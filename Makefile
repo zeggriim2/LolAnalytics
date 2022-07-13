@@ -7,7 +7,6 @@ analyse:
 cs-fix:
 	vendor\bin\php-cs-fixer fix --allow-risky yes -vvv
 
-
 # Docker
 docker-start:
 	@docker-compose up -d
