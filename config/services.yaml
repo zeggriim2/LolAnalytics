@@ -22,3 +22,10 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+    App\Services\API\LOL\BaseApi:
+        arguments:
+            $platform : '%env(string:PLATFORM)%'
+            $apiKey: '%env(string:APIKEY)%'
+
+    App\Services\API\LOL\SummonerApi:
+        public: true
