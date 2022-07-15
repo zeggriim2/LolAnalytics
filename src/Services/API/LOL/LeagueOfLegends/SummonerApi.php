@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Services\API\LOL;
+namespace App\Services\API\LOL\LeagueOfLegends;
 
-use App\Services\API\LOL\DTO\SummonerDTO;
+use App\Services\API\LOL\BaseApi;
+use App\Services\API\LOL\LeagueOfLegends\DTO\SummonerDTO;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
@@ -17,15 +18,11 @@ class SummonerApi
     private const URL_SUMMONER_ID =
         BaseApi::URL_RACINE_PLATFORM . 'summoner/v4/summoners/{summonerId}';
 
-    private BaseApi $baseApi;
-    private DenormalizerInterface $denormalizer;
-
     public function __construct(
-        BaseApi $baseApi,
-        DenormalizerInterface $denormalizer
+        private BaseApi $baseApi,
+        private DenormalizerInterface $denormalizer
     ) {
-        $this->baseApi = $baseApi;
-        $this->denormalizer = $denormalizer;
+
     }
 
     public function summonerBySummonerName(string $summonerName): ?SummonerDTO

@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Services\API\LOL\DTO;
+namespace App\Services\API\LOL\LeagueOfLegends\DTO\Status;
 
 class StatusDto
 {
     private int     $id;
-    private string  $maintenance_status;
+    private ?string $maintenance_status;
     private ?string $incident_severity;
     /**
      * @var ContentDto[]
@@ -42,18 +42,18 @@ class StatusDto
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getMaintenanceStatus(): string
+    public function getMaintenanceStatus(): ?string
     {
         return $this->maintenance_status;
     }
 
     /**
-     * @param string $maintenance_status
+     * @param string|null $maintenance_status
      * @return StatusDto
      */
-    public function setMaintenanceStatus(string $maintenance_status): StatusDto
+    public function setMaintenanceStatus(?string $maintenance_status): StatusDto
     {
         $this->maintenance_status = $maintenance_status;
         return $this;

@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Services\API\LOL;
+namespace App\Services\API\LOL\LeagueOfLegends;
 
-use App\Services\API\LOL\DTO\PlatformDataDto;
+use App\Services\API\LOL\BaseApi;
+use App\Services\API\LOL\LeagueOfLegends\DTO\Status\PlatformDataDto;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 

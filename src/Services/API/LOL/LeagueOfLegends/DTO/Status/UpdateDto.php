@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\API\LOL\DTO;
+namespace App\Services\API\LOL\LeagueOfLegends\DTO\Status;
 
 class UpdateDto
 {

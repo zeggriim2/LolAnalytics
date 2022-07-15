@@ -2,8 +2,8 @@
 
 namespace App\Tests;
 
-use App\Services\API\LOL\DTO\SummonerDTO;
-use App\Services\API\LOL\SummonerApi;
+use App\Services\API\LOL\LeagueOfLegends\DTO\SummonerDTO;
+use App\Services\API\LOL\LeagueOfLegends\SummonerApi;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class SummonerApiTest extends KernelTestCase
