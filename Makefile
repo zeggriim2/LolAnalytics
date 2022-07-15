@@ -17,6 +17,17 @@ docker-stop:
 docker-remove:
 	@docker-compose rm -v database
 
+# Server
+
+server-start:
+	@symfony serve -d
+
+server-list:
+	@symfony server:list
+
+server-stop:
+	@symfony server:stop
+
 
 install:
 	cp .env.dist .env.$(env).local
