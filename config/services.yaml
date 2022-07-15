@@ -27,8 +27,11 @@ services:
             $platform : '%env(string:PLATFORM)%'
             $apiKey: '%env(string:APIKEY)%'
 
-    App\Services\API\LOL\SummonerApi:
+    App\Services\API\LOL\LeagueOfLegends\SummonerApi:
         public: true
 
-    App\Services\API\LOL\StatusApi:
+    App\Services\API\LOL\LeagueOfLegends\StatusApi:
+        public: true
+
+    App\Services\API\LOL\LeagueOfLegends\LeagueApi:
         public: true
