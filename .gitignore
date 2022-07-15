@@ -22,3 +22,13 @@
 /phpunit.xml
 .phpunit.result.cache
 ###< phpunit/phpunit ###
+
+
+###> idea ###
+.idea/
+###< idea ###
+
+###> tests Coverage ###
+tests/coverage
+tests/coverage.txt
+###< tests Coverage ###
