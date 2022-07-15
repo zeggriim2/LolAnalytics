@@ -2,11 +2,11 @@
 
 namespace App\Tests;
 
-use App\Services\API\LOL\DTO\ContentDto;
-use App\Services\API\LOL\DTO\PlatformDataDto;
-use App\Services\API\LOL\DTO\StatusDto;
-use App\Services\API\LOL\DTO\UpdateDto;
-use App\Services\API\LOL\StatusApi;
+use App\Services\API\LOL\LeagueOfLegends\DTO\Status\ContentDto;
+use App\Services\API\LOL\LeagueOfLegends\DTO\Status\PlatformDataDto;
+use App\Services\API\LOL\LeagueOfLegends\DTO\Status\StatusDto;
+use App\Services\API\LOL\LeagueOfLegends\DTO\Status\UpdateDto;
+use App\Services\API\LOL\LeagueOfLegends\StatusApi;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class StatusApiTest extends KernelTestCase
