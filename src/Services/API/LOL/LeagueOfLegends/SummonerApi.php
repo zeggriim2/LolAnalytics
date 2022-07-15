@@ -22,7 +22,6 @@ class SummonerApi
         private BaseApi $baseApi,
         private DenormalizerInterface $denormalizer
     ) {
-
     }
 
     public function summonerBySummonerName(string $summonerName): ?SummonerDTO

@@ -13,75 +13,51 @@ class LeagueListDTO
      */
     private array $entries;
 
-    /**
-     * @return string
-     */
     public function getLeagueId(): string
     {
         return $this->leagueId;
     }
 
-    /**
-     * @param string $leagueId
-     * @return LeagueListDTO
-     */
-    public function setLeagueId(string $leagueId): LeagueListDTO
+    public function setLeagueId(string $leagueId): self
     {
         $this->leagueId = $leagueId;
+
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getTier(): string
     {
         return $this->tier;
     }
 
-    /**
-     * @param string $tier
-     * @return LeagueListDTO
-     */
-    public function setTier(string $tier): LeagueListDTO
+    public function setTier(string $tier): self
     {
         $this->tier = $tier;
+
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @param string $name
-     * @return LeagueListDTO
-     */
-    public function setName(string $name): LeagueListDTO
+    public function setName(string $name): self
     {
         $this->name = $name;
+
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getQueue(): string
     {
         return $this->queue;
     }
 
-    /**
-     * @param string $queue
-     * @return LeagueListDTO
-     */
-    public function setQueue(string $queue): LeagueListDTO
+    public function setQueue(string $queue): self
     {
         $this->queue = $queue;
+
         return $this;
     }
 
@@ -95,11 +71,11 @@ class LeagueListDTO
 
     /**
      * @param LeagueItemDTO[] $entries
-     * @return LeagueListDTO
      */
-    public function setEntries(array $entries): LeagueListDTO
+    public function setEntries(array $entries): self
     {
         $this->entries = $entries;
+
         return $this;
     }
 }

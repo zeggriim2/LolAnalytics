@@ -23,57 +23,39 @@ class StatusDto
      */
     private array   $platforms;
 
-    /**
-     * @return int
-     */
     public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     * @return StatusDto
-     */
-    public function setId(int $id): StatusDto
+    public function setId(int $id): self
     {
         $this->id = $id;
+
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getMaintenanceStatus(): ?string
     {
         return $this->maintenance_status;
     }
 
-    /**
-     * @param string|null $maintenance_status
-     * @return StatusDto
-     */
-    public function setMaintenanceStatus(?string $maintenance_status): StatusDto
+    public function setMaintenanceStatus(?string $maintenance_status): self
     {
         $this->maintenance_status = $maintenance_status;
+
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getIncidentSeverity(): ?string
     {
         return $this->incident_severity;
     }
 
-    /**
-     * @param string|null $incident_severity
-     * @return StatusDto
-     */
-    public function setIncidentSeverity(?string $incident_severity): StatusDto
+    public function setIncidentSeverity(?string $incident_severity): self
     {
         $this->incident_severity = $incident_severity;
+
         return $this;
     }
 
@@ -87,11 +69,11 @@ class StatusDto
 
     /**
      * @param ContentDto[] $titles
-     * @return StatusDto
      */
-    public function setTitles(array $titles): StatusDto
+    public function setTitles(array $titles): self
     {
         $this->titles = $titles;
+
         return $this;
     }
 
@@ -105,65 +87,47 @@ class StatusDto
 
     /**
      * @param UpdateDto[] $updates
-     * @return StatusDto
      */
-    public function setUpdates(array $updates): StatusDto
+    public function setUpdates(array $updates): self
     {
         $this->updates = $updates;
+
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getCreatedAt(): string
     {
         return $this->created_at;
     }
 
-    /**
-     * @param string $created_at
-     * @return StatusDto
-     */
-    public function setCreatedAt(string $created_at): StatusDto
+    public function setCreatedAt(string $created_at): self
     {
         $this->created_at = $created_at;
+
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getArchiveAt(): ?string
     {
         return $this->archive_at;
     }
 
-    /**
-     * @param string|null $archive_at
-     * @return StatusDto
-     */
-    public function setArchiveAt(?string $archive_at): StatusDto
+    public function setArchiveAt(?string $archive_at): self
     {
         $this->archive_at = $archive_at;
+
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getUpdatedAt(): ?string
     {
         return $this->updated_at;
     }
 
-    /**
-     * @param string|null $updated_at
-     * @return StatusDto
-     */
-    public function setUpdatedAt(?string $updated_at): StatusDto
+    public function setUpdatedAt(?string $updated_at): self
     {
         $this->updated_at = $updated_at;
+
         return $this;
     }
 
@@ -177,11 +141,11 @@ class StatusDto
 
     /**
      * @param string[] $platforms
-     * @return StatusDto
      */
-    public function setPlatforms(array $platforms): StatusDto
+    public function setPlatforms(array $platforms): self
     {
         $this->platforms = $platforms;
+
         return $this;
     }
 }

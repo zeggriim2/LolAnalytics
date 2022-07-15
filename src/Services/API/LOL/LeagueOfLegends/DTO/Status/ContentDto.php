@@ -7,39 +7,27 @@ class ContentDto
     private string $locale;
     private string $content;
 
-    /**
-     * @return string
-     */
     public function getLocale(): string
     {
         return $this->locale;
     }
 
-    /**
-     * @param string $locale
-     * @return ContentDto
-     */
-    public function setLocale(string $locale): ContentDto
+    public function setLocale(string $locale): self
     {
         $this->locale = $locale;
+
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getContent(): string
     {
         return $this->content;
     }
 
-    /**
-     * @param string $content
-     * @return ContentDto
-     */
-    public function setContent(string $content): ContentDto
+    public function setContent(string $content): self
     {
         $this->content = $content;
+
         return $this;
     }
 }

@@ -9,7 +9,7 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 class StatusApi
 {
-    private const URL_STATUS = BaseApi::URL_RACINE_PLATFORM . "status/v4/platform-data";
+    private const URL_STATUS = BaseApi::URL_RACINE_PLATFORM . 'status/v4/platform-data';
 
     private BaseApi $baseApi;
     private DenormalizerInterface $denormalizer;
@@ -30,7 +30,7 @@ class StatusApi
         $url = $this->baseApi->constructUrl(
             self::URL_STATUS,
             [
-                "platform" => $this->baseApi->platform
+                'platform' => $this->baseApi->platform,
             ]
         );
 
@@ -39,13 +39,13 @@ class StatusApi
             $url,
             Request::METHOD_GET,
             [
-                "headers" => [
-                    "X-Riot-Token" => $this->baseApi->apiKey
-                ]
+                'headers' => [
+                    'X-Riot-Token' => $this->baseApi->apiKey,
+                ],
             ]
         );
 
-        if (is_null($status)) {
+        if (null === $status) {
             return null;
         }
 
@@ -54,6 +54,7 @@ class StatusApi
 
     /**
      * @param array<string,int|string> $data
+     *
      * @return PlatformDataDto
      */
     private function denormalize(array $data)

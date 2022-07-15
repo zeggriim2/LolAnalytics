@@ -18,57 +18,39 @@ class UpdateDto
     private string $created_at;
     private string $updated_at;
 
-    /**
-     * @return int
-     */
     public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     * @return UpdateDto
-     */
-    public function setId(int $id): UpdateDto
+    public function setId(int $id): self
     {
         $this->id = $id;
+
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getAuthor(): string
     {
         return $this->author;
     }
 
-    /**
-     * @param string $author
-     * @return UpdateDto
-     */
-    public function setAuthor(string $author): UpdateDto
+    public function setAuthor(string $author): self
     {
         $this->author = $author;
+
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isPublish(): bool
     {
         return $this->publish;
     }
 
-    /**
-     * @param bool $publish
-     * @return UpdateDto
-     */
-    public function setPublish(bool $publish): UpdateDto
+    public function setPublish(bool $publish): self
     {
         $this->publish = $publish;
+
         return $this;
     }
 
@@ -82,11 +64,11 @@ class UpdateDto
 
     /**
      * @param string[] $publish_locations
-     * @return UpdateDto
      */
-    public function setPublishLocations(array $publish_locations): UpdateDto
+    public function setPublishLocations(array $publish_locations): self
     {
         $this->publish_locations = $publish_locations;
+
         return $this;
     }
 
@@ -100,47 +82,35 @@ class UpdateDto
 
     /**
      * @param ContentDto[] $translations
-     * @return UpdateDto
      */
-    public function setTranslations(array $translations): UpdateDto
+    public function setTranslations(array $translations): self
     {
         $this->translations = $translations;
+
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getCreatedAt(): string
     {
         return $this->created_at;
     }
 
-    /**
-     * @param string $created_at
-     * @return UpdateDto
-     */
-    public function setCreatedAt(string $created_at): UpdateDto
+    public function setCreatedAt(string $created_at): self
     {
         $this->created_at = $created_at;
+
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getUpdatedAt(): string
     {
         return $this->updated_at;
     }
 
-    /**
-     * @param string $updated_at
-     * @return UpdateDto
-     */
-    public function setUpdatedAt(string $updated_at): UpdateDto
+    public function setUpdatedAt(string $updated_at): self
     {
         $this->updated_at = $updated_at;
+
         return $this;
     }
 }

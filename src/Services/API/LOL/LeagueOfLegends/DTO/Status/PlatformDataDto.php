@@ -19,39 +19,27 @@ class PlatformDataDto
      */
     private array $incidents;
 
-    /**
-     * @return string
-     */
     public function getId(): string
     {
         return $this->id;
     }
 
-    /**
-     * @param string $id
-     * @return PlatformDataDto
-     */
-    public function setId(string $id): PlatformDataDto
+    public function setId(string $id): self
     {
         $this->id = $id;
+
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @param string $name
-     * @return PlatformDataDto
-     */
-    public function setName(string $name): PlatformDataDto
+    public function setName(string $name): self
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -65,11 +53,11 @@ class PlatformDataDto
 
     /**
      * @param string[] $locales
-     * @return PlatformDataDto
      */
-    public function setLocales(array $locales): PlatformDataDto
+    public function setLocales(array $locales): self
     {
         $this->locales = $locales;
+
         return $this;
     }
 
@@ -83,11 +71,11 @@ class PlatformDataDto
 
     /**
      * @param StatusDto[] $maintenances
-     * @return PlatformDataDto
      */
-    public function setMaintenances(array $maintenances): PlatformDataDto
+    public function setMaintenances(array $maintenances): self
     {
         $this->maintenances = $maintenances;
+
         return $this;
     }
 
@@ -101,11 +89,11 @@ class PlatformDataDto
 
     /**
      * @param StatusDto[] $incidents
-     * @return PlatformDataDto
      */
-    public function setIncidents(array $incidents): PlatformDataDto
+    public function setIncidents(array $incidents): self
     {
         $this->incidents = $incidents;
+
         return $this;
     }
 }

@@ -16,8 +16,7 @@ class LeagueApiTest extends KernelTestCase
 {
     private LeagueApi $leagueApi;
 
-
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->leagueApi = static::getContainer()->get(LeagueApi::class);
     }
@@ -31,14 +30,14 @@ class LeagueApiTest extends KernelTestCase
         $this->assertIsArray($leaguesSummonerId);
 
         foreach ($leaguesSummonerId as $leagueSummonerId) {
-            $this->assertInstanceOf(LeagueEntryDTO::class,$leagueSummonerId);
+            $this->assertInstanceOf(LeagueEntryDTO::class, $leagueSummonerId);
         }
     }
 
     public function testLeagueBySummonerIdForbiddenException()
     {
         $this->expectException(ForbiddenException::class);
-        $this->expectExceptionMessage("Summoner ID est vide");
+        $this->expectExceptionMessage('Summoner ID est vide');
         $leaguesSummonerId =
             $this->leagueApi->leagueBySummonerId('');
     }
@@ -54,13 +53,13 @@ class LeagueApiTest extends KernelTestCase
     public function testLeagueChallengerByQueueForbiddenException()
     {
         $this->expectException(ForbiddenException::class);
-        $leagueChallenger = $this->leagueApi->leagueChallengerByQueue("");
+        $leagueChallenger = $this->leagueApi->leagueChallengerByQueue('');
     }
 
     public function testLeagueChallengerByQueueLeagueArgumentException()
     {
         $this->expectException(LeagueArgumentException::class);
-        $leagueChallenger = $this->leagueApi->leagueChallengerByQueue("zerhzaterh");
+        $leagueChallenger = $this->leagueApi->leagueChallengerByQueue('zerhzaterh');
     }
     // League Challenger By Queue End
 
@@ -74,13 +73,13 @@ class LeagueApiTest extends KernelTestCase
     public function testLeagueGrandMasterByQueueForbiddenException()
     {
         $this->expectException(ForbiddenException::class);
-        $leagueChallenger = $this->leagueApi->leagueGrandMasterByQueue("");
+        $leagueChallenger = $this->leagueApi->leagueGrandMasterByQueue('');
     }
 
     public function testLeagueGrandMasterByQueueLeagueArgumentException()
     {
         $this->expectException(LeagueArgumentException::class);
-        $leagueChallenger = $this->leagueApi->leagueGrandMasterByQueue("zerhzaterh");
+        $leagueChallenger = $this->leagueApi->leagueGrandMasterByQueue('zerhzaterh');
     }
     // League Grand Master By Queue End
 
@@ -94,27 +93,27 @@ class LeagueApiTest extends KernelTestCase
     public function testLeagueMasterByQueueForbiddenException()
     {
         $this->expectException(ForbiddenException::class);
-        $leagueMaster = $this->leagueApi->leagueMasterByQueue("");
+        $leagueMaster = $this->leagueApi->leagueMasterByQueue('');
     }
 
     public function testLeagueMasterByQueueLeagueArgumentException()
     {
         $this->expectException(LeagueArgumentException::class);
-        $leagueMaster = $this->leagueApi->leagueMasterByQueue("zerhzaterh");
+        $leagueMaster = $this->leagueApi->leagueMasterByQueue('zerhzaterh');
     }
     // League Master By Queue End
 
     // League By League ID Start
     public function testLeagueByLeagueIdSuccess()
     {
-        $league = $this->leagueApi->leagueByLeagueId("86940884-763f-478a-860d-a98c57a85102");
+        $league = $this->leagueApi->leagueByLeagueId('86940884-763f-478a-860d-a98c57a85102');
         $this->assertInstanceOf(LeagueListDTO::class, $league);
     }
 
     public function testLeagueByLeagueIdForbiddenException()
     {
         $this->expectException(ForbiddenException::class);
-        $league = $this->leagueApi->leagueByLeagueId("");
+        $league = $this->leagueApi->leagueByLeagueId('');
     }
     // League Grand Master By Queue End
 
@@ -137,23 +136,23 @@ class LeagueApiTest extends KernelTestCase
     public function testLeagueByQueueByTierByDivisionExceptionForbidden()
     {
         $this->expectException(ForbiddenException::class);
-        $this->expectExceptionMessage("Queue/Tier/Division est vide");
+        $this->expectExceptionMessage('Queue/Tier/Division est vide');
         $leagueList = $this->leagueApi->leagueByQueueByTierByDivision(
-            "",
+            '',
             Tier::TIER_GOLD,
             Division::DIVISION_I
         );
 
         $leagueList = $this->leagueApi->leagueByQueueByTierByDivision(
             Queue::RANKED_SOLO,
-            "",
+            '',
             Division::DIVISION_I
         );
 
         $leagueList = $this->leagueApi->leagueByQueueByTierByDivision(
             Queue::RANKED_SOLO,
             Tier::TIER_GOLD,
-            ""
+            ''
         );
     }
 
@@ -162,7 +161,7 @@ class LeagueApiTest extends KernelTestCase
         $this->expectException(LeagueArgumentException::class);
         $this->expectExceptionMessage("N'existe pas dans les différents éléments Queue/Tier/Division");
         $leagueList = $this->leagueApi->leagueByQueueByTierByDivision(
-            "zregarehgae",
+            'zregarehgae',
             Tier::TIER_GOLD,
             Division::DIVISION_I
         );

@@ -23,9 +23,9 @@ class StatusApiTest extends KernelTestCase
         $status = $this->statusApi->status();
         $this->assertInstanceOf(
             PlatformDataDto::class,
-                $status
+            $status
         );
-         $this->checkPlatformDataDto($status);
+        $this->checkPlatformDataDto($status);
     }
 
     private function checkPlatformDataDto(PlatformDataDto $platformDataDto)
@@ -33,7 +33,7 @@ class StatusApiTest extends KernelTestCase
         $this->assertIsString($platformDataDto->getId());
         $this->assertIsString($platformDataDto->getName());
         $this->assertIsArray($platformDataDto->getLocales());
-        if(count($platformDataDto->getMaintenances()) > 0) {
+        if (\count($platformDataDto->getMaintenances()) > 0) {
             foreach ($platformDataDto->getMaintenances() as $maintenance) {
                 $this->assertInstanceOf(StatusDto::class, $maintenance);
             }
@@ -51,32 +51,32 @@ class StatusApiTest extends KernelTestCase
         $this->assertIsString($statusDto->getMaintenanceStatus());
         $this->assertIsString($statusDto->getCreatedAt());
         $this->assertIsArray($statusDto->getPlatforms());
-        if(is_string($statusDto->getIncidentSeverity())) {
+        if (\is_string($statusDto->getIncidentSeverity())) {
             $this->assertIsString($statusDto->getIncidentSeverity());
-        }else{
+        } else {
             $this->assertNull($statusDto->getIncidentSeverity());
         }
 
-        if(is_string($statusDto->getArchiveAt())) {
+        if (\is_string($statusDto->getArchiveAt())) {
             $this->assertIsString($statusDto->getArchiveAt());
-        }else{
+        } else {
             $this->assertNull($statusDto->getArchiveAt());
         }
 
-        if(is_string($statusDto->getUpdatedAt())) {
+        if (\is_string($statusDto->getUpdatedAt())) {
             $this->assertIsString($statusDto->getUpdatedAt());
-        }else{
+        } else {
             $this->assertNull($statusDto->getUpdatedAt());
         }
 
-        if($statusDto->getTitles() > 0) {
+        if ($statusDto->getTitles() > 0) {
             foreach ($statusDto->getTitles() as $title) {
                 $this->assertInstanceOf(ContentDto::class, $title);
             }
             $this->checkContentDTO($statusDto->getTitles()[0]);
         }
 
-        if($statusDto->getUpdates() > 0) {
+        if ($statusDto->getUpdates() > 0) {
             foreach ($statusDto->getUpdates() as $update) {
                 $this->assertInstanceOf(UpdateDto::class, $update);
             }
