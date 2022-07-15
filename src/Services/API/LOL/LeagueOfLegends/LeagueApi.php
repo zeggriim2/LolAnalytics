@@ -34,9 +34,14 @@ class LeagueApi
     ) {
     }
 
+    /**
+     * @param string $summonerId
+     * @return LeagueEntryDTO[]|null
+     * @throws ForbiddenException
+     */
     public function leagueBySummonerId(
         string $summonerId
-    ) {
+    ): ?array {
         if ('' === $summonerId) {
             throw new ForbiddenException('Summoner ID est vide');
         }
@@ -62,9 +67,15 @@ class LeagueApi
         return $leagueSummonerId ? $this->denormalizeArray($leagueSummonerId) : null;
     }
 
+    /**
+     * @param string $queue
+     * @return LeagueListDTO|null
+     * @throws ForbiddenException
+     * @throws LeagueArgumentException
+     */
     public function leagueChallengerByQueue(
         string $queue
-    ) {
+    ): ?LeagueListDTO {
         if ('' === $queue) {
             throw new ForbiddenException('Queue vide.');
         }
@@ -94,9 +105,15 @@ class LeagueApi
         return $leagueChallenger ? $this->denormalize($leagueChallenger) : null;
     }
 
+    /**
+     * @param string $queue
+     * @return LeagueListDTO|null
+     * @throws ForbiddenException
+     * @throws LeagueArgumentException
+     */
     public function leagueGrandMasterByQueue(
         string $queue
-    ) {
+    ): ?LeagueListDTO {
         if ('' === $queue) {
             throw new ForbiddenException('Queue vide.');
         }
@@ -126,9 +143,15 @@ class LeagueApi
         return $leagueGrandMaster ? $this->denormalize($leagueGrandMaster) : null;
     }
 
+    /**
+     * @param string $queue
+     * @return LeagueListDTO|null
+     * @throws ForbiddenException
+     * @throws LeagueArgumentException
+     */
     public function leagueMasterByQueue(
         string $queue
-    ) {
+    ): ?LeagueListDTO {
         if ('' === $queue) {
             throw new ForbiddenException('Queue vide.');
         }
@@ -158,9 +181,14 @@ class LeagueApi
         return $leagueMaster ? $this->denormalize($leagueMaster) : null;
     }
 
+    /**
+     * @param string $leagueId
+     * @return LeagueListDTO|null
+     * @throws ForbiddenException
+     */
     public function leagueByLeagueId(
         string $leagueId
-    ) {
+    ): ?LeagueListDTO {
         if ('' === $leagueId) {
             throw new ForbiddenException('League ID est vide.');
         }
@@ -186,11 +214,19 @@ class LeagueApi
         return $league ? $this->denormalize($league) : null;
     }
 
+    /**
+     * @param string $queue
+     * @param string $tier
+     * @param string $division
+     * @return LeagueEntryDTO[]|null
+     * @throws ForbiddenException
+     * @throws LeagueArgumentException
+     */
     public function leagueByQueueByTierByDivision(
         string $queue,
         string $tier,
         string $division
-    ) {
+    ): ?array {
         if ('' === $queue || '' === $tier || '' === $division) {
             throw new ForbiddenException('Queue/Tier/Division est vide');
         }
@@ -222,6 +258,10 @@ class LeagueApi
         return $league ? $this->denormalizeArray($league) : null;
     }
 
+    /**
+     * @param array $datas
+     * @return LeagueEntryDTO[]
+     */
     private function denormalizeArray(
         array $datas
     ): array {
@@ -233,9 +273,13 @@ class LeagueApi
         return $listEntity;
     }
 
+    /**
+     * @param array $data
+     * @return LeagueListDTO
+     */
     private function denormalize(
         array $data
-    ) {
+    ): LeagueListDTO {
         return $this->denormalizer->denormalize($data, LeagueListDTO::class);
     }
 }
