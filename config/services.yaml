@@ -29,3 +29,6 @@ services:
 
     App\Services\API\LOL\SummonerApi:
         public: true
+
+    App\Services\API\LOL\StatusApi:
+        public: true
