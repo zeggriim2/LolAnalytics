@@ -11,15 +11,10 @@ class StatusApi
 {
     private const URL_STATUS = BaseApi::URL_RACINE_PLATFORM . 'status/v4/platform-data';
 
-    private BaseApi $baseApi;
-    private DenormalizerInterface $denormalizer;
-
     public function __construct(
-        BaseApi $baseApi,
-        DenormalizerInterface $denormalizer
+        private BaseApi $baseApi,
+        private DenormalizerInterface $denormalizer
     ) {
-        $this->baseApi = $baseApi;
-        $this->denormalizer = $denormalizer;
     }
 
     /**
@@ -34,7 +29,6 @@ class StatusApi
             ]
         );
 
-        /** @var array<string,int|string>|null $status */
         $status = $this->baseApi->callApi(
             $url,
             Request::METHOD_GET,
@@ -45,11 +39,7 @@ class StatusApi
             ]
         );
 
-        if (null === $status) {
-            return null;
-        }
-
-        return $this->denormalize($status);
+        return $status ? $this->denormalize($status) : null;
     }
 
     /**
