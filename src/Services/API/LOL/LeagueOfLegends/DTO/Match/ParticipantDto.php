@@ -110,1893 +110,1263 @@ class ParticipantDto
     private int $wardsPlaced;
     private bool $win;
 
-    /**
-     * @return int
-     */
     public function getAssists(): int
     {
         return $this->assists;
     }
 
-    /**
-     * @param int $assists
-     * @return ParticipantDto
-     */
-    public function setAssists(int $assists): ParticipantDto
+    public function setAssists(int $assists): self
     {
         $this->assists = $assists;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getBaronKills(): int
     {
         return $this->baronKills;
     }
 
-    /**
-     * @param int $baronKills
-     * @return ParticipantDto
-     */
-    public function setBaronKills(int $baronKills): ParticipantDto
+    public function setBaronKills(int $baronKills): self
     {
         $this->baronKills = $baronKills;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getBountyLevel(): int
     {
         return $this->bountyLevel;
     }
 
-    /**
-     * @param int $bountyLevel
-     * @return ParticipantDto
-     */
-    public function setBountyLevel(int $bountyLevel): ParticipantDto
+    public function setBountyLevel(int $bountyLevel): self
     {
         $this->bountyLevel = $bountyLevel;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getChampExperience(): int
     {
         return $this->champExperience;
     }
 
-    /**
-     * @param int $champExperience
-     * @return ParticipantDto
-     */
-    public function setChampExperience(int $champExperience): ParticipantDto
+    public function setChampExperience(int $champExperience): self
     {
         $this->champExperience = $champExperience;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getChampLevel(): int
     {
         return $this->champLevel;
     }
 
-    /**
-     * @param int $champLevel
-     * @return ParticipantDto
-     */
-    public function setChampLevel(int $champLevel): ParticipantDto
+    public function setChampLevel(int $champLevel): self
     {
         $this->champLevel = $champLevel;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getChampionId(): int
     {
         return $this->championId;
     }
 
-    /**
-     * @param int $championId
-     * @return ParticipantDto
-     */
-    public function setChampionId(int $championId): ParticipantDto
+    public function setChampionId(int $championId): self
     {
         $this->championId = $championId;
+
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getChampionName(): string
     {
         return $this->championName;
     }
 
-    /**
-     * @param string $championName
-     * @return ParticipantDto
-     */
-    public function setChampionName(string $championName): ParticipantDto
+    public function setChampionName(string $championName): self
     {
         $this->championName = $championName;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getChampionTransform(): int
     {
         return $this->championTransform;
     }
 
-    /**
-     * @param int $championTransform
-     * @return ParticipantDto
-     */
-    public function setChampionTransform(int $championTransform): ParticipantDto
+    public function setChampionTransform(int $championTransform): self
     {
         $this->championTransform = $championTransform;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getConsumablesPurchased(): int
     {
         return $this->consumablesPurchased;
     }
 
-    /**
-     * @param int $consumablesPurchased
-     * @return ParticipantDto
-     */
-    public function setConsumablesPurchased(int $consumablesPurchased): ParticipantDto
+    public function setConsumablesPurchased(int $consumablesPurchased): self
     {
         $this->consumablesPurchased = $consumablesPurchased;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getDamageDealtToBuildings(): int
     {
         return $this->damageDealtToBuildings;
     }
 
-    /**
-     * @param int $damageDealtToBuildings
-     * @return ParticipantDto
-     */
-    public function setDamageDealtToBuildings(int $damageDealtToBuildings): ParticipantDto
+    public function setDamageDealtToBuildings(int $damageDealtToBuildings): self
     {
         $this->damageDealtToBuildings = $damageDealtToBuildings;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getDamageDealtToObjectives(): int
     {
         return $this->damageDealtToObjectives;
     }
 
-    /**
-     * @param int $damageDealtToObjectives
-     * @return ParticipantDto
-     */
-    public function setDamageDealtToObjectives(int $damageDealtToObjectives): ParticipantDto
+    public function setDamageDealtToObjectives(int $damageDealtToObjectives): self
     {
         $this->damageDealtToObjectives = $damageDealtToObjectives;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getDamageDealtToTurrets(): int
     {
         return $this->damageDealtToTurrets;
     }
 
-    /**
-     * @param int $damageDealtToTurrets
-     * @return ParticipantDto
-     */
-    public function setDamageDealtToTurrets(int $damageDealtToTurrets): ParticipantDto
+    public function setDamageDealtToTurrets(int $damageDealtToTurrets): self
     {
         $this->damageDealtToTurrets = $damageDealtToTurrets;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getDamageSelfMitigated(): int
     {
         return $this->damageSelfMitigated;
     }
 
-    /**
-     * @param int $damageSelfMitigated
-     * @return ParticipantDto
-     */
-    public function setDamageSelfMitigated(int $damageSelfMitigated): ParticipantDto
+    public function setDamageSelfMitigated(int $damageSelfMitigated): self
     {
         $this->damageSelfMitigated = $damageSelfMitigated;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getDeaths(): int
     {
         return $this->deaths;
     }
 
-    /**
-     * @param int $deaths
-     * @return ParticipantDto
-     */
-    public function setDeaths(int $deaths): ParticipantDto
+    public function setDeaths(int $deaths): self
     {
         $this->deaths = $deaths;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getDetectorWardsPlaced(): int
     {
         return $this->detectorWardsPlaced;
     }
 
-    /**
-     * @param int $detectorWardsPlaced
-     * @return ParticipantDto
-     */
-    public function setDetectorWardsPlaced(int $detectorWardsPlaced): ParticipantDto
+    public function setDetectorWardsPlaced(int $detectorWardsPlaced): self
     {
         $this->detectorWardsPlaced = $detectorWardsPlaced;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getDoubleKills(): int
     {
         return $this->doubleKills;
     }
 
-    /**
-     * @param int $doubleKills
-     * @return ParticipantDto
-     */
-    public function setDoubleKills(int $doubleKills): ParticipantDto
+    public function setDoubleKills(int $doubleKills): self
     {
         $this->doubleKills = $doubleKills;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getDragonKills(): int
     {
         return $this->dragonKills;
     }
 
-    /**
-     * @param int $dragonKills
-     * @return ParticipantDto
-     */
-    public function setDragonKills(int $dragonKills): ParticipantDto
+    public function setDragonKills(int $dragonKills): self
     {
         $this->dragonKills = $dragonKills;
+
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isFirstBloodAssist(): bool
     {
         return $this->firstBloodAssist;
     }
 
-    /**
-     * @param bool $firstBloodAssist
-     * @return ParticipantDto
-     */
-    public function setFirstBloodAssist(bool $firstBloodAssist): ParticipantDto
+    public function setFirstBloodAssist(bool $firstBloodAssist): self
     {
         $this->firstBloodAssist = $firstBloodAssist;
+
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isFirstBloodKill(): bool
     {
         return $this->firstBloodKill;
     }
 
-    /**
-     * @param bool $firstBloodKill
-     * @return ParticipantDto
-     */
-    public function setFirstBloodKill(bool $firstBloodKill): ParticipantDto
+    public function setFirstBloodKill(bool $firstBloodKill): self
     {
         $this->firstBloodKill = $firstBloodKill;
+
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isFirstTowerAssist(): bool
     {
         return $this->firstTowerAssist;
     }
 
-    /**
-     * @param bool $firstTowerAssist
-     * @return ParticipantDto
-     */
-    public function setFirstTowerAssist(bool $firstTowerAssist): ParticipantDto
+    public function setFirstTowerAssist(bool $firstTowerAssist): self
     {
         $this->firstTowerAssist = $firstTowerAssist;
+
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isFirstTowerKill(): bool
     {
         return $this->firstTowerKill;
     }
 
-    /**
-     * @param bool $firstTowerKill
-     * @return ParticipantDto
-     */
-    public function setFirstTowerKill(bool $firstTowerKill): ParticipantDto
+    public function setFirstTowerKill(bool $firstTowerKill): self
     {
         $this->firstTowerKill = $firstTowerKill;
+
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isGameEndedInEarlySurrender(): bool
     {
         return $this->gameEndedInEarlySurrender;
     }
 
-    /**
-     * @param bool $gameEndedInEarlySurrender
-     * @return ParticipantDto
-     */
-    public function setGameEndedInEarlySurrender(bool $gameEndedInEarlySurrender): ParticipantDto
+    public function setGameEndedInEarlySurrender(bool $gameEndedInEarlySurrender): self
     {
         $this->gameEndedInEarlySurrender = $gameEndedInEarlySurrender;
+
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isGameEndedInSurrender(): bool
     {
         return $this->gameEndedInSurrender;
     }
 
-    /**
-     * @param bool $gameEndedInSurrender
-     * @return ParticipantDto
-     */
-    public function setGameEndedInSurrender(bool $gameEndedInSurrender): ParticipantDto
+    public function setGameEndedInSurrender(bool $gameEndedInSurrender): self
     {
         $this->gameEndedInSurrender = $gameEndedInSurrender;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getGoldEarned(): int
     {
         return $this->goldEarned;
     }
 
-    /**
-     * @param int $goldEarned
-     * @return ParticipantDto
-     */
-    public function setGoldEarned(int $goldEarned): ParticipantDto
+    public function setGoldEarned(int $goldEarned): self
     {
         $this->goldEarned = $goldEarned;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getGoldSpent(): int
     {
         return $this->goldSpent;
     }
 
-    /**
-     * @param int $goldSpent
-     * @return ParticipantDto
-     */
-    public function setGoldSpent(int $goldSpent): ParticipantDto
+    public function setGoldSpent(int $goldSpent): self
     {
         $this->goldSpent = $goldSpent;
+
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getIndividualPosition(): string
     {
         return $this->individualPosition;
     }
 
-    /**
-     * @param string $individualPosition
-     * @return ParticipantDto
-     */
-    public function setIndividualPosition(string $individualPosition): ParticipantDto
+    public function setIndividualPosition(string $individualPosition): self
     {
         $this->individualPosition = $individualPosition;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getInhibitorKills(): int
     {
         return $this->inhibitorKills;
     }
 
-    /**
-     * @param int $inhibitorKills
-     * @return ParticipantDto
-     */
-    public function setInhibitorKills(int $inhibitorKills): ParticipantDto
+    public function setInhibitorKills(int $inhibitorKills): self
     {
         $this->inhibitorKills = $inhibitorKills;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getInhibitorTakedowns(): int
     {
         return $this->inhibitorTakedowns;
     }
 
-    /**
-     * @param int $inhibitorTakedowns
-     * @return ParticipantDto
-     */
-    public function setInhibitorTakedowns(int $inhibitorTakedowns): ParticipantDto
+    public function setInhibitorTakedowns(int $inhibitorTakedowns): self
     {
         $this->inhibitorTakedowns = $inhibitorTakedowns;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getInhibitorsLost(): int
     {
         return $this->inhibitorsLost;
     }
 
-    /**
-     * @param int $inhibitorsLost
-     * @return ParticipantDto
-     */
-    public function setInhibitorsLost(int $inhibitorsLost): ParticipantDto
+    public function setInhibitorsLost(int $inhibitorsLost): self
     {
         $this->inhibitorsLost = $inhibitorsLost;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getItem0(): int
     {
         return $this->item0;
     }
 
-    /**
-     * @param int $item0
-     * @return ParticipantDto
-     */
-    public function setItem0(int $item0): ParticipantDto
+    public function setItem0(int $item0): self
     {
         $this->item0 = $item0;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getItem1(): int
     {
         return $this->item1;
     }
 
-    /**
-     * @param int $item1
-     * @return ParticipantDto
-     */
-    public function setItem1(int $item1): ParticipantDto
+    public function setItem1(int $item1): self
     {
         $this->item1 = $item1;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getItem2(): int
     {
         return $this->item2;
     }
 
-    /**
-     * @param int $item2
-     * @return ParticipantDto
-     */
-    public function setItem2(int $item2): ParticipantDto
+    public function setItem2(int $item2): self
     {
         $this->item2 = $item2;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getItem3(): int
     {
         return $this->item3;
     }
 
-    /**
-     * @param int $item3
-     * @return ParticipantDto
-     */
-    public function setItem3(int $item3): ParticipantDto
+    public function setItem3(int $item3): self
     {
         $this->item3 = $item3;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getItem4(): int
     {
         return $this->item4;
     }
 
-    /**
-     * @param int $item4
-     * @return ParticipantDto
-     */
-    public function setItem4(int $item4): ParticipantDto
+    public function setItem4(int $item4): self
     {
         $this->item4 = $item4;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getItem5(): int
     {
         return $this->item5;
     }
 
-    /**
-     * @param int $item5
-     * @return ParticipantDto
-     */
-    public function setItem5(int $item5): ParticipantDto
+    public function setItem5(int $item5): self
     {
         $this->item5 = $item5;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getItem6(): int
     {
         return $this->item6;
     }
 
-    /**
-     * @param int $item6
-     * @return ParticipantDto
-     */
-    public function setItem6(int $item6): ParticipantDto
+    public function setItem6(int $item6): self
     {
         $this->item6 = $item6;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getItemsPurchased(): int
     {
         return $this->itemsPurchased;
     }
 
-    /**
-     * @param int $itemsPurchased
-     * @return ParticipantDto
-     */
-    public function setItemsPurchased(int $itemsPurchased): ParticipantDto
+    public function setItemsPurchased(int $itemsPurchased): self
     {
         $this->itemsPurchased = $itemsPurchased;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getKillingSprees(): int
     {
         return $this->killingSprees;
     }
 
-    /**
-     * @param int $killingSprees
-     * @return ParticipantDto
-     */
-    public function setKillingSprees(int $killingSprees): ParticipantDto
+    public function setKillingSprees(int $killingSprees): self
     {
         $this->killingSprees = $killingSprees;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getKills(): int
     {
         return $this->kills;
     }
 
-    /**
-     * @param int $kills
-     * @return ParticipantDto
-     */
-    public function setKills(int $kills): ParticipantDto
+    public function setKills(int $kills): self
     {
         $this->kills = $kills;
+
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getLane(): string
     {
         return $this->lane;
     }
 
-    /**
-     * @param string $lane
-     * @return ParticipantDto
-     */
-    public function setLane(string $lane): ParticipantDto
+    public function setLane(string $lane): self
     {
         $this->lane = $lane;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getLargestCriticalStrike(): int
     {
         return $this->largestCriticalStrike;
     }
 
-    /**
-     * @param int $largestCriticalStrike
-     * @return ParticipantDto
-     */
-    public function setLargestCriticalStrike(int $largestCriticalStrike): ParticipantDto
+    public function setLargestCriticalStrike(int $largestCriticalStrike): self
     {
         $this->largestCriticalStrike = $largestCriticalStrike;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getLargestKillingSpree(): int
     {
         return $this->largestKillingSpree;
     }
 
-    /**
-     * @param int $largestKillingSpree
-     * @return ParticipantDto
-     */
-    public function setLargestKillingSpree(int $largestKillingSpree): ParticipantDto
+    public function setLargestKillingSpree(int $largestKillingSpree): self
     {
         $this->largestKillingSpree = $largestKillingSpree;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getLargestMultiKill(): int
     {
         return $this->largestMultiKill;
     }
 
-    /**
-     * @param int $largestMultiKill
-     * @return ParticipantDto
-     */
-    public function setLargestMultiKill(int $largestMultiKill): ParticipantDto
+    public function setLargestMultiKill(int $largestMultiKill): self
     {
         $this->largestMultiKill = $largestMultiKill;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getLongestTimeSpentLiving(): int
     {
         return $this->longestTimeSpentLiving;
     }
 
-    /**
-     * @param int $longestTimeSpentLiving
-     * @return ParticipantDto
-     */
-    public function setLongestTimeSpentLiving(int $longestTimeSpentLiving): ParticipantDto
+    public function setLongestTimeSpentLiving(int $longestTimeSpentLiving): self
     {
         $this->longestTimeSpentLiving = $longestTimeSpentLiving;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getMagicDamageDealt(): int
     {
         return $this->magicDamageDealt;
     }
 
-    /**
-     * @param int $magicDamageDealt
-     * @return ParticipantDto
-     */
-    public function setMagicDamageDealt(int $magicDamageDealt): ParticipantDto
+    public function setMagicDamageDealt(int $magicDamageDealt): self
     {
         $this->magicDamageDealt = $magicDamageDealt;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getMagicDamageDealtToChampions(): int
     {
         return $this->magicDamageDealtToChampions;
     }
 
-    /**
-     * @param int $magicDamageDealtToChampions
-     * @return ParticipantDto
-     */
-    public function setMagicDamageDealtToChampions(int $magicDamageDealtToChampions): ParticipantDto
+    public function setMagicDamageDealtToChampions(int $magicDamageDealtToChampions): self
     {
         $this->magicDamageDealtToChampions = $magicDamageDealtToChampions;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getMagicDamageTaken(): int
     {
         return $this->magicDamageTaken;
     }
 
-    /**
-     * @param int $magicDamageTaken
-     * @return ParticipantDto
-     */
-    public function setMagicDamageTaken(int $magicDamageTaken): ParticipantDto
+    public function setMagicDamageTaken(int $magicDamageTaken): self
     {
         $this->magicDamageTaken = $magicDamageTaken;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getNeutralMinionsKilled(): int
     {
         return $this->neutralMinionsKilled;
     }
 
-    /**
-     * @param int $neutralMinionsKilled
-     * @return ParticipantDto
-     */
-    public function setNeutralMinionsKilled(int $neutralMinionsKilled): ParticipantDto
+    public function setNeutralMinionsKilled(int $neutralMinionsKilled): self
     {
         $this->neutralMinionsKilled = $neutralMinionsKilled;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getNexusKills(): int
     {
         return $this->nexusKills;
     }
 
-    /**
-     * @param int $nexusKills
-     * @return ParticipantDto
-     */
-    public function setNexusKills(int $nexusKills): ParticipantDto
+    public function setNexusKills(int $nexusKills): self
     {
         $this->nexusKills = $nexusKills;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getNexusTakedowns(): int
     {
         return $this->nexusTakedowns;
     }
 
-    /**
-     * @param int $nexusTakedowns
-     * @return ParticipantDto
-     */
-    public function setNexusTakedowns(int $nexusTakedowns): ParticipantDto
+    public function setNexusTakedowns(int $nexusTakedowns): self
     {
         $this->nexusTakedowns = $nexusTakedowns;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getNexusLost(): int
     {
         return $this->nexusLost;
     }
 
-    /**
-     * @param int $nexusLost
-     * @return ParticipantDto
-     */
-    public function setNexusLost(int $nexusLost): ParticipantDto
+    public function setNexusLost(int $nexusLost): self
     {
         $this->nexusLost = $nexusLost;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getObjectivesStolen(): int
     {
         return $this->objectivesStolen;
     }
 
-    /**
-     * @param int $objectivesStolen
-     * @return ParticipantDto
-     */
-    public function setObjectivesStolen(int $objectivesStolen): ParticipantDto
+    public function setObjectivesStolen(int $objectivesStolen): self
     {
         $this->objectivesStolen = $objectivesStolen;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getObjectivesStolenAssists(): int
     {
         return $this->objectivesStolenAssists;
     }
 
-    /**
-     * @param int $objectivesStolenAssists
-     * @return ParticipantDto
-     */
-    public function setObjectivesStolenAssists(int $objectivesStolenAssists): ParticipantDto
+    public function setObjectivesStolenAssists(int $objectivesStolenAssists): self
     {
         $this->objectivesStolenAssists = $objectivesStolenAssists;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getParticipantId(): int
     {
         return $this->participantId;
     }
 
-    /**
-     * @param int $participantId
-     * @return ParticipantDto
-     */
-    public function setParticipantId(int $participantId): ParticipantDto
+    public function setParticipantId(int $participantId): self
     {
         $this->participantId = $participantId;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getPentaKills(): int
     {
         return $this->pentaKills;
     }
 
-    /**
-     * @param int $pentaKills
-     * @return ParticipantDto
-     */
-    public function setPentaKills(int $pentaKills): ParticipantDto
+    public function setPentaKills(int $pentaKills): self
     {
         $this->pentaKills = $pentaKills;
+
         return $this;
     }
 
-    /**
-     * @return PerksDto
-     */
     public function getPerks(): PerksDto
     {
         return $this->perks;
     }
 
-    /**
-     * @param PerksDto $perks
-     * @return ParticipantDto
-     */
-    public function setPerks(PerksDto $perks): ParticipantDto
+    public function setPerks(PerksDto $perks): self
     {
         $this->perks = $perks;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getPhysicalDamageDealt(): int
     {
         return $this->physicalDamageDealt;
     }
 
-    /**
-     * @param int $physicalDamageDealt
-     * @return ParticipantDto
-     */
-    public function setPhysicalDamageDealt(int $physicalDamageDealt): ParticipantDto
+    public function setPhysicalDamageDealt(int $physicalDamageDealt): self
     {
         $this->physicalDamageDealt = $physicalDamageDealt;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getPhysicalDamageDealtToChampions(): int
     {
         return $this->physicalDamageDealtToChampions;
     }
 
-    /**
-     * @param int $physicalDamageDealtToChampions
-     * @return ParticipantDto
-     */
-    public function setPhysicalDamageDealtToChampions(int $physicalDamageDealtToChampions): ParticipantDto
+    public function setPhysicalDamageDealtToChampions(int $physicalDamageDealtToChampions): self
     {
         $this->physicalDamageDealtToChampions = $physicalDamageDealtToChampions;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getPhysicalDamageTaken(): int
     {
         return $this->physicalDamageTaken;
     }
 
-    /**
-     * @param int $physicalDamageTaken
-     * @return ParticipantDto
-     */
-    public function setPhysicalDamageTaken(int $physicalDamageTaken): ParticipantDto
+    public function setPhysicalDamageTaken(int $physicalDamageTaken): self
     {
         $this->physicalDamageTaken = $physicalDamageTaken;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getProfileIcon(): int
     {
         return $this->profileIcon;
     }
 
-    /**
-     * @param int $profileIcon
-     * @return ParticipantDto
-     */
-    public function setProfileIcon(int $profileIcon): ParticipantDto
+    public function setProfileIcon(int $profileIcon): self
     {
         $this->profileIcon = $profileIcon;
+
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getPuuid(): string
     {
         return $this->puuid;
     }
 
-    /**
-     * @param string $puuid
-     * @return ParticipantDto
-     */
-    public function setPuuid(string $puuid): ParticipantDto
+    public function setPuuid(string $puuid): self
     {
         $this->puuid = $puuid;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getQuadraKills(): int
     {
         return $this->quadraKills;
     }
 
-    /**
-     * @param int $quadraKills
-     * @return ParticipantDto
-     */
-    public function setQuadraKills(int $quadraKills): ParticipantDto
+    public function setQuadraKills(int $quadraKills): self
     {
         $this->quadraKills = $quadraKills;
+
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getRiotIdName(): string
     {
         return $this->riotIdName;
     }
 
-    /**
-     * @param string $riotIdName
-     * @return ParticipantDto
-     */
-    public function setRiotIdName(string $riotIdName): ParticipantDto
+    public function setRiotIdName(string $riotIdName): self
     {
         $this->riotIdName = $riotIdName;
+
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getRiotIdTagline(): string
     {
         return $this->riotIdTagline;
     }
 
-    /**
-     * @param string $riotIdTagline
-     * @return ParticipantDto
-     */
-    public function setRiotIdTagline(string $riotIdTagline): ParticipantDto
+    public function setRiotIdTagline(string $riotIdTagline): self
     {
         $this->riotIdTagline = $riotIdTagline;
+
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getRole(): string
     {
         return $this->role;
     }
 
-    /**
-     * @param string $role
-     * @return ParticipantDto
-     */
-    public function setRole(string $role): ParticipantDto
+    public function setRole(string $role): self
     {
         $this->role = $role;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getSightWardsBoughtInGame(): int
     {
         return $this->sightWardsBoughtInGame;
     }
 
-    /**
-     * @param int $sightWardsBoughtInGame
-     * @return ParticipantDto
-     */
-    public function setSightWardsBoughtInGame(int $sightWardsBoughtInGame): ParticipantDto
+    public function setSightWardsBoughtInGame(int $sightWardsBoughtInGame): self
     {
         $this->sightWardsBoughtInGame = $sightWardsBoughtInGame;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getSpell1Casts(): int
     {
         return $this->spell1Casts;
     }
 
-    /**
-     * @param int $spell1Casts
-     * @return ParticipantDto
-     */
-    public function setSpell1Casts(int $spell1Casts): ParticipantDto
+    public function setSpell1Casts(int $spell1Casts): self
     {
         $this->spell1Casts = $spell1Casts;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getSpell2Casts(): int
     {
         return $this->spell2Casts;
     }
 
-    /**
-     * @param int $spell2Casts
-     * @return ParticipantDto
-     */
-    public function setSpell2Casts(int $spell2Casts): ParticipantDto
+    public function setSpell2Casts(int $spell2Casts): self
     {
         $this->spell2Casts = $spell2Casts;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getSpell3Casts(): int
     {
         return $this->spell3Casts;
     }
 
-    /**
-     * @param int $spell3Casts
-     * @return ParticipantDto
-     */
-    public function setSpell3Casts(int $spell3Casts): ParticipantDto
+    public function setSpell3Casts(int $spell3Casts): self
     {
         $this->spell3Casts = $spell3Casts;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getSpell4Casts(): int
     {
         return $this->spell4Casts;
     }
 
-    /**
-     * @param int $spell4Casts
-     * @return ParticipantDto
-     */
-    public function setSpell4Casts(int $spell4Casts): ParticipantDto
+    public function setSpell4Casts(int $spell4Casts): self
     {
         $this->spell4Casts = $spell4Casts;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getSummoner1Casts(): int
     {
         return $this->summoner1Casts;
     }
 
-    /**
-     * @param int $summoner1Casts
-     * @return ParticipantDto
-     */
-    public function setSummoner1Casts(int $summoner1Casts): ParticipantDto
+    public function setSummoner1Casts(int $summoner1Casts): self
     {
         $this->summoner1Casts = $summoner1Casts;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getSummoner1Id(): int
     {
         return $this->summoner1Id;
     }
 
-    /**
-     * @param int $summoner1Id
-     * @return ParticipantDto
-     */
-    public function setSummoner1Id(int $summoner1Id): ParticipantDto
+    public function setSummoner1Id(int $summoner1Id): self
     {
         $this->summoner1Id = $summoner1Id;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getSummoner2Casts(): int
     {
         return $this->summoner2Casts;
     }
 
-    /**
-     * @param int $summoner2Casts
-     * @return ParticipantDto
-     */
-    public function setSummoner2Casts(int $summoner2Casts): ParticipantDto
+    public function setSummoner2Casts(int $summoner2Casts): self
     {
         $this->summoner2Casts = $summoner2Casts;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getSummoner2Id(): int
     {
         return $this->summoner2Id;
     }
 
-    /**
-     * @param int $summoner2Id
-     * @return ParticipantDto
-     */
-    public function setSummoner2Id(int $summoner2Id): ParticipantDto
+    public function setSummoner2Id(int $summoner2Id): self
     {
         $this->summoner2Id = $summoner2Id;
+
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getSummonerId(): string
     {
         return $this->summonerId;
     }
 
-    /**
-     * @param string $summonerId
-     * @return ParticipantDto
-     */
-    public function setSummonerId(string $summonerId): ParticipantDto
+    public function setSummonerId(string $summonerId): self
     {
         $this->summonerId = $summonerId;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getSummonerLevel(): int
     {
         return $this->summonerLevel;
     }
 
-    /**
-     * @param int $summonerLevel
-     * @return ParticipantDto
-     */
-    public function setSummonerLevel(int $summonerLevel): ParticipantDto
+    public function setSummonerLevel(int $summonerLevel): self
     {
         $this->summonerLevel = $summonerLevel;
+
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getSummonerName(): string
     {
         return $this->summonerName;
     }
 
-    /**
-     * @param string $summonerName
-     * @return ParticipantDto
-     */
-    public function setSummonerName(string $summonerName): ParticipantDto
+    public function setSummonerName(string $summonerName): self
     {
         $this->summonerName = $summonerName;
+
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isTeamEarlySurrendered(): bool
     {
         return $this->teamEarlySurrendered;
     }
 
-    /**
-     * @param bool $teamEarlySurrendered
-     * @return ParticipantDto
-     */
-    public function setTeamEarlySurrendered(bool $teamEarlySurrendered): ParticipantDto
+    public function setTeamEarlySurrendered(bool $teamEarlySurrendered): self
     {
         $this->teamEarlySurrendered = $teamEarlySurrendered;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getTeamId(): int
     {
         return $this->teamId;
     }
 
-    /**
-     * @param int $teamId
-     * @return ParticipantDto
-     */
-    public function setTeamId(int $teamId): ParticipantDto
+    public function setTeamId(int $teamId): self
     {
         $this->teamId = $teamId;
+
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getTeamPosition(): string
     {
         return $this->teamPosition;
     }
 
-    /**
-     * @param string $teamPosition
-     * @return ParticipantDto
-     */
-    public function setTeamPosition(string $teamPosition): ParticipantDto
+    public function setTeamPosition(string $teamPosition): self
     {
         $this->teamPosition = $teamPosition;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getTimeCCingOthers(): int
     {
         return $this->timeCCingOthers;
     }
 
-    /**
-     * @param int $timeCCingOthers
-     * @return ParticipantDto
-     */
-    public function setTimeCCingOthers(int $timeCCingOthers): ParticipantDto
+    public function setTimeCCingOthers(int $timeCCingOthers): self
     {
         $this->timeCCingOthers = $timeCCingOthers;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getTimePlayed(): int
     {
         return $this->timePlayed;
     }
 
-    /**
-     * @param int $timePlayed
-     * @return ParticipantDto
-     */
-    public function setTimePlayed(int $timePlayed): ParticipantDto
+    public function setTimePlayed(int $timePlayed): self
     {
         $this->timePlayed = $timePlayed;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getTotalDamageDealt(): int
     {
         return $this->totalDamageDealt;
     }
 
-    /**
-     * @param int $totalDamageDealt
-     * @return ParticipantDto
-     */
-    public function setTotalDamageDealt(int $totalDamageDealt): ParticipantDto
+    public function setTotalDamageDealt(int $totalDamageDealt): self
     {
         $this->totalDamageDealt = $totalDamageDealt;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getTotalDamageDealtToChampions(): int
     {
         return $this->totalDamageDealtToChampions;
     }
 
-    /**
-     * @param int $totalDamageDealtToChampions
-     * @return ParticipantDto
-     */
-    public function setTotalDamageDealtToChampions(int $totalDamageDealtToChampions): ParticipantDto
+    public function setTotalDamageDealtToChampions(int $totalDamageDealtToChampions): self
     {
         $this->totalDamageDealtToChampions = $totalDamageDealtToChampions;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getTotalDamageShieldedOnTeammates(): int
     {
         return $this->totalDamageShieldedOnTeammates;
     }
 
-    /**
-     * @param int $totalDamageShieldedOnTeammates
-     * @return ParticipantDto
-     */
-    public function setTotalDamageShieldedOnTeammates(int $totalDamageShieldedOnTeammates): ParticipantDto
+    public function setTotalDamageShieldedOnTeammates(int $totalDamageShieldedOnTeammates): self
     {
         $this->totalDamageShieldedOnTeammates = $totalDamageShieldedOnTeammates;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getTotalDamageTaken(): int
     {
         return $this->totalDamageTaken;
     }
 
-    /**
-     * @param int $totalDamageTaken
-     * @return ParticipantDto
-     */
-    public function setTotalDamageTaken(int $totalDamageTaken): ParticipantDto
+    public function setTotalDamageTaken(int $totalDamageTaken): self
     {
         $this->totalDamageTaken = $totalDamageTaken;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getTotalHeal(): int
     {
         return $this->totalHeal;
     }
 
-    /**
-     * @param int $totalHeal
-     * @return ParticipantDto
-     */
-    public function setTotalHeal(int $totalHeal): ParticipantDto
+    public function setTotalHeal(int $totalHeal): self
     {
         $this->totalHeal = $totalHeal;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getTotalHealsOnTeammates(): int
     {
         return $this->totalHealsOnTeammates;
     }
 
-    /**
-     * @param int $totalHealsOnTeammates
-     * @return ParticipantDto
-     */
-    public function setTotalHealsOnTeammates(int $totalHealsOnTeammates): ParticipantDto
+    public function setTotalHealsOnTeammates(int $totalHealsOnTeammates): self
     {
         $this->totalHealsOnTeammates = $totalHealsOnTeammates;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getTotalMinionsKilled(): int
     {
         return $this->totalMinionsKilled;
     }
 
-    /**
-     * @param int $totalMinionsKilled
-     * @return ParticipantDto
-     */
-    public function setTotalMinionsKilled(int $totalMinionsKilled): ParticipantDto
+    public function setTotalMinionsKilled(int $totalMinionsKilled): self
     {
         $this->totalMinionsKilled = $totalMinionsKilled;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getTotalTimeCCDealt(): int
     {
         return $this->totalTimeCCDealt;
     }
 
-    /**
-     * @param int $totalTimeCCDealt
-     * @return ParticipantDto
-     */
-    public function setTotalTimeCCDealt(int $totalTimeCCDealt): ParticipantDto
+    public function setTotalTimeCCDealt(int $totalTimeCCDealt): self
     {
         $this->totalTimeCCDealt = $totalTimeCCDealt;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getTotalTimeSpentDead(): int
     {
         return $this->totalTimeSpentDead;
     }
 
-    /**
-     * @param int $totalTimeSpentDead
-     * @return ParticipantDto
-     */
-    public function setTotalTimeSpentDead(int $totalTimeSpentDead): ParticipantDto
+    public function setTotalTimeSpentDead(int $totalTimeSpentDead): self
     {
         $this->totalTimeSpentDead = $totalTimeSpentDead;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getTotalUnitsHealed(): int
     {
         return $this->totalUnitsHealed;
     }
 
-    /**
-     * @param int $totalUnitsHealed
-     * @return ParticipantDto
-     */
-    public function setTotalUnitsHealed(int $totalUnitsHealed): ParticipantDto
+    public function setTotalUnitsHealed(int $totalUnitsHealed): self
     {
         $this->totalUnitsHealed = $totalUnitsHealed;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getTripleKills(): int
     {
         return $this->tripleKills;
     }
 
-    /**
-     * @param int $tripleKills
-     * @return ParticipantDto
-     */
-    public function setTripleKills(int $tripleKills): ParticipantDto
+    public function setTripleKills(int $tripleKills): self
     {
         $this->tripleKills = $tripleKills;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getTrueDamageDealt(): int
     {
         return $this->trueDamageDealt;
     }
 
-    /**
-     * @param int $trueDamageDealt
-     * @return ParticipantDto
-     */
-    public function setTrueDamageDealt(int $trueDamageDealt): ParticipantDto
+    public function setTrueDamageDealt(int $trueDamageDealt): self
     {
         $this->trueDamageDealt = $trueDamageDealt;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getTrueDamageDealtToChampions(): int
     {
         return $this->trueDamageDealtToChampions;
     }
 
-    /**
-     * @param int $trueDamageDealtToChampions
-     * @return ParticipantDto
-     */
-    public function setTrueDamageDealtToChampions(int $trueDamageDealtToChampions): ParticipantDto
+    public function setTrueDamageDealtToChampions(int $trueDamageDealtToChampions): self
     {
         $this->trueDamageDealtToChampions = $trueDamageDealtToChampions;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getTrueDamageTaken(): int
     {
         return $this->trueDamageTaken;
     }
 
-    /**
-     * @param int $trueDamageTaken
-     * @return ParticipantDto
-     */
-    public function setTrueDamageTaken(int $trueDamageTaken): ParticipantDto
+    public function setTrueDamageTaken(int $trueDamageTaken): self
     {
         $this->trueDamageTaken = $trueDamageTaken;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getTurretKills(): int
     {
         return $this->turretKills;
     }
 
-    /**
-     * @param int $turretKills
-     * @return ParticipantDto
-     */
-    public function setTurretKills(int $turretKills): ParticipantDto
+    public function setTurretKills(int $turretKills): self
     {
         $this->turretKills = $turretKills;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getTurretTakedowns(): int
     {
         return $this->turretTakedowns;
     }
 
-    /**
-     * @param int $turretTakedowns
-     * @return ParticipantDto
-     */
-    public function setTurretTakedowns(int $turretTakedowns): ParticipantDto
+    public function setTurretTakedowns(int $turretTakedowns): self
     {
         $this->turretTakedowns = $turretTakedowns;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getTurretsLost(): int
     {
         return $this->turretsLost;
     }
 
-    /**
-     * @param int $turretsLost
-     * @return ParticipantDto
-     */
-    public function setTurretsLost(int $turretsLost): ParticipantDto
+    public function setTurretsLost(int $turretsLost): self
     {
         $this->turretsLost = $turretsLost;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getUnrealKills(): int
     {
         return $this->unrealKills;
     }
 
-    /**
-     * @param int $unrealKills
-     * @return ParticipantDto
-     */
-    public function setUnrealKills(int $unrealKills): ParticipantDto
+    public function setUnrealKills(int $unrealKills): self
     {
         $this->unrealKills = $unrealKills;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getVisionScore(): int
     {
         return $this->visionScore;
     }
 
-    /**
-     * @param int $visionScore
-     * @return ParticipantDto
-     */
-    public function setVisionScore(int $visionScore): ParticipantDto
+    public function setVisionScore(int $visionScore): self
     {
         $this->visionScore = $visionScore;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getVisionWardsBoughtInGame(): int
     {
         return $this->visionWardsBoughtInGame;
     }
 
-    /**
-     * @param int $visionWardsBoughtInGame
-     * @return ParticipantDto
-     */
-    public function setVisionWardsBoughtInGame(int $visionWardsBoughtInGame): ParticipantDto
+    public function setVisionWardsBoughtInGame(int $visionWardsBoughtInGame): self
     {
         $this->visionWardsBoughtInGame = $visionWardsBoughtInGame;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getWardsKilled(): int
     {
         return $this->wardsKilled;
     }
 
-    /**
-     * @param int $wardsKilled
-     * @return ParticipantDto
-     */
-    public function setWardsKilled(int $wardsKilled): ParticipantDto
+    public function setWardsKilled(int $wardsKilled): self
     {
         $this->wardsKilled = $wardsKilled;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getWardsPlaced(): int
     {
         return $this->wardsPlaced;
     }
 
-    /**
-     * @param int $wardsPlaced
-     * @return ParticipantDto
-     */
-    public function setWardsPlaced(int $wardsPlaced): ParticipantDto
+    public function setWardsPlaced(int $wardsPlaced): self
     {
         $this->wardsPlaced = $wardsPlaced;
+
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isWin(): bool
     {
         return $this->win;
     }
 
-    /**
-     * @param bool $win
-     * @return ParticipantDto
-     */
-    public function setWin(bool $win): ParticipantDto
+    public function setWin(bool $win): self
     {
         $this->win = $win;
+
         return $this;
     }
 }

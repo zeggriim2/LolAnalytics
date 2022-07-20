@@ -10,21 +10,15 @@ class PerksDto
      */
     private array $styles;
 
-    /**
-     * @return PerkStatsDto
-     */
     public function getStatPerks(): PerkStatsDto
     {
         return $this->statPerks;
     }
 
-    /**
-     * @param PerkStatsDto $statPerks
-     * @return PerksDto
-     */
-    public function setStatPerks(PerkStatsDto $statPerks): PerksDto
+    public function setStatPerks(PerkStatsDto $statPerks): self
     {
         $this->statPerks = $statPerks;
+
         return $this;
     }
 
@@ -38,11 +32,11 @@ class PerksDto
 
     /**
      * @param PerkStyleDto[] $styles
-     * @return PerksDto
      */
-    public function setStyles(array $styles): PerksDto
+    public function setStyles(array $styles): self
     {
         $this->styles = $styles;
+
         return $this;
     }
 }

@@ -4,21 +4,18 @@ namespace App\Services\API\LOL\LeagueOfLegends;
 
 use App\Services\API\LOL\BaseApi;
 use App\Services\API\LOL\LeagueOfLegends\DTO\ChampionMastery\ChampionMasteryDto;
-use App\Services\API\LOL\LeagueOfLegends\DTO\League\LeagueEntryDTO;
 use App\Services\API\LOL\LeagueOfLegends\Exception\ForbiddenException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 class ChampionMasteryApi
 {
-
     private const URL_CHAMPION_MASTERY_SUMMONERID =
         BaseApi::URL_RACINE_PLATFORM . 'champion-mastery/v4/champion-masteries/by-summoner/{summonerId}';
     private const URL_CHAMPION_MASTERY_SUMMONERID_CHAMPIONID =
         BaseApi::URL_RACINE_PLATFORM . 'champion-mastery/v4/champion-masteries/by-summoner/{summonerId}/by-champion/{championId}';
     private const URL_CHAMPION_MASTERY_SCORE_SUMMONERID =
         BaseApi::URL_RACINE_PLATFORM . 'champion-mastery/v4/scores/by-summoner/{summonerId}';
-
 
     public function __construct(
         private BaseApi $baseApi,
@@ -27,15 +24,14 @@ class ChampionMasteryApi
     }
 
     /**
-     * @param string $summonerId
-     * @return ChampionMasteryDto[]|null
      * @throws ForbiddenException
+     *
+     * @return ChampionMasteryDto[]|null
      */
     public function getChampionMasteryBySummonerId(
         string $summonerId
-    ): ?array
-    {
-        if (strlen($summonerId) === 0) {
+    ): ?array {
+        if ('' === $summonerId) {
             throw new ForbiddenException('Summoner ID est vide');
         }
 
@@ -61,21 +57,17 @@ class ChampionMasteryApi
     }
 
     /**
-     * @param string $summonerId
-     * @param string $championId
-     * @return ChampionMasteryDto|null
      * @throws ForbiddenException
      */
     public function getChampionMasteryBySummonerIdAndByChampionId(
         string $summonerId,
         string $championId
-    ): ?ChampionMasteryDto
-    {
-        if (strlen($summonerId) === 0) {
+    ): ?ChampionMasteryDto {
+        if ('' === $summonerId) {
             throw new ForbiddenException('Summoner ID est vide');
         }
 
-        if (strlen($championId) === 0) {
+        if ('' === $championId) {
             throw new ForbiddenException('Champion ID est vide');
         }
 
@@ -102,14 +94,12 @@ class ChampionMasteryApi
     }
 
     /**
-     * @param string $summonerId
      * @throws ForbiddenException
      */
     public function getChampionMasteryScoreBySummonerId(
         string $summonerId
-    )
-    {
-        if(strlen($summonerId) === 0) {
+    ) {
+        if ('' === $summonerId) {
             throw new ForbiddenException('Summoner ID est vide');
         }
 
@@ -121,7 +111,7 @@ class ChampionMasteryApi
             ]
         );
 
-        return (int)$this->baseApi->callApi(
+        return (int) $this->baseApi->callApi(
             $url,
             Request::METHOD_GET,
             [
@@ -133,9 +123,7 @@ class ChampionMasteryApi
         );
     }
 
-
     /**
-     * @param array $datas
      * @return ChampionMasteryDto[]
      */
     private function denormalizeArray(
@@ -149,10 +137,6 @@ class ChampionMasteryApi
         return $listEntity;
     }
 
-    /**
-     * @param array $data
-     * @return ChampionMasteryDto
-     */
     private function denormalize(
         array $data
     ): ChampionMasteryDto {

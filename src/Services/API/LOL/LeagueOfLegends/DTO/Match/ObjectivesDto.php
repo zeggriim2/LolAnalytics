@@ -11,111 +11,75 @@ class ObjectivesDto
     private ObjectiveDto $riftHerald;
     private ObjectiveDto $tower;
 
-    /**
-     * @return ObjectiveDto
-     */
     public function getBaron(): ObjectiveDto
     {
         return $this->baron;
     }
 
-    /**
-     * @param ObjectiveDto $baron
-     * @return ObjectivesDto
-     */
-    public function setBaron(ObjectiveDto $baron): ObjectivesDto
+    public function setBaron(ObjectiveDto $baron): self
     {
         $this->baron = $baron;
+
         return $this;
     }
 
-    /**
-     * @return ObjectiveDto
-     */
     public function getChampion(): ObjectiveDto
     {
         return $this->champion;
     }
 
-    /**
-     * @param ObjectiveDto $champion
-     * @return ObjectivesDto
-     */
-    public function setChampion(ObjectiveDto $champion): ObjectivesDto
+    public function setChampion(ObjectiveDto $champion): self
     {
         $this->champion = $champion;
+
         return $this;
     }
 
-    /**
-     * @return ObjectiveDto
-     */
     public function getDragon(): ObjectiveDto
     {
         return $this->dragon;
     }
 
-    /**
-     * @param ObjectiveDto $dragon
-     * @return ObjectivesDto
-     */
-    public function setDragon(ObjectiveDto $dragon): ObjectivesDto
+    public function setDragon(ObjectiveDto $dragon): self
     {
         $this->dragon = $dragon;
+
         return $this;
     }
 
-    /**
-     * @return ObjectiveDto
-     */
     public function getInhibitor(): ObjectiveDto
     {
         return $this->inhibitor;
     }
 
-    /**
-     * @param ObjectiveDto $inhibitor
-     * @return ObjectivesDto
-     */
-    public function setInhibitor(ObjectiveDto $inhibitor): ObjectivesDto
+    public function setInhibitor(ObjectiveDto $inhibitor): self
     {
         $this->inhibitor = $inhibitor;
+
         return $this;
     }
 
-    /**
-     * @return ObjectiveDto
-     */
     public function getRiftHerald(): ObjectiveDto
     {
         return $this->riftHerald;
     }
 
-    /**
-     * @param ObjectiveDto $riftHerald
-     * @return ObjectivesDto
-     */
-    public function setRiftHerald(ObjectiveDto $riftHerald): ObjectivesDto
+    public function setRiftHerald(ObjectiveDto $riftHerald): self
     {
         $this->riftHerald = $riftHerald;
+
         return $this;
     }
 
-    /**
-     * @return ObjectiveDto
-     */
     public function getTower(): ObjectiveDto
     {
         return $this->tower;
     }
 
-    /**
-     * @param ObjectiveDto $tower
-     * @return ObjectivesDto
-     */
-    public function setTower(ObjectiveDto $tower): ObjectivesDto
+    public function setTower(ObjectiveDto $tower): self
     {
         $this->tower = $tower;
+
         return $this;
     }
 }

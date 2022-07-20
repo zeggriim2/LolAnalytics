@@ -10,7 +10,7 @@ class ChampionApiTest extends KernelTestCase
 {
     private ChampionApi $championApi;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->championApi = static::getContainer()->get(ChampionApi::class);
     }

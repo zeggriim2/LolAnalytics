@@ -11,39 +11,27 @@ class MetadataDto
      */
     private array $participants;
 
-    /**
-     * @return string
-     */
     public function getDataVersion(): string
     {
         return $this->dataVersion;
     }
 
-    /**
-     * @param string $dataVersion
-     * @return MetadataDto
-     */
-    public function setDataVersion(string $dataVersion): MetadataDto
+    public function setDataVersion(string $dataVersion): self
     {
         $this->dataVersion = $dataVersion;
+
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getMatchId(): string
     {
         return $this->matchId;
     }
 
-    /**
-     * @param string $matchId
-     * @return MetadataDto
-     */
-    public function setMatchId(string $matchId): MetadataDto
+    public function setMatchId(string $matchId): self
     {
         $this->matchId = $matchId;
+
         return $this;
     }
 
@@ -57,11 +45,11 @@ class MetadataDto
 
     /**
      * @param string[] $participants
-     * @return MetadataDto
      */
-    public function setParticipants(array $participants): MetadataDto
+    public function setParticipants(array $participants): self
     {
         $this->participants = $participants;
+
         return $this;
     }
 }

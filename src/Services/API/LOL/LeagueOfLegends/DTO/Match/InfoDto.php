@@ -26,183 +26,123 @@ class InfoDto
     private array $teams;
     private string $tournamentCode;
 
-    /**
-     * @return int
-     */
     public function getGameCreation(): int
     {
         return $this->gameCreation;
     }
 
-    /**
-     * @param int $gameCreation
-     * @return InfoDto
-     */
-    public function setGameCreation(int $gameCreation): InfoDto
+    public function setGameCreation(int $gameCreation): self
     {
         $this->gameCreation = $gameCreation;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getGameDuration(): int
     {
         return $this->gameDuration;
     }
 
-    /**
-     * @param int $gameDuration
-     * @return InfoDto
-     */
-    public function setGameDuration(int $gameDuration): InfoDto
+    public function setGameDuration(int $gameDuration): self
     {
         $this->gameDuration = $gameDuration;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getGameEndTimestamp(): int
     {
         return $this->gameEndTimestamp;
     }
 
-    /**
-     * @param int $gameEndTimestamp
-     * @return InfoDto
-     */
-    public function setGameEndTimestamp(int $gameEndTimestamp): InfoDto
+    public function setGameEndTimestamp(int $gameEndTimestamp): self
     {
         $this->gameEndTimestamp = $gameEndTimestamp;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getGameId(): int
     {
         return $this->gameId;
     }
 
-    /**
-     * @param int $gameId
-     * @return InfoDto
-     */
-    public function setGameId(int $gameId): InfoDto
+    public function setGameId(int $gameId): self
     {
         $this->gameId = $gameId;
+
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getGameMode(): string
     {
         return $this->gameMode;
     }
 
-    /**
-     * @param string $gameMode
-     * @return InfoDto
-     */
-    public function setGameMode(string $gameMode): InfoDto
+    public function setGameMode(string $gameMode): self
     {
         $this->gameMode = $gameMode;
+
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getGameName(): string
     {
         return $this->gameName;
     }
 
-    /**
-     * @param string $gameName
-     * @return InfoDto
-     */
-    public function setGameName(string $gameName): InfoDto
+    public function setGameName(string $gameName): self
     {
         $this->gameName = $gameName;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getGameStartTimestamp(): int
     {
         return $this->gameStartTimestamp;
     }
 
-    /**
-     * @param int $gameStartTimestamp
-     * @return InfoDto
-     */
-    public function setGameStartTimestamp(int $gameStartTimestamp): InfoDto
+    public function setGameStartTimestamp(int $gameStartTimestamp): self
     {
         $this->gameStartTimestamp = $gameStartTimestamp;
+
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getGameType(): string
     {
         return $this->gameType;
     }
 
-    /**
-     * @param string $gameType
-     * @return InfoDto
-     */
-    public function setGameType(string $gameType): InfoDto
+    public function setGameType(string $gameType): self
     {
         $this->gameType = $gameType;
+
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getGameVersion(): string
     {
         return $this->gameVersion;
     }
 
-    /**
-     * @param string $gameVersion
-     * @return InfoDto
-     */
-    public function setGameVersion(string $gameVersion): InfoDto
+    public function setGameVersion(string $gameVersion): self
     {
         $this->gameVersion = $gameVersion;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getMapId(): int
     {
         return $this->mapId;
     }
 
-    /**
-     * @param int $mapId
-     * @return InfoDto
-     */
-    public function setMapId(int $mapId): InfoDto
+    public function setMapId(int $mapId): self
     {
         $this->mapId = $mapId;
+
         return $this;
     }
 
@@ -216,47 +156,35 @@ class InfoDto
 
     /**
      * @param ParticipantDto[] $participants
-     * @return InfoDto
      */
-    public function setParticipants(array $participants): InfoDto
+    public function setParticipants(array $participants): self
     {
         $this->participants = $participants;
+
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getPlatformId(): string
     {
         return $this->platformId;
     }
 
-    /**
-     * @param string $platformId
-     * @return InfoDto
-     */
-    public function setPlatformId(string $platformId): InfoDto
+    public function setPlatformId(string $platformId): self
     {
         $this->platformId = $platformId;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getQueueId(): int
     {
         return $this->queueId;
     }
 
-    /**
-     * @param int $queueId
-     * @return InfoDto
-     */
-    public function setQueueId(int $queueId): InfoDto
+    public function setQueueId(int $queueId): self
     {
         $this->queueId = $queueId;
+
         return $this;
     }
 
@@ -270,29 +198,23 @@ class InfoDto
 
     /**
      * @param TeamDto[] $teams
-     * @return InfoDto
      */
-    public function setTeams(array $teams): InfoDto
+    public function setTeams(array $teams): self
     {
         $this->teams = $teams;
+
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getTournamentCode(): string
     {
         return $this->tournamentCode;
     }
 
-    /**
-     * @param string $tournamentCode
-     * @return InfoDto
-     */
-    public function setTournamentCode(string $tournamentCode): InfoDto
+    public function setTournamentCode(string $tournamentCode): self
     {
         $this->tournamentCode = $tournamentCode;
+
         return $this;
     }
 }

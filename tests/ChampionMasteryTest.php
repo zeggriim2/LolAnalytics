@@ -11,7 +11,7 @@ class ChampionMasteryTest extends KernelTestCase
 {
     private ChampionMasteryApi $championMasteryApi;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->championMasteryApi = static::getContainer()->get(ChampionMasteryApi::class);
     }
@@ -19,10 +19,9 @@ class ChampionMasteryTest extends KernelTestCase
     public function testChampionMasteryBySummonerIdSuccess()
     {
         $championMasteryList = $this->championMasteryApi
-            ->getChampionMasteryBySummonerId("tSmVTVjydJYj5gbjMy8IhFkyMpgWhc4JNdH4ZbqHal3maT4");
+            ->getChampionMasteryBySummonerId('tSmVTVjydJYj5gbjMy8IhFkyMpgWhc4JNdH4ZbqHal3maT4');
 
-
-        if($championMasteryList > 0) {
+        if ($championMasteryList > 0) {
             $this->assertIsArray($championMasteryList);
 
             foreach ($championMasteryList as $championMastery) {
@@ -40,8 +39,8 @@ class ChampionMasteryTest extends KernelTestCase
     public function testChampionMasteryBySummonerIdAndByChampionSuccess()
     {
         $championMastery = $this->championMasteryApi->getChampionMasteryBySummonerIdAndByChampionId(
-            "tSmVTVjydJYj5gbjMy8IhFkyMpgWhc4JNdH4ZbqHal3maT4",
-            "222"
+            'tSmVTVjydJYj5gbjMy8IhFkyMpgWhc4JNdH4ZbqHal3maT4',
+            '222'
         );
         $this->assertInstanceOf(ChampionMasteryDto::class, $championMastery);
     }
@@ -67,7 +66,7 @@ class ChampionMasteryTest extends KernelTestCase
     public function testChampionMasteryScoreBySummonerIdSuccess()
     {
         $championMasteryScore = $this->championMasteryApi->getChampionMasteryScoreBySummonerId(
-            "tSmVTVjydJYj5gbjMy8IhFkyMpgWhc4JNdH4ZbqHal3maT4"
+            'tSmVTVjydJYj5gbjMy8IhFkyMpgWhc4JNdH4ZbqHal3maT4'
         );
 
         $this->assertIsInt($championMasteryScore);
@@ -77,7 +76,7 @@ class ChampionMasteryTest extends KernelTestCase
     {
         $this->expectException(ForbiddenException::class);
         $championMasteryScore = $this->championMasteryApi->getChampionMasteryScoreBySummonerId(
-            ""
+            ''
         );
     }
 }

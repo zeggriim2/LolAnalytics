@@ -14,165 +14,111 @@ class ChampionMasteryDto
     private int $championPointsSinceLastLevel;
     private int $tokensEarned;
 
-    /**
-     * @return int
-     */
     public function getChampionPointsUntilNextLevel(): int
     {
         return $this->championPointsUntilNextLevel;
     }
 
-    /**
-     * @param int $championPointsUntilNextLevel
-     * @return ChampionMasteryDto
-     */
-    public function setChampionPointsUntilNextLevel(int $championPointsUntilNextLevel): ChampionMasteryDto
+    public function setChampionPointsUntilNextLevel(int $championPointsUntilNextLevel): self
     {
         $this->championPointsUntilNextLevel = $championPointsUntilNextLevel;
+
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isChestGranted(): bool
     {
         return $this->chestGranted;
     }
 
-    /**
-     * @param bool $chestGranted
-     * @return ChampionMasteryDto
-     */
-    public function setChestGranted(bool $chestGranted): ChampionMasteryDto
+    public function setChestGranted(bool $chestGranted): self
     {
         $this->chestGranted = $chestGranted;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getChampionId(): int
     {
         return $this->championId;
     }
 
-    /**
-     * @param int $championId
-     * @return ChampionMasteryDto
-     */
-    public function setChampionId(int $championId): ChampionMasteryDto
+    public function setChampionId(int $championId): self
     {
         $this->championId = $championId;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getLastPlayTime(): int
     {
         return $this->lastPlayTime;
     }
 
-    /**
-     * @param int $lastPlayTime
-     * @return ChampionMasteryDto
-     */
-    public function setLastPlayTime(int $lastPlayTime): ChampionMasteryDto
+    public function setLastPlayTime(int $lastPlayTime): self
     {
         $this->lastPlayTime = $lastPlayTime;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getChampionLevel(): int
     {
         return $this->championLevel;
     }
 
-    /**
-     * @param int $championLevel
-     * @return ChampionMasteryDto
-     */
-    public function setChampionLevel(int $championLevel): ChampionMasteryDto
+    public function setChampionLevel(int $championLevel): self
     {
         $this->championLevel = $championLevel;
+
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getSummonerId(): string
     {
         return $this->summonerId;
     }
 
-    /**
-     * @param string $summonerId
-     * @return ChampionMasteryDto
-     */
-    public function setSummonerId(string $summonerId): ChampionMasteryDto
+    public function setSummonerId(string $summonerId): self
     {
         $this->summonerId = $summonerId;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getChampionPoints(): int
     {
         return $this->championPoints;
     }
 
-    /**
-     * @param int $championPoints
-     * @return ChampionMasteryDto
-     */
-    public function setChampionPoints(int $championPoints): ChampionMasteryDto
+    public function setChampionPoints(int $championPoints): self
     {
         $this->championPoints = $championPoints;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getChampionPointsSinceLastLevel(): int
     {
         return $this->championPointsSinceLastLevel;
     }
 
-    /**
-     * @param int $championPointsSinceLastLevel
-     * @return ChampionMasteryDto
-     */
-    public function setChampionPointsSinceLastLevel(int $championPointsSinceLastLevel): ChampionMasteryDto
+    public function setChampionPointsSinceLastLevel(int $championPointsSinceLastLevel): self
     {
         $this->championPointsSinceLastLevel = $championPointsSinceLastLevel;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getTokensEarned(): int
     {
         return $this->tokensEarned;
     }
 
-    /**
-     * @param int $tokensEarned
-     * @return ChampionMasteryDto
-     */
-    public function setTokensEarned(int $tokensEarned): ChampionMasteryDto
+    public function setTokensEarned(int $tokensEarned): self
     {
         $this->tokensEarned = $tokensEarned;
+
         return $this;
     }
 }

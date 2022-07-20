@@ -10,13 +10,12 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 class MatchApi
 {
-
     private const URL_MATCH_PUUID =
-        BaseApi::URL_RACINE_REGION . "match/v5/matches/by-puuid/{puuid}/ids?start={start}&count={count}";
+        BaseApi::URL_RACINE_REGION . 'match/v5/matches/by-puuid/{puuid}/ids?start={start}&count={count}';
     private const URL_MATCH_ID =
-        BaseApi::URL_RACINE_REGION . "match/v5/matches/{matchId}";
+        BaseApi::URL_RACINE_REGION . 'match/v5/matches/{matchId}';
     private const URL_MATCH_TIMELINE_MATCH_ID =
-        BaseApi::URL_RACINE_REGION . "match/v5/matches/{matchId}/timeline";
+        BaseApi::URL_RACINE_REGION . 'match/v5/matches/{matchId}/timeline';
 
     public function __construct(
         private BaseApi $baseApi,
@@ -25,29 +24,26 @@ class MatchApi
     }
 
     /**
-     * @param string $puuid
-     * @param int $start
-     * @param int $count
-     * @return string[]|null
      * @throws ForbiddenException
+     *
+     * @return string[]|null
      */
     public function getMatchByPuuid(
         string $puuid,
         int $start = 0,
         int $count = 20
-    ): ?array
-    {
-        if(strlen($puuid) === 0) {
-            throw new ForbiddenException("Puuid est vide");
+    ): ?array {
+        if ('' === $puuid) {
+            throw new ForbiddenException('Puuid est vide');
         }
 
         $url = $this->baseApi->constructUrl(
             self::URL_MATCH_PUUID,
             [
-                'region'    => 'europe',
-                'puuid'     => $puuid,
-                'start'     => $start,
-                'count'     => $count
+                'region' => 'europe',
+                'puuid' => $puuid,
+                'start' => $start,
+                'count' => $count,
             ]
         );
 
@@ -63,23 +59,20 @@ class MatchApi
     }
 
     /**
-     * @param string $matchId
-     * @return MatchDto|null
      * @throws ForbiddenException
      */
     public function getMatchById(
         string $matchId
-    ): ?MatchDto
-    {
-        if(strlen($matchId) === 0) {
-            throw new ForbiddenException("Match ID est vide");
+    ): ?MatchDto {
+        if ('' === $matchId) {
+            throw new ForbiddenException('Match ID est vide');
         }
 
         $url = $this->baseApi->constructUrl(
             self::URL_MATCH_ID,
             [
-                'region'    => 'europe',
-                'matchId'   => $matchId
+                'region' => 'europe',
+                'matchId' => $matchId,
             ]
         );
 
@@ -98,17 +91,16 @@ class MatchApi
 
     public function getMatchTimeLineByMatchId(
         string $matchId
-    )
-    {
-        if(strlen($matchId) === 0){
-            throw new ForbiddenException("Match ID est vide");
+    ) {
+        if ('' === $matchId) {
+            throw new ForbiddenException('Match ID est vide');
         }
 
         $url = $this->baseApi->constructUrl(
             self::URL_MATCH_TIMELINE_MATCH_ID,
             [
-                'region'    => 'europe',
-                'matchId'   => $matchId
+                'region' => 'europe',
+                'matchId' => $matchId,
             ]
         );
 
@@ -126,7 +118,6 @@ class MatchApi
     }
 
     /**
-     * @param array $data
      * @return MatchDto
      */
     private function denormalize(array $data)
