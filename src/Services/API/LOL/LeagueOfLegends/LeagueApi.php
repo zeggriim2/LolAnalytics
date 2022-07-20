@@ -35,9 +35,9 @@ class LeagueApi
     }
 
     /**
-     * @param string $summonerId
-     * @return LeagueEntryDTO[]|null
      * @throws ForbiddenException
+     *
+     * @return LeagueEntryDTO[]|null
      */
     public function leagueBySummonerId(
         string $summonerId
@@ -68,8 +68,6 @@ class LeagueApi
     }
 
     /**
-     * @param string $queue
-     * @return LeagueListDTO|null
      * @throws ForbiddenException
      * @throws LeagueArgumentException
      */
@@ -106,8 +104,6 @@ class LeagueApi
     }
 
     /**
-     * @param string $queue
-     * @return LeagueListDTO|null
      * @throws ForbiddenException
      * @throws LeagueArgumentException
      */
@@ -144,8 +140,6 @@ class LeagueApi
     }
 
     /**
-     * @param string $queue
-     * @return LeagueListDTO|null
      * @throws ForbiddenException
      * @throws LeagueArgumentException
      */
@@ -182,8 +176,6 @@ class LeagueApi
     }
 
     /**
-     * @param string $leagueId
-     * @return LeagueListDTO|null
      * @throws ForbiddenException
      */
     public function leagueByLeagueId(
@@ -215,12 +207,10 @@ class LeagueApi
     }
 
     /**
-     * @param string $queue
-     * @param string $tier
-     * @param string $division
-     * @return LeagueEntryDTO[]|null
      * @throws ForbiddenException
      * @throws LeagueArgumentException
+     *
+     * @return LeagueEntryDTO[]|null
      */
     public function leagueByQueueByTierByDivision(
         string $queue,
@@ -259,7 +249,6 @@ class LeagueApi
     }
 
     /**
-     * @param array $datas
      * @return LeagueEntryDTO[]
      */
     private function denormalizeArray(
@@ -273,10 +262,6 @@ class LeagueApi
         return $listEntity;
     }
 
-    /**
-     * @param array $data
-     * @return LeagueListDTO
-     */
     private function denormalize(
         array $data
     ): LeagueListDTO {

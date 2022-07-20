@@ -4,7 +4,6 @@ namespace App\Services\API\LOL\LeagueOfLegends;
 
 use App\Services\API\LOL\BaseApi;
 use App\Services\API\LOL\LeagueOfLegends\DTO\Champion\ChampionInfoDTO;
-use App\Services\API\LOL\LeagueOfLegends\DTO\League\LeagueListDTO;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
@@ -19,15 +18,12 @@ class ChampionApi
     ) {
     }
 
-    /**
-     * @return ChampionInfoDTO|null
-     */
     public function getChampionRotation(): ?ChampionInfoDTO
     {
         $url = $this->baseApi->constructUrl(
             self::URL_CHAMPION_ROTATION,
             [
-                'platform' => $this->baseApi->platform
+                'platform' => $this->baseApi->platform,
             ]
         );
 
@@ -44,10 +40,6 @@ class ChampionApi
         return $championRotation ? $this->denormalize($championRotation) : null;
     }
 
-    /**
-     * @param array $data
-     * @return ChampionInfoDTO
-     */
     private function denormalize(
         array $data
     ): ChampionInfoDTO {

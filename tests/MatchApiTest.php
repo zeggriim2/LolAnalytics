@@ -11,7 +11,7 @@ class MatchApiTest extends KernelTestCase
 {
     private MatchApi $matchApi;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->matchApi = static::getContainer()->get(MatchApi::class);
     }
@@ -19,7 +19,7 @@ class MatchApiTest extends KernelTestCase
     public function testMatchByPuuidSuccess()
     {
         $match = $this->matchApi->getMatchByPuuid(
-            "NFLqmQ-TfqzILQI1aYhPTIBn6FG1Ox3QYT2sCGDRQNlEQC8MVIzkOjw2VAncGE70VF-L4ptfaUxEUw"
+            'NFLqmQ-TfqzILQI1aYhPTIBn6FG1Ox3QYT2sCGDRQNlEQC8MVIzkOjw2VAncGE70VF-L4ptfaUxEUw'
         );
         $this->assertIsArray($match);
     }
@@ -27,33 +27,33 @@ class MatchApiTest extends KernelTestCase
     public function testMatchByPuuidForbiddenException()
     {
         $this->expectException(ForbiddenException::class);
-        $this->expectExceptionMessage("Puuid est vide");
-        $this->matchApi->getMatchByPuuid("");
+        $this->expectExceptionMessage('Puuid est vide');
+        $this->matchApi->getMatchByPuuid('');
     }
 
     public function testMatchByIdSuccess()
     {
-        $matchDetail = $this->matchApi->getMatchById("EUW1_5966722251");
+        $matchDetail = $this->matchApi->getMatchById('EUW1_5966722251');
         $this->assertInstanceOf(MatchDto::class, $matchDetail);
     }
 
     public function testMatchByIdForbiddenException()
     {
         $this->expectException(ForbiddenException::class);
-        $this->expectExceptionMessage("Match ID est vide");
-        $matchDetail = $this->matchApi->getMatchById("");
+        $this->expectExceptionMessage('Match ID est vide');
+        $matchDetail = $this->matchApi->getMatchById('');
     }
 
     public function testMatchTimeLineByIdSuccess()
     {
-        $matchDetail = $this->matchApi->getMatchTimeLineByMatchId("EUW1_5966722251");
+        $matchDetail = $this->matchApi->getMatchTimeLineByMatchId('EUW1_5966722251');
         $this->assertIsArray($matchDetail);
     }
 
     public function testMatchTimeLineByIdForbiddenException()
     {
         $this->expectException(ForbiddenException::class);
-        $this->expectExceptionMessage("Match ID est vide");
-        $matchDetail = $this->matchApi->getMatchTimeLineByMatchId("");
+        $this->expectExceptionMessage('Match ID est vide');
+        $matchDetail = $this->matchApi->getMatchTimeLineByMatchId('');
     }
 }

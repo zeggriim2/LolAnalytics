@@ -7,14 +7,13 @@ use Symfony\Component\HttpFoundation\Request;
 
 class DataDragonApi
 {
-    const URL_RACINE    = "https://ddragon.leagueoflegends.com/";
-    const URL_VERSION   = self::URL_RACINE . "api/versions.json";
-    const URL_LANGUAGE  = self::URL_RACINE . "cdn/languages.json";
-    const URL_CHAMPIONS = self::URL_RACINE . "cdn/{version}/data/{lang}/champion.json";
-    const URL_CHAMPION  = self::URL_RACINE . "cdn/{version}/data/{lang}/champion/{champion}.json";
-    const URL_ITEMS     = self::URL_RACINE . "cdn/{version}/data/{lang}/item.json";
-    const URL_SUMMONER  = self::URL_RACINE . "cdn/{version}/data/{lang}/summoner.json";
-
+    public const URL_RACINE = 'https://ddragon.leagueoflegends.com/';
+    public const URL_VERSION = self::URL_RACINE . 'api/versions.json';
+    public const URL_LANGUAGE = self::URL_RACINE . 'cdn/languages.json';
+    public const URL_CHAMPIONS = self::URL_RACINE . 'cdn/{version}/data/{lang}/champion.json';
+    public const URL_CHAMPION = self::URL_RACINE . 'cdn/{version}/data/{lang}/champion/{champion}.json';
+    public const URL_ITEMS = self::URL_RACINE . 'cdn/{version}/data/{lang}/item.json';
+    public const URL_SUMMONER = self::URL_RACINE . 'cdn/{version}/data/{lang}/summoner.json';
 
     public function __construct(
         private BaseApi $baseApi,
@@ -35,13 +34,11 @@ class DataDragonApi
     }
 
     /**
-     * @param string|null $version
-     * @param string $lang
      * @return array|null
      */
-    public function getChampions(string $version = null,string $lang = 'fr_FR')
+    public function getChampions(string $version = null, string $lang = 'fr_FR')
     {
-        if(is_null($version)) {
+        if (null === $version) {
             $version = $this->getLastVersion();
         }
 
@@ -49,20 +46,19 @@ class DataDragonApi
             self::URL_CHAMPIONS,
             [
                 'version' => $version,
-                'lang' => $lang
+                'lang' => $lang,
             ]
         );
-        return $this->baseApi->callApi($url,Request::METHOD_GET);
+
+        return $this->baseApi->callApi($url, Request::METHOD_GET);
     }
 
     /**
-     * @param string $champion
-     * @param string|null $version
-     * @param string $lang
      * @return array|null
      */
-    public function getChampion(string $champion, string $version = null, string $lang = 'fr_FR') {
-        if(is_null($version)) {
+    public function getChampion(string $champion, string $version = null, string $lang = 'fr_FR')
+    {
+        if (null === $version) {
             $version = $this->getLastVersion();
         }
 
@@ -71,7 +67,7 @@ class DataDragonApi
             [
                 'champion' => ucfirst($champion),
                 'version' => $version,
-                'lang' => $lang
+                'lang' => $lang,
             ]
         );
 
@@ -79,29 +75,28 @@ class DataDragonApi
     }
 
     /**
-     * @param string|null $version
-     * @param string $lang
      * @return bool[]|int[]|string|string[]|null
      */
-    public function getItems(string $version = null,string $lang = "fr_FR")
+    public function getItems(string $version = null, string $lang = 'fr_FR')
     {
-        if(is_null($version)) {
+        if (null === $version) {
             $version = $this->getLastVersion();
         }
 
         $url = $this->baseApi->constructUrl(
             self::URL_ITEMS,
             [
-                'version'   => $version,
-                'lang'      => $lang
+                'version' => $version,
+                'lang' => $lang,
             ]
         );
-        return $this->baseApi->callApi($url,Request::METHOD_GET);
+
+        return $this->baseApi->callApi($url, Request::METHOD_GET);
     }
 
-    public function getSummoner(string $version = null,string $lang = 'fr_FR')
+    public function getSummoner(string $version = null, string $lang = 'fr_FR')
     {
-        if(is_null($version)) {
+        if (null === $version) {
             $version = $this->getLastVersion();
         }
 
@@ -119,6 +114,6 @@ class DataDragonApi
      */
     private function getLastVersion()
     {
-        return  $this->getVersions()[0];
+        return $this->getVersions()[0];
     }
 }

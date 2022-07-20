@@ -11,21 +11,15 @@ class PerkStyleDto
     private array $selections;
     private int $style;
 
-    /**
-     * @return string
-     */
     public function getDescription(): string
     {
         return $this->description;
     }
 
-    /**
-     * @param string $description
-     * @return PerkStyleDto
-     */
-    public function setDescription(string $description): PerkStyleDto
+    public function setDescription(string $description): self
     {
         $this->description = $description;
+
         return $this;
     }
 
@@ -39,29 +33,23 @@ class PerkStyleDto
 
     /**
      * @param PerkStyleSelectionDto[] $selections
-     * @return PerkStyleDto
      */
-    public function setSelections(array $selections): PerkStyleDto
+    public function setSelections(array $selections): self
     {
         $this->selections = $selections;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getStyle(): int
     {
         return $this->style;
     }
 
-    /**
-     * @param int $style
-     * @return PerkStyleDto
-     */
-    public function setStyle(int $style): PerkStyleDto
+    public function setStyle(int $style): self
     {
         $this->style = $style;
+
         return $this;
     }
 }

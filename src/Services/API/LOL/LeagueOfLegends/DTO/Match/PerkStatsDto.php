@@ -8,57 +8,39 @@ class PerkStatsDto
     private int $flex;
     private int $offense;
 
-    /**
-     * @return int
-     */
     public function getDefense(): int
     {
         return $this->defense;
     }
 
-    /**
-     * @param int $defense
-     * @return PerkStatsDto
-     */
-    public function setDefense(int $defense): PerkStatsDto
+    public function setDefense(int $defense): self
     {
         $this->defense = $defense;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getFlex(): int
     {
         return $this->flex;
     }
 
-    /**
-     * @param int $flex
-     * @return PerkStatsDto
-     */
-    public function setFlex(int $flex): PerkStatsDto
+    public function setFlex(int $flex): self
     {
         $this->flex = $flex;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getOffense(): int
     {
         return $this->offense;
     }
 
-    /**
-     * @param int $offense
-     * @return PerkStatsDto
-     */
-    public function setOffense(int $offense): PerkStatsDto
+    public function setOffense(int $offense): self
     {
         $this->offense = $offense;
+
         return $this;
     }
 }
