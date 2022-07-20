@@ -44,3 +44,9 @@ services:
 
     App\Services\API\LOL\LeagueOfLegends\MatchApi:
         public: true
+
+    App\Services\API\LOL\DataDragon\DataDragonApi:
+        public: true
+
+    App\Services\API\LOL\DataDragon\GeneralApi:
+        public: true
