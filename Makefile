@@ -1,11 +1,5 @@
-install:
-	@composer install
-
 analyse:
 	composer valid
-
-cs-fix:
-	vendor\bin\php-cs-fixer fix --allow-risky yes -vvv
 
 # Docker
 docker-start:
@@ -17,8 +11,14 @@ docker-stop:
 docker-remove:
 	@docker-compose rm -v database
 
-# Server
 
+
+#Command Interne
+cmd-versions:
+	 @php bin/console app:versions
+
+
+# Server
 server-start:
 	@symfony serve -d
 
@@ -28,6 +28,42 @@ server-list:
 server-stop:
 	@symfony server:stop
 
+# Doctrine
+migrate:
+	@php bin/console make:migration
+
+doc-migrate-dev:
+	@php bin/console doctrine:migration:migrate --env=dev
+
+doc-migrate-test:
+	@php bin/console doctrine:migration:migrate --env=test
+
+#Database
+db-remove-dev:
+	php bin/console doctrine:database:drop --force --env=dev --if-exists
+
+db-create-dev:
+	php bin/console doctrine:database:create --env=dev --if-not-exists
+
+db-restore-dev:
+	make db-remove-dev
+	make db-create-dev
+	make doc-migrate-dev
+
+db-remove-test:
+	php bin/console doctrine:database:drop --force --env=test --if-exists
+
+db-create-test:
+	php bin/console doctrine:database:create --env=test --if-not-exists
+
+db-restore-test:
+	make db-remove-test
+	make db-create-test
+	make doc-migrate-test
+
+# Composer
+composer-install:
+	@composer install
 
 install:
 	cp .env.dist .env.$(env).local
@@ -38,5 +74,10 @@ install:
 	make prepare env=$(env)
 
 
+
+
 test-start:
 	@php bin/phpunit --coverage-html tests\coverage --coverage-text=tests\coverage.txt
+
+cs-fix:
+	vendor\bin\php-cs-fixer fix --allow-risky yes -vvv
