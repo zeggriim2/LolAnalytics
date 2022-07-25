@@ -3,8 +3,8 @@
 namespace App\Tests\Command;
 
 use App\Repository\VersionRepository;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class CommandVersionTest extends KernelTestCase
@@ -24,7 +24,7 @@ class CommandVersionTest extends KernelTestCase
 
         $output = $commandTest->getDisplay();
         $outputArray = explode(' ', trim($output));
-        $nb = (int)$outputArray[1];
+        $nb = (int) $outputArray[1];
 
         $this->assertEquals($nb, $nbVersionRepo);
     }
