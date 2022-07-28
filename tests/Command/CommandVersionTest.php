@@ -16,13 +16,13 @@ class CommandVersionTest extends KernelTestCase
         $application = new Application($kernel);
 
         $command = $application->find('app:version');
-        $commandTest = new CommandTester($command);
-        $commandTest->execute([]);
+        $commandTester = new CommandTester($command);
+        $commandTester->execute([]);
 
-        $commandTest->assertCommandIsSuccessful();
+        $commandTester->assertCommandIsSuccessful();
         $nbVersionRepo = static::getContainer()->get(VersionRepository::class)->count([]);
 
-        $output = $commandTest->getDisplay();
+        $output = $commandTester->getDisplay();
         $outputArray = explode(' ', trim($output));
         $nb = (int) $outputArray[1];
 

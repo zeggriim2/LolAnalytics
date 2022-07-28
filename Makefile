@@ -33,10 +33,10 @@ migrate:
 	@php bin/console make:migration
 
 doc-migrate-dev:
-	@php bin/console doctrine:migration:migrate --env=dev
+	@php bin/console doctrine:migration:migrate --env=dev -n
 
 doc-migrate-test:
-	@php bin/console doctrine:migration:migrate --env=test
+	@php bin/console doctrine:migration:migrate --env=test -n
 
 #Database
 db-remove-dev:

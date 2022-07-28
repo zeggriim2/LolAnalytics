@@ -46,8 +46,10 @@ class SummonerCommand extends Command
 
         if($summonerApi === null){
             $io->warning('Nom d\'utilisateur introuvable');
+            return Command::FAILURE;
         } elseif ($this->doctrine->getRepository(Invocateur::class)->findOneBy(['idLol' => $summonerApi->getId()])) {
             $io->warning('Nom d\'utilisateur déjà existant');
+            return Command::FAILURE;
         }
 
         $invocateur = (new Invocateur())
@@ -62,9 +64,7 @@ class SummonerCommand extends Command
         $this->doctrine->persist($invocateur);
         $this->doctrine->flush();
 
-
-        $io->success('You have a new command! Now make it your own! Pass --help to see your options.');
-
+        $io->success("L'invocateur {$name} à bien été ajouté à la base de donnée. (Id Lol : {$summonerApi->getId()} )");
         return Command::SUCCESS;
     }
 }
