@@ -30,7 +30,6 @@ class SummonerApi
             'platform' => $this->baseApi->platform,
             'name' => $summonerName,
         ]);
-
         /** @var array<string,int|string>|null $summoner */
         $summoner = $this->baseApi->callApi(
             $url,

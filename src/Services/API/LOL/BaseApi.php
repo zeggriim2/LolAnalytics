@@ -2,14 +2,16 @@
 
 namespace App\Services\API\LOL;
 
+use App\Services\API\LOL\DataDragon\Platform;
 use phpDocumentor\Reflection\Types\ArrayKey;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class BaseApi
 {
-    public const URL_RACINE_REGION = 'https://{region}.api.riotgames.com/lol/';
-    public const URL_RACINE_PLATFORM = 'https://{platform}.api.riotgames.com/lol/';
+    public const URL_RACINE_REGION      = 'https://{region}.api.riotgames.com/lol/';
+    public const URL_RACINE_PLATFORM    = 'https://{platform}.api.riotgames.com/lol/';
 
     public string $apiKey;
     public string $platform;
@@ -18,11 +20,14 @@ class BaseApi
     public function __construct(
         string $apiKey,
         string $platform,
-        HttpClientInterface $client
+        HttpClientInterface $client,
     ) {
         $this->apiKey = $apiKey;
-        $this->platform = $platform;
         $this->client = $client;
+//        $session->has('platform')
+//            ? $this->platform = $session->get('platform')
+//            : $this->platform = $platform;
+        $this->platform = $platform;
     }
 
     /**
@@ -57,6 +62,13 @@ class BaseApi
             case Response::HTTP_NOT_FOUND:
             default:
                 return null;
+        }
+    }
+
+    public function changePlatrform(string $platform)
+    {
+        if(in_array($platform,Platform::ALL_PLATFORM)){
+            $this->platform = $platform;
         }
     }
 }

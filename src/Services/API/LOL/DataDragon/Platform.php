@@ -6,17 +6,17 @@ class Platform
 {
     private const URL   = '.api.riotgames.com';
 
-    private const BR1   = 'br1' . self::URL;
-    private const EUN1  = 'eun1' . self::URL;
-    private const EUW1  = 'euw1' . self::URL;
-    private const JP1   = 'jp1' . self::URL;
-    private const KR    = 'kr' . self::URL;
-    private const LA1   = 'la1' . self::URL;
-    private const LA2   = 'la2' . self::URL;
-    private const NA1   = 'na1' . self::URL;
-    private const OC1   = 'oc1' . self::URL;
-    private const TR1   = 'tr1' . self::URL;
-    private const RU    = 'ru' . self::URL;
+    public const BR1   = 'br1';
+    public const EUN1  = 'eun1';
+    public const EUW1  = 'euw1';
+    public const JP1   = 'jp1';
+    public const KR    = 'kr';
+    public const LA1   = 'la1';
+    public const LA2   = 'la2';
+    public const NA1   = 'na1';
+    public const OC1   = 'oc1';
+    public const TR1   = 'tr1';
+    public const RU    = 'ru';
 
     public const ALL_PLATFORM = [
         'BR1'   => self::BR1,
