@@ -2,33 +2,36 @@
 
 namespace App\Services\API\LOL\DataDragon;
 
-class Platform
+use Fresh\DoctrineEnumBundle\DBAL\Types\AbstractEnumType;
+
+class Platform extends AbstractEnumType
 {
     private const URL   = '.api.riotgames.com';
 
-    public const BR1   = 'br1';
-    public const EUN1  = 'eun1';
-    public const EUW1  = 'euw1';
-    public const JP1   = 'jp1';
-    public const KR    = 'kr';
-    public const LA1   = 'la1';
-    public const LA2   = 'la2';
-    public const NA1   = 'na1';
-    public const OC1   = 'oc1';
-    public const TR1   = 'tr1';
-    public const RU    = 'ru';
+    public const BR1   = 'BR1';
+    public const EUN1  = 'EUN1';
+    public const EUW1  = 'EUW1';
+    public const JP1   = 'JP1';
+    public const KR    = 'KR';
+    public const LA1   = 'LA1';
+    public const LA2   = 'LA2';
+    public const NA1   = 'NA1';
+    public const OC1   = 'OC1';
+    public const TR1   = 'TR1';
+    public const RU    = 'RU';
 
-    public const ALL_PLATFORM = [
-        'BR1'   => self::BR1,
-        'EUN1'  => self::EUN1,
-        'EUW1'  => self::EUW1,
-        'JP1'   => self::JP1,
-        'KR'    => self::KR,
-        'LA1'   => self::LA1,
-        'LA2'   => self::LA2,
-        'NA1'   => self::NA1,
-        'OC1'   => self::OC1,
-        'TR1'   => self::TR1,
-        'RU'    => self::RU,
+
+    public static array $choices = [
+        self::BR1   => 'br1',
+        self::EUN1  => 'eun1',
+        self::EUW1  => 'euw1',
+        self::JP1   => 'jp1',
+        self::KR    => 'kr',
+        self::LA1   => 'la1',
+        self::LA2   => 'la2',
+        self::NA1   => 'na1',
+        self::OC1   => 'oc1',
+        self::TR1   => 'tr1',
+        self::RU    => 'ru',
     ];
 }
