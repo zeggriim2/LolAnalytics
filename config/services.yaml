@@ -4,6 +4,10 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
+    reqQueue: !php/const App\Services\API\LOL\DataDragon\Queue::REQUIREMENTS
+    reqTier: !php/const App\Services\API\LOL\DataDragon\Tier::REQUIREMENTS
+    reqDivision: !php/const App\Services\API\LOL\DataDragon\Division::REQUIREMENTS
+
 
 services:
     # default configuration for services in *this* file

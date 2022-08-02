@@ -18,6 +18,8 @@ class Division extends AbstractEnumType
         self::DIVISION_IV   => self::DIVISION_IV,
     ];
 
+    public const REQUIREMENTS = self::DIVISION_I.'|'.self::DIVISION_II.'|'.self::DIVISION_III.'|'.self::DIVISION_IV;
+
     public const ALL_DIVISION = [
         self::DIVISION_I,
         self::DIVISION_II,

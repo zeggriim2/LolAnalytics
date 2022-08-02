@@ -29,6 +29,10 @@ class Tier extends AbstractEnumType
         self::TIER_IRON         => self::TIER_IRON
     ];
 
+    public const REQUIREMENTS = self::TIER_CHALLENGER.'|'.self::TIER_GRANDMASTER.'|'
+.self::TIER_MASTER.'|'.self::TIER_DIAMOND.'|'.self::TIER_PLATINUM.'|'.self::TIER_GOLD.'|'.self::TIER_SILVER.'|'
+.self::TIER_BRONZE.'|'.self::TIER_IRON;
+
     public const ALL_TIERS = [
         self::TIER_CHALLENGER,
         self::TIER_GRANDMASTER,
