@@ -2,9 +2,8 @@
 
 namespace App\Command;
 
-use App\Entity\Invocateur;
+use App\Manager\SummonerManager;
 use App\Services\API\LOL\LeagueOfLegends\SummonerApi;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -21,8 +20,8 @@ class SummonerCommand extends Command
 {
 
     public function __construct(
+        private SummonerManager $summonerManager,
         private SummonerApi $summonerApi,
-        private EntityManagerInterface $doctrine,
         string $name = null
     )
     {
@@ -44,25 +43,7 @@ class SummonerCommand extends Command
 
         $summonerApi = $this->summonerApi->summonerBySummonerName($name);
 
-        if($summonerApi === null){
-            $io->warning('Nom d\'utilisateur introuvable');
-            return Command::FAILURE;
-        } elseif ($this->doctrine->getRepository(Invocateur::class)->findOneBy(['idLol' => $summonerApi->getId()])) {
-            $io->warning('Nom d\'utilisateur déjà existant');
-            return Command::FAILURE;
-        }
-
-        $invocateur = (new Invocateur())
-            ->setName($summonerApi->getName())
-            ->setIdLol($summonerApi->getId())
-            ->setAccoundId($summonerApi->getAccountId())
-            ->setPuuid($summonerApi->getPuuid())
-            ->setProfileIconId($summonerApi->getProfileIconId())
-            ->setSummonerLevel($summonerApi->getSummonerLevel())
-        ;
-
-        $this->doctrine->persist($invocateur);
-        $this->doctrine->flush();
+        $error = $this->summonerManager->enregistrer($summonerApi);
 
         $io->success("L'invocateur {$name} à bien été ajouté à la base de donnée. (Id Lol : {$summonerApi->getId()} )");
         return Command::SUCCESS;

@@ -67,7 +67,7 @@ class BaseApi
 
     public function changePlatrform(string $platform)
     {
-        if(in_array($platform,Platform::ALL_PLATFORM)){
+        if(in_array($platform,Platform::getChoices())){
             $this->platform = $platform;
         }
     }

@@ -1,8 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Repository\InvocateurRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -14,7 +18,7 @@ class Invocateur
     #[ORM\Column(type: 'integer')]
     private $id;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: 'string', length: 255, unique: true)]
     private $puuid;
 
     #[ORM\Column(type: 'integer')]
@@ -39,6 +43,18 @@ class Invocateur
     #[Gedmo\Timestampable(on: 'update')]
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     private $updatedAt;
+
+    #[ORM\ManyToMany(targetEntity: Rencontre::class, mappedBy: 'invocateurs')]
+    private $rencontres;
+
+    #[ORM\OneToMany(mappedBy: 'invocateur', targetEntity: HistoriqueLeague::class)]
+    private $historiqueLeagues;
+
+    public function __construct()
+    {
+        $this->rencontres = new ArrayCollection();
+        $this->historiqueLeagues = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -137,6 +153,63 @@ class Invocateur
     public function setUpdatedAt(?\DateTimeImmutable $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Rencontre>
+     */
+    public function getRencontres(): Collection
+    {
+        return $this->rencontres;
+    }
+
+    public function addRencontre(Rencontre $rencontre): self
+    {
+        if (!$this->rencontres->contains($rencontre)) {
+            $this->rencontres[] = $rencontre;
+            $rencontre->addInvocateur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRencontre(Rencontre $rencontre): self
+    {
+        if ($this->rencontres->removeElement($rencontre)) {
+            $rencontre->removeInvocateur($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, HistoriqueLeague>
+     */
+    public function getHistoriqueLeagues(): Collection
+    {
+        return $this->historiqueLeagues;
+    }
+
+    public function addHistoriqueLeague(HistoriqueLeague $historiqueLeague): self
+    {
+        if (!$this->historiqueLeagues->contains($historiqueLeague)) {
+            $this->historiqueLeagues[] = $historiqueLeague;
+            $historiqueLeague->setInvocateur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeHistoriqueLeague(HistoriqueLeague $historiqueLeague): self
+    {
+        if ($this->historiqueLeagues->removeElement($historiqueLeague)) {
+            // set the owning side to null (unless already changed)
+            if ($historiqueLeague->getInvocateur() === $this) {
+                $historiqueLeague->setInvocateur(null);
+            }
+        }
 
         return $this;
     }

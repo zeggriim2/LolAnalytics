@@ -39,6 +39,18 @@ class InvocateurRepository extends ServiceEntityRepository
         }
     }
 
+    public function findOrderByCreatedAt(string $summonerId)
+    {
+        return $this->createQueryBuilder('i')
+            ->leftJoin('i.historiqueLeagues', 'h')
+            ->andWhere('i.idLol= :summonerId')
+            ->setParameter('summonerId', $summonerId)
+            ->orderBy('h.createAt')
+            ->getQuery()
+            ->getOneOrNullResult()
+            ;
+    }
+
 //    /**
 //     * @return Invocateur[] Returns an array of Invocateur objects
 //     */

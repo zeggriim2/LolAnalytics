@@ -38,10 +38,10 @@ class MapCommand extends Command
 
         $countMaps = 0;
         foreach ($maps as $map) {
-            $mapRepo = $this->doctrine->getRepository(Map::class)->findOneBy(['mapId' => $map['mapId']]);
+            $mapRepo = $this->doctrine->getRepository(Map::class)->findOneBy(['mapIdLol' => $map['mapId']]);
             if (null === $mapRepo) {
                 $mapEntity = (new Map())
-                    ->setMapId($map['mapId'])
+                    ->setMapIdLol($map['mapId'])
                     ->setName($map['mapName'])
                     ->setNotes($map['notes'])
                 ;
