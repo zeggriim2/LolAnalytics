@@ -7,7 +7,7 @@ class SummonerDTO
     private string  $accountId;
     private int     $profileIconId;
     private int     $revisionDate;
-    private string  $name;
+    private ?string  $name = null;
     private string  $id;
     private string  $puuid;
     private int     $summonerLevel;
@@ -48,12 +48,12 @@ class SummonerDTO
         return $this;
     }
 
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->name;
     }
 
-    public function setName(string $name): self
+    public function setName(?string $name): self
     {
         $this->name = $name;
 

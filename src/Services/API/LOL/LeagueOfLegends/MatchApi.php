@@ -11,11 +11,24 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 class MatchApi
 {
     private const URL_MATCH_PUUID =
-        BaseApi::URL_RACINE_REGION . 'match/v5/matches/by-puuid/{puuid}/ids?start={start}&count={count}';
+//        BaseApi::URL_RACINE_REGION . 'match/v5/matches/by-puuid/{puuid}/ids?start={start}&count={count}';
+        BaseApi::URL_RACINE_REGION . 'match/v5/matches/by-puuid/{puuid}/ids';
     private const URL_MATCH_ID =
         BaseApi::URL_RACINE_REGION . 'match/v5/matches/{matchId}';
     private const URL_MATCH_TIMELINE_MATCH_ID =
         BaseApi::URL_RACINE_REGION . 'match/v5/matches/{matchId}/timeline';
+
+    public const TYPE_RANKED = 'ranked';
+    public const TYPE_NORMAL = 'normal';
+    public const TYPE_TOURNEY = 'tourney';
+    public const TYPE_TUTORIAL = 'tutorial';
+
+    private const TYPE = [
+        self::TYPE_RANKED,
+        self::TYPE_NORMAL,
+        self::TYPE_TOURNEY,
+        self::TYPE_TUTORIAL,
+    ];
 
     public function __construct(
         private BaseApi $baseApi,
@@ -31,7 +44,8 @@ class MatchApi
     public function getMatchByPuuid(
         string $puuid,
         int $start = 0,
-        int $count = 20
+        int $count = 20,
+        ?string $type = null
     ): ?array {
         if ('' === $puuid) {
             throw new ForbiddenException('Puuid est vide');
@@ -41,11 +55,15 @@ class MatchApi
             self::URL_MATCH_PUUID,
             [
                 'region' => 'europe',
-                'puuid' => $puuid,
-                'start' => $start,
-                'count' => $count,
+                'puuid' => $puuid
             ]
         );
+
+        $query = $this->constructQuery([
+            'start' => $start,
+            'count' => $count,
+            'type' => $type
+        ]);
 
         return $this->baseApi->callApi(
             $url,
@@ -54,6 +72,7 @@ class MatchApi
                 'headers' => [
                     'X-Riot-Token' => $this->baseApi->apiKey,
                 ],
+                'query' => $query
             ]
         );
     }
@@ -123,5 +142,19 @@ class MatchApi
     private function denormalize(array $data)
     {
         return $this->denormalizer->denormalize($data, MatchDto::class);
+    }
+
+    private function constructQuery(array $params)
+    {
+        $query = [];
+        foreach($params as $key => $param) {
+            if($param !== null) {
+                if($key === 'type' && !in_array($param, self::TYPE)) {
+                    continue;
+                }
+                $query[$key] = $param;
+            }
+        }
+        return $query;
     }
 }
