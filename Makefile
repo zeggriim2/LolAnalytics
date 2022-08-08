@@ -78,8 +78,6 @@ install:
 	make prepare env=$(env)
 
 
-
-
 test-start:
 	@php bin/phpunit --coverage-html tests\coverage --coverage-text=tests\coverage.txt
 
