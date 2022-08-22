@@ -59,12 +59,12 @@ class Dragon
     public function setTeam(?Team $team): self
     {
         // unset the owning side of the relation if necessary
-        if ($team === null && $this->team !== null) {
+        if (null === $team && null !== $this->team) {
             $this->team->setDragon(null);
         }
 
         // set the owning side of the relation if necessary
-        if ($team !== null && $team->getDragon() !== $this) {
+        if (null !== $team && $team->getDragon() !== $this) {
             $team->setDragon($this);
         }
 

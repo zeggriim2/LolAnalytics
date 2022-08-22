@@ -59,12 +59,12 @@ class Tower
     public function setTeam(?Team $team): self
     {
         // unset the owning side of the relation if necessary
-        if ($team === null && $this->team !== null) {
+        if (null === $team && null !== $this->team) {
             $this->team->setTower(null);
         }
 
         // set the owning side of the relation if necessary
-        if ($team !== null && $team->getTower() !== $this) {
+        if (null !== $team && $team->getTower() !== $this) {
             $team->setTower($this);
         }
 

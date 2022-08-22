@@ -27,11 +27,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class StatController extends AbstractController
 {
-
     public function __construct(
         private ManagerRegistry $doctrine
-    )
-    {
+    ) {
     }
 
     #[Route('/statistique/{tier}/{division}', name: 'app_stat_index',
@@ -49,17 +47,16 @@ class StatController extends AbstractController
             $division)
         ;
 
-        foreach($leagues as $leagueApi) {
-
+        foreach ($leagues as $leagueApi) {
             $invocateur =
                 $this->doctrine->getRepository(Invocateur::class)
                     ->findOrderByCreatedAt($leagueApi->getSummonerId());
 
             // Verif invocateur existe
-            if($invocateur === null) {
+            if (null === $invocateur) {
                 // Creation de l'invocateur
                 $sumApi = $summonerApi->summonerBySummonerId($leagueApi->getSummonerId());
-                if($sumApi === null) {
+                if (null === $sumApi) {
                     continue;
                 }
                 $invocateur = $this->createInvocateur($sumApi);
@@ -68,7 +65,7 @@ class StatController extends AbstractController
             }
 
             // On verif si l'invocateur à eu une historique League enregistré il y a plus de un jour
-            if(count($invocateur->getHistoriqueLeagues()) > 0 &&
+            if (\count($invocateur->getHistoriqueLeagues()) > 0 &&
                 $invocateur->getHistoriqueLeagues()[0]->getCreateAt()->diff(new \DateTimeImmutable())->days <= 1
             ) {
                 continue;
@@ -77,28 +74,27 @@ class StatController extends AbstractController
             // On créé l'historique League
             $league = $this->createHistoriqueLeague($leagueApi, $invocateur);
 
-
             // On récupère les ID Matchs de l'invocateur
-            $idMatchs = $matchApi->getMatchByPuuid($invocateur->getPuuid(),0,20,'ranked');
-            if($idMatchs === null) {
+            $idMatchs = $matchApi->getMatchByPuuid($invocateur->getPuuid(), 0, 20, 'ranked');
+            if (null === $idMatchs) {
                 continue;
             }
 
-            foreach($idMatchs as $idmatch) {
+            foreach ($idMatchs as $idmatch) {
                 // On verifie si le match existe déjà
                 $rencontreRepo = $this->doctrine->getRepository(Rencontre::class)
-                    ->findOneBy(['gameId' => (int)substr(strstr($idmatch, '_'),1, null)]);
+                    ->findOneBy(['gameId' => (int) mb_substr(mb_strstr($idmatch, '_'), 1, null)]);
 
                 // On le récupère les infos du match et on l'enregistre
-                if($rencontreRepo === null) {
+                if (null === $rencontreRepo) {
                     $match = $matchApi->getMatchById($idmatch);
-                    if($match === null) {
+                    if (null === $match) {
                         continue;
                     }
 
                     $map = $this->doctrine->getRepository(Map::class)->findOneBy(['mapIdLol' => $match->getInfo()->getMapId()]);
 
-                    $rencontre = $this->createRencontre($match, $map,$invocateur);
+                    $rencontre = $this->createRencontre($match, $map, $invocateur);
                     $this->doctrine->getManager()->persist($rencontre);
                 }
             }
@@ -106,13 +102,12 @@ class StatController extends AbstractController
         }
         $this->doctrine->getManager()->flush();
 
-        return new JsonResponse("Traitement fini");
+        return new JsonResponse('Traitement fini');
     }
 
     private function createInvocateur(
         SummonerDTO $sumApi
-    ): Invocateur
-    {
+    ): Invocateur {
         return (new Invocateur())
                 ->setName($sumApi->getName())
                 ->setSummonerLevel($sumApi->getSummonerLevel())
@@ -120,14 +115,13 @@ class StatController extends AbstractController
                 ->setIdLol($sumApi->getId())
                 ->setAccoundId($sumApi->getAccountId())
                 ->setProfileIconId($sumApi->getProfileIconId())
-            ;
+        ;
     }
 
     private function createHistoriqueLeague(
         LeagueEntryDTO $leagueApi,
         Invocateur $invocateur
-    ): HistoriqueLeague
-    {
+    ): HistoriqueLeague {
         return (new HistoriqueLeague())
                 ->setLeagueId($leagueApi->getLeagueId())
                 ->setLeaguePoint($leagueApi->getLeaguePoints())
@@ -136,15 +130,14 @@ class StatController extends AbstractController
                 ->setWins($leagueApi->getWins() ?: 0)
                 ->setLosses($leagueApi->getLosses() ?: 0)
                 ->setInvocateur($invocateur)
-            ;
+        ;
     }
 
     private function createRencontre(
         MatchDto $match,
         Map $maps,
         Invocateur $invocateur
-    )
-    {
+    ) {
         $rencontre = (new Rencontre())
             ->setGameId($match->getInfo()->getGameId())
             ->setGameDuration($match->getInfo()->getGameDuration())
@@ -154,7 +147,6 @@ class StatController extends AbstractController
         ;
 
         foreach ($match->getInfo()->getTeams() as $teamApi) {
-
             $tower = $this->createTower($teamApi);
 
             $baron = $this->createBaron($teamApi);
@@ -171,53 +163,48 @@ class StatController extends AbstractController
 
             $rencontre->addTeam($team);
         }
+
         return $rencontre;
     }
 
     private function createTower(
         TeamDto $teamApi
-    )
-    {
+    ) {
         return (new Tower())
             ->setFirst($teamApi->getObjectives()->getTower()->isFirst())
             ->setKills($teamApi->getObjectives()->getTower()->getKills())
-            ;
+        ;
     }
 
     private function createBaron(
         TeamDto $teamApi
-    )
-    {
+    ) {
         return (new Baron())
             ->setFirst($teamApi->getObjectives()->getTower()->isFirst())
             ->setKills($teamApi->getObjectives()->getTower()->getKills())
-            ;
+        ;
     }
 
     private function createInhibitor(
         TeamDto $teamApi
-    )
-    {
+    ) {
         return (new Inhibitor())
             ->setFirst($teamApi->getObjectives()->getTower()->isFirst())
             ->setKills($teamApi->getObjectives()->getTower()->getKills())
-            ;
+        ;
     }
 
     private function createRiftHerald(
         TeamDto $teamApi
-    )
-    {
+    ) {
         return (new RiftHerald())
             ->setFirst($teamApi->getObjectives()->getTower()->isFirst())
             ->setKills($teamApi->getObjectives()->getTower()->getKills())
-            ;
+        ;
     }
 
-    private function createDragon
-    (TeamDto $teamApi
-    )
-    {
+    private function createDragon(TeamDto $teamApi
+    ) {
         return (new Dragon())
             ->setFirst($teamApi->getObjectives()->getTower()->isFirst())
             ->setKills($teamApi->getObjectives()->getTower()->getKills())

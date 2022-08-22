@@ -59,12 +59,12 @@ class Baron
     public function setTeam(?Team $team): self
     {
         // unset the owning side of the relation if necessary
-        if ($team === null && $this->team !== null) {
+        if (null === $team && null !== $this->team) {
             $this->team->setBaron(null);
         }
 
         // set the owning side of the relation if necessary
-        if ($team !== null && $team->getBaron() !== $this) {
+        if (null !== $team && $team->getBaron() !== $this) {
             $team->setBaron($this);
         }
 

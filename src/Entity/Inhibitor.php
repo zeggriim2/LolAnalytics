@@ -59,12 +59,12 @@ class Inhibitor
     public function setTeam(?Team $team): self
     {
         // unset the owning side of the relation if necessary
-        if ($team === null && $this->team !== null) {
+        if (null === $team && null !== $this->team) {
             $this->team->setInhibitor(null);
         }
 
         // set the owning side of the relation if necessary
-        if ($team !== null && $team->getInhibitor() !== $this) {
+        if (null !== $team && $team->getInhibitor() !== $this) {
             $team->setInhibitor($this);
         }
 

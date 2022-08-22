@@ -14,7 +14,7 @@ class Queue extends AbstractEnumType
         self::RANKED_FLEX => self::RANKED_FLEX,
     ];
 
-    public const REQUIREMENTS = self::RANKED_SOLO.'|'.self::RANKED_FLEX;
+    public const REQUIREMENTS = self::RANKED_SOLO . '|' . self::RANKED_FLEX;
 
     public const ALL_QEUEUES = [
         self::RANKED_SOLO,
