@@ -1,13 +1,10 @@
 analyse:
 	composer valid
 
-app:
-    @php bin/console app:maps
-    @php bin/console app:versions
 
 # Docker
 docker-start:
-	@docker-compose up -d
+	@docker-compose --env-file ./.env.dev.local up -d
 
 docker-stop:
 	@docker-compose stop
