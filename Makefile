@@ -1,6 +1,15 @@
 analyse:
 	composer valid
 
+start:
+	@make docker-start
+	@make composer-install
+	@make db-restore-dev
+	@make init-data
+
+init-data:
+	php bin/console app:versions
+	php bin/console app:maps
 
 # Docker
 docker-start:

@@ -23,7 +23,7 @@ services:
     build:
       context: ./docker/server
       dockerfile: DockerFile
-    container_name: '${APP_NAME}-server'
+    container_name: '${APP_NAME:-server}'
     ports:
       - '${APP_PORT}:80'
     working_dir: /var/www/html
