@@ -8,8 +8,13 @@ start:
 	@make init-data
 
 init-data:
-	php bin/console app:versions
-	php bin/console app:maps
+	docker-compose exec server php bin/console app:versions
+	docker-compose exec server php bin/console app:maps
+	docker-compose exec server php bin/console app:languages
+
+
+command-champion:
+	@docker-compose exec server php bin/console app:champions
 
 # Docker
 docker-start:
@@ -22,10 +27,6 @@ docker-remove:
 	@docker-compose rm -v database
 
 
-
-#Command Interne
-cmd-versions:
-	 @php bin/console app:versions
 
 
 # Server
@@ -40,20 +41,20 @@ server-stop:
 
 # Doctrine
 migrate:
-	@php bin/console make:migration
+	@docker-compose exec server php bin/console make:migration
 
 doc-migrate-dev:
-	@php bin/console doctrine:migration:migrate --env=dev -n
+	@docker-compose exec server php bin/console doctrine:migration:migrate --env=dev -n
 
 doc-migrate-test:
-	@php bin/console doctrine:migration:migrate --env=test -n
+	@docker-compose exec server php bin/console doctrine:migration:migrate --env=test -n
 
 #Database
 db-remove-dev:
-	php bin/console doctrine:database:drop --force --env=dev --if-exists
+	docker-compose exec server php bin/console doctrine:database:drop --force --env=dev --if-exists
 
 db-create-dev:
-	php bin/console doctrine:database:create --env=dev --if-not-exists
+	docker-compose exec server php bin/console doctrine:database:create --env=dev --if-not-exists
 
 db-restore-dev:
 	make db-remove-dev
@@ -61,10 +62,10 @@ db-restore-dev:
 	make doc-migrate-dev
 
 db-remove-test:
-	php bin/console doctrine:database:drop --force --env=test --if-exists
+	docker-compose exec server php bin/console doctrine:database:drop --force --env=test --if-exists
 
 db-create-test:
-	php bin/console doctrine:database:create --env=test --if-not-exists
+	docker-compose exec server php bin/console doctrine:database:create --env=test --if-not-exists
 
 db-restore-test:
 	make db-remove-test

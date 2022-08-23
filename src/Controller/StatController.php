@@ -40,12 +40,16 @@ class StatController extends AbstractController
         LeagueApi $leagueApi,
         SummonerApi $summonerApi,
         MatchApi $matchApi
-    ) {
+    ): JsonResponse
+    {
         $leagues = $leagueApi->leagueByQueueByTierByDivision(
             Queue::RANKED_SOLO,
             $tier,
             $division)
         ;
+        if($leagues === null) {
+            return new JsonResponse('Traitement fini');
+        }
 
         foreach ($leagues as $leagueApi) {
             $invocateur =
