@@ -3,8 +3,6 @@
 namespace App\Command;
 
 use App\Entity\Map;
-use App\Entity\Version;
-use App\Services\API\LOL\DataDragon\DataDragonApi;
 use App\Services\API\LOL\DataDragon\GeneralApi;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;

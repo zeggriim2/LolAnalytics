@@ -59,12 +59,12 @@ class RiftHerald
     public function setTeam(?Team $team): self
     {
         // unset the owning side of the relation if necessary
-        if ($team === null && $this->team !== null) {
+        if (null === $team && null !== $this->team) {
             $this->team->setRiftHerald(null);
         }
 
         // set the owning side of the relation if necessary
-        if ($team !== null && $team->getRiftHerald() !== $this) {
+        if (null !== $team && $team->getRiftHerald() !== $this) {
             $team->setRiftHerald($this);
         }
 

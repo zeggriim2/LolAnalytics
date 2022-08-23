@@ -64,9 +64,9 @@ class Rencontre
 
     public function setGameCreation(DateTimeImmutable|int $gameCreation): self
     {
-        if($gameCreation instanceof DateTimeImmutable) {
+        if ($gameCreation instanceof DateTimeImmutable) {
             $this->gameCreation = $gameCreation;
-        } elseif (is_int($gameCreation)){
+        } elseif (\is_int($gameCreation)) {
             $gameCreation = $gameCreation / 1000;
             $this->gameCreation = new DateTimeImmutable("@{$gameCreation}");
         }
@@ -81,9 +81,9 @@ class Rencontre
 
     public function setGameDuration(DateTimeImmutable|int $gameDuration): self
     {
-        if($gameDuration instanceof DateTimeImmutable) {
+        if ($gameDuration instanceof DateTimeImmutable) {
             $this->gameDuration = $gameDuration;
-        } elseif (is_int($gameDuration)) {
+        } elseif (\is_int($gameDuration)) {
             $gameDuration = $gameDuration / 1000;
             $this->gameDuration = new DateTimeImmutable("@{$gameDuration}");
         }

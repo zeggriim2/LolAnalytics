@@ -48,7 +48,7 @@ class InvocateurRepository extends ServiceEntityRepository
             ->orderBy('h.createAt')
             ->getQuery()
             ->getOneOrNullResult()
-            ;
+        ;
     }
 
 //    /**

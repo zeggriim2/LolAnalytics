@@ -55,14 +55,14 @@ class MatchApi
             self::URL_MATCH_PUUID,
             [
                 'region' => 'europe',
-                'puuid' => $puuid
+                'puuid' => $puuid,
             ]
         );
 
         $query = $this->constructQuery([
             'start' => $start,
             'count' => $count,
-            'type' => $type
+            'type' => $type,
         ]);
 
         return $this->baseApi->callApi(
@@ -72,7 +72,7 @@ class MatchApi
                 'headers' => [
                     'X-Riot-Token' => $this->baseApi->apiKey,
                 ],
-                'query' => $query
+                'query' => $query,
             ]
         );
     }
@@ -147,14 +147,15 @@ class MatchApi
     private function constructQuery(array $params)
     {
         $query = [];
-        foreach($params as $key => $param) {
-            if($param !== null) {
-                if($key === 'type' && !in_array($param, self::TYPE)) {
+        foreach ($params as $key => $param) {
+            if (null !== $param) {
+                if ('type' === $key && !\in_array($param, self::TYPE, true)) {
                     continue;
                 }
                 $query[$key] = $param;
             }
         }
+
         return $query;
     }
 }

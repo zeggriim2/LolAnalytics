@@ -37,7 +37,6 @@ class Map
         $this->rencontres = new ArrayCollection();
     }
 
-
     public function getId(): ?int
     {
         return $this->id;

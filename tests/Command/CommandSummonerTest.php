@@ -11,7 +11,7 @@ class CommandSummonerTest extends KernelTestCase
 {
     private Application $application;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->application = new Application(self::bootKernel());
         $this->application->setAutoExit(false);
@@ -21,12 +21,12 @@ class CommandSummonerTest extends KernelTestCase
     {
         $command = $this->application->find('app:summoner');
         $commandTester = new CommandTester($command);
-        $commandTester->execute(['name'=> 'jarkalien']);
+        $commandTester->execute(['name' => 'jarkalien']);
 
         $commandTester->assertCommandIsSuccessful();
         $output = $commandTester->getDisplay();
         $outputArray = explode(' ', trim($output));
-        $idLol = $outputArray[count($outputArray) - 2];
+        $idLol = $outputArray[\count($outputArray) - 2];
         $invocateur = static::getContainer()->get(InvocateurRepository::class)->findOneBy(['idLol' => $idLol]);
         $this->assertNotNull($invocateur);
     }
@@ -35,11 +35,8 @@ class CommandSummonerTest extends KernelTestCase
     {
         $command = $this->application->find('app:summoner');
         $commandTester = new CommandTester($command);
-        $commandTester->execute(['name'=> 'jarkalien']);
+        $commandTester->execute(['name' => 'jarkalien']);
 
-        $this->assertEquals(1,$commandTester->getStatusCode());
+        $this->assertEquals(1, $commandTester->getStatusCode());
     }
-
-
-
 }

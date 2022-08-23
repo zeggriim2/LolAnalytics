@@ -10,17 +10,15 @@ class SummonerManager
 {
     public function __construct(
         private EntityManagerInterface $doctrine
-    )
-    {
+    ) {
     }
 
     /**
-     * @param SummonerDTO|null $summonerApi
      * @return string|void
      */
     public function enregistrer(?SummonerDTO $summonerApi)
     {
-        if($summonerApi === null){
+        if (null === $summonerApi) {
             // TODO Exception
             return $error['message'] = 'Nom d\'utilisateur introuvable';
         } elseif ($this->doctrine->getRepository(Invocateur::class)->findOneBy(['idLol' => $summonerApi->getId()])) {
@@ -40,5 +38,4 @@ class SummonerManager
         $this->doctrine->persist($invocateur);
         $this->doctrine->flush();
     }
-
 }

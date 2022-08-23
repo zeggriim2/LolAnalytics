@@ -18,13 +18,11 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 )]
 class SummonerCommand extends Command
 {
-
     public function __construct(
         private SummonerManager $summonerManager,
         private SummonerApi $summonerApi,
         string $name = null
-    )
-    {
+    ) {
         parent::__construct($name);
     }
 
@@ -46,6 +44,7 @@ class SummonerCommand extends Command
         $error = $this->summonerManager->enregistrer($summonerApi);
 
         $io->success("L'invocateur {$name} à bien été ajouté à la base de donnée. (Id Lol : {$summonerApi->getId()} )");
+
         return Command::SUCCESS;
     }
 }
