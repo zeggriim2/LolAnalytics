@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 #[ORM\Entity(repositoryClass: ChampionRepository::class)]
+#[ORM\ChangeTrackingPolicy("DEFERRED_EXPLICIT")]
 class Champion
 {
     #[ORM\Id]

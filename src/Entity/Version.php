@@ -23,7 +23,7 @@ class Version
     #[ORM\Column(name: 'created', type: 'datetime_immutable')]
     private $createdAt;
 
-    #[ORM\OneToMany(mappedBy: 'version', targetEntity: Champion::class)]
+    #[ORM\OneToMany(mappedBy: 'version', targetEntity: Champion::class, cascade: ['persist'])]
     private $champions;
 
     public function __construct()
@@ -60,33 +60,33 @@ class Version
         return $this;
     }
 
-/**
- * @return Collection<int, Champion>
- */
-public function getChampions(): Collection
-{
-    return $this->champions;
-}
-
-public function addChampion(Champion $champion): self
-{
-    if (!$this->champions->contains($champion)) {
-        $this->champions[] = $champion;
-        $champion->setVersion($this);
+    /**
+     * @return Collection<int, Champion>
+     */
+    public function getChampions(): Collection
+    {
+        return $this->champions;
     }
 
-    return $this;
-}
-
-public function removeChampion(Champion $champion): self
-{
-    if ($this->champions->removeElement($champion)) {
-        // set the owning side to null (unless already changed)
-        if ($champion->getVersion() === $this) {
-            $champion->setVersion(null);
+    public function addChampion(Champion $champion): self
+    {
+        if (!$this->champions->contains($champion)) {
+            $this->champions[] = $champion;
+            $champion->setVersion($this);
         }
+
+        return $this;
     }
 
-    return $this;
-}
+    public function removeChampion(Champion $champion): self
+    {
+        if ($this->champions->removeElement($champion)) {
+            // set the owning side to null (unless already changed)
+            if ($champion->getVersion() === $this) {
+                $champion->setVersion(null);
+            }
+        }
+
+        return $this;
+    }
 }

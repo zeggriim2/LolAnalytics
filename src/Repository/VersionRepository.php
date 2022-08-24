@@ -39,6 +39,14 @@ class VersionRepository extends ServiceEntityRepository
         }
     }
 
+    public function findVersionCode()
+    {
+        return $this->createQueryBuilder('v')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
 //    /**
 //     * @return Version[] Returns an array of Version objects
 //     */

@@ -12,6 +12,11 @@ init-data:
 	docker-compose exec server php bin/console app:maps
 	docker-compose exec server php bin/console app:languages
 
+init-data-prod:
+	docker-compose exec server php bin/console app:versions --env=prod
+	docker-compose exec server php bin/console app:maps --env=prod
+	docker-compose exec server php bin/console app:languages --env=prod
+
 
 command-champion:
 	@docker-compose exec server php bin/console app:champions
@@ -49,6 +54,9 @@ doc-migrate-dev:
 doc-migrate-test:
 	@docker-compose exec server php bin/console doctrine:migration:migrate --env=test -n
 
+doc-migrate-prod:
+	@docker-compose exec server php bin/console doctrine:migration:migrate --env=prod -n
+
 #Database
 db-remove-dev:
 	docker-compose exec server php bin/console doctrine:database:drop --force --env=dev --if-exists
@@ -60,6 +68,19 @@ db-restore-dev:
 	make db-remove-dev
 	make db-create-dev
 	make doc-migrate-dev
+
+
+#Database
+db-remove-prod:
+	docker-compose exec server php bin/console doctrine:database:drop --force --env=prod --if-exists
+
+db-create-prod:
+	docker-compose exec server php bin/console doctrine:database:create --env=prod --if-not-exists
+
+db-restore-prod:
+	make db-remove-prod
+	make db-create-prod
+	make doc-migrate-prod
 
 db-remove-test:
 	docker-compose exec server php bin/console doctrine:database:drop --force --env=test --if-exists
