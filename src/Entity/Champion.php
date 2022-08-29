@@ -13,35 +13,35 @@ class Champion
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private int $id;
 
     #[ORM\Column(type: 'string', length: 100)]
-    private $idName;
+    private string $idName;
 
     #[ORM\Column(type: 'string', length: 5)]
-    private $key;
+    private string $key;
 
     #[ORM\Column(type: 'string', length: 100)]
-    private $name;
+    private  string$name;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $title;
+    private  string $title;
 
     #[Gedmo\Timestampable(on: 'create')]
     #[ORM\Column(type: 'datetime_immutable')]
-    private $createdAt;
+    private \DateTimeImmutable $createdAt;
 
     #[ORM\Column(type: 'string', length: 50, nullable: true, options: ['default'=> null])]
-    private $partype;
+    private ?string $partype;
 
     #[ORM\ManyToOne(targetEntity: Version::class, inversedBy: 'champions')]
-    private $version;
+    private Version $version;
 
     #[ORM\OneToOne(mappedBy: 'champion', targetEntity: InfoChampion::class, cascade: ['persist', 'remove'])]
-    private $infoChampion;
+    private InfoChampion $infoChampion;
 
     #[ORM\ManyToOne(targetEntity: Image::class, inversedBy: 'champions')]
-    private $image;
+    private Image $image;
 
     public function getId(): ?int
     {

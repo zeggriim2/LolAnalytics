@@ -6,8 +6,6 @@ use Fresh\DoctrineEnumBundle\DBAL\Types\AbstractEnumType;
 
 class Platform extends AbstractEnumType
 {
-    private const URL = '.api.riotgames.com';
-
     public const BR1 = 'BR1';
     public const EUN1 = 'EUN1';
     public const EUW1 = 'EUW1';

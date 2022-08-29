@@ -16,39 +16,45 @@ class Invocateur
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private int $id;
 
     #[ORM\Column(type: 'string', length: 255, unique: true)]
-    private $puuid;
+    private string $puuid;
 
     #[ORM\Column(type: 'integer')]
-    private $summonerLevel;
+    private int $summonerLevel;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $name;
+    private string $name;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $idLol;
+    private string $idLol;
 
     #[ORM\Column(type: 'integer')]
-    private $profileIconId;
+    private int $profileIconId;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $accoundId;
+    private string $accoundId;
 
     #[Gedmo\Timestampable(on: 'create')]
     #[ORM\Column(type: 'datetime_immutable')]
-    private $createdAt;
+    private \DateTimeImmutable $createdAt;
 
     #[Gedmo\Timestampable(on: 'update')]
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
-    private $updatedAt;
+    private \DateTimeImmutable $updatedAt;
 
+    /**
+     * @var Collection<int, Rencontre>
+     */
     #[ORM\ManyToMany(targetEntity: Rencontre::class, mappedBy: 'invocateurs')]
-    private $rencontres;
+    private Collection $rencontres;
 
+    /**
+     * @var Collection<int, HistoriqueLeague>
+     */
     #[ORM\OneToMany(mappedBy: 'invocateur', targetEntity: HistoriqueLeague::class)]
-    private $historiqueLeagues;
+    private Collection $historiqueLeagues;
 
     public function __construct()
     {

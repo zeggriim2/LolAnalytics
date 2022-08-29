@@ -87,7 +87,12 @@ class ChampionCommand extends Command
         return Command::SUCCESS;
     }
 
-    private function addChampions(array $champions,Version $version)
+    /**
+     * @param mixed[] $champions
+     * @param Version $version
+     * @return void
+     */
+    private function addChampions(array $champions,Version $version): void
     {
         foreach ($champions["data"] as $champion) {
             // On verifie si le champion n'existe pas pour la version concerné

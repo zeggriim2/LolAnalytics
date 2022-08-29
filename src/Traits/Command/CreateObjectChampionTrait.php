@@ -10,7 +10,7 @@ use App\Entity\Version;
 trait CreateObjectChampionTrait
 {
     /**
-     * @param array $championApi
+     * @param mixed[] $championApi
      * @param Version $version
      * @return void
      */
@@ -35,14 +35,15 @@ trait CreateObjectChampionTrait
 
         if (($this->inscrementBatch % $this->batchSize) === 0) {
             $this->doctrine->flush();
-            $this->doctrine->clear(Champion::class);
-            $this->doctrine->clear(InfoChampion::class);
-            $this->doctrine->clear(Image::class);
+            $this->doctrine->clear();
+//            $this->doctrine->clear(Champion::class);
+//            $this->doctrine->clear(InfoChampion::class);
+//            $this->doctrine->clear(Image::class);
         }
     }
 
     /**
-     * @param array $info
+     * @param mixed[] $info
      * @return InfoChampion
      */
     private function createInfoChampion(array $info): InfoChampion
@@ -56,7 +57,7 @@ trait CreateObjectChampionTrait
     }
 
     /**
-     * @param array $image
+     * @param mixed[] $image
      * @return Image
      */
     private function createImageChampion(array $image): Image

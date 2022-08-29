@@ -21,22 +21,25 @@ class DataDragonApi
     }
 
     /**
-     * @return array|null
+     * @return array<int,string>|null
      */
-    public function getVersions()
+    public function getVersions(): ?array
     {
         return $this->baseApi->callApi(self::URL_VERSION, Request::METHOD_GET);
     }
 
-    public function getLanguages()
+    /**
+     * @return array<int,string>|null
+     */
+    public function getLanguages(): ?array
     {
         return $this->baseApi->callApi(self::URL_LANGUAGE, Request::METHOD_GET);
     }
 
     /**
-     * @return array|null
+     * @return mixed[]|null
      */
-    public function getChampions(string $version = null, string $lang = 'fr_FR')
+    public function getChampions(string $version = null, string $lang = 'fr_FR'): ?array
     {
         if (null === $version) {
             $version = $this->getLastVersion();
@@ -54,9 +57,9 @@ class DataDragonApi
     }
 
     /**
-     * @return array|null
+     * @return mixed[]|null
      */
-    public function getChampion(string $champion, string $version = null, string $lang = 'fr_FR')
+    public function getChampion(string $champion, string $version = null, string $lang = 'fr_FR'): ?array
     {
         if (null === $version) {
             $version = $this->getLastVersion();
@@ -74,10 +77,13 @@ class DataDragonApi
         return $this->baseApi->callApi($url, Request::METHOD_GET);
     }
 
+
     /**
-     * @return bool[]|int[]|string|string[]|null
+     * @param string|null $version
+     * @param string $lang
+     * @return mixed[]|null
      */
-    public function getItems(string $version = null, string $lang = 'fr_FR')
+    public function getItems(string $version = null, string $lang = 'fr_FR'): ?array
     {
         if (null === $version) {
             $version = $this->getLastVersion();
@@ -94,6 +100,11 @@ class DataDragonApi
         return $this->baseApi->callApi($url, Request::METHOD_GET);
     }
 
+    /**
+     * @param string|null $version
+     * @param string $lang
+     * @return void
+     */
     public function getSummoner(string $version = null, string $lang = 'fr_FR')
     {
         if (null === $version) {
@@ -110,10 +121,10 @@ class DataDragonApi
     }
 
     /**
-     * @return mixed
+     * @return string|null
      */
-    private function getLastVersion()
+    private function getLastVersion(): ?string
     {
-        return $this->getVersions()[0];
+        return $this->getLastVersion() ? $this->getVersions()[0] : null;
     }
 }

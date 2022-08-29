@@ -78,7 +78,8 @@ class MatchApi
     }
 
     /**
-     * @throws ForbiddenException
+     * @param string $matchId
+     * @return MatchDto|null
      */
     public function getMatchById(
         string $matchId
@@ -108,9 +109,15 @@ class MatchApi
         return $matchDetailId ? $this->denormalize($matchDetailId) : null;
     }
 
+    /**
+     * @param string $matchId
+     * @return mixed[]|null
+     * @throws ForbiddenException
+     */
     public function getMatchTimeLineByMatchId(
         string $matchId
-    ) {
+    ): array|null
+    {
         if ('' === $matchId) {
             throw new ForbiddenException('Match ID est vide');
         }
@@ -123,7 +130,7 @@ class MatchApi
             ]
         );
 
-        $matchTimeLine = $this->baseApi->callApi(
+        return $this->baseApi->callApi(
             $url,
             Request::METHOD_GET,
             [
@@ -132,19 +139,22 @@ class MatchApi
                 ],
             ]
         );
-
-        return $matchTimeLine;
     }
 
     /**
+     * @param  mixed[] $data
      * @return MatchDto
      */
-    private function denormalize(array $data)
+    private function denormalize(array $data): MatchDto
     {
         return $this->denormalizer->denormalize($data, MatchDto::class);
     }
 
-    private function constructQuery(array $params)
+    /**
+     * @param array<string, string|int|null> $params
+     * @return array<string, string>
+     */
+    private function constructQuery(array $params): array
     {
         $query = [];
         foreach ($params as $key => $param) {

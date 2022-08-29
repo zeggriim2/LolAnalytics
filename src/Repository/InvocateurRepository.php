@@ -41,6 +41,8 @@ class InvocateurRepository extends ServiceEntityRepository
     }
 
     /**
+     * @param string $summonerId
+     * @return Invocateur|null
      * @throws NonUniqueResultException
      */
     public function findOrderByCreatedAt(string $summonerId)

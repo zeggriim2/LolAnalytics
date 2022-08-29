@@ -94,11 +94,14 @@ class ChampionMasteryApi
     }
 
     /**
+     * @param string $summonerId
+     * @return int
      * @throws ForbiddenException
      */
     public function getChampionMasteryScoreBySummonerId(
         string $summonerId
-    ) {
+    ): int
+    {
         if ('' === $summonerId) {
             throw new ForbiddenException('Summoner ID est vide');
         }
@@ -124,7 +127,9 @@ class ChampionMasteryApi
     }
 
     /**
-     * @return ChampionMasteryDto[]
+     * @param mixed[] $datas
+     * @return array<array-key, ChampionMasteryDto>
+     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
      */
     private function denormalizeArray(
         array $datas
@@ -137,6 +142,11 @@ class ChampionMasteryApi
         return $listEntity;
     }
 
+    /**
+     * @param mixed[] $data
+     * @return ChampionMasteryDto
+     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
+     */
     private function denormalize(
         array $data
     ): ChampionMasteryDto {

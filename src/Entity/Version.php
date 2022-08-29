@@ -14,17 +14,20 @@ class Version
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private int $id;
 
     #[ORM\Column(type: 'string', length: 20)]
-    private $name;
+    private string $name;
 
     #[Gedmo\Timestampable(on: 'create')]
     #[ORM\Column(name: 'created', type: 'datetime_immutable')]
-    private $createdAt;
+    private \DateTimeImmutable$createdAt;
 
+    /**
+     * @var Collection<int, Champion>
+     */
     #[ORM\OneToMany(mappedBy: 'version', targetEntity: Champion::class, cascade: ['persist'])]
-    private $champions;
+    private Collection $champions;
 
     public function __construct()
     {

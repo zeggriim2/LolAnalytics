@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services\API\LOL;
 
 use App\Services\API\LOL\DataDragon\Platform;
-use phpDocumentor\Reflection\Types\ArrayKey;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -44,7 +45,7 @@ class BaseApi
     /**
      * @param array<string,string|array<string|string>> $options
      *
-     * @return string|array<int|string|ArrayKey,int|string|bool>|null
+     * @return mixed[]|string|null
      */
     public function callApi(string $url, string $method = 'GET', array $options = [], string $return = 'array')
     {
@@ -64,6 +65,10 @@ class BaseApi
         }
     }
 
+    /**
+     * @param string $platform
+     * @return void
+     */
     public function changePlatrform(string $platform)
     {
         if (\in_array($platform, Platform::getChoices(), true)) {

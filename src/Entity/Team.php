@@ -11,46 +11,46 @@ class Team
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private int $id;
 
     #[ORM\Column(type: 'integer')]
-    private $teamIdLol;
+    private int $teamIdLol;
 
     #[ORM\Column(type: 'boolean')]
-    private $win;
+    private bool $win;
 
     #[ORM\Column(type: 'integer')]
-    private $ban1ChampionId;
+    private int $ban1ChampionId;
 
     #[ORM\Column(type: 'integer')]
-    private $ban2ChampionId;
+    private int $ban2ChampionId;
 
     #[ORM\Column(type: 'integer')]
-    private $ban3ChampionId;
+    private int $ban3ChampionId;
 
     #[ORM\Column(type: 'integer')]
-    private $ban4ChampionId;
+    private int $ban4ChampionId;
 
     #[ORM\Column(type: 'integer')]
-    private $ban5ChampionId;
+    private int $ban5ChampionId;
 
     #[ORM\OneToOne(inversedBy: 'team', targetEntity: Baron::class, cascade: ['persist', 'remove'])]
-    private $baron;
+    private Baron $baron;
 
     #[ORM\OneToOne(inversedBy: 'team', targetEntity: Dragon::class, cascade: ['persist', 'remove'])]
-    private $dragon;
+    private Dragon $dragon;
 
     #[ORM\OneToOne(inversedBy: 'team', targetEntity: Inhibitor::class, cascade: ['persist', 'remove'])]
-    private $inhibitor;
+    private Inhibitor $inhibitor;
 
     #[ORM\OneToOne(inversedBy: 'team', targetEntity: RiftHerald::class, cascade: ['persist', 'remove'])]
-    private $riftHerald;
+    private RiftHerald $riftHerald;
 
     #[ORM\OneToOne(inversedBy: 'team', targetEntity: Tower::class, cascade: ['persist', 'remove'])]
-    private $tower;
+    private Tower $tower;
 
     #[ORM\ManyToOne(targetEntity: Rencontre::class, inversedBy: 'teams')]
-    private $rencontre;
+    private Rencontre $rencontre;
 
     public function getId(): ?int
     {

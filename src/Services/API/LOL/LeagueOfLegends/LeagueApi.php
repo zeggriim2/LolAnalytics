@@ -11,6 +11,7 @@ use App\Services\API\LOL\LeagueOfLegends\DTO\League\LeagueListDTO;
 use App\Services\API\LOL\LeagueOfLegends\Exception\ForbiddenException;
 use App\Services\API\LOL\LeagueOfLegends\Exception\LeagueArgumentException;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 class LeagueApi
@@ -249,6 +250,7 @@ class LeagueApi
     }
 
     /**
+     * @param mixed[] $datas
      * @return LeagueEntryDTO[]
      */
     private function denormalizeArray(
@@ -262,6 +264,11 @@ class LeagueApi
         return $listEntity;
     }
 
+    /**
+     * @param mixed[] $data
+     * @return LeagueListDTO
+     * @throws ExceptionInterface
+     */
     private function denormalize(
         array $data
     ): LeagueListDTO {

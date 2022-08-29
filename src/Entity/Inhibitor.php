@@ -11,16 +11,16 @@ class Inhibitor
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private int $id;
 
     #[ORM\Column(type: 'boolean')]
-    private $first;
+    private bool $first;
 
     #[ORM\Column(type: 'integer')]
-    private $kills;
+    private int $kills;
 
     #[ORM\OneToOne(mappedBy: 'inhibitor', targetEntity: Team::class, cascade: ['persist', 'remove'])]
-    private $team;
+    private Team $team;
 
     public function getId(): ?int
     {

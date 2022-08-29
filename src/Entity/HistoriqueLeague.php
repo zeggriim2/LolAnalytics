@@ -14,32 +14,32 @@ class HistoriqueLeague
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private int $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $leagueId;
+    private string $leagueId;
 
     #[ORM\Column(type: 'string', length: 100)]
-    private $tier;
+    private string $tier;
 
     #[ORM\Column(type: 'string', length: 10)]
-    private $rank;
+    private string $rank;
 
     #[ORM\Column(type: 'integer')]
-    private $leaguePoint;
+    private int $leaguePoint;
 
     #[ORM\ManyToOne(targetEntity: Invocateur::class, inversedBy: 'historiqueLeagues')]
-    private $invocateur;
+    private Invocateur $invocateur;
 
     #[Gedmo\Timestampable(on: 'create')]
     #[ORM\Column(type: 'datetime_immutable')]
-    private $createAt;
+    private \DateTimeImmutable $createAt;
 
     #[ORM\Column(type: 'integer')]
-    private $wins;
+    private int $wins;
 
     #[ORM\Column(type: 'integer')]
-    private $losses;
+    private int $losses;
 
     public function getId(): ?int
     {

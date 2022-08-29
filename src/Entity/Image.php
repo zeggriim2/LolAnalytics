@@ -14,35 +14,38 @@ class Image
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private int $id;
 
     #[ORM\Column(type: 'string', length: 150)]
-    private $complete;
+    private string $complete;
 
     #[ORM\Column(type: 'string', length: 150)]
-    private $sprite;
+    private string $sprite;
 
     #[ORM\Column(type: 'string', length: 100)]
-    private $groupe;
+    private string $groupe;
 
     #[ORM\Column(type: 'integer')]
-    private $x;
+    private int $x;
 
     #[ORM\Column(type: 'integer')]
-    private $y;
+    private int $y;
 
     #[ORM\Column(type: 'integer')]
-    private $w;
+    private int $w;
 
     #[ORM\Column(type: 'integer')]
-    private $h;
+    private int $h;
 
     #[Gedmo\Timestampable(on: 'create')]
     #[ORM\Column(type: 'datetime_immutable')]
-    private $createdAt;
+    private \DateTimeImmutable $createdAt;
 
+    /**
+     * @var Collection<int, Champion>
+     */
     #[ORM\OneToMany(mappedBy: 'image', targetEntity: Champion::class)]
-    private $champions;
+    private Collection $champions;
 
     public function __construct()
     {

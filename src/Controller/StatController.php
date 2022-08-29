@@ -12,6 +12,7 @@ use App\Entity\Rencontre;
 use App\Entity\RiftHerald;
 use App\Entity\Team;
 use App\Entity\Tower;
+use App\Repository\InvocateurRepository;
 use App\Services\API\LOL\DataDragon\Queue;
 use App\Services\API\LOL\LeagueOfLegends\DTO\League\LeagueEntryDTO;
 use App\Services\API\LOL\LeagueOfLegends\DTO\Match\MatchDto;
@@ -52,9 +53,9 @@ class StatController extends AbstractController
         }
 
         foreach ($leagues as $leagueApi) {
-            $invocateur =
-                $this->doctrine->getRepository(Invocateur::class)
-                    ->findOrderByCreatedAt($leagueApi->getSummonerId());
+            /** @var InvocateurRepository $invocateurRepo */
+            $invocateurRepo =$this->doctrine->getRepository(Invocateur::class);
+            $invocateur = $invocateurRepo->findOrderByCreatedAt($leagueApi->getSummonerId());
 
             // Verif invocateur existe
             if (null === $invocateur) {
@@ -137,6 +138,12 @@ class StatController extends AbstractController
         ;
     }
 
+    /**
+     * @param MatchDto $match
+     * @param Map $maps
+     * @param Invocateur $invocateur
+     * @return Rencontre
+     */
     private function createRencontre(
         MatchDto $match,
         Map $maps,
@@ -171,44 +178,69 @@ class StatController extends AbstractController
         return $rencontre;
     }
 
+    /**
+     * @param TeamDto $teamApi
+     * @return Tower
+     */
     private function createTower(
         TeamDto $teamApi
-    ) {
+    ): Tower
+    {
         return (new Tower())
             ->setFirst($teamApi->getObjectives()->getTower()->isFirst())
             ->setKills($teamApi->getObjectives()->getTower()->getKills())
         ;
     }
 
+    /**
+     * @param TeamDto $teamApi
+     * @return Baron
+     */
     private function createBaron(
         TeamDto $teamApi
-    ) {
+    ): Baron
+    {
         return (new Baron())
             ->setFirst($teamApi->getObjectives()->getTower()->isFirst())
             ->setKills($teamApi->getObjectives()->getTower()->getKills())
         ;
     }
 
+    /**
+     * @param TeamDto $teamApi
+     * @return Inhibitor
+     */
     private function createInhibitor(
         TeamDto $teamApi
-    ) {
+    ): Inhibitor
+    {
         return (new Inhibitor())
             ->setFirst($teamApi->getObjectives()->getTower()->isFirst())
             ->setKills($teamApi->getObjectives()->getTower()->getKills())
         ;
     }
 
+    /**
+     * @param TeamDto $teamApi
+     * @return RiftHerald
+     */
     private function createRiftHerald(
         TeamDto $teamApi
-    ) {
+    ): RiftHerald
+    {
         return (new RiftHerald())
             ->setFirst($teamApi->getObjectives()->getTower()->isFirst())
             ->setKills($teamApi->getObjectives()->getTower()->getKills())
         ;
     }
 
+    /**
+     * @param TeamDto $teamApi
+     * @return Dragon
+     */
     private function createDragon(TeamDto $teamApi
-    ) {
+    ): Dragon
+    {
         return (new Dragon())
             ->setFirst($teamApi->getObjectives()->getTower()->isFirst())
             ->setKills($teamApi->getObjectives()->getTower()->getKills())
@@ -222,7 +254,8 @@ class StatController extends AbstractController
         RiftHerald $riftHerald,
         Baron $baron,
         Inhibitor $inhibitor
-    ) {
+    ): Team
+    {
         return (new Team())
             ->setTeamIdLol($teamApi->getTeamId())
             ->setBan1ChampionId($teamApi->getBans()[0]->getChampionId())

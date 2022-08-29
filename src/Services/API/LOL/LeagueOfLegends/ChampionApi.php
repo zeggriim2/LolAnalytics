@@ -40,6 +40,11 @@ class ChampionApi
         return $championRotation ? $this->denormalize($championRotation) : null;
     }
 
+    /**
+     * @param mixed[] $data
+     * @return ChampionInfoDTO
+     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
+     */
     private function denormalize(
         array $data
     ): ChampionInfoDTO {

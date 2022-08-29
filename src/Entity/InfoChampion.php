@@ -11,22 +11,22 @@ class InfoChampion
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private int $id;
 
     #[ORM\Column(type: 'integer')]
-    private $attack;
+    private int $attack;
 
     #[ORM\Column(type: 'integer')]
-    private $defense;
+    private int $defense;
 
     #[ORM\Column(type: 'integer')]
-    private $magic;
+    private int $magic;
 
     #[ORM\Column(type: 'integer')]
-    private $difficulty;
+    private int $difficulty;
 
     #[ORM\OneToOne(inversedBy: 'infoChampion', targetEntity: Champion::class, cascade: ['persist', 'remove'])]
-    private $champion;
+    private Champion $champion;
 
     public function getId(): ?int
     {
