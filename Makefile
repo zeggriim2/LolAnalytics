@@ -1,7 +1,7 @@
 analyse:
 	composer valid
-	docker-compose exec server php bin/console doctrine:schema:valid --skip-sync
-	php vendor/bin/phpstan analyse -c phpstan.neon src --level 7 --no-progress
+	#docker-compose exec server php bin/console doctrine:schema:valid --skip-sync
+	php vendor/bin/phpstan analyse -c phpstan.neon src --no-progress
 
 start:
 	@make docker-start
