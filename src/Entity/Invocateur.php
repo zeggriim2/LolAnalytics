@@ -11,52 +11,49 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 #[ORM\Entity(repositoryClass: InvocateurRepository::class)]
-#[ORM\Table(options: ["comment"=> "Invocateur du jeux (Player)"])]
 class Invocateur
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer', options: ['comment' => 'Id de l\'invocateur'])]
+    #[ORM\Column(type: 'integer')]
     private int $id;
 
-    #[ORM\Column(type: 'string', length: 255, unique: true,
-        options: ['comment' => 'PUUID de API donnée par API de LOL'])]
+    #[ORM\Column(type: 'string', length: 255, unique: true)]
     private string $puuid;
 
-    #[ORM\Column(type: 'integer', options: ['comment' => 'Niveau de l\'invocateur'])]
+    #[ORM\Column(type: 'integer')]
     private int $summonerLevel;
 
-    #[ORM\Column(type: 'string', length: 255, options: ['comment' => 'Nom de l\'invocateur'])]
+    #[ORM\Column(type: 'string', length: 255)]
     private string $name;
 
-    #[ORM\Column(type: 'string', length: 255, options: ['comment' => 'ID donnée par API de LOL'])]
+    #[ORM\Column(type: 'string', length: 255)]
     private string $idLol;
 
-    #[ORM\Column(type: 'integer', options: ['comment' => 'ID icon au profil de l\'invocateur'])]
+    #[ORM\Column(type: 'integer')]
     private int $profileIconId;
 
-    #[ORM\Column(type: 'string', length: 255, options: ['comment' => 'ID de l\'account'])]
+    #[ORM\Column(type: 'string', length: 255)]
     private string $accoundId;
 
     #[Gedmo\Timestampable(on: 'create')]
-    #[ORM\Column(type: 'datetime_immutable', options: ['comment' => 'Date de création en Base'])]
+    #[ORM\Column(type: 'datetime_immutable')]
     private \DateTimeImmutable $createdAt;
 
     #[Gedmo\Timestampable(on: 'update')]
-    #[ORM\Column(type: 'datetime_immutable', nullable: true, options: ['comment' => 'Date de modif en Base'])]    private ?\DateTimeImmutable $updatedAt;
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    private ?\DateTimeImmutable $updatedAt;
 
     /**
      * @var Collection<int, Rencontre>
      */
     #[ORM\ManyToMany(targetEntity: Rencontre::class, mappedBy: 'invocateurs')]
-    #[ORM\Column(options: ['comment' =>''])]
     private Collection $rencontres;
 
     /**
      * @var Collection<int, HistoriqueLeague>
      */
     #[ORM\OneToMany(mappedBy: 'invocateur', targetEntity: HistoriqueLeague::class)]
-    #[ORM\Column(options: ['comment' => 'Historique des Leagues de l\'invocateur'])]
     private Collection $historiqueLeagues;
 
     public function __construct()
