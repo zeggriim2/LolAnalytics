@@ -67,7 +67,7 @@ class Invocateur
         return $this->id;
     }
 
-    public function getPuuid(): ?string
+    public function getPuuid(): string
     {
         return $this->puuid;
     }

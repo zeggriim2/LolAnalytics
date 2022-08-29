@@ -41,7 +41,9 @@ class BaseApi
     public function constructUrl(string $url, array $params): string
     {
         foreach ($params as $key => $param) {
-            $url = str_replace("{{$key}}", $param, $url);
+            if($param !== null){
+                $url = str_replace("{{$key}}", $param, $url);
+            }
         }
 
         return $url;

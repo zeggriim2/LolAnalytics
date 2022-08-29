@@ -35,14 +35,16 @@ class LanguageCommand extends Command
         $languages = $this->dataDragonApi->getLanguages();
 
         $count = 0;
-        foreach ($languages as $language) {
-            $languageRepo = $this->doctrine->getRepository(Language::class)->findOneBy(['code' => $language]);
-            if (null === $languageRepo) {
-                $languageEntity = (new Language())
-                    ->setCode($language)
-                ;
-                $this->doctrine->persist($languageEntity);
-                ++$count;
+        if($languages !== null){
+            foreach ($languages as $language) {
+                $languageRepo = $this->doctrine->getRepository(Language::class)->findOneBy(['code' => $language]);
+                if (null === $languageRepo) {
+                    $languageEntity = (new Language())
+                        ->setCode($language)
+                    ;
+                    $this->doctrine->persist($languageEntity);
+                    ++$count;
+                }
             }
         }
         $this->doctrine->flush();

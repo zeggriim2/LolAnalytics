@@ -35,14 +35,16 @@ class VersionCommand extends Command
         $versions = $this->dataDragonApi->getVersions();
 
         $count = 0;
-        foreach (array_reverse($versions) as $version) {
-            $versionRepo = $this->doctrine->getRepository(Version::class)->findOneBy(['name' => $version]);
-            if (null === $versionRepo) {
-                $versionsEntity = (new Version())
-                    ->setName($version)
-                ;
-                $this->doctrine->persist($versionsEntity);
-                ++$count;
+        if($versions !== null){
+            foreach (array_reverse($versions) as $version) {
+                $versionRepo = $this->doctrine->getRepository(Version::class)->findOneBy(['name' => $version]);
+                if (null === $versionRepo) {
+                    $versionsEntity = (new Version())
+                        ->setName($version)
+                    ;
+                    $this->doctrine->persist($versionsEntity);
+                    ++$count;
+                }
             }
         }
         $this->doctrine->flush();

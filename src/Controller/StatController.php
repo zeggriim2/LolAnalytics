@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use _PHPStan_9a6ded56a\Nette\Neon\Exception;
 use App\Entity\Baron;
 use App\Entity\Dragon;
 use App\Entity\HistoriqueLeague;
@@ -24,6 +23,7 @@ use App\Services\API\LOL\LeagueOfLegends\Exception\LeagueArgumentException;
 use App\Services\API\LOL\LeagueOfLegends\LeagueApi;
 use App\Services\API\LOL\LeagueOfLegends\MatchApi;
 use App\Services\API\LOL\LeagueOfLegends\SummonerApi;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -80,10 +80,14 @@ class StatController extends AbstractController
 
             // On verif si l'invocateur à eu une historique League enregistré il y a plus de un jour
             if (\count($invocateur->getHistoriqueLeagues()) > 0 &&
-                $invocateur->getHistoriqueLeagues()[0]->getCreateAt()->diff(new \DateTimeImmutable())->days <= 1
+                $invocateur->getHistoriqueLeagues()->get(0) !== null &&
+                $invocateur->getHistoriqueLeagues()->get(0)->getCreateAt()->diff(new \DateTimeImmutable())->days <= 1
             ) {
                 continue;
             }
+
+            // On verif si l'invocateur à eu une historique League enregistré il y a plus de un jour
+
 
             // On créé l'historique League
             $league = $this->createHistoriqueLeague($leagueApi, $invocateur);
@@ -108,8 +112,10 @@ class StatController extends AbstractController
 
                     $map = $this->doctrine->getRepository(Map::class)->findOneBy(['mapIdLol' => $match->getInfo()->getMapId()]);
 
-                    $rencontre = $this->createRencontre($match, $map, $invocateur);
-                    $this->doctrine->getManager()->persist($rencontre);
+                    if($map !== null){
+                        $rencontre =  $this->createRencontre($match, $map, $invocateur);
+                        $this->doctrine->getManager()->persist($rencontre);
+                    }
                 }
             }
             $this->doctrine->getManager()->persist($league);

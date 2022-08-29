@@ -21,7 +21,7 @@ class DataDragonApi
     }
 
     /**
-     * @return array<int,string>|null
+     * @return array<array-key,string>|null
      */
     public function getVersions(): ?array
     {
@@ -125,6 +125,6 @@ class DataDragonApi
      */
     private function getLastVersion(): ?string
     {
-        return $this->getLastVersion() ? $this->getVersions()[0] : null;
+        return$this->getVersions() ? $this->getVersions()[0]: null;
     }
 }

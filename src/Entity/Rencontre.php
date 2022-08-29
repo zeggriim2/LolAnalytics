@@ -56,7 +56,11 @@ class Rencontre
         return $this->gameId;
     }
 
-    public function setGameId(?string $gameId): self
+    /**
+     * @param int|string $gameId
+     * @return $this
+     */
+    public function setGameId(int|string $gameId): self
     {
         $this->gameId = $gameId;
 

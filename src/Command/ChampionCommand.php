@@ -61,16 +61,18 @@ class ChampionCommand extends Command
             }
         }else{
             $champions = $this->dataDragonApi->getChampions();
-            $versionLabel = $input->getArgument('version') ?: $champions['version'];
-            /** @var Version|null $version */
-            $version = $this->doctrine->getRepository(Version::class)->findOneBy(['name'=> $versionLabel]);
-            // Si la version n'est pas trouvé en BDD
-            if($version === null) {
-                $io->error("La version ${versionLabel} n'existe pas en Bdd");
-                return Command::FAILURE;
-            }
+            if($champions !== null){
+                $versionLabel = $input->getArgument('version') ?: $champions['version'];
+                /** @var Version|null $version */
+                $version = $this->doctrine->getRepository(Version::class)->findOneBy(['name'=> $versionLabel]);
+                // Si la version n'est pas trouvé en BDD
+                if($version === null) {
+                    $io->error("La version ${versionLabel} n'existe pas en Bdd");
+                    return Command::FAILURE;
+                }
 
-            $this->addChampions($champions, $version);
+                $this->addChampions($champions, $version);
+            }
         }
 
         $this->doctrine->flush();
