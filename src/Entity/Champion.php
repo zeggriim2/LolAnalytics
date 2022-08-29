@@ -35,13 +35,13 @@ class Champion
     private ?string $partype;
 
     #[ORM\ManyToOne(targetEntity: Version::class, inversedBy: 'champions')]
-    private Version $version;
+    private ?Version $version;
 
     #[ORM\OneToOne(mappedBy: 'champion', targetEntity: InfoChampion::class, cascade: ['persist', 'remove'])]
-    private InfoChampion $infoChampion;
+    private ?InfoChampion $infoChampion;
 
     #[ORM\ManyToOne(targetEntity: Image::class, inversedBy: 'champions')]
-    private Image $image;
+    private ?Image $image;
 
     public function getId(): ?int
     {

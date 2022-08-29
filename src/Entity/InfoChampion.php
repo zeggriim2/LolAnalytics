@@ -26,7 +26,7 @@ class InfoChampion
     private int $difficulty;
 
     #[ORM\OneToOne(inversedBy: 'infoChampion', targetEntity: Champion::class, cascade: ['persist', 'remove'])]
-    private Champion $champion;
+    private ?Champion $champion;
 
     public function getId(): ?int
     {

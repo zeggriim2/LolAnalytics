@@ -39,7 +39,7 @@ class MatchApi
     /**
      * @throws ForbiddenException
      *
-     * @return string[]|null
+     * @return mixed[]|null
      */
     public function getMatchByPuuid(
         string $puuid,
@@ -65,7 +65,7 @@ class MatchApi
             'type' => $type,
         ]);
 
-        return $this->baseApi->callApi(
+        return $this->baseApi->callApiArray(
             $url,
             Request::METHOD_GET,
             [
@@ -96,7 +96,7 @@ class MatchApi
             ]
         );
 
-        $matchDetailId = $this->baseApi->callApi(
+        $matchDetailId = $this->baseApi->callApiArray(
             $url,
             Request::METHOD_GET,
             [
@@ -130,7 +130,7 @@ class MatchApi
             ]
         );
 
-        return $this->baseApi->callApi(
+        return $this->baseApi->callApiArray(
             $url,
             Request::METHOD_GET,
             [
@@ -152,7 +152,7 @@ class MatchApi
 
     /**
      * @param array<string, string|int|null> $params
-     * @return array<string, string>
+     * @return array<string, string|int>
      */
     private function constructQuery(array $params): array
     {

@@ -20,7 +20,7 @@ class RiftHerald
     private int $kills;
 
     #[ORM\OneToOne(mappedBy: 'riftHerald', targetEntity: Team::class, cascade: ['persist', 'remove'])]
-    private Team $team;
+    private ?Team $team;
 
     public function getId(): ?int
     {

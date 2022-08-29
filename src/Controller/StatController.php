@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use _PHPStan_9a6ded56a\Nette\Neon\Exception;
 use App\Entity\Baron;
 use App\Entity\Dragon;
 use App\Entity\HistoriqueLeague;
@@ -18,9 +19,12 @@ use App\Services\API\LOL\LeagueOfLegends\DTO\League\LeagueEntryDTO;
 use App\Services\API\LOL\LeagueOfLegends\DTO\Match\MatchDto;
 use App\Services\API\LOL\LeagueOfLegends\DTO\Match\TeamDto;
 use App\Services\API\LOL\LeagueOfLegends\DTO\SummonerDTO;
+use App\Services\API\LOL\LeagueOfLegends\Exception\ForbiddenException;
+use App\Services\API\LOL\LeagueOfLegends\Exception\LeagueArgumentException;
 use App\Services\API\LOL\LeagueOfLegends\LeagueApi;
 use App\Services\API\LOL\LeagueOfLegends\MatchApi;
 use App\Services\API\LOL\LeagueOfLegends\SummonerApi;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -33,6 +37,11 @@ class StatController extends AbstractController
     ) {
     }
 
+    /**
+     * @throws LeagueArgumentException
+     * @throws NonUniqueResultException
+     * @throws ForbiddenException
+     */
     #[Route('/statistique/{tier}/{division}', name: 'app_stat_index',
         requirements: ['tier' => '%reqTier%', 'division' => '%reqDivision%'])]
     public function index(
@@ -88,7 +97,7 @@ class StatController extends AbstractController
             foreach ($idMatchs as $idmatch) {
                 // On verifie si le match existe déjà
                 $rencontreRepo = $this->doctrine->getRepository(Rencontre::class)
-                    ->findOneBy(['gameId' => (int) mb_substr(mb_strstr($idmatch, '_'), 1, null)]);
+                    ->findOneBy(['gameId' => (int) $this->truncIdMatch($idmatch)]);
 
                 // On le récupère les infos du match et on l'enregistre
                 if (null === $rencontreRepo) {
@@ -150,7 +159,7 @@ class StatController extends AbstractController
         Invocateur $invocateur
     ) {
         $rencontre = (new Rencontre())
-            ->setGameId($match->getInfo()->getGameId())
+            ->setGameId((string)$match->getInfo()->getGameId())
             ->setGameDuration($match->getInfo()->getGameDuration())
             ->setGameCreation($match->getInfo()->getGameCreation())
             ->setMap($maps)
@@ -270,5 +279,19 @@ class StatController extends AbstractController
             ->setInhibitor($inhibitor)
             ->setWin($teamApi->isWin())
         ;
+    }
+
+    /**
+     * @param string $idMatch
+     * @return int
+     * @throws \Exception
+     */
+    private function truncIdMatch(string $idMatch): int
+    {
+        $idMatch = mb_strstr($idMatch, '_');
+        if($idMatch == null){
+            throw new  \Exception("Id Match Incorrect");
+        }
+        return (int) mb_substr($idMatch, 1, null);
     }
 }

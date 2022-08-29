@@ -17,12 +17,12 @@ class Rencontre
     private ?int $id = null;
 
     #[ORM\Column(type: 'bigint')]
-    private ?int $gameId = null;
+    private string|int $gameId;
 
-    #[ORM\Column(type: 'datetime')]
+    #[ORM\Column(type: 'datetime_immutable')]
     private DateTimeImmutable $gameCreation;
 
-    #[ORM\Column(type: 'datetime')]
+    #[ORM\Column(type: 'datetime_immutable')]
     private DateTimeImmutable $gameDuration;
 
     /**
@@ -38,7 +38,7 @@ class Rencontre
     private Collection$invocateurs;
 
     #[ORM\ManyToOne(targetEntity: Map::class, inversedBy: 'rencontres')]
-    private Map $map;
+    private ?Map $map;
 
     public function __construct()
     {
@@ -51,12 +51,12 @@ class Rencontre
         return $this->id;
     }
 
-    public function getGameId(): ?int
+    public function getGameId(): int|string
     {
         return $this->gameId;
     }
 
-    public function setGameId(?int $gameId): self
+    public function setGameId(?string $gameId): self
     {
         $this->gameId = $gameId;
 

@@ -20,7 +20,7 @@ class Inhibitor
     private int $kills;
 
     #[ORM\OneToOne(mappedBy: 'inhibitor', targetEntity: Team::class, cascade: ['persist', 'remove'])]
-    private Team $team;
+    private ?Team $team;
 
     public function getId(): ?int
     {

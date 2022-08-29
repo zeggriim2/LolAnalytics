@@ -29,7 +29,7 @@ class HistoriqueLeague
     private int $leaguePoint;
 
     #[ORM\ManyToOne(targetEntity: Invocateur::class, inversedBy: 'historiqueLeagues')]
-    private Invocateur $invocateur;
+    private ?Invocateur $invocateur;
 
     #[Gedmo\Timestampable(on: 'create')]
     #[ORM\Column(type: 'datetime_immutable')]

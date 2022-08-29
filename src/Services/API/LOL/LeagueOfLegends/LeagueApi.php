@@ -55,7 +55,7 @@ class LeagueApi
             ]
         );
 
-        $leagueSummonerId = $this->baseApi->callApi(
+        $leagueSummonerId = $this->baseApi->callApiArray(
             $url,
             Request::METHOD_GET,
             [
@@ -91,7 +91,7 @@ class LeagueApi
             ]
         );
 
-        $leagueChallenger = $this->baseApi->callApi(
+        $leagueChallenger = $this->baseApi->callApiArray(
             $url,
             Request::METHOD_GET,
             [
@@ -127,7 +127,7 @@ class LeagueApi
             ]
         );
 
-        $leagueGrandMaster = $this->baseApi->callApi(
+        $leagueGrandMaster = $this->baseApi->callApiArray(
             $url,
             Request::METHOD_GET,
             [
@@ -163,7 +163,7 @@ class LeagueApi
             ]
         );
 
-        $leagueMaster = $this->baseApi->callApi(
+        $leagueMaster = $this->baseApi->callApiArray(
             $url,
             Request::METHOD_GET,
             [
@@ -194,7 +194,7 @@ class LeagueApi
             ]
         );
 
-        $league = $this->baseApi->callApi(
+        $league = $this->baseApi->callApiArray(
             $url,
             Request::METHOD_GET,
             [
@@ -236,7 +236,7 @@ class LeagueApi
             'division' => $division,
         ]);
 
-        $league = $this->baseApi->callApi(
+        $league = $this->baseApi->callApiArray(
             $url,
             Request::METHOD_GET,
             [

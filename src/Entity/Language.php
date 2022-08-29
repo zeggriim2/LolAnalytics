@@ -18,7 +18,7 @@ class Language
     private string $code;
 
     #[ORM\Column(type: 'string', length: 150, nullable: true)]
-    private string $language;
+    private ?string $language;
 
     #[Gedmo\Timestampable(on: 'create')]
     #[ORM\Column(type: 'datetime_immutable')]

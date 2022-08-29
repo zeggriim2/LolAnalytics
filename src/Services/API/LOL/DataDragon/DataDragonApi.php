@@ -25,7 +25,7 @@ class DataDragonApi
      */
     public function getVersions(): ?array
     {
-        return $this->baseApi->callApi(self::URL_VERSION, Request::METHOD_GET);
+        return $this->baseApi->callApiArray(self::URL_VERSION, Request::METHOD_GET);
     }
 
     /**
@@ -33,7 +33,7 @@ class DataDragonApi
      */
     public function getLanguages(): ?array
     {
-        return $this->baseApi->callApi(self::URL_LANGUAGE, Request::METHOD_GET);
+        return $this->baseApi->callApiArray(self::URL_LANGUAGE, Request::METHOD_GET);
     }
 
     /**
@@ -53,7 +53,7 @@ class DataDragonApi
             ]
         );
 
-        return $this->baseApi->callApi($url, Request::METHOD_GET);
+        return $this->baseApi->callApiArray($url, Request::METHOD_GET);
     }
 
     /**
@@ -74,7 +74,7 @@ class DataDragonApi
             ]
         );
 
-        return $this->baseApi->callApi($url, Request::METHOD_GET);
+        return $this->baseApi->callApiArray($url, Request::METHOD_GET);
     }
 
 
@@ -97,7 +97,7 @@ class DataDragonApi
             ]
         );
 
-        return $this->baseApi->callApi($url, Request::METHOD_GET);
+        return $this->baseApi->callApiArray($url, Request::METHOD_GET);
     }
 
     /**

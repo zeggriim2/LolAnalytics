@@ -35,22 +35,22 @@ class Team
     private int $ban5ChampionId;
 
     #[ORM\OneToOne(inversedBy: 'team', targetEntity: Baron::class, cascade: ['persist', 'remove'])]
-    private Baron $baron;
+    private ?Baron $baron;
 
     #[ORM\OneToOne(inversedBy: 'team', targetEntity: Dragon::class, cascade: ['persist', 'remove'])]
-    private Dragon $dragon;
+    private ?Dragon $dragon;
 
     #[ORM\OneToOne(inversedBy: 'team', targetEntity: Inhibitor::class, cascade: ['persist', 'remove'])]
-    private Inhibitor $inhibitor;
+    private ?Inhibitor $inhibitor;
 
     #[ORM\OneToOne(inversedBy: 'team', targetEntity: RiftHerald::class, cascade: ['persist', 'remove'])]
-    private RiftHerald $riftHerald;
+    private ?RiftHerald $riftHerald;
 
     #[ORM\OneToOne(inversedBy: 'team', targetEntity: Tower::class, cascade: ['persist', 'remove'])]
-    private Tower $tower;
+    private ?Tower $tower;
 
     #[ORM\ManyToOne(targetEntity: Rencontre::class, inversedBy: 'teams')]
-    private Rencontre $rencontre;
+    private ?Rencontre $rencontre;
 
     public function getId(): ?int
     {

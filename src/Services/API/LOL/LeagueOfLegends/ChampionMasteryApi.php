@@ -43,7 +43,7 @@ class ChampionMasteryApi
             ]
         );
 
-        $championMasterySummonerId = $this->baseApi->callApi(
+        $championMasterySummonerId = $this->baseApi->callApiArray(
             $url,
             Request::METHOD_GET,
             [
@@ -80,7 +80,7 @@ class ChampionMasteryApi
             ]
         );
 
-        $championMasterySummonerIdChampionId = $this->baseApi->callApi(
+        $championMasterySummonerIdChampionId = $this->baseApi->callApiArray(
             $url,
             Request::METHOD_GET,
             [

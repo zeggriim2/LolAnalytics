@@ -6,6 +6,11 @@ namespace App\Services\API\LOL;
 
 use App\Services\API\LOL\DataDragon\Platform;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class BaseApi
@@ -31,7 +36,7 @@ class BaseApi
     }
 
     /**
-     * @param array<string,string> $params
+     * @param array<string,string|null> $params
      */
     public function constructUrl(string $url, array $params): string
     {
@@ -62,6 +67,37 @@ class BaseApi
             case Response::HTTP_NOT_FOUND:
             default:
                 return null;
+        }
+    }
+
+    /**
+     * @param string $url
+     * @param string $method
+     * @param array<string,string|array<string,int|string>> $options
+     * @return mixed|null
+     */
+    public function callApiArray(string $url, string $method = 'GET', array $options = [])
+    {
+        $response = $this->client->request($method, $url, $options);
+        $statusCode = $response->getStatusCode();
+        if($statusCode === Response::HTTP_OK){
+            return $response->toArray();
+        }
+
+        return null;
+    }
+
+    /**
+     * @param string $url
+     * @param string $method
+     * @param array<string,string|array<string,int|string>> $options
+     * @return string|void
+     */
+    public function callApiString(string $url, string $method = 'GET', array $options = []){
+        $response = $this->client->request($method, $url, $options);
+        $statusCode = $response->getStatusCode();
+        if($statusCode === Response::HTTP_OK){
+            return $response->getContent();
         }
     }
 

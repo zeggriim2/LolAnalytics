@@ -20,7 +20,7 @@ class Baron
     private int $kills;
 
     #[ORM\OneToOne(mappedBy: 'baron', targetEntity: Team::class, cascade: ['persist', 'remove'])]
-    private Team $team;
+    private ?Team $team;
 
     public function getId(): ?int
     {

@@ -27,7 +27,7 @@ class ChampionApi
             ]
         );
 
-        $championRotation = $this->baseApi->callApi(
+        $championRotation = $this->baseApi->callApiArray(
             $url,
             Request::METHOD_GET,
             [
