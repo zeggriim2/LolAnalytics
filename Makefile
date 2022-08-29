@@ -1,7 +1,7 @@
 analyse:
 	composer valid
 	#docker-compose exec server php bin/console doctrine:schema:valid --skip-sync
-	php vendor/bin/phpstan analyse -c phpstan.neon src --no-progress
+	php vendor/bin/phpstan analyse -c phpstan.neon --no-progress
 
 start:
 	@make docker-start
@@ -96,7 +96,7 @@ db-restore-test:
 	make doc-migrate-test
 
 # Composer
-composer-install:
+composer-install-dev:
 	@composer install
 
 install:
@@ -113,3 +113,6 @@ test-start:
 
 cs-fix:
 	vendor\bin\php-cs-fixer fix --allow-risky yes -vvv
+
+composer-install-prod:
+	docker-compose exec server composer install --optimize-autoloader --no-dev
