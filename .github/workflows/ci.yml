@@ -1,10 +1,6 @@
 name: CI and tests
 
-on:
-  push:
-    paths:
-      - "**.php"
-      - "phpcs.xml"
+on: [push]
 jobs:
   phpstan:
     runs-on: ubuntu-latest
@@ -18,3 +14,10 @@ jobs:
           REQUIRE_DEV: true
         with:
           args: analyse src/
+  php-cs-fixer:
+    name: PHP-CS-Fixer
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: PHP-CS-Fixer
+        uses: docker://oskarstark/php-cs-fixer-ga
