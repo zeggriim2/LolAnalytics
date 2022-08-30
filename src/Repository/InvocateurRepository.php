@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Invocateur;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -39,6 +40,11 @@ class InvocateurRepository extends ServiceEntityRepository
         }
     }
 
+    /**
+     * @param string $summonerId
+     * @return Invocateur|null
+     * @throws NonUniqueResultException
+     */
     public function findOrderByCreatedAt(string $summonerId)
     {
         return $this->createQueryBuilder('i')

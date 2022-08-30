@@ -40,10 +40,15 @@ class SummonerCommand extends Command
         $name = $input->getArgument('name');
 
         $summonerApi = $this->summonerApi->summonerBySummonerName($name);
+        if($summonerApi !== null){
+            $error = $this->summonerManager->enregistrer($summonerApi);
+            $phase = "L'invocateur {$name} à bien été ajouté à la base de donnée. (Id Lol : {$summonerApi->getId()} )";
+        }else{
+            $phase = "";
+        }
 
-        $error = $this->summonerManager->enregistrer($summonerApi);
 
-        $io->success("L'invocateur {$name} à bien été ajouté à la base de donnée. (Id Lol : {$summonerApi->getId()} )");
+        $io->success($phase);
 
         return Command::SUCCESS;
     }

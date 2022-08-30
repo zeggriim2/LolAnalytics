@@ -2,7 +2,7 @@
 
 namespace App\Command;
 
-use App\Entity\Version;
+use App\Entity\Language;
 use App\Services\API\LOL\DataDragon\DataDragonApi;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -12,10 +12,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(
-    name: 'app:versions',
-    description: 'Ajout les versions en BDD',
+    name: 'app:languages',
+    description: 'Ajout des Languages en BDD',
 )]
-class VersionCommand extends Command
+class LanguageCommand extends Command
 {
     public function __construct(
         private DataDragonApi $dataDragonApi,
@@ -32,17 +32,17 @@ class VersionCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $versions = $this->dataDragonApi->getVersions();
+        $languages = $this->dataDragonApi->getLanguages();
 
         $count = 0;
-        if($versions !== null){
-            foreach (array_reverse($versions) as $version) {
-                $versionRepo = $this->doctrine->getRepository(Version::class)->findOneBy(['name' => $version]);
-                if (null === $versionRepo) {
-                    $versionsEntity = (new Version())
-                        ->setName($version)
+        if($languages !== null){
+            foreach ($languages as $language) {
+                $languageRepo = $this->doctrine->getRepository(Language::class)->findOneBy(['code' => $language]);
+                if (null === $languageRepo) {
+                    $languageEntity = (new Language())
+                        ->setCode($language)
                     ;
-                    $this->doctrine->persist($versionsEntity);
+                    $this->doctrine->persist($languageEntity);
                     ++$count;
                 }
             }
@@ -50,9 +50,9 @@ class VersionCommand extends Command
         $this->doctrine->flush();
 
         if (0 === $count) {
-            $phrase = "Aucun élément de version n'a été ajouté.";
+            $phrase = "Aucun élément de language n'a été ajouté.";
         } else {
-            $phrase = "$count version ont été ajouté en bdd.";
+            $phrase = "$count language ont été ajouté en bdd.";
         }
 
         $io->success($phrase);

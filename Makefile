@@ -9,6 +9,8 @@ help: ## Affiche cette aide
 
 analyse: ##
 	composer valid
+	#docker-compose exec server php bin/console doctrine:schema:valid --skip-sync
+	php vendor/bin/phpstan analyse -c phpstan.neon --no-progress
 
 start:
 	@make docker-start
@@ -17,8 +19,18 @@ start:
 	@make init-data
 
 init-data:
-	$(sy) app:versions
-	$(sy) app:maps
+	docker-compose exec server php bin/console app:versions
+	docker-compose exec server php bin/console app:maps
+	docker-compose exec server php bin/console app:languages
+
+init-data-prod:
+	docker-compose exec server php bin/console app:versions --env=prod
+	docker-compose exec server php bin/console app:maps --env=prod
+	docker-compose exec server php bin/console app:languages --env=prod
+
+
+command-champion:
+	@docker-compose exec server php bin/console app:champions
 
 # Docker
 docker-start:
@@ -29,13 +41,6 @@ docker-stop:
 
 docker-remove:
 	@docker-compose rm -v database
-
-
-
-#Command Interne
-cmd-versions:
-	 $(sy) app:versions
-
 
 # Server
 server-start:
@@ -49,31 +54,47 @@ server-stop:
 
 # Doctrine
 migrate:
-	$(sy) make:migration
+	@docker-compose exec server php bin/console make:migration
 
 doc-migrate-dev:
-	$(sy) doctrine:migration:migrate --env=dev -n
+	@docker-compose exec server php bin/console doctrine:migration:migrate --env=dev -n
 
 doc-migrate-test:
-	$(sy) doctrine:migration:migrate --env=test -n
+	@docker-compose exec server php bin/console doctrine:migration:migrate --env=test -n
+
+doc-migrate-prod:
+	@docker-compose exec server php bin/console doctrine:migration:migrate --env=prod -n
 
 #Database
 db-remove-dev:
-	$(sy) doctrine:database:drop --force --env=dev --if-exists
+	docker-compose exec server php bin/console doctrine:database:drop --force --env=dev --if-exists
 
 db-create-dev:
-	$(sy) doctrine:database:create --env=dev --if-not-exists
+	docker-compose exec server php bin/console doctrine:database:create --env=dev --if-not-exists
 
 db-restore-dev:
 	make db-remove-dev
 	make db-create-dev
 	make doc-migrate-dev
 
+
+#Database
+db-remove-prod:
+	docker-compose exec server php bin/console doctrine:database:drop --force --env=prod --if-exists
+
+db-create-prod:
+	docker-compose exec server php bin/console doctrine:database:create --env=prod --if-not-exists
+
+db-restore-prod:
+	make db-remove-prod
+	make db-create-prod
+	make doc-migrate-prod
+
 db-remove-test:
-	$(sy) doctrine:database:drop --force --env=test --if-exists
+	docker-compose exec server php bin/console doctrine:database:drop --force --env=test --if-exists
 
 db-create-test:
-	$(sy) doctrine:database:create --env=test --if-not-exists
+	docker-compose exec server php bin/console doctrine:database:create --env=test --if-not-exists
 
 db-restore-test:
 	make db-remove-test
@@ -81,7 +102,7 @@ db-restore-test:
 	make doc-migrate-test
 
 # Composer
-composer-install:
+composer-install-dev:
 	@composer install
 
 install:
@@ -98,3 +119,6 @@ test-start:
 
 cs-fix:
 	vendor\bin\php-cs-fixer fix --allow-risky yes -vvv
+
+composer-install-prod:
+	docker-compose exec server composer install --optimize-autoloader --no-dev

@@ -17,6 +17,9 @@ class LeagueEntryDTO
     private bool $veteran;
     private bool $freshBlood;
     private bool $inactive;
+    /**
+     * @var array<string, int|string>
+     */
     private array $miniSeries;
 
     public function getLeagueId(): string
@@ -175,11 +178,18 @@ class LeagueEntryDTO
         return $this;
     }
 
+    /**
+     * @return array<string, int|string>
+     */
     public function getMiniSeries(): array
     {
         return $this->miniSeries;
     }
 
+    /**
+     * @param array<string, int|string> $miniSeries
+     * @return $this
+     */
     public function setMiniSeries(array $miniSeries): self
     {
         $this->miniSeries = $miniSeries;

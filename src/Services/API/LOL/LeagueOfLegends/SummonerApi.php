@@ -24,6 +24,10 @@ class SummonerApi
     ) {
     }
 
+    /**
+     * @param string $summonerName
+     * @return SummonerDTO|null
+     */
     public function summonerBySummonerName(string $summonerName): ?SummonerDTO
     {
         $url = $this->baseApi->constructUrl(self::URL_NAME, [
@@ -122,7 +126,7 @@ class SummonerApi
     }
 
     /**
-     * @param array<int,string|string> $data
+     * @param array<string,int|string> $data
      */
     private function denormalize(array $data): SummonerDTO
     {
