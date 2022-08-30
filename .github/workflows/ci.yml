@@ -15,6 +15,6 @@ jobs:
       - name: OSKAR-phpstan
         # You may pin to the exact commit or the version.
         # uses: OskarStark/phpstan-ga@3646e109c94da5c36641cac786e555ce0a9479de
-        uses: OskarStark/phpstan-ga
+        uses: OskarStark/phpstan-ga:latest
         env:
           REQUIRE_DEV: true
