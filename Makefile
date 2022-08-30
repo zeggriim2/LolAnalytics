@@ -1,4 +1,13 @@
-analyse:
+isProd := $(shell grep "APP_ENV=prod" .env.local > /dev/null && echo 1)
+sy := php bin/console
+
+make test-env:
+	@echo $(isProd)
+
+help: ## Affiche cette aide
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
+
+analyse: ##
 	composer valid
 
 start:
@@ -8,8 +17,8 @@ start:
 	@make init-data
 
 init-data:
-	php bin/console app:versions
-	php bin/console app:maps
+	$(sy) app:versions
+	$(sy) app:maps
 
 # Docker
 docker-start:
@@ -25,7 +34,7 @@ docker-remove:
 
 #Command Interne
 cmd-versions:
-	 @php bin/console app:versions
+	 $(sy) app:versions
 
 
 # Server
@@ -40,20 +49,20 @@ server-stop:
 
 # Doctrine
 migrate:
-	@php bin/console make:migration
+	$(sy) make:migration
 
 doc-migrate-dev:
-	@php bin/console doctrine:migration:migrate --env=dev -n
+	$(sy) doctrine:migration:migrate --env=dev -n
 
 doc-migrate-test:
-	@php bin/console doctrine:migration:migrate --env=test -n
+	$(sy) doctrine:migration:migrate --env=test -n
 
 #Database
 db-remove-dev:
-	php bin/console doctrine:database:drop --force --env=dev --if-exists
+	$(sy) doctrine:database:drop --force --env=dev --if-exists
 
 db-create-dev:
-	php bin/console doctrine:database:create --env=dev --if-not-exists
+	$(sy) doctrine:database:create --env=dev --if-not-exists
 
 db-restore-dev:
 	make db-remove-dev
@@ -61,10 +70,10 @@ db-restore-dev:
 	make doc-migrate-dev
 
 db-remove-test:
-	php bin/console doctrine:database:drop --force --env=test --if-exists
+	$(sy) doctrine:database:drop --force --env=test --if-exists
 
 db-create-test:
-	php bin/console doctrine:database:create --env=test --if-not-exists
+	$(sy) doctrine:database:create --env=test --if-not-exists
 
 db-restore-test:
 	make db-remove-test
