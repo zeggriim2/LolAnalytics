@@ -7,8 +7,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: echo a string
-        run: eccho "Hello World"
+        run: echo "Hello World"
       - name: multiline script
         run: |
           node -v
           npm -v
+      - name: OSKAR-phpstan
+        # You may pin to the exact commit or the version.
+        # uses: OskarStark/phpstan-ga@3646e109c94da5c36641cac786e555ce0a9479de
+        uses: OskarStark/phpstan-ga@1.6.0
