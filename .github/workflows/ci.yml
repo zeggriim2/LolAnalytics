@@ -1,7 +1,10 @@
 name: CI and test
 
-on: [push]
-
+on:
+  push:
+    paths:
+      - "**.php"
+      - "phpcs.xml"
 jobs:
   phpstan:
     runs-on: ubuntu-latest
@@ -15,9 +18,22 @@ jobs:
           REQUIRE_DEV: true
         with:
           args: analyse src/
+  phpcs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0 # important!
 
+      # we may use whatever way to install phpcs, just specify the path on the next step
+      # however, curl seems to be the fastest
+      - name: Install PHP_CodeSniffer
+        run: |
+          curl -OL https://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar
+          php phpcs.phar --version
 
-      - name: OSKAR-phpcs
-        # You may pin to the exact commit or the version.
-        # uses: OskarStark/phpcs-ga@f51a526c819eccf595bc5807d903de3ae1082a68
-        uses: OskarStark/phpcs-ga@3.4.2
+      - uses: thenabeel/action-phpcs@v8
+        with:
+          files: "**.php" # you may customize glob as needed
+          phpcs_path: php phpcs.phar
+          standard: phpcs.xml
