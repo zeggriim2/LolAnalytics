@@ -1,4 +1,13 @@
-analyse:
+isProd := $(shell grep "APP_ENV=prod" .env.local > /dev/null && echo 1)
+sy := php bin/console
+
+make test-env:
+	@echo $(isProd)
+
+help: ## Affiche cette aide
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
+
+analyse: ##
 	composer valid
 	#docker-compose exec server php bin/console doctrine:schema:valid --skip-sync
 	php vendor/bin/phpstan analyse -c phpstan.neon --no-progress
@@ -32,9 +41,6 @@ docker-stop:
 
 docker-remove:
 	@docker-compose rm -v database
-
-
-
 
 # Server
 server-start:

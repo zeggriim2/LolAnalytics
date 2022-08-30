@@ -1,0 +1,16 @@
+name: CI and tests
+
+on: [push]
+jobs:
+  phpstan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v2
+
+      - name: PHPStan
+        uses: docker://oskarstark/phpstan-ga
+        env:
+          REQUIRE_DEV: true
+        with:
+          args: analyse src/
