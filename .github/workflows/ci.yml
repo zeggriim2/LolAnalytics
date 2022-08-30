@@ -3,15 +3,9 @@ name: CI and test
 on: [push]
 
 jobs:
-  run-shell-command:
+  phpstan:
     runs-on: ubuntu-latest
     steps:
-      - name: echo a string
-        run: echo "Hello World"
-      - name: multiline script
-        run: |
-          node -v
-          npm -v
       - name: "Checkout"
         uses: actions/checkout@v2
 
@@ -21,3 +15,9 @@ jobs:
           REQUIRE_DEV: true
         with:
           args: analyse src/
+
+
+      - name: OSKAR-phpcs
+        # You may pin to the exact commit or the version.
+        # uses: OskarStark/phpcs-ga@f51a526c819eccf595bc5807d903de3ae1082a68
+        uses: OskarStark/phpcs-ga@3.4.2
