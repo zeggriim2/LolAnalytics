@@ -12,14 +12,19 @@ use App\Entity\Rencontre;
 use App\Entity\RiftHerald;
 use App\Entity\Team;
 use App\Entity\Tower;
+use App\Repository\InvocateurRepository;
 use App\Services\API\LOL\DataDragon\Queue;
 use App\Services\API\LOL\LeagueOfLegends\DTO\League\LeagueEntryDTO;
 use App\Services\API\LOL\LeagueOfLegends\DTO\Match\MatchDto;
 use App\Services\API\LOL\LeagueOfLegends\DTO\Match\TeamDto;
 use App\Services\API\LOL\LeagueOfLegends\DTO\SummonerDTO;
+use App\Services\API\LOL\LeagueOfLegends\Exception\ForbiddenException;
+use App\Services\API\LOL\LeagueOfLegends\Exception\LeagueArgumentException;
 use App\Services\API\LOL\LeagueOfLegends\LeagueApi;
 use App\Services\API\LOL\LeagueOfLegends\MatchApi;
 use App\Services\API\LOL\LeagueOfLegends\SummonerApi;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -32,6 +37,11 @@ class StatController extends AbstractController
     ) {
     }
 
+    /**
+     * @throws LeagueArgumentException
+     * @throws NonUniqueResultException
+     * @throws ForbiddenException
+     */
     #[Route('/statistique/{tier}/{division}', name: 'app_stat_index',
         requirements: ['tier' => '%reqTier%', 'division' => '%reqDivision%'])]
     public function index(
@@ -40,17 +50,21 @@ class StatController extends AbstractController
         LeagueApi $leagueApi,
         SummonerApi $summonerApi,
         MatchApi $matchApi
-    ) {
+    ): JsonResponse
+    {
         $leagues = $leagueApi->leagueByQueueByTierByDivision(
             Queue::RANKED_SOLO,
             $tier,
             $division)
         ;
+        if($leagues === null) {
+            return new JsonResponse('Traitement fini');
+        }
 
         foreach ($leagues as $leagueApi) {
-            $invocateur =
-                $this->doctrine->getRepository(Invocateur::class)
-                    ->findOrderByCreatedAt($leagueApi->getSummonerId());
+            /** @var InvocateurRepository $invocateurRepo */
+            $invocateurRepo =$this->doctrine->getRepository(Invocateur::class);
+            $invocateur = $invocateurRepo->findOrderByCreatedAt($leagueApi->getSummonerId());
 
             // Verif invocateur existe
             if (null === $invocateur) {
@@ -66,10 +80,14 @@ class StatController extends AbstractController
 
             // On verif si l'invocateur à eu une historique League enregistré il y a plus de un jour
             if (\count($invocateur->getHistoriqueLeagues()) > 0 &&
-                $invocateur->getHistoriqueLeagues()[0]->getCreateAt()->diff(new \DateTimeImmutable())->days <= 1
+                $invocateur->getHistoriqueLeagues()->get(0) !== null &&
+                $invocateur->getHistoriqueLeagues()->get(0)->getCreateAt()->diff(new \DateTimeImmutable())->days <= 1
             ) {
                 continue;
             }
+
+            // On verif si l'invocateur à eu une historique League enregistré il y a plus de un jour
+
 
             // On créé l'historique League
             $league = $this->createHistoriqueLeague($leagueApi, $invocateur);
@@ -83,7 +101,7 @@ class StatController extends AbstractController
             foreach ($idMatchs as $idmatch) {
                 // On verifie si le match existe déjà
                 $rencontreRepo = $this->doctrine->getRepository(Rencontre::class)
-                    ->findOneBy(['gameId' => (int) mb_substr(mb_strstr($idmatch, '_'), 1, null)]);
+                    ->findOneBy(['gameId' => (int) $this->truncIdMatch($idmatch)]);
 
                 // On le récupère les infos du match et on l'enregistre
                 if (null === $rencontreRepo) {
@@ -94,8 +112,10 @@ class StatController extends AbstractController
 
                     $map = $this->doctrine->getRepository(Map::class)->findOneBy(['mapIdLol' => $match->getInfo()->getMapId()]);
 
-                    $rencontre = $this->createRencontre($match, $map, $invocateur);
-                    $this->doctrine->getManager()->persist($rencontre);
+                    if($map !== null){
+                        $rencontre =  $this->createRencontre($match, $map, $invocateur);
+                        $this->doctrine->getManager()->persist($rencontre);
+                    }
                 }
             }
             $this->doctrine->getManager()->persist($league);
@@ -133,13 +153,19 @@ class StatController extends AbstractController
         ;
     }
 
+    /**
+     * @param MatchDto $match
+     * @param Map $maps
+     * @param Invocateur $invocateur
+     * @return Rencontre
+     */
     private function createRencontre(
         MatchDto $match,
         Map $maps,
         Invocateur $invocateur
     ) {
         $rencontre = (new Rencontre())
-            ->setGameId($match->getInfo()->getGameId())
+            ->setGameId((string)$match->getInfo()->getGameId())
             ->setGameDuration($match->getInfo()->getGameDuration())
             ->setGameCreation($match->getInfo()->getGameCreation())
             ->setMap($maps)
@@ -167,44 +193,69 @@ class StatController extends AbstractController
         return $rencontre;
     }
 
+    /**
+     * @param TeamDto $teamApi
+     * @return Tower
+     */
     private function createTower(
         TeamDto $teamApi
-    ) {
+    ): Tower
+    {
         return (new Tower())
             ->setFirst($teamApi->getObjectives()->getTower()->isFirst())
             ->setKills($teamApi->getObjectives()->getTower()->getKills())
         ;
     }
 
+    /**
+     * @param TeamDto $teamApi
+     * @return Baron
+     */
     private function createBaron(
         TeamDto $teamApi
-    ) {
+    ): Baron
+    {
         return (new Baron())
             ->setFirst($teamApi->getObjectives()->getTower()->isFirst())
             ->setKills($teamApi->getObjectives()->getTower()->getKills())
         ;
     }
 
+    /**
+     * @param TeamDto $teamApi
+     * @return Inhibitor
+     */
     private function createInhibitor(
         TeamDto $teamApi
-    ) {
+    ): Inhibitor
+    {
         return (new Inhibitor())
             ->setFirst($teamApi->getObjectives()->getTower()->isFirst())
             ->setKills($teamApi->getObjectives()->getTower()->getKills())
         ;
     }
 
+    /**
+     * @param TeamDto $teamApi
+     * @return RiftHerald
+     */
     private function createRiftHerald(
         TeamDto $teamApi
-    ) {
+    ): RiftHerald
+    {
         return (new RiftHerald())
             ->setFirst($teamApi->getObjectives()->getTower()->isFirst())
             ->setKills($teamApi->getObjectives()->getTower()->getKills())
         ;
     }
 
+    /**
+     * @param TeamDto $teamApi
+     * @return Dragon
+     */
     private function createDragon(TeamDto $teamApi
-    ) {
+    ): Dragon
+    {
         return (new Dragon())
             ->setFirst($teamApi->getObjectives()->getTower()->isFirst())
             ->setKills($teamApi->getObjectives()->getTower()->getKills())
@@ -218,7 +269,8 @@ class StatController extends AbstractController
         RiftHerald $riftHerald,
         Baron $baron,
         Inhibitor $inhibitor
-    ) {
+    ): Team
+    {
         return (new Team())
             ->setTeamIdLol($teamApi->getTeamId())
             ->setBan1ChampionId($teamApi->getBans()[0]->getChampionId())
@@ -233,5 +285,19 @@ class StatController extends AbstractController
             ->setInhibitor($inhibitor)
             ->setWin($teamApi->isWin())
         ;
+    }
+
+    /**
+     * @param string $idMatch
+     * @return int
+     * @throws \Exception
+     */
+    private function truncIdMatch(string $idMatch): int
+    {
+        $idMatch = mb_strstr($idMatch, '_');
+        if($idMatch == null){
+            throw new  \Exception("Id Match Incorrect");
+        }
+        return (int) mb_substr($idMatch, 1, null);
     }
 }

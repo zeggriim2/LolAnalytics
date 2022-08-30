@@ -6,7 +6,6 @@ use Fresh\DoctrineEnumBundle\DBAL\Types\AbstractEnumType;
 
 class Region extends AbstractEnumType
 {
-    private const URL = '.api.riotgames.com';
 
     private const AMERICAS = 'AMERICAS';
     private const ASIA = 'ASIA';

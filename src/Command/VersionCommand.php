@@ -34,23 +34,25 @@ class VersionCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $versions = $this->dataDragonApi->getVersions();
 
-        $countVersion = 0;
-        foreach (array_reverse($versions) as $version) {
-            $versionRepo = $this->doctrine->getRepository(Version::class)->findOneBy(['name' => $version]);
-            if (null === $versionRepo) {
-                $versionsEntity = (new Version())
-                    ->setName($version)
-                ;
-                $this->doctrine->persist($versionsEntity);
-                ++$countVersion;
+        $count = 0;
+        if($versions !== null){
+            foreach (array_reverse($versions) as $version) {
+                $versionRepo = $this->doctrine->getRepository(Version::class)->findOneBy(['name' => $version]);
+                if (null === $versionRepo) {
+                    $versionsEntity = (new Version())
+                        ->setName($version)
+                    ;
+                    $this->doctrine->persist($versionsEntity);
+                    ++$count;
+                }
             }
         }
         $this->doctrine->flush();
 
-        if (0 === $countVersion) {
+        if (0 === $count) {
             $phrase = "Aucun élément de version n'a été ajouté.";
         } else {
-            $phrase = "$countVersion version ont été ajouté en bdd.";
+            $phrase = "$count version ont été ajouté en bdd.";
         }
 
         $io->success($phrase);

@@ -29,6 +29,7 @@ class StatusApi
             ]
         );
 
+        /** @var array<string, int|string> $status */
         $status = $this->baseApi->callApi(
             $url,
             Request::METHOD_GET,

@@ -17,28 +17,40 @@ class GeneralApi
     ) {
     }
 
+    /**
+     * @return mixed[]|null
+     */
     public function getSeason()
     {
         return $this->callApi(Request::METHOD_GET, self::URL_SEASON);
     }
 
+    /**
+     * @return mixed[]|null
+     */
     public function getMaps()
     {
         return $this->callApi(Request::METHOD_GET, self::URL_MAPS);
     }
 
+    /**
+     * @return mixed[]|null
+     */
     public function getGameModes()
     {
         return $this->callApi(Request::METHOD_GET, self::URL_GAMEMODES);
     }
 
+    /**
+     * @return mixed[]|null
+     */
     public function getGameTypes()
     {
         return $this->callApi(Request::METHOD_GET, self::URL_GAMETYPES);
     }
 
     /**
-     * @return array|null
+     * @return mixed[]|null
      */
     private function callApi(string $method, string $url)
     {

@@ -14,25 +14,31 @@ class Rencontre
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private ?int $id = null;
 
     #[ORM\Column(type: 'bigint')]
-    private $gameId;
+    private string|int $gameId;
 
-    #[ORM\Column(type: 'datetime')]
-    private $gameCreation;
+    #[ORM\Column(type: 'datetime_immutable')]
+    private DateTimeImmutable $gameCreation;
 
-    #[ORM\Column(type: 'datetime')]
-    private $gameDuration;
+    #[ORM\Column(type: 'datetime_immutable')]
+    private DateTimeImmutable $gameDuration;
 
+    /**
+     * @var Collection<int, Team>
+     */
     #[ORM\OneToMany(mappedBy: 'rencontre', targetEntity: Team::class)]
-    private $teams;
+    private Collection $teams;
 
+    /**
+     * @var Collection<int, Invocateur>
+     */
     #[ORM\ManyToMany(targetEntity: Invocateur::class, inversedBy: 'rencontres')]
-    private $invocateurs;
+    private Collection$invocateurs;
 
     #[ORM\ManyToOne(targetEntity: Map::class, inversedBy: 'rencontres')]
-    private $map;
+    private ?Map $map;
 
     public function __construct()
     {
@@ -45,12 +51,16 @@ class Rencontre
         return $this->id;
     }
 
-    public function getGameId(): ?string
+    public function getGameId(): int|string
     {
         return $this->gameId;
     }
 
-    public function setGameId(string $gameId): self
+    /**
+     * @param int|string $gameId
+     * @return $this
+     */
+    public function setGameId(int|string $gameId): self
     {
         $this->gameId = $gameId;
 

@@ -1,0 +1,11 @@
+parameters:
+#    ignoreErrors:
+#        -
+#          message: '#Property [a-zA-Z0-9\\_]+::\$id is never written, only read.#'
+#          path: src/Entity/*
+    checkGenericClassInNonGenericObjectType: false
+    level: 8
+    paths:
+        - src
+    doctrine:
+        objectManagerLoader: build/phpstan/doctrine.php

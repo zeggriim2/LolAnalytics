@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\DragonRepository;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: DragonRepository::class)]
@@ -11,16 +12,16 @@ class Dragon
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private int $id;
 
     #[ORM\Column(type: 'boolean')]
-    private $first;
+    private bool $first;
 
     #[ORM\Column(type: 'integer')]
-    private $kills;
+    private int $kills;
 
     #[ORM\OneToOne(mappedBy: 'dragon', targetEntity: Team::class, cascade: ['persist', 'remove'])]
-    private $team;
+    private ?Team $team;
 
     public function getId(): ?int
     {

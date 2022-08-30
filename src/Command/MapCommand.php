@@ -33,18 +33,19 @@ class MapCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
         $maps = $this->generalApi->getMaps();
-
         $countMaps = 0;
-        foreach ($maps as $map) {
-            $mapRepo = $this->doctrine->getRepository(Map::class)->findOneBy(['mapIdLol' => $map['mapId']]);
-            if (null === $mapRepo) {
-                $mapEntity = (new Map())
-                    ->setMapIdLol($map['mapId'])
-                    ->setName($map['mapName'])
-                    ->setNotes($map['notes'])
-                ;
-                $this->doctrine->persist($mapEntity);
-                ++$countMaps;
+        if($maps !== null){
+            foreach ($maps as $map) {
+                $mapRepo = $this->doctrine->getRepository(Map::class)->findOneBy(['mapIdLol' => $map['mapId']]);
+                if (null === $mapRepo) {
+                    $mapEntity = (new Map())
+                        ->setMapIdLol($map['mapId'])
+                        ->setName($map['mapName'])
+                        ->setNotes($map['notes'])
+                    ;
+                    $this->doctrine->persist($mapEntity);
+                    ++$countMaps;
+                }
             }
         }
         $this->doctrine->flush();

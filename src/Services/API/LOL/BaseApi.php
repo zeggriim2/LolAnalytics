@@ -1,10 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services\API\LOL;
 
 use App\Services\API\LOL\DataDragon\Platform;
-use phpDocumentor\Reflection\Types\ArrayKey;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class BaseApi
@@ -30,12 +36,14 @@ class BaseApi
     }
 
     /**
-     * @param array<string,string> $params
+     * @param array<string,string|null> $params
      */
     public function constructUrl(string $url, array $params): string
     {
         foreach ($params as $key => $param) {
-            $url = str_replace("{{$key}}", $param, $url);
+            if($param !== null){
+                $url = str_replace("{{$key}}", $param, $url);
+            }
         }
 
         return $url;
@@ -44,7 +52,7 @@ class BaseApi
     /**
      * @param array<string,string|array<string|string>> $options
      *
-     * @return string|array<int|string|ArrayKey,int|string|bool>|null
+     * @return mixed[]|string|null
      */
     public function callApi(string $url, string $method = 'GET', array $options = [], string $return = 'array')
     {
@@ -64,6 +72,41 @@ class BaseApi
         }
     }
 
+    /**
+     * @param string $url
+     * @param string $method
+     * @param array<string,string|array<string,int|string>> $options
+     * @return mixed|null
+     */
+    public function callApiArray(string $url, string $method = 'GET', array $options = [])
+    {
+        $response = $this->client->request($method, $url, $options);
+        $statusCode = $response->getStatusCode();
+        if($statusCode === Response::HTTP_OK){
+            return $response->toArray();
+        }
+
+        return null;
+    }
+
+    /**
+     * @param string $url
+     * @param string $method
+     * @param array<string,string|array<string,int|string>> $options
+     * @return string|void
+     */
+    public function callApiString(string $url, string $method = 'GET', array $options = []){
+        $response = $this->client->request($method, $url, $options);
+        $statusCode = $response->getStatusCode();
+        if($statusCode === Response::HTTP_OK){
+            return $response->getContent();
+        }
+    }
+
+    /**
+     * @param string $platform
+     * @return void
+     */
     public function changePlatrform(string $platform)
     {
         if (\in_array($platform, Platform::getChoices(), true)) {

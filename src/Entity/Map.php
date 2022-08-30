@@ -14,23 +14,26 @@ class Map
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private int $id;
 
     #[ORM\Column(type: 'integer', unique: true)]
-    private $mapIdLol;
+    private int $mapIdLol;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $name;
+    private string $name;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $notes;
+    private string $notes;
 
     #[Gedmo\Timestampable(on: 'create')]
     #[ORM\Column(name: 'created', type: 'datetime_immutable')]
-    private $createdAt;
+    private \DateTimeImmutable$createdAt;
 
+    /**
+     * @var Collection<int, Rencontre>
+     */
     #[ORM\OneToMany(mappedBy: 'map', targetEntity: Rencontre::class)]
-    private $rencontres;
+    private Collection $rencontres;
 
     public function __construct()
     {
@@ -81,6 +84,13 @@ class Map
     public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
     }
 
     /**

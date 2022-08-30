@@ -7,6 +7,9 @@ class LeagueItemDTO
     private bool $freshBlood;
     private int $wins;
     private string $summonerName;
+    /**
+     * @var array<string, int|string>
+     */
     private array $miniSeries;
     private bool $inactive;
     private bool $veteran;
@@ -52,11 +55,18 @@ class LeagueItemDTO
         return $this;
     }
 
+    /**
+     * @return array<string, int|string>
+     */
     public function getMiniSeries(): array
     {
         return $this->miniSeries;
     }
 
+    /**
+     * @param array<string, int|string> $miniSeries
+     * @return $this
+     */
     public function setMiniSeries(array $miniSeries): self
     {
         $this->miniSeries = $miniSeries;
