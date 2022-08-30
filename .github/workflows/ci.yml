@@ -12,6 +12,9 @@ jobs:
         run: |
           node -v
           npm -v
+      - name: "Checkout"
+        uses: actions/checkout@v2
+
       - name: PHPStan
         uses: docker://oskarstark/phpstan-ga
         with:
