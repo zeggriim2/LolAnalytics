@@ -261,7 +261,7 @@ class StatController extends AbstractController
     private function truncIdMatch(string $idMatch): int
     {
         $idMatch = mb_strstr($idMatch, '_');
-        if (null === $idMatch) {
+        if (false === $idMatch) {
             throw new \Exception('Id Match Incorrect');
         }
 
