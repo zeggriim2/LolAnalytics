@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 #[ORM\Entity(repositoryClass: ChampionRepository::class)]
-#[ORM\ChangeTrackingPolicy("DEFERRED_EXPLICIT")]
+#[ORM\ChangeTrackingPolicy('DEFERRED_EXPLICIT')]
 class Champion
 {
     #[ORM\Id]
@@ -22,16 +22,16 @@ class Champion
     private string $key;
 
     #[ORM\Column(type: 'string', length: 100)]
-    private  string$name;
+    private string$name;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private  string $title;
+    private string $title;
 
     #[Gedmo\Timestampable(on: 'create')]
     #[ORM\Column(type: 'datetime_immutable')]
     private \DateTimeImmutable $createdAt;
 
-    #[ORM\Column(type: 'string', length: 50, nullable: true, options: ['default'=> null])]
+    #[ORM\Column(type: 'string', length: 50, nullable: true, options: ['default' => null])]
     private ?string $partype;
 
     #[ORM\ManyToOne(targetEntity: Version::class, inversedBy: 'champions')]
@@ -140,12 +140,12 @@ class Champion
     public function setInfoChampion(?InfoChampion $infoChampion): self
     {
         // unset the owning side of the relation if necessary
-        if ($infoChampion === null && $this->infoChampion !== null) {
+        if (null === $infoChampion && null !== $this->infoChampion) {
             $this->infoChampion->setChampion(null);
         }
 
         // set the owning side of the relation if necessary
-        if ($infoChampion !== null && $infoChampion->getChampion() !== $this) {
+        if (null !== $infoChampion && $infoChampion->getChampion() !== $this) {
             $infoChampion->setChampion($this);
         }
 

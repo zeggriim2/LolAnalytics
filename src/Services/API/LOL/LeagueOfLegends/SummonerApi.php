@@ -24,10 +24,6 @@ class SummonerApi
     ) {
     }
 
-    /**
-     * @param string $summonerName
-     * @return SummonerDTO|null
-     */
     public function summonerBySummonerName(string $summonerName): ?SummonerDTO
     {
         $url = $this->baseApi->constructUrl(self::URL_NAME, [

@@ -6,11 +6,6 @@ namespace App\Services\API\LOL;
 
 use App\Services\API\LOL\DataDragon\Platform;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class BaseApi
@@ -41,7 +36,7 @@ class BaseApi
     public function constructUrl(string $url, array $params): string
     {
         foreach ($params as $key => $param) {
-            if($param !== null){
+            if (null !== $param) {
                 $url = str_replace("{{$key}}", $param, $url);
             }
         }
@@ -73,16 +68,15 @@ class BaseApi
     }
 
     /**
-     * @param string $url
-     * @param string $method
      * @param array<string,string|array<string,int|string>> $options
+     *
      * @return mixed|null
      */
     public function callApiArray(string $url, string $method = 'GET', array $options = [])
     {
         $response = $this->client->request($method, $url, $options);
         $statusCode = $response->getStatusCode();
-        if($statusCode === Response::HTTP_OK){
+        if (Response::HTTP_OK === $statusCode) {
             return $response->toArray();
         }
 
@@ -90,21 +84,20 @@ class BaseApi
     }
 
     /**
-     * @param string $url
-     * @param string $method
      * @param array<string,string|array<string,int|string>> $options
+     *
      * @return string|void
      */
-    public function callApiString(string $url, string $method = 'GET', array $options = []){
+    public function callApiString(string $url, string $method = 'GET', array $options = [])
+    {
         $response = $this->client->request($method, $url, $options);
         $statusCode = $response->getStatusCode();
-        if($statusCode === Response::HTTP_OK){
+        if (Response::HTTP_OK === $statusCode) {
             return $response->getContent();
         }
     }
 
     /**
-     * @param string $platform
      * @return void
      */
     public function changePlatrform(string $platform)

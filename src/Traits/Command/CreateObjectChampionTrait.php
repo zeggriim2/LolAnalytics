@@ -11,8 +11,6 @@ trait CreateObjectChampionTrait
 {
     /**
      * @param mixed[] $championApi
-     * @param Version $version
-     * @return void
      */
     private function createChampion(array $championApi, Version $version): void
     {
@@ -23,7 +21,7 @@ trait CreateObjectChampionTrait
             ->setTitle($championApi['title'])
             ->setVersion($version)
         ;
-        if (key_exists('partype', $championApi)){
+        if (\array_key_exists('partype', $championApi)) {
             $champion->setPartype($championApi['partype']);
         }
         $infoChampion = $this->createInfoChampion($championApi['info']);
@@ -44,7 +42,6 @@ trait CreateObjectChampionTrait
 
     /**
      * @param mixed[] $info
-     * @return InfoChampion
      */
     private function createInfoChampion(array $info): InfoChampion
     {
@@ -53,12 +50,11 @@ trait CreateObjectChampionTrait
             ->setDefense($info['defense'])
             ->setMagic($info['magic'])
             ->setDifficulty($info['difficulty'])
-            ;
+        ;
     }
 
     /**
      * @param mixed[] $image
-     * @return Image
      */
     private function createImageChampion(array $image): Image
     {
@@ -72,6 +68,7 @@ trait CreateObjectChampionTrait
             ->setY($image['y'])
         ;
         $this->doctrine->persist($image);
+
         return $image;
     }
 }

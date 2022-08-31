@@ -38,6 +38,7 @@ class ChampionInfoDTO
 
     /**
      * @param int[] $freeChampionIdsForNewPlayers
+     *
      * @return $this
      */
     public function setFreeChampionIdsForNewPlayers(array $freeChampionIdsForNewPlayers): self
@@ -57,6 +58,7 @@ class ChampionInfoDTO
 
     /**
      * @param int[] $freeChampionIds
+     *
      * @return $this
      */
     public function setFreeChampionIds(array $freeChampionIds): self

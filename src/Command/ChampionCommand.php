@@ -3,8 +3,6 @@
 namespace App\Command;
 
 use App\Entity\Champion;
-use App\Entity\Image;
-use App\Entity\InfoChampion;
 use App\Entity\Version;
 use App\Services\API\LOL\DataDragon\DataDragonApi;
 use App\Traits\Command\CreateObjectChampionTrait;
@@ -40,8 +38,8 @@ class ChampionCommand extends Command
     protected function configure(): void
     {
         $this
-            ->addArgument("version", InputArgument::OPTIONAL, "Si on veut préciser un version particulière.")
-            ->addOption('all-version',null,InputOption::VALUE_NEGATABLE,"Si on veut récupérer tout les champions de toutes les versions")
+            ->addArgument('version', InputArgument::OPTIONAL, 'Si on veut préciser un version particulière.')
+            ->addOption('all-version', null, InputOption::VALUE_NEGATABLE, 'Si on veut récupérer tout les champions de toutes les versions')
         ;
     }
 
@@ -50,24 +48,24 @@ class ChampionCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $allVersionInput = $input->getOption('all-version');
 
-
-        if($allVersionInput) {
+        if ($allVersionInput) {
             $versions = $this->doctrine->getRepository(Version::class)->findAll();
-            foreach($versions as $version) {
+            foreach ($versions as $version) {
                 $champions = $this->dataDragonApi->getChampions($version->getName());
-                if($champions !== null) {
+                if (null !== $champions) {
                     $this->addChampions($champions, $version);
                 }
             }
-        }else{
+        } else {
             $champions = $this->dataDragonApi->getChampions();
-            if($champions !== null){
+            if (null !== $champions) {
                 $versionLabel = $input->getArgument('version') ?: $champions['version'];
                 /** @var Version|null $version */
-                $version = $this->doctrine->getRepository(Version::class)->findOneBy(['name'=> $versionLabel]);
+                $version = $this->doctrine->getRepository(Version::class)->findOneBy(['name' => $versionLabel]);
                 // Si la version n'est pas trouvé en BDD
-                if($version === null) {
-                    $io->error("La version ${versionLabel} n'existe pas en Bdd");
+                if (null === $version) {
+                    $io->error("La version {$versionLabel} n'existe pas en Bdd");
+
                     return Command::FAILURE;
                 }
 
@@ -91,23 +89,21 @@ class ChampionCommand extends Command
 
     /**
      * @param mixed[] $champions
-     * @param Version $version
-     * @return void
      */
-    private function addChampions(array $champions,Version $version): void
+    private function addChampions(array $champions, Version $version): void
     {
-        foreach ($champions["data"] as $champion) {
+        foreach ($champions['data'] as $champion) {
             // On verifie si le champion n'existe pas pour la version concerné
             $championRepo = $this->doctrine->getRepository(Champion::class)
                 ->findOneBy(
                     [
                         'version' => $version,
-                        'idName'    => $champion['id']
+                        'idName' => $champion['id'],
                     ]
                 );
 
-            if($championRepo === null) {
-                $this->count++;
+            if (null === $championRepo) {
+                ++$this->count;
                 $this->createChampion($champion, $version);
             }
         }

@@ -77,10 +77,6 @@ class MatchApi
         );
     }
 
-    /**
-     * @param string $matchId
-     * @return MatchDto|null
-     */
     public function getMatchById(
         string $matchId
     ): ?MatchDto {
@@ -110,14 +106,13 @@ class MatchApi
     }
 
     /**
-     * @param string $matchId
-     * @return mixed[]|null
      * @throws ForbiddenException
+     *
+     * @return mixed[]|null
      */
     public function getMatchTimeLineByMatchId(
         string $matchId
-    ): array|null
-    {
+    ): array|null {
         if ('' === $matchId) {
             throw new ForbiddenException('Match ID est vide');
         }
@@ -142,8 +137,7 @@ class MatchApi
     }
 
     /**
-     * @param  mixed[] $data
-     * @return MatchDto
+     * @param mixed[] $data
      */
     private function denormalize(array $data): MatchDto
     {
@@ -152,6 +146,7 @@ class MatchApi
 
     /**
      * @param array<string, string|int|null> $params
+     *
      * @return array<string, string|int>
      */
     private function constructQuery(array $params): array

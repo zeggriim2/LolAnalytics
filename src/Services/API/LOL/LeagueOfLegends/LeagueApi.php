@@ -251,6 +251,7 @@ class LeagueApi
 
     /**
      * @param mixed[] $datas
+     *
      * @return LeagueEntryDTO[]
      */
     private function denormalizeArray(
@@ -266,7 +267,7 @@ class LeagueApi
 
     /**
      * @param mixed[] $data
-     * @return LeagueListDTO
+     *
      * @throws ExceptionInterface
      */
     private function denormalize(

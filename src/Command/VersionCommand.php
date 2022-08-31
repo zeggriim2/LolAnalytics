@@ -35,7 +35,7 @@ class VersionCommand extends Command
         $versions = $this->dataDragonApi->getVersions();
 
         $count = 0;
-        if($versions !== null){
+        if (null !== $versions) {
             foreach (array_reverse($versions) as $version) {
                 $versionRepo = $this->doctrine->getRepository(Version::class)->findOneBy(['name' => $version]);
                 if (null === $versionRepo) {

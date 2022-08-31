@@ -6,7 +6,6 @@ use Fresh\DoctrineEnumBundle\DBAL\Types\AbstractEnumType;
 
 class Region extends AbstractEnumType
 {
-
     private const AMERICAS = 'AMERICAS';
     private const ASIA = 'ASIA';
     private const EUROPE = 'EUROPE';

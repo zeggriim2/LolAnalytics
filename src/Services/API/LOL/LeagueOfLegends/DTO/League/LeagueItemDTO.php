@@ -65,6 +65,7 @@ class LeagueItemDTO
 
     /**
      * @param array<string, int|string> $miniSeries
+     *
      * @return $this
      */
     public function setMiniSeries(array $miniSeries): self

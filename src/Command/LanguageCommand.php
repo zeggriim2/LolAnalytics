@@ -35,7 +35,7 @@ class LanguageCommand extends Command
         $languages = $this->dataDragonApi->getLanguages();
 
         $count = 0;
-        if($languages !== null){
+        if (null !== $languages) {
             foreach ($languages as $language) {
                 $languageRepo = $this->doctrine->getRepository(Language::class)->findOneBy(['code' => $language]);
                 if (null === $languageRepo) {

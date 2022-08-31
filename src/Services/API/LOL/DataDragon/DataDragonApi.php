@@ -77,10 +77,7 @@ class DataDragonApi
         return $this->baseApi->callApiArray($url, Request::METHOD_GET);
     }
 
-
     /**
-     * @param string|null $version
-     * @param string $lang
      * @return mixed[]|null
      */
     public function getItems(string $version = null, string $lang = 'fr_FR'): ?array
@@ -101,8 +98,6 @@ class DataDragonApi
     }
 
     /**
-     * @param string|null $version
-     * @param string $lang
      * @return void
      */
     public function getSummoner(string $version = null, string $lang = 'fr_FR')
@@ -120,11 +115,8 @@ class DataDragonApi
         );
     }
 
-    /**
-     * @return string|null
-     */
     private function getLastVersion(): ?string
     {
-        return$this->getVersions() ? $this->getVersions()[0]: null;
+        return $this->getVersions() ? $this->getVersions()[0] : null;
     }
 }

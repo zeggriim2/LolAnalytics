@@ -23,7 +23,6 @@ use App\Services\API\LOL\LeagueOfLegends\Exception\LeagueArgumentException;
 use App\Services\API\LOL\LeagueOfLegends\LeagueApi;
 use App\Services\API\LOL\LeagueOfLegends\MatchApi;
 use App\Services\API\LOL\LeagueOfLegends\SummonerApi;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -50,20 +49,19 @@ class StatController extends AbstractController
         LeagueApi $leagueApi,
         SummonerApi $summonerApi,
         MatchApi $matchApi
-    ): JsonResponse
-    {
+    ): JsonResponse {
         $leagues = $leagueApi->leagueByQueueByTierByDivision(
             Queue::RANKED_SOLO,
             $tier,
             $division)
         ;
-        if($leagues === null) {
+        if (null === $leagues) {
             return new JsonResponse('Traitement fini');
         }
 
         foreach ($leagues as $leagueApi) {
             /** @var InvocateurRepository $invocateurRepo */
-            $invocateurRepo =$this->doctrine->getRepository(Invocateur::class);
+            $invocateurRepo = $this->doctrine->getRepository(Invocateur::class);
             $invocateur = $invocateurRepo->findOrderByCreatedAt($leagueApi->getSummonerId());
 
             // Verif invocateur existe
@@ -80,14 +78,13 @@ class StatController extends AbstractController
 
             // On verif si l'invocateur à eu une historique League enregistré il y a plus de un jour
             if (\count($invocateur->getHistoriqueLeagues()) > 0 &&
-                $invocateur->getHistoriqueLeagues()->get(0) !== null &&
+                null !== $invocateur->getHistoriqueLeagues()->get(0) &&
                 $invocateur->getHistoriqueLeagues()->get(0)->getCreateAt()->diff(new \DateTimeImmutable())->days <= 1
             ) {
                 continue;
             }
 
             // On verif si l'invocateur à eu une historique League enregistré il y a plus de un jour
-
 
             // On créé l'historique League
             $league = $this->createHistoriqueLeague($leagueApi, $invocateur);
@@ -112,8 +109,8 @@ class StatController extends AbstractController
 
                     $map = $this->doctrine->getRepository(Map::class)->findOneBy(['mapIdLol' => $match->getInfo()->getMapId()]);
 
-                    if($map !== null){
-                        $rencontre =  $this->createRencontre($match, $map, $invocateur);
+                    if (null !== $map) {
+                        $rencontre = $this->createRencontre($match, $map, $invocateur);
                         $this->doctrine->getManager()->persist($rencontre);
                     }
                 }
@@ -154,9 +151,6 @@ class StatController extends AbstractController
     }
 
     /**
-     * @param MatchDto $match
-     * @param Map $maps
-     * @param Invocateur $invocateur
      * @return Rencontre
      */
     private function createRencontre(
@@ -165,7 +159,7 @@ class StatController extends AbstractController
         Invocateur $invocateur
     ) {
         $rencontre = (new Rencontre())
-            ->setGameId((string)$match->getInfo()->getGameId())
+            ->setGameId((string) $match->getInfo()->getGameId())
             ->setGameDuration($match->getInfo()->getGameDuration())
             ->setGameCreation($match->getInfo()->getGameCreation())
             ->setMap($maps)
@@ -193,69 +187,44 @@ class StatController extends AbstractController
         return $rencontre;
     }
 
-    /**
-     * @param TeamDto $teamApi
-     * @return Tower
-     */
     private function createTower(
         TeamDto $teamApi
-    ): Tower
-    {
+    ): Tower {
         return (new Tower())
             ->setFirst($teamApi->getObjectives()->getTower()->isFirst())
             ->setKills($teamApi->getObjectives()->getTower()->getKills())
         ;
     }
 
-    /**
-     * @param TeamDto $teamApi
-     * @return Baron
-     */
     private function createBaron(
         TeamDto $teamApi
-    ): Baron
-    {
+    ): Baron {
         return (new Baron())
             ->setFirst($teamApi->getObjectives()->getTower()->isFirst())
             ->setKills($teamApi->getObjectives()->getTower()->getKills())
         ;
     }
 
-    /**
-     * @param TeamDto $teamApi
-     * @return Inhibitor
-     */
     private function createInhibitor(
         TeamDto $teamApi
-    ): Inhibitor
-    {
+    ): Inhibitor {
         return (new Inhibitor())
             ->setFirst($teamApi->getObjectives()->getTower()->isFirst())
             ->setKills($teamApi->getObjectives()->getTower()->getKills())
         ;
     }
 
-    /**
-     * @param TeamDto $teamApi
-     * @return RiftHerald
-     */
     private function createRiftHerald(
         TeamDto $teamApi
-    ): RiftHerald
-    {
+    ): RiftHerald {
         return (new RiftHerald())
             ->setFirst($teamApi->getObjectives()->getTower()->isFirst())
             ->setKills($teamApi->getObjectives()->getTower()->getKills())
         ;
     }
 
-    /**
-     * @param TeamDto $teamApi
-     * @return Dragon
-     */
     private function createDragon(TeamDto $teamApi
-    ): Dragon
-    {
+    ): Dragon {
         return (new Dragon())
             ->setFirst($teamApi->getObjectives()->getTower()->isFirst())
             ->setKills($teamApi->getObjectives()->getTower()->getKills())
@@ -269,8 +238,7 @@ class StatController extends AbstractController
         RiftHerald $riftHerald,
         Baron $baron,
         Inhibitor $inhibitor
-    ): Team
-    {
+    ): Team {
         return (new Team())
             ->setTeamIdLol($teamApi->getTeamId())
             ->setBan1ChampionId($teamApi->getBans()[0]->getChampionId())
@@ -288,16 +256,15 @@ class StatController extends AbstractController
     }
 
     /**
-     * @param string $idMatch
-     * @return int
      * @throws \Exception
      */
     private function truncIdMatch(string $idMatch): int
     {
         $idMatch = mb_strstr($idMatch, '_');
-        if($idMatch == null){
-            throw new  \Exception("Id Match Incorrect");
+        if (null === $idMatch) {
+            throw new \Exception('Id Match Incorrect');
         }
+
         return (int) mb_substr($idMatch, 1, null);
     }
 }
