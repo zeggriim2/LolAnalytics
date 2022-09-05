@@ -13,6 +13,7 @@
         "doctrine/doctrine-bundle": "^2.7",
         "doctrine/doctrine-migrations-bundle": "^3.2",
         "doctrine/orm": "^2.12",
+        "easycorp/easyadmin-bundle": "^4.3",
         "fresh/doctrine-enum-bundle": "7.5.*",
         "stof/doctrine-extensions-bundle": "^1.7",
         "symfony/console": "5.4.*",
