@@ -31,6 +31,17 @@ init-data-prod: ## Initialise les datas (Version / Maps / Languages) en Prod
 command-champion:
 	@docker-compose exec server php bin/console app:champions
 
+# Yarn
+
+yarn-install: ## Yarn Install
+	yarn install
+
+yarn-dev: ## Yarn Dev
+	yarn dev
+
+yarn-watch: ## Yarn Watch
+	yarn watch
+
 # Docker
 docker-start: ## Lance les container docker (Server et Database) avec .env.dev.local
 	@docker-compose --env-file ./.env.dev.local up -d
@@ -121,3 +132,11 @@ cs-fix:
 
 composer-install-prod:
 	docker-compose exec server composer install --optimize-autoloader --no-dev
+
+
+# Debug
+debug-router:
+	docker-compose exec server php bin/console debug:router
+
+schemaspy: ## Générer un schema de la BDD avec SchemaSpy (dossier output)
+	docker run --rm --network="host" -v %cd%/output:/output andrewjones/schemaspy-postgres:latest -host localhost -port 5432 -u toto -p toto -db app -s public
