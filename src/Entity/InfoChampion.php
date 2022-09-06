@@ -12,29 +12,30 @@ class InfoChampion
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $id = null;
+    private int $id;
 
     #[ORM\Column]
-    private ?int $attack = null;
+    private int $attack;
 
     #[ORM\Column]
-    private ?int $defense = null;
+    private int $defense;
 
     #[ORM\Column]
-    private ?int $magic = null;
+    private int $magic;
 
     #[ORM\Column]
-    private ?int $difficulty = null;
+    private int $difficulty;
 
     #[ORM\Column]
     #[Gedmo\Timestampable(on: 'create')]
-    private ?\DateTimeImmutable $createdAt = null;
+    private \DateTimeImmutable $createdAt;
 
     #[ORM\OneToOne(mappedBy: 'infoChampion', cascade: ['persist', 'remove'])]
     private ?Champion $champion = null;
+
     public function __toString(): string
     {
-        return $this->id;
+        return (string)$this->id;
     }
 
     public function getId(): ?int

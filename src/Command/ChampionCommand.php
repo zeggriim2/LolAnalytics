@@ -50,9 +50,11 @@ class ChampionCommand extends Command
         if($versionInput){
 
             // On récupère les versions par API
+            /** @var array<array-key,string> $versionsApi */
             $versionsApi = $this->dataDragonApi->getVersions();
             // Check si la version existe
-            $keyVersionApi = array_search($versionInput,$versionsApi);
+            /** @var int|bool $keyVersionApi */
+            $keyVersionApi = $versionsApi ? array_search($versionInput,$versionsApi) : false;
             if($keyVersionApi === false){
                 $io->error("La version $versionInput n'existe pas");
                 return Command::FAILURE;
@@ -65,6 +67,7 @@ class ChampionCommand extends Command
             }
         }else{
             // On récupère la dernière version
+            /** @var array<array-key,string> $versionApi */
             $versionApi = $this->dataDragonApi->getVersions();
             /** @var Version|null $version */
             $version = $this->doctrine->getRepository(Version::class)->findOneBy(['name' => $versionApi[0]]);
@@ -86,7 +89,12 @@ class ChampionCommand extends Command
      */
     private function createChampion(Version $version): void
     {
+        /** @var array<string, mixed> $championsApi */
         $championsApi = $this->dataDragonApi->getChampions($version->getName());
+        if(!array_key_exists('data', $championsApi)){
+            //error
+            throw new \Exception('No key Data');
+        }
         $this->countChampionApi = count($championsApi['data']);
         $keyChampions = $this->doctrine->getRepository(Champion::class)->AllKeyForVersion($version);
         foreach ($championsApi['data'] as $championApi){
@@ -128,6 +136,11 @@ class ChampionCommand extends Command
         return $phrase;
     }
 
+    /**
+     * @param array<string, mixed> $championApi
+     * @param array<array-key, string> $keyChampions
+     * @return bool
+     */
     private function checkExisteInBdd(array $championApi,array $keyChampions): bool
     {
         return in_array($championApi['key'],$keyChampions);
