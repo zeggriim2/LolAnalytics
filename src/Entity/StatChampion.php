@@ -81,6 +81,11 @@ class StatChampion
     #[ORM\OneToOne(mappedBy: 'statChampion', cascade: ['persist', 'remove'])]
     private ?Champion $champion = null;
 
+    public function __toString(): string
+    {
+        return (string) $this->getId();
+    }
+
     public function getId(): int
     {
         return $this->id;

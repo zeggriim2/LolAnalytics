@@ -4,6 +4,7 @@ namespace App\Command;
 
 use App\Entity\Champion;
 use App\Entity\InfoChampion;
+use App\Entity\StatChampion;
 use App\Entity\Version;
 use App\Services\API\LOL\DataDragon\DataDragonApi;
 use Doctrine\ORM\EntityManagerInterface;
@@ -114,20 +115,65 @@ class ChampionCommand extends Command
                 ;
 
                 // On crée info Champion s'il n'existe pas
-                $infoChampion = (new InfoChampion())
-                    ->setAttack($championApi['info']['attack'])
-                    ->setDifficulty($championApi['info']['difficulty'])
-                    ->setDefense($championApi['info']['defense'])
-                    ->setMagic($championApi['info']['magic'])
-                ;
-                $this->doctrine->persist($infoChampion);
+                $infoChampion = $this->createInfoChampion($championApi);
+
+                // On crée stat Champion s'il n'existe pas
+                $statChampion = $this->createStatChampion($championApi);
+
                 $champion->setInfoChampion($infoChampion);
+                $champion->setStatChampion($statChampion);
 
                 $this->doctrine->persist($champion);
             }
         }
+    }
 
+    /**
+     * @param array<string, mixed> $championApi
+     * @return StatChampion
+     */
+    private function createStatChampion(array $championApi): StatChampion
+    {
+        $statChampion = (new StatChampion())
+            ->setHp($championApi['stats']['hp'])
+            ->setHpperlevel($championApi['stats']['hpperlevel'])
+            ->setMp($championApi['stats']['mp'])
+            ->setMpperlevel($championApi['stats']['mpperlevel'])
+            ->setMovespeed($championApi['stats']['movespeed'])
+            ->setArmor($championApi['stats']['armor'])
+            ->setArmorperlevel($championApi['stats']['armorperlevel'])
+            ->setSpellblock($championApi['stats']['spellblock'])
+            ->setSpellblockperlevel($championApi['stats']['spellblockperlevel'])
+            ->setAttackrange($championApi['stats']['attackrange'])
+            ->setHpregen($championApi['stats']['hpregen'])
+            ->setHpregenperlevel($championApi['stats']['hpregenperlevel'])
+            ->setMpregen($championApi['stats']['mpregen'])
+            ->setMpregenperlevel($championApi['stats']['mpregenperlevel'])
+            ->setCrit($championApi['stats']['crit'])
+            ->setCritperlevel($championApi['stats']['critperlevel'])
+            ->setAttackdamage($championApi['stats']['attackdamage'])
+            ->setAttackdamageperlevel($championApi['stats']['attackdamageperlevel'])
+            ->setAttackspeedperlevel($championApi['stats']['attackspeedperlevel'])
+            ->setAttackspeed($championApi['stats']['attackspeed'])
+        ;
+        $this->doctrine->persist($statChampion);
+        return $statChampion;
+    }
 
+    /**
+     * @param array<string, mixed> $championApi
+     * @return InfoChampion
+     */
+    public function createInfoChampion(array $championApi): InfoChampion
+    {
+        $infoChampion = (new InfoChampion())
+            ->setAttack($championApi['info']['attack'])
+            ->setDifficulty($championApi['info']['difficulty'])
+            ->setDefense($championApi['info']['defense'])
+            ->setMagic($championApi['info']['magic'])
+        ;
+        $this->doctrine->persist($infoChampion);
+        return $infoChampion;
     }
 
     private function phraseRetour(): string
