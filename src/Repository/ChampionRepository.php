@@ -3,7 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Champion;
+use App\Entity\Version;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\AbstractQuery;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -37,6 +39,21 @@ class ChampionRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+
+    /**
+     * @param Version $version
+     * @return float|int|mixed|string
+     */
+    public function AllKeyForVersion(Version $version): mixed
+    {
+        return $this->createQueryBuilder('c')
+            ->select('c.key')
+            ->where('c.version = :version')
+            ->setParameter('version', $version)
+            ->getQuery()
+            ->getResult(AbstractQuery::HYDRATE_SCALAR_COLUMN);
     }
 
 //    /**

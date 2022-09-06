@@ -3,9 +3,9 @@
 namespace App\Command;
 
 use App\Entity\Champion;
+use App\Entity\InfoChampion;
 use App\Entity\Version;
 use App\Services\API\LOL\DataDragon\DataDragonApi;
-use App\Traits\Command\CreateObjectChampionTrait;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -21,11 +21,9 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 )]
 class ChampionCommand extends Command
 {
-    use CreateObjectChampionTrait;
 
     private int $count = 0;
-    private int $batchSize = 20;
-    private int $inscrementBatch = 0;
+    private int $countChampionApi = 0;
 
     public function __construct(
         private DataDragonApi $dataDragonApi,
@@ -39,73 +37,100 @@ class ChampionCommand extends Command
     {
         $this
             ->addArgument('version', InputArgument::OPTIONAL, 'Si on veut préciser un version particulière.')
-            ->addOption('all-version', null, InputOption::VALUE_NEGATABLE, 'Si on veut récupérer tout les champions de toutes les versions')
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $allVersionInput = $input->getOption('all-version');
 
-        if ($allVersionInput) {
-            $versions = $this->doctrine->getRepository(Version::class)->findAll();
-            foreach ($versions as $version) {
-                $champions = $this->dataDragonApi->getChampions($version->getName());
-                if (null !== $champions) {
-                    $this->addChampions($champions, $version);
+        // Recupération de l'argument version
+        $versionInput = $input->getArgument('version');
+
+        if($versionInput){
+
+            // On récupère les versions par API
+            $versionsApi = $this->dataDragonApi->getVersions();
+            // Check si la version existe
+            $keyVersionApi = array_search($versionInput,$versionsApi);
+            if($keyVersionApi === false){
+                $io->error("La version $versionInput n'existe pas");
+                return Command::FAILURE;
+            }else{
+                $version = $this->doctrine->getRepository(Version::class)
+                    ->findOneBy(['name' => $versionsApi[$keyVersionApi]]);
+                if($version){
+                    $this->createChampion($version);
                 }
             }
-        } else {
-            $champions = $this->dataDragonApi->getChampions();
-            if (null !== $champions) {
-                $versionLabel = $input->getArgument('version') ?: $champions['version'];
-                /** @var Version|null $version */
-                $version = $this->doctrine->getRepository(Version::class)->findOneBy(['name' => $versionLabel]);
-                // Si la version n'est pas trouvé en BDD
-                if (null === $version) {
-                    $io->error("La version {$versionLabel} n'existe pas en Bdd");
-
-                    return Command::FAILURE;
-                }
-
-                $this->addChampions($champions, $version);
+        }else{
+            // On récupère la dernière version
+            $versionApi = $this->dataDragonApi->getVersions();
+            /** @var Version|null $version */
+            $version = $this->doctrine->getRepository(Version::class)->findOneBy(['name' => $versionApi[0]]);
+            if($version){
+                $this->createChampion($version);
             }
         }
 
         $this->doctrine->flush();
-        $this->doctrine->clear();
 
-        if (0 === $this->count) {
-            $phrase = "Aucun élément de champion n'a été ajouté.";
-        } else {
-            $phrase = "{$this->count} champion ont été ajouté en bdd.";
-        }
-
-        $io->success($phrase);
+        $io->success($this->phraseRetour());
 
         return Command::SUCCESS;
     }
 
     /**
-     * @param mixed[] $champions
+     * @param Version $version
+     * @return void
      */
-    private function addChampions(array $champions, Version $version): void
+    private function createChampion(Version $version): void
     {
-        foreach ($champions['data'] as $champion) {
-            // On verifie si le champion n'existe pas pour la version concerné
-            $championRepo = $this->doctrine->getRepository(Champion::class)
-                ->findOneBy(
-                    [
-                        'version' => $version,
-                        'idName' => $champion['id'],
-                    ]
-                );
+        $championsApi = $this->dataDragonApi->getChampions($version->getName());
+        $this->countChampionApi = count($championsApi['data']);
+        $keyChampions = $this->doctrine->getRepository(Champion::class)->AllKeyForVersion($version);
+        foreach ($championsApi['data'] as $championApi){
+            if(!$this->checkExisteInBdd($championApi, $keyChampions)){
+                $this->count++;
+                $champion = (new Champion())
+                    ->setIdName($championApi['id'])
+                    ->setName($championApi['name'])
+                    ->setKey($championApi['key'])
+                    ->setTitle($championApi['title'])
+                    ->setPartype($championApi['partype'] ?: null)
+                    ->setVersion($version)
+                ;
 
-            if (null === $championRepo) {
-                ++$this->count;
-                $this->createChampion($champion, $version);
+                // On crée info Champion s'il n'existe pas
+                $infoChampion = (new InfoChampion())
+                    ->setAttack($championApi['info']['attack'])
+                    ->setDifficulty($championApi['info']['difficulty'])
+                    ->setDefense($championApi['info']['defense'])
+                    ->setMagic($championApi['info']['magic'])
+                ;
+                $this->doctrine->persist($infoChampion);
+                $champion->setInfoChampion($infoChampion);
+
+                $this->doctrine->persist($champion);
             }
         }
+
+
     }
+
+    private function phraseRetour(): string
+    {
+        if (0 === $this->count) {
+            $phrase = "Aucun élément de champion n'a été ajouté ({$this->countChampionApi}).";
+        } else {
+            $phrase = "{$this->count} champion ont été ajouté en bdd ({$this->countChampionApi}).";
+        }
+        return $phrase;
+    }
+
+    private function checkExisteInBdd(array $championApi,array $keyChampions): bool
+    {
+        return in_array($championApi['key'],$keyChampions);
+    }
+
 }

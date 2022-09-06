@@ -8,7 +8,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 
 #[ORM\Entity(repositoryClass: ChampionRepository::class)]
 #[ORM\ChangeTrackingPolicy('DEFERRED_EXPLICIT')]
-class Champion
+class   Champion
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -37,11 +37,11 @@ class Champion
     #[ORM\ManyToOne(targetEntity: Version::class, inversedBy: 'champions')]
     private ?Version $version;
 
-    #[ORM\OneToOne(mappedBy: 'champion', targetEntity: InfoChampion::class, cascade: ['persist', 'remove'])]
-    private ?InfoChampion $infoChampion;
-
     #[ORM\ManyToOne(targetEntity: Image::class, inversedBy: 'champions')]
     private ?Image $image;
+
+    #[ORM\OneToOne(inversedBy: 'champion', cascade: ['persist', 'remove'])]
+    private ?InfoChampion $infoChampion = null;
 
     public function getId(): ?int
     {
@@ -132,28 +132,6 @@ class Champion
         return $this;
     }
 
-    public function getInfoChampion(): ?InfoChampion
-    {
-        return $this->infoChampion;
-    }
-
-    public function setInfoChampion(?InfoChampion $infoChampion): self
-    {
-        // unset the owning side of the relation if necessary
-        if (null === $infoChampion && null !== $this->infoChampion) {
-            $this->infoChampion->setChampion(null);
-        }
-
-        // set the owning side of the relation if necessary
-        if (null !== $infoChampion && $infoChampion->getChampion() !== $this) {
-            $infoChampion->setChampion($this);
-        }
-
-        $this->infoChampion = $infoChampion;
-
-        return $this;
-    }
-
     public function getImage(): ?Image
     {
         return $this->image;
@@ -162,6 +140,18 @@ class Champion
     public function setImage(?Image $image): self
     {
         $this->image = $image;
+
+        return $this;
+    }
+
+    public function getInfoChampion(): ?InfoChampion
+    {
+        return $this->infoChampion;
+    }
+
+    public function setInfoChampion(?InfoChampion $infoChampion): self
+    {
+        $this->infoChampion = $infoChampion;
 
         return $this;
     }
