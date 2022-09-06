@@ -6,6 +6,7 @@ use App\Entity\Champion;
 use App\Entity\InfoChampion;
 use App\Entity\Language;
 use App\Entity\Map;
+use App\Entity\StatChampion;
 use App\Entity\Version;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
@@ -62,5 +63,6 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::section("Champion");
         yield MenuItem::linkToCrud('Champion', 'fas fa-list-ul', Champion::class);
         yield MenuItem::linkToCrud('Info Champion', 'fas fa-list-ul', InfoChampion::class);
+        yield MenuItem::linkToCrud('Stat Champion', 'fas fa-list-ul', StatChampion::class);
     }
 }

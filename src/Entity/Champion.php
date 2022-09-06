@@ -43,6 +43,9 @@ class   Champion
     #[ORM\OneToOne(inversedBy: 'champion', cascade: ['persist', 'remove'])]
     private ?InfoChampion $infoChampion = null;
 
+    #[ORM\OneToOne(inversedBy: 'champion', cascade: ['persist', 'remove'])]
+    private ?StatChampion $statChampion = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -152,6 +155,18 @@ class   Champion
     public function setInfoChampion(?InfoChampion $infoChampion): self
     {
         $this->infoChampion = $infoChampion;
+
+        return $this;
+    }
+
+    public function getStatChampion(): ?StatChampion
+    {
+        return $this->statChampion;
+    }
+
+    public function setStatChampion(?StatChampion $statChampion): self
+    {
+        $this->statChampion = $statChampion;
 
         return $this;
     }

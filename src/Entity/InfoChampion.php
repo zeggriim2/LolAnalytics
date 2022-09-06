@@ -35,7 +35,7 @@ class InfoChampion
 
     public function __toString(): string
     {
-        return (string)$this->id;
+        return (string)$this->getId();
     }
 
     public function getId(): ?int
