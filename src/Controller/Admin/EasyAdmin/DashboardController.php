@@ -2,6 +2,8 @@
 
 namespace App\Controller\Admin\EasyAdmin;
 
+use App\Entity\Champion;
+use App\Entity\InfoChampion;
 use App\Entity\Language;
 use App\Entity\Map;
 use App\Entity\Version;
@@ -56,5 +58,9 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud("Version", "fas fa-list", Version::class);
         yield MenuItem::linkToCrud("Map", "far fa-map", Map::class);
         yield MenuItem::linkToCrud('Language', 'fas fa-language', Language::class);
+
+        yield MenuItem::section("Champion");
+        yield MenuItem::linkToCrud('Champion', 'fas fa-list-ul', Champion::class);
+        yield MenuItem::linkToCrud('Info Champion', 'fas fa-list-ul', InfoChampion::class);
     }
 }

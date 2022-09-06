@@ -11,13 +11,13 @@ class Language
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: 'integer', options: ["comment" => "ID interne"])]
     private int $id;
 
-    #[ORM\Column(type: 'string', length: 20)]
+    #[ORM\Column(type: 'string', length: 20, options: ["comment" => "Code langue"])]
     private string $code;
 
-    #[ORM\Column(type: 'string', length: 150, nullable: true)]
+    #[ORM\Column(type: 'string', length: 150, nullable: true, options: ["comment" => "Langue complète"])]
     private ?string $language;
 
     #[Gedmo\Timestampable(on: 'create')]

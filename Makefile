@@ -1,11 +1,12 @@
 #isProd := $(shell grep "APP_ENV=prod" .env.local > /dev/null && echo 1)
 sy := php bin/console
 
+help: ## Affiche cette aide
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
+
 make test-env:
 	@echo $(isProd)
 
-help: ## Affiche cette aide
-	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
 analyse: ## Analyse Composer Valid + PHPStan
 	docker-compose exec server php bin/console doctrine:schema:valid --skip-sync
