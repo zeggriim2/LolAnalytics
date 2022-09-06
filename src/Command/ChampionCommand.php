@@ -36,7 +36,11 @@ class ChampionCommand extends Command
     protected function configure(): void
     {
         $this
-            ->addArgument('version', InputArgument::OPTIONAL, 'Si on veut préciser un version particulière.')
+            ->addArgument(
+                'version',
+                InputArgument::OPTIONAL,
+                'Si on veut préciser un version particulière.'
+            )
         ;
     }
 
