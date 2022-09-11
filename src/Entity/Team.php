@@ -19,20 +19,20 @@ class Team
     #[ORM\Column(type: 'boolean')]
     private bool $win;
 
-    #[ORM\Column(type: 'integer')]
-    private int $ban1ChampionId;
+    #[ORM\Column(type: 'integer', nullable: true)]
+    private ?int $ban1ChampionId;
 
-    #[ORM\Column(type: 'integer')]
-    private int $ban2ChampionId;
+    #[ORM\Column(type: 'integer', nullable: true)]
+    private ?int $ban2ChampionId;
 
-    #[ORM\Column(type: 'integer')]
-    private int $ban3ChampionId;
+    #[ORM\Column(type: 'integer', nullable: true)]
+    private ?int $ban3ChampionId;
 
-    #[ORM\Column(type: 'integer')]
-    private int $ban4ChampionId;
+    #[ORM\Column(type: 'integer', nullable: true)]
+    private ?int $ban4ChampionId;
 
-    #[ORM\Column(type: 'integer')]
-    private int $ban5ChampionId;
+    #[ORM\Column(type: 'integer', nullable: true)]
+    private ?int $ban5ChampionId;
 
     #[ORM\OneToOne(inversedBy: 'team', targetEntity: Baron::class, cascade: ['persist', 'remove'])]
     private ?Baron $baron;
@@ -86,7 +86,7 @@ class Team
         return $this->ban1ChampionId;
     }
 
-    public function setBan1ChampionId(int $ban1ChampionId): self
+    public function setBan1ChampionId(?int $ban1ChampionId): self
     {
         $this->ban1ChampionId = $ban1ChampionId;
 
@@ -98,7 +98,7 @@ class Team
         return $this->ban2ChampionId;
     }
 
-    public function setBan2ChampionId(int $ban2ChampionId): self
+    public function setBan2ChampionId(?int $ban2ChampionId): self
     {
         $this->ban2ChampionId = $ban2ChampionId;
 
@@ -110,7 +110,7 @@ class Team
         return $this->ban3ChampionId;
     }
 
-    public function setBan3ChampionId(int $ban3ChampionId): self
+    public function setBan3ChampionId(?int $ban3ChampionId): self
     {
         $this->ban3ChampionId = $ban3ChampionId;
 
@@ -122,7 +122,7 @@ class Team
         return $this->ban4ChampionId;
     }
 
-    public function setBan4ChampionId(int $ban4ChampionId): self
+    public function setBan4ChampionId(?int $ban4ChampionId): self
     {
         $this->ban4ChampionId = $ban4ChampionId;
 
@@ -134,7 +134,7 @@ class Team
         return $this->ban5ChampionId;
     }
 
-    public function setBan5ChampionId(int $ban5ChampionId): self
+    public function setBan5ChampionId(?int $ban5ChampionId): self
     {
         $this->ban5ChampionId = $ban5ChampionId;
 

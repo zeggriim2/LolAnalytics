@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Invocateur;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -52,6 +53,21 @@ class InvocateurRepository extends ServiceEntityRepository
             ->andWhere('i.idLol= :summonerId')
             ->setParameter('summonerId', $summonerId)
             ->orderBy('h.createAt')
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
+    /**
+     * @param string $name
+     * @return float|int|mixed|string
+     * @throws NonUniqueResultException
+     */
+    public function isInvocateurExiste(string $name): mixed
+    {
+        return $this->createQueryBuilder('i')
+            ->where('i.name = :name')
+            ->setParameter('name', $name)
             ->getQuery()
             ->getOneOrNullResult()
         ;

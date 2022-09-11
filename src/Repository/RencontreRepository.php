@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Rencontre;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -38,6 +39,21 @@ class RencontreRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
+
+    /**
+     * @throws NonUniqueResultException
+     */
+    public function isGameId($gameId)
+    {
+        $gameId = substr($gameId,strpos($gameId,'_') + 1);
+        return $this->createQueryBuilder('r')
+            ->where('r.gameId = :gameId')
+            ->setParameter('gameId', $gameId)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
 
 //    /**
 //     * @return Rencontre[] Returns an array of Rencontre objects

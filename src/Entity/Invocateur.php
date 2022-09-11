@@ -30,7 +30,7 @@ class Invocateur
     #[ORM\Column(type: 'string', length: 255)]
     private string $idLol;
 
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: 'integer', nullable: true)]
     private int $profileIconId;
 
     #[ORM\Column(type: 'string', length: 255)]
