@@ -135,6 +135,10 @@ composer-install-prod:
 	docker-compose exec server composer install --optimize-autoloader --no-dev
 
 
+fixture-equipe: ## Generer les Equipes et Les compétitions
+	docker-compose exec server php bin/console doctrine:fixtures:load --group=equipe --no-interaction
+
+
 # Debug
 debug-router:
 	docker-compose exec server php bin/console debug:router

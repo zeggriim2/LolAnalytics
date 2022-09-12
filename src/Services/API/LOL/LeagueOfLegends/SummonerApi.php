@@ -24,10 +24,10 @@ class SummonerApi
     ) {
     }
 
-    public function summonerBySummonerName(string $summonerName): ?SummonerDTO
+    public function summonerBySummonerName(string $summonerName, string $platform = null): ?SummonerDTO
     {
         $url = $this->baseApi->constructUrl(self::URL_NAME, [
-            'platform' => $this->baseApi->platform,
+            'platform' => $platform ?: $this->baseApi->platform,
             'name' => $summonerName,
         ]);
         /** @var array<string,int|string>|null $summoner */
