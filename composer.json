@@ -14,6 +14,7 @@
         "doctrine/doctrine-migrations-bundle": "^3.2",
         "doctrine/orm": "^2.12",
         "easycorp/easyadmin-bundle": "^4.3",
+        "fakerphp/faker": "^1.20",
         "fresh/doctrine-enum-bundle": "7.5.*",
         "sensio/framework-extra-bundle": "^6.2",
         "stof/doctrine-extensions-bundle": "^1.7",
@@ -82,6 +83,7 @@
         }
     },
     "require-dev": {
+        "doctrine/doctrine-fixtures-bundle": "^3.4",
         "friendsofphp/php-cs-fixer": "^3.9",
         "phpstan/extension-installer": "^1.1",
         "phpstan/phpstan": "^1.8",
