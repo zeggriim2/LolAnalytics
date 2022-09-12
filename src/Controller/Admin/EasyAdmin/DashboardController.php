@@ -3,6 +3,8 @@
 namespace App\Controller\Admin\EasyAdmin;
 
 use App\Entity\Champion;
+use App\Entity\Competition;
+use App\Entity\Equipe;
 use App\Entity\InfoChampion;
 use App\Entity\Language;
 use App\Entity\Map;
@@ -12,6 +14,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
+use PhpParser\Node\Expr\Yield_;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -64,5 +67,9 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Champion', 'fas fa-list-ul', Champion::class);
         yield MenuItem::linkToCrud('Info Champion', 'fas fa-list-ul', InfoChampion::class);
         yield MenuItem::linkToCrud('Stat Champion', 'fas fa-list-ul', StatChampion::class);
+
+        yield MenuItem::section('Competition');
+        yield MenuItem::linkToCrud('Equipe', 'fas fa-list-ul', Equipe::class);
+        yield MenuItem::linkToCrud('Compétition', 'fas fa-list-ul', Competition::class);
     }
 }
