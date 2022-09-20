@@ -6,14 +6,19 @@ use App\Services\API\LOL\DataDragon\Division;
 use App\Services\API\LOL\DataDragon\Queue;
 use App\Services\API\LOL\DataDragon\Tier;
 use App\Services\API\LOL\LeagueOfLegends\DTO\League\LeagueEntryDTO;
+use App\Services\API\LOL\LeagueOfLegends\DTO\League\LeagueItemDTO;
 use App\Services\API\LOL\LeagueOfLegends\DTO\League\LeagueListDTO;
+use App\Services\API\LOL\LeagueOfLegends\DTO\Status\ContentDto;
 use App\Services\API\LOL\LeagueOfLegends\Exception\ForbiddenException;
 use App\Services\API\LOL\LeagueOfLegends\Exception\LeagueArgumentException;
 use App\Services\API\LOL\LeagueOfLegends\LeagueApi;
+use App\Tests\Traits\CheckLeagueApi;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class LeagueApiTest extends KernelTestCase
 {
+    use CheckLeagueApi;
+
     private LeagueApi $leagueApi;
 
     protected function setUp(): void
@@ -32,6 +37,7 @@ class LeagueApiTest extends KernelTestCase
         foreach ($leaguesSummonerId as $leagueSummonerId) {
             $this->assertInstanceOf(LeagueEntryDTO::class, $leagueSummonerId);
         }
+        $this->checkLeagueEntryDto($leaguesSummonerId[0]);
     }
 
     public function testLeagueBySummonerIdForbiddenException()
@@ -43,11 +49,13 @@ class LeagueApiTest extends KernelTestCase
     }
     // League By Summoner ID End
 
+
     // League Challenger By Queue Start
     public function testLeagueChallengerByQueueSuccess()
     {
         $leagueChallenger = $this->leagueApi->leagueChallengerByQueue(Queue::RANKED_SOLO);
         $this->assertInstanceOf(LeagueListDTO::class, $leagueChallenger);
+        $this->checkLeagueListDto($leagueChallenger);
     }
 
     public function testLeagueChallengerByQueueForbiddenException()

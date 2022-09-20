@@ -44,7 +44,9 @@ class SummonerCommand extends Command
             $error = $this->summonerManager->enregistrer($summonerApi);
             $phase = "L'invocateur {$name} à bien été ajouté à la base de donnée. (Id Lol : {$summonerApi->getId()} )";
         } else {
-            $phase = '';
+            $phase = "L'invocateur {$name} n'a pas été trouvé.";
+
+            return Command::FAILURE;
         }
 
         $io->success($phase);

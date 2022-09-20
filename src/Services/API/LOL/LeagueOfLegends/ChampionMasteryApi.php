@@ -19,7 +19,8 @@ class ChampionMasteryApi
 
     public function __construct(
         private BaseApi $baseApi,
-        private DenormalizerInterface $denormalizer
+        private DenormalizerInterface $denormalizer,
+        private DenormalizeArrayApi $denormalizeArrayApi
     ) {
     }
 
@@ -53,7 +54,9 @@ class ChampionMasteryApi
             ]
         );
 
-        return $championMasterySummonerId ? $this->denormalizeArray($championMasterySummonerId) : null;
+        return $championMasterySummonerId ?
+            $this->denormalizeArrayApi->denormalizeArray($championMasterySummonerId, ChampionMasteryDto::class) :
+            null;
     }
 
     /**
@@ -121,24 +124,6 @@ class ChampionMasteryApi
             ],
             'content'
         );
-    }
-
-    /**
-     * @param mixed[] $datas
-     *
-     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
-     *
-     * @return array<array-key, ChampionMasteryDto>
-     */
-    private function denormalizeArray(
-        array $datas
-    ): array {
-        $listEntity = [];
-        foreach ($datas as $key => $data) {
-            $listEntity[] = $this->denormalizer->denormalize($data, ChampionMasteryDto::class);
-        }
-
-        return $listEntity;
     }
 
     /**

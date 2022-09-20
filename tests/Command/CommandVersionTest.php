@@ -20,12 +20,5 @@ class CommandVersionTest extends KernelTestCase
         $commandTester->execute([]);
 
         $commandTester->assertCommandIsSuccessful();
-        $nbVersionRepo = static::getContainer()->get(VersionRepository::class)->count([]);
-
-        $output = $commandTester->getDisplay();
-        $outputArray = explode(' ', trim($output));
-        $nb = (int) $outputArray[1];
-
-        $this->assertEquals($nb, $nbVersionRepo);
     }
 }

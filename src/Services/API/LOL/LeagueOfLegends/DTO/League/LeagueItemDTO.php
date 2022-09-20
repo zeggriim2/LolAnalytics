@@ -10,7 +10,7 @@ class LeagueItemDTO
     /**
      * @var array<string, int|string>
      */
-    private array $miniSeries;
+    private ?array $miniSeries = null;
     private bool $inactive;
     private bool $veteran;
     private bool $hotStreak;
@@ -56,9 +56,9 @@ class LeagueItemDTO
     }
 
     /**
-     * @return array<string, int|string>
+     * @return null|array<string, int|string>
      */
-    public function getMiniSeries(): array
+    public function getMiniSeries(): ?array
     {
         return $this->miniSeries;
     }

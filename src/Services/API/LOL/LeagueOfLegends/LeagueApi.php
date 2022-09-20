@@ -31,7 +31,8 @@ class LeagueApi
 
     public function __construct(
         private BaseApi $baseApi,
-        private DenormalizerInterface $denormalizer
+        private DenormalizerInterface $denormalizer,
+        private DenormalizeArrayApi $denormalizeArrayApi
     ) {
     }
 
@@ -65,7 +66,8 @@ class LeagueApi
             ]
         );
 
-        return $leagueSummonerId ? $this->denormalizeArray($leagueSummonerId) : null;
+        return $leagueSummonerId ?
+            $this->denormalizeArrayApi->denormalizeArray($leagueSummonerId, LeagueEntryDTO::class) : null;
     }
 
     /**
@@ -246,23 +248,8 @@ class LeagueApi
             ]
         );
 
-        return $league ? $this->denormalizeArray($league) : null;
-    }
-
-    /**
-     * @param mixed[] $datas
-     *
-     * @return LeagueEntryDTO[]
-     */
-    private function denormalizeArray(
-        array $datas
-    ): array {
-        $listEntity = [];
-        foreach ($datas as $key => $data) {
-            $listEntity[] = $this->denormalizer->denormalize($data, LeagueEntryDTO::class);
-        }
-
-        return $listEntity;
+        return $league ?
+            $this->denormalizeArrayApi->denormalizeArray($league, LeagueEntryDTO::class) : null;
     }
 
     /**

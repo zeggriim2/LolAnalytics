@@ -4,10 +4,13 @@ namespace App\Tests;
 
 use App\Services\API\LOL\LeagueOfLegends\DTO\SummonerDTO;
 use App\Services\API\LOL\LeagueOfLegends\SummonerApi;
+use App\Tests\Traits\CheckSummonerApi;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class SummonerApiTest extends KernelTestCase
 {
+    use CheckSummonerApi;
+
     public ?SummonerApi $summonerApi;
 
     protected function setUp(): void
@@ -17,10 +20,12 @@ class SummonerApiTest extends KernelTestCase
 
     public function testSummonerByNameSuccess()
     {
+        $summonerDto = $this->summonerApi->summonerBySummonerName('jarkalien');
         $this->assertInstanceOf(
             SummonerDTO::class,
-            $this->summonerApi->summonerBySummonerName('jarkalien')
+            $summonerDto
         );
+        $this->checkSummonerDto($summonerDto);
     }
 
     public function testSummonerByNameBad()

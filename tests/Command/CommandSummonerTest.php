@@ -35,7 +35,7 @@ class CommandSummonerTest extends KernelTestCase
     {
         $command = $this->application->find('app:summoner');
         $commandTester = new CommandTester($command);
-        $commandTester->execute(['name' => 'jarkalien']);
+        $commandTester->execute(['name' => 'regareg']);
 
         $this->assertEquals(1, $commandTester->getStatusCode());
     }

@@ -126,7 +126,7 @@ install:
 
 
 test-start:
-	@php bin/phpunit --coverage-html tests\coverage --coverage-text=tests\coverage.txt
+	docker-compose exec server php bin/phpunit --coverage-html tests\coverage --coverage-text=tests\coverage.txt
 
 cs-fix:
 	vendor\bin\php-cs-fixer fix --allow-risky yes -vvv

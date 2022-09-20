@@ -5,10 +5,13 @@ namespace App\Tests;
 use App\Services\API\LOL\LeagueOfLegends\ChampionMasteryApi;
 use App\Services\API\LOL\LeagueOfLegends\DTO\ChampionMastery\ChampionMasteryDto;
 use App\Services\API\LOL\LeagueOfLegends\Exception\ForbiddenException;
+use App\Tests\Traits\CheckChampionMastery;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class ChampionMasteryTest extends KernelTestCase
 {
+    use CheckChampionMastery;
+
     private ChampionMasteryApi $championMasteryApi;
 
     protected function setUp(): void
@@ -27,6 +30,7 @@ class ChampionMasteryTest extends KernelTestCase
             foreach ($championMasteryList as $championMastery) {
                 $this->assertInstanceOf(ChampionMasteryDto::class, $championMastery);
             }
+            $this->checkChampionMasteryDto($championMasteryList[0]);
         }
     }
 
