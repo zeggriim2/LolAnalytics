@@ -3,10 +3,10 @@
 namespace App\Services\API\LOL\LeagueOfLegends;
 
 use App\Services\API\LOL\BaseApi;
+use App\Services\API\LOL\LeagueOfLegends\Denormalize\DenormalizerApi;
 use App\Services\API\LOL\LeagueOfLegends\DTO\ChampionMastery\ChampionMasteryDto;
 use App\Services\API\LOL\LeagueOfLegends\Exception\ForbiddenException;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 class ChampionMasteryApi
 {
@@ -19,8 +19,7 @@ class ChampionMasteryApi
 
     public function __construct(
         private BaseApi $baseApi,
-        private DenormalizerInterface $denormalizer,
-        private DenormalizeArrayApi $denormalizeArrayApi
+        private DenormalizerApi $denormalizerApi
     ) {
     }
 
@@ -55,7 +54,7 @@ class ChampionMasteryApi
         );
 
         return $championMasterySummonerId ?
-            $this->denormalizeArrayApi->denormalizeArray($championMasterySummonerId, ChampionMasteryDto::class) :
+            $this->denormalizerApi->denormalizeArray($championMasterySummonerId, ChampionMasteryDto::class) :
             null;
     }
 
@@ -93,7 +92,9 @@ class ChampionMasteryApi
             ]
         );
 
-        return $championMasterySummonerIdChampionId ? $this->denormalize($championMasterySummonerIdChampionId) : null;
+        return $championMasterySummonerIdChampionId ?
+            $this->denormalizerApi->denormalize($championMasterySummonerIdChampionId, ChampionMasteryDto::class) :
+            null;
     }
 
     /**
@@ -124,16 +125,5 @@ class ChampionMasteryApi
             ],
             'content'
         );
-    }
-
-    /**
-     * @param mixed[] $data
-     *
-     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
-     */
-    private function denormalize(
-        array $data
-    ): ChampionMasteryDto {
-        return $this->denormalizer->denormalize($data, ChampionMasteryDto::class);
     }
 }

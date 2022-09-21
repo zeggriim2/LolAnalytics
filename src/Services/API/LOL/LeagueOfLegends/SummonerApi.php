@@ -3,9 +3,9 @@
 namespace App\Services\API\LOL\LeagueOfLegends;
 
 use App\Services\API\LOL\BaseApi;
+use App\Services\API\LOL\LeagueOfLegends\Denormalize\DenormalizerApi;
 use App\Services\API\LOL\LeagueOfLegends\DTO\SummonerDTO;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 class SummonerApi
 {
@@ -20,7 +20,7 @@ class SummonerApi
 
     public function __construct(
         private BaseApi $baseApi,
-        private DenormalizerInterface $denormalizer
+        private DenormalizerApi $denormalizerApi
     ) {
     }
 
@@ -44,7 +44,7 @@ class SummonerApi
             return null;
         }
 
-        return $this->denormalize($summoner);
+        return $this->denormalizerApi->denormalize($summoner, SummonerDTO::class);
     }
 
     public function summonerByAccountId(string $accountId): ?SummonerDTO
@@ -68,7 +68,7 @@ class SummonerApi
             return null;
         }
 
-        return $this->denormalize($summoner);
+        return $this->denormalizerApi->denormalize($summoner, SummonerDTO::class);
     }
 
     public function summonerByPuuid(string $puuid): ?SummonerDTO
@@ -93,7 +93,7 @@ class SummonerApi
             return null;
         }
 
-        return $this->denormalize($summoner);
+        return $this->denormalizerApi->denormalize($summoner, SummonerDTO::class);
     }
 
     public function summonerBySummonerId(string $summonerId): ?SummonerDTO
@@ -118,14 +118,6 @@ class SummonerApi
             return null;
         }
 
-        return $this->denormalize($summoner);
-    }
-
-    /**
-     * @param array<string,int|string> $data
-     */
-    private function denormalize(array $data): SummonerDTO
-    {
-        return $this->denormalizer->denormalize($data, SummonerDTO::class);
+        return $this->denormalizerApi->denormalize($summoner,SummonerDTO::class);
     }
 }

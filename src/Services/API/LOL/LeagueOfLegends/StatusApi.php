@@ -3,9 +3,9 @@
 namespace App\Services\API\LOL\LeagueOfLegends;
 
 use App\Services\API\LOL\BaseApi;
+use App\Services\API\LOL\LeagueOfLegends\Denormalize\DenormalizerApi;
 use App\Services\API\LOL\LeagueOfLegends\DTO\Status\PlatformDataDto;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 class StatusApi
 {
@@ -13,14 +13,14 @@ class StatusApi
 
     public function __construct(
         private BaseApi $baseApi,
-        private DenormalizerInterface $denormalizer
+        private DenormalizerApi $denormalizerApi
     ) {
     }
 
     /**
      * @return PlatformDataDto|null
      */
-    public function status()
+    public function status(): ?PlatformDataDto
     {
         $url = $this->baseApi->constructUrl(
             self::URL_STATUS,
@@ -40,16 +40,6 @@ class StatusApi
             ]
         );
 
-        return $status ? $this->denormalize($status) : null;
-    }
-
-    /**
-     * @param array<string,int|string> $data
-     *
-     * @return PlatformDataDto
-     */
-    private function denormalize(array $data)
-    {
-        return $this->denormalizer->denormalize($data, PlatformDataDto::class);
+        return $status ? $this->denormalizerApi->denormalize($status,PlatformDataDto::class) : null;
     }
 }

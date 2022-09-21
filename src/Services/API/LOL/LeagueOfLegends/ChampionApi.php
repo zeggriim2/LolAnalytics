@@ -3,9 +3,9 @@
 namespace App\Services\API\LOL\LeagueOfLegends;
 
 use App\Services\API\LOL\BaseApi;
+use App\Services\API\LOL\LeagueOfLegends\Denormalize\DenormalizerApi;
 use App\Services\API\LOL\LeagueOfLegends\DTO\Champion\ChampionInfoDTO;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 class ChampionApi
 {
@@ -14,7 +14,7 @@ class ChampionApi
 
     public function __construct(
         private BaseApi $baseApi,
-        private DenormalizerInterface $denormalizer
+        private DenormalizerApi $denormalizerApi
     ) {
     }
 
@@ -37,17 +37,7 @@ class ChampionApi
             ]
         );
 
-        return $championRotation ? $this->denormalize($championRotation) : null;
-    }
-
-    /**
-     * @param mixed[] $data
-     *
-     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
-     */
-    private function denormalize(
-        array $data
-    ): ChampionInfoDTO {
-        return $this->denormalizer->denormalize($data, ChampionInfoDTO::class);
+        return $championRotation ?
+            $this->denormalizerApi->denormalize($championRotation, ChampionInfoDTO::class) : null;
     }
 }

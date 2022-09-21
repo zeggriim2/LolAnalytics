@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Services\API\LOL\LeagueOfLegends;
+namespace App\Services\API\LOL\LeagueOfLegends\Denormalize;
 
+use App\Services\API\LOL\LeagueOfLegends\DTO\Champion\ChampionInfoDTO;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
-class DenormalizeArrayApi
+class DenormalizerApi
 {
-
     public function __construct(
         private DenormalizerInterface $denormalizer
     )
@@ -24,5 +24,17 @@ class DenormalizeArrayApi
         }
 
         return $listEntity;
+    }
+
+    /**
+     * @param mixed[] $datas
+     * @param string $type
+     *
+     */
+    public function denormalize(
+        array  $datas,
+        string $type
+    ) {
+        return $this->denormalizer->denormalize($datas, $type);
     }
 }

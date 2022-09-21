@@ -6,13 +6,12 @@ use App\Services\API\LOL\BaseApi;
 use App\Services\API\LOL\DataDragon\Division;
 use App\Services\API\LOL\DataDragon\Queue;
 use App\Services\API\LOL\DataDragon\Tier;
+use App\Services\API\LOL\LeagueOfLegends\Denormalize\DenormalizerApi;
 use App\Services\API\LOL\LeagueOfLegends\DTO\League\LeagueEntryDTO;
 use App\Services\API\LOL\LeagueOfLegends\DTO\League\LeagueListDTO;
 use App\Services\API\LOL\LeagueOfLegends\Exception\ForbiddenException;
 use App\Services\API\LOL\LeagueOfLegends\Exception\LeagueArgumentException;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Serializer\Exception\ExceptionInterface;
-use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 class LeagueApi
 {
@@ -31,8 +30,7 @@ class LeagueApi
 
     public function __construct(
         private BaseApi $baseApi,
-        private DenormalizerInterface $denormalizer,
-        private DenormalizeArrayApi $denormalizeArrayApi
+        private DenormalizerApi $denormalizerApi
     ) {
     }
 
@@ -67,7 +65,7 @@ class LeagueApi
         );
 
         return $leagueSummonerId ?
-            $this->denormalizeArrayApi->denormalizeArray($leagueSummonerId, LeagueEntryDTO::class) : null;
+            $this->denormalizerApi->denormalizeArray($leagueSummonerId, LeagueEntryDTO::class) : null;
     }
 
     /**
@@ -103,7 +101,9 @@ class LeagueApi
             ]
         );
 
-        return $leagueChallenger ? $this->denormalize($leagueChallenger) : null;
+        return $leagueChallenger ?
+            $this->denormalizerApi->denormalize($leagueChallenger, LeagueListDTO::class) :
+            null;
     }
 
     /**
@@ -139,7 +139,8 @@ class LeagueApi
             ]
         );
 
-        return $leagueGrandMaster ? $this->denormalize($leagueGrandMaster) : null;
+        return $leagueGrandMaster ?
+            $this->denormalizerApi->denormalize($leagueGrandMaster, LeagueListDTO::class) : null;
     }
 
     /**
@@ -175,7 +176,8 @@ class LeagueApi
             ]
         );
 
-        return $leagueMaster ? $this->denormalize($leagueMaster) : null;
+        return $leagueMaster ?
+            $this->denormalizerApi->denormalize($leagueMaster, LeagueListDTO::class) : null;
     }
 
     /**
@@ -206,7 +208,8 @@ class LeagueApi
             ]
         );
 
-        return $league ? $this->denormalize($league) : null;
+        return $league ?
+            $this->denormalizerApi->denormalize($league, LeagueListDTO::class) : null;
     }
 
     /**
@@ -249,17 +252,6 @@ class LeagueApi
         );
 
         return $league ?
-            $this->denormalizeArrayApi->denormalizeArray($league, LeagueEntryDTO::class) : null;
-    }
-
-    /**
-     * @param mixed[] $data
-     *
-     * @throws ExceptionInterface
-     */
-    private function denormalize(
-        array $data
-    ): LeagueListDTO {
-        return $this->denormalizer->denormalize($data, LeagueListDTO::class);
+            $this->denormalizerApi->denormalizeArray($league, LeagueEntryDTO::class) : null;
     }
 }

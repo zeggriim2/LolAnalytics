@@ -3,10 +3,10 @@
 namespace App\Services\API\LOL\LeagueOfLegends;
 
 use App\Services\API\LOL\BaseApi;
+use App\Services\API\LOL\LeagueOfLegends\Denormalize\DenormalizerApi;
 use App\Services\API\LOL\LeagueOfLegends\DTO\Match\MatchDto;
 use App\Services\API\LOL\LeagueOfLegends\Exception\ForbiddenException;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 class MatchApi
 {
@@ -32,7 +32,7 @@ class MatchApi
 
     public function __construct(
         private BaseApi $baseApi,
-        private DenormalizerInterface $denormalizer
+        private DenormalizerApi $denormalizerApi
     ) {
     }
 
@@ -102,7 +102,9 @@ class MatchApi
             ]
         );
 
-        return $matchDetailId ? $this->denormalize($matchDetailId) : null;
+        return $matchDetailId ?
+            $this->denormalizerApi->denormalize($matchDetailId, MatchDto::class) :
+            null;
     }
 
     /**
@@ -134,14 +136,6 @@ class MatchApi
                 ],
             ]
         );
-    }
-
-    /**
-     * @param mixed[] $data
-     */
-    private function denormalize(array $data): MatchDto
-    {
-        return $this->denormalizer->denormalize($data, MatchDto::class);
     }
 
     /**
