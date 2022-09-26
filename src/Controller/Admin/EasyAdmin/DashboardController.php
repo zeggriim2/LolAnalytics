@@ -9,6 +9,7 @@ use App\Entity\InfoChampion;
 use App\Entity\Language;
 use App\Entity\Map;
 use App\Entity\StatChampion;
+use App\Entity\User;
 use App\Entity\Version;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
@@ -57,6 +58,7 @@ class DashboardController extends AbstractDashboardController
     public function configureMenuItems(): iterable
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
+        yield MenuItem::linkToCrud('Utilisateurs', 'fa fa-user', User::class);
 
         yield MenuItem::section("General");
         yield MenuItem::linkToCrud("Version", "fas fa-list", Version::class);
