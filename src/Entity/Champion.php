@@ -37,7 +37,7 @@ class   Champion
     #[ORM\ManyToOne(targetEntity: Version::class, inversedBy: 'champions')]
     private ?Version $version;
 
-    #[ORM\ManyToOne(targetEntity: Image::class, inversedBy: 'champions')]
+    #[ORM\ManyToOne(targetEntity: Image::class, cascade: ['persist', 'remove'], inversedBy: 'champions')]
     private ?Image $image;
 
     #[ORM\OneToOne(inversedBy: 'champion', cascade: ['persist', 'remove'])]
@@ -45,6 +45,11 @@ class   Champion
 
     #[ORM\OneToOne(inversedBy: 'champion', cascade: ['persist', 'remove'])]
     private ?StatChampion $statChampion = null;
+
+    public function __toString(): string
+    {
+        return (string)$this->id;
+    }
 
     public function getId(): ?int
     {

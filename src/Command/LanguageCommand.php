@@ -33,10 +33,12 @@ class LanguageCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
         $languages = $this->dataDragonApi->getLanguages();
+        $io->progressStart();
 
         $count = 0;
         if (null !== $languages) {
             foreach ($languages as $language) {
+                $io->progressAdvance();
                 $languageRepo = $this->doctrine->getRepository(Language::class)->findOneBy(['code' => $language]);
                 if (null === $languageRepo) {
                     $languageEntity = (new Language())
@@ -56,6 +58,7 @@ class LanguageCommand extends Command
         }
 
         $io->success($phrase);
+        $io->progressFinish();
 
         return Command::SUCCESS;
     }

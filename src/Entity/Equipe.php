@@ -17,7 +17,7 @@ class Equipe
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $name = null;
+    private string $name;
 
     #[ORM\Column(length: 150)]
     private ?string $shortName = null;
@@ -26,12 +26,15 @@ class Equipe
     #[Gedmo\Timestampable(on: 'create')]
     private ?\DateTimeImmutable $createdAt = null;
 
+    /** @var Collection<int, Versus> $versusEquipe1 */
     #[ORM\OneToMany(mappedBy: 'equipe1', targetEntity: Versus::class)]
     private Collection $versusEquipe1;
 
+    /** @var Collection<int, Versus> $versusEquipe2 */
     #[ORM\OneToMany(mappedBy: 'equipe2', targetEntity: Versus::class)]
     private Collection $versusEquipe2;
 
+    /** @var Collection<int, Competition> $competitions */
     #[ORM\ManyToMany(targetEntity: Competition::class, mappedBy: 'equipes')]
     private Collection $competitions;
 
@@ -52,7 +55,7 @@ class Equipe
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getName(): string
     {
         return $this->name;
     }

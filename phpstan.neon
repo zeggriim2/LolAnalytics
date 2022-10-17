@@ -4,9 +4,12 @@ parameters:
 #            class: App\PHPStan\PropertiesExtension
 #            tags:
 #                - phpstan.properties.readWriteExtension
+    excludePaths:
+        - src/Controller/*
     checkGenericClassInNonGenericObjectType: false
     level: 8
     paths:
         - src
     doctrine:
         objectManagerLoader: build/phpstan/doctrine.php
+        allowNullablePropertyForRequiredField: true

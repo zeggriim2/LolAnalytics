@@ -53,9 +53,15 @@ class ChampionMasteryApi
             ]
         );
 
-        return $championMasterySummonerId ?
-            $this->denormalizerApi->denormalizeArray($championMasterySummonerId, ChampionMasteryDto::class) :
-            null;
+
+        $arrayChampionMasterySummonerId = null;
+        if($championMasterySummonerId) {
+            /** @var array<array-key,ChampionMasteryDto> $arrayChampionMasterySummonerId */
+            $arrayChampionMasterySummonerId =
+                $this->denormalizerApi->denormalizeArray($championMasterySummonerId, ChampionMasteryDto::class);
+        }
+
+        return $arrayChampionMasterySummonerId;
     }
 
     /**

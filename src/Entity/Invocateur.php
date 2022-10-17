@@ -8,6 +8,7 @@ use App\Repository\InvocateurRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\DBAL\Types\Types;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 #[ORM\Entity(repositoryClass: InvocateurRepository::class)]
@@ -15,33 +16,33 @@ class Invocateur
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: TYPES::INTEGER)]
     private int $id;
 
-    #[ORM\Column(type: 'string', length: 255, unique: true)]
+    #[ORM\Column(type: TYPES::STRING, length: 255, unique: true)]
     private string $puuid;
 
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: TYPES::INTEGER)]
     private int $summonerLevel;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: TYPES::STRING, length: 255)]
     private string $name;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: TYPES::STRING, length: 255)]
     private string $idLol;
 
-    #[ORM\Column(type: 'integer', nullable: true)]
-    private int $profileIconId;
+    #[ORM\Column(type: TYPES::INTEGER, nullable: true)]
+    private ?int $profileIconId = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: TYPES::STRING, length: 255)]
     private string $accoundId;
 
     #[Gedmo\Timestampable(on: 'create')]
-    #[ORM\Column(type: 'datetime_immutable')]
+    #[ORM\Column(type: TYPES::DATETIME_IMMUTABLE)]
     private \DateTimeImmutable $createdAt;
 
     #[Gedmo\Timestampable(on: 'update')]
-    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    #[ORM\Column(type: TYPES::DATETIME_IMMUTABLE, nullable: true)]
     private ?\DateTimeImmutable $updatedAt;
 
     /**
@@ -120,7 +121,7 @@ class Invocateur
         return $this->profileIconId;
     }
 
-    public function setProfileIconId(int $profileIconId): self
+    public function setProfileIconId(?int $profileIconId): self
     {
         $this->profileIconId = $profileIconId;
 

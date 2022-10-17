@@ -10,7 +10,7 @@ use Doctrine\Persistence\ObjectManager;
 
 class EquipeFixtures extends Fixture implements FixtureGroupInterface
 {
-
+    /** @var array<array-key, array<string,string|mixed>> $equipes */
     private array $equipes = [
         [
             'name'          => 'G2 Esport',
@@ -84,6 +84,8 @@ class EquipeFixtures extends Fixture implements FixtureGroupInterface
         ]
 
     ];
+
+    /** @var array<array-key, array<string,string>> $competitions */
     private array $competitions = [
         [
             'name'      => 'LEC',
@@ -123,7 +125,7 @@ class EquipeFixtures extends Fixture implements FixtureGroupInterface
         ;
     }
 
-    private function instanceCompetition(string $name, string $annee)
+    private function instanceCompetition(string $name, string $annee): Competition
     {
         return (new Competition())
             ->setName($name)

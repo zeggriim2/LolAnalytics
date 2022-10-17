@@ -27,6 +27,7 @@ class Competition
     #[Gedmo\Timestampable(on: 'create')]
     private ?\DateTimeImmutable $createdAt = null;
 
+    /** @var  Collection<int, Equipe> $equipes */
     #[ORM\ManyToMany(targetEntity: Equipe::class, inversedBy: 'competitions')]
     private Collection $equipes;
 

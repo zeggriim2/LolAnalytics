@@ -37,7 +37,7 @@ class DataDragonApi
     }
 
     /**
-     * @return mixed[]|null
+     * @return array<string, mixed>|null
      */
     public function getChampions(string $version = null, string $lang = 'fr_FR'): ?array
     {

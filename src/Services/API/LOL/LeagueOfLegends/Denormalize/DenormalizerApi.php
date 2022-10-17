@@ -3,6 +3,10 @@
 namespace App\Services\API\LOL\LeagueOfLegends\Denormalize;
 
 use App\Services\API\LOL\LeagueOfLegends\DTO\Champion\ChampionInfoDTO;
+use App\Services\API\LOL\LeagueOfLegends\DTO\ChampionMastery\ChampionMasteryDto;
+use App\Services\API\LOL\LeagueOfLegends\DTO\League\LeagueEntryDTO;
+use App\Services\API\LOL\LeagueOfLegends\LeagueApi;
+use phpDocumentor\Reflection\Types\ArrayKey;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 class DenormalizerApi
@@ -14,10 +18,11 @@ class DenormalizerApi
     }
 
     /**
-     * @param array $datas
-     * @return array
+     * @param array{array-key, array{string, string}} $datas
+     * @return array<array-key,LeagueEntryDTO|ChampionMasteryDto>
      */
-    public function denormalizeArray(array $datas, string $type) {
+    public function denormalizeArray(array $datas, string $type): array
+    {
         $listEntity = [];
         foreach ($datas as $key => $data) {
             $listEntity[] = $this->denormalizer->denormalize($data, $type);
@@ -27,14 +32,15 @@ class DenormalizerApi
     }
 
     /**
-     * @param mixed[] $datas
+     * @param array<array-key, mixed> $datas
      * @param string $type
-     *
+     * @return mixed
      */
     public function denormalize(
         array  $datas,
         string $type
-    ) {
+    )
+    {
         return $this->denormalizer->denormalize($datas, $type);
     }
 }

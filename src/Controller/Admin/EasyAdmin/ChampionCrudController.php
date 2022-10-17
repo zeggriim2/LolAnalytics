@@ -26,10 +26,8 @@ class ChampionCrudController extends AbstractCrudController
             TextField::new('idName'),
             NumberField::new('key'),
             TextField::new('Name'),
-            TextField::new('Name'),
             DateTimeField::new('createdAt'),
             AssociationField::new('version'),
-            AssociationField::new('statChampion'),
         ];
     }
 }

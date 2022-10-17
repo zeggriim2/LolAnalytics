@@ -43,7 +43,7 @@ class RencontreRepository extends ServiceEntityRepository
     /**
      * @throws NonUniqueResultException
      */
-    public function isGameId($gameId)
+    public function isGameId(string $gameId): ?Rencontre
     {
         $gameId = substr($gameId,strpos($gameId,'_') + 1);
         return $this->createQueryBuilder('r')

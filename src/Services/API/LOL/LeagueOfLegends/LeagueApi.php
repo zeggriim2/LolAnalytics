@@ -64,8 +64,13 @@ class LeagueApi
             ]
         );
 
-        return $leagueSummonerId ?
-            $this->denormalizerApi->denormalizeArray($leagueSummonerId, LeagueEntryDTO::class) : null;
+        $leaguesSummunerId = null;
+        if($leagueSummonerId){
+            /** @var array<array-key,LeagueEntryDTO> $leaguesSummunerId */
+            $leaguesSummunerId = $this->denormalizerApi->denormalizeArray($leagueSummonerId, LeagueEntryDTO::class);
+        }
+
+        return $leaguesSummunerId;
     }
 
     /**
@@ -251,7 +256,12 @@ class LeagueApi
             ]
         );
 
-        return $league ?
-            $this->denormalizerApi->denormalizeArray($league, LeagueEntryDTO::class) : null;
+        $leagues = null;
+        if($league){
+            /** @var array<array-key,LeagueEntryDTO> $leagues */
+            $leagues = $this->denormalizerApi->denormalizeArray($league, LeagueEntryDTO::class);
+        }
+
+        return $leagues;
     }
 }
