@@ -58,8 +58,8 @@ class VersionCommand extends Command
         }
 
         $io->success($phrase);
-
         $io->progressFinish();
+
         return Command::SUCCESS;
     }
 }

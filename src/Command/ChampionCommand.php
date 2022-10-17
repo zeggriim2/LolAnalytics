@@ -2,7 +2,9 @@
 
 namespace App\Command;
 
+use App\Command\Traits\ChampionTrait;
 use App\Entity\Champion;
+use App\Entity\Image;
 use App\Entity\InfoChampion;
 use App\Entity\StatChampion;
 use App\Entity\Version;
@@ -22,6 +24,8 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 )]
 class ChampionCommand extends Command
 {
+
+    use ChampionTrait;
 
     private int $count = 0;
     private int $countChampionApi = 0;
@@ -45,6 +49,9 @@ class ChampionCommand extends Command
         ;
     }
 
+    /**
+     * @throws \Exception
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
@@ -52,35 +59,23 @@ class ChampionCommand extends Command
         // Recupération de l'argument version
         $versionInput = $input->getArgument('version');
 
-        if($versionInput){
+        $versionsApi = $this->dataDragonApi->getVersions();
 
-            // On récupère les versions par API
-            /** @var array<array-key,string> $versionsApi */
-            $versionsApi = $this->dataDragonApi->getVersions();
-            // Check si la version existe
+        if($versionInput){
             /** @var int|bool $keyVersionApi */
             $keyVersionApi = $versionsApi ? array_search($versionInput,$versionsApi) : false;
             if($keyVersionApi === false){
                 $io->error("La version $versionInput n'existe pas");
                 return Command::FAILURE;
-            }else{
-                $version = $this->doctrine->getRepository(Version::class)
-                    ->findOneBy(['name' => $versionsApi[$keyVersionApi]]);
-                if($version){
-                    $this->createChampion($version);
-                }
             }
+            $version = $this->doctrine->getRepository(Version::class)
+                ->findOneBy(['name' => $versionsApi[$keyVersionApi]]);
         }else{
-            // On récupère la dernière version
-            /** @var array<array-key,string> $versionApi */
-            $versionApi = $this->dataDragonApi->getVersions();
-            /** @var Version|null $version */
-            $version = $this->doctrine->getRepository(Version::class)->findOneBy(['name' => $versionApi[0]]);
-            if($version){
-                $this->createChampion($version);
-            }
+            $version = $this->doctrine->getRepository(Version::class)
+                ->findOneBy(['name' => $versionsApi[0]]);
         }
 
+        if ($version) $this->createChampion($version);
         $this->doctrine->flush();
 
         $io->success($this->phraseRetour());
@@ -120,8 +115,12 @@ class ChampionCommand extends Command
                 // On crée stat Champion s'il n'existe pas
                 $statChampion = $this->createStatChampion($championApi);
 
+                // On crée l'image Champion s'il n'existe pas
+                $imageChampion = $this->createImageChampion($championApi);
+
                 $champion->setInfoChampion($infoChampion);
                 $champion->setStatChampion($statChampion);
+                $champion->setImage($imageChampion);
 
                 $this->doctrine->persist($champion);
             }
@@ -174,6 +173,26 @@ class ChampionCommand extends Command
         ;
         $this->doctrine->persist($infoChampion);
         return $infoChampion;
+    }
+
+    /**
+     * @param array<string, mixed> $championApi
+     * @return Image
+     */
+    public function createImageChampion(array $championApi): Image
+    {
+
+        $ImageChampion = (new Image())
+            ->setComplete($championApi['image']['full'])
+            ->setGroupe($championApi['image']['sprite'])
+            ->setSprite($championApi['image']['group'])
+            ->setX($championApi['image']['x'])
+            ->setY($championApi['image']['y'])
+            ->setW($championApi['image']['w'])
+            ->setH($championApi['image']['h'])
+        ;
+
+        return $ImageChampion;
     }
 
     private function phraseRetour(): string

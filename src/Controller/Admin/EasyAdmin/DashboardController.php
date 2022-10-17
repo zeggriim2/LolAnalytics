@@ -5,6 +5,7 @@ namespace App\Controller\Admin\EasyAdmin;
 use App\Entity\Champion;
 use App\Entity\Competition;
 use App\Entity\Equipe;
+use App\Entity\Image;
 use App\Entity\InfoChampion;
 use App\Entity\Language;
 use App\Entity\Map;
@@ -51,6 +52,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Champion', 'fas fa-list-ul', Champion::class);
         yield MenuItem::linkToCrud('Info Champion', 'fas fa-list-ul', InfoChampion::class);
         yield MenuItem::linkToCrud('Stat Champion', 'fas fa-list-ul', StatChampion::class);
+        yield MenuItem::linkToCrud('Image Champion', 'fas fa-list-ul', Image::class);
 
         yield MenuItem::section('Competition');
         yield MenuItem::linkToCrud('Equipe', 'fas fa-list-ul', Equipe::class);
