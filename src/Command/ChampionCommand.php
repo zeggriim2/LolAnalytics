@@ -2,15 +2,12 @@
 
 namespace App\Command;
 
-use App\Command\Traits\ChampionTrait;
 use App\Entity\Champion;
-use App\Entity\Image;
 use App\Entity\InfoChampion;
 use App\Entity\StatChampion;
 use App\Entity\Version;
 use App\Services\API\LOL\DataDragon\DataDragonApi;
 use Doctrine\ORM\EntityManagerInterface;
-use phpDocumentor\Reflection\Types\Array_;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -101,6 +98,21 @@ class ChampionCommand extends Command
         return Command::SUCCESS;
     }
 
+    /**
+     * @param array<string, mixed> $championApi
+     * @return InfoChampion
+     */
+    public function createInfoChampion(array $championApi): InfoChampion
+    {
+        $infoChampion = (new InfoChampion())
+            ->setAttack($championApi['info']['attack'])
+            ->setDifficulty($championApi['info']['difficulty'])
+            ->setDefense($championApi['info']['defense'])
+            ->setMagic($championApi['info']['magic'])
+        ;
+        $this->doctrine->persist($infoChampion);
+        return $infoChampion;
+    }
 
     private function phraseRetour(): string
     {

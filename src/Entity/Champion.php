@@ -37,7 +37,7 @@ class   Champion
     #[ORM\ManyToOne(targetEntity: Version::class, inversedBy: 'champions')]
     private ?Version $version;
 
-    #[ORM\ManyToOne(targetEntity: Image::class, cascade: ['persist', 'remove'], inversedBy: 'champions')]
+    #[ORM\ManyToOne(targetEntity: Image::class, inversedBy: 'champions')]
     private ?Image $image;
 
     #[ORM\OneToOne(inversedBy: 'champion', cascade: ['persist', 'remove'])]
