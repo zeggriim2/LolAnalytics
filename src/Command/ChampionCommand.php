@@ -2,6 +2,7 @@
 
 namespace App\Command;
 
+use App\Command\Traits\ChampionTrait;
 use App\Entity\Champion;
 use App\Entity\InfoChampion;
 use App\Entity\StatChampion;

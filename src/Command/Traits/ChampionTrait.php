@@ -11,7 +11,7 @@ use App\Entity\Version;
 trait ChampionTrait
 {
     /**
-     * @param array<mixed> $championApi
+     * @param mixed[] $championApi
      * @param Version $version
      * @return Champion
      */
