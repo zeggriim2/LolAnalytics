@@ -45,6 +45,7 @@ class ChampionCommand extends Command
                 InputArgument::OPTIONAL,
                 'Si on veut préciser un version particulière.'
             )
+            ->addOption(name:'all',shortcut: 'a',description: 'Récupère tous les champions de toute les versions')
         ;
     }
 
@@ -61,11 +62,9 @@ class ChampionCommand extends Command
         /** @var array<array-key, string> $versionsApi */
         $versionsApi = $this->dataDragonApi->getVersions();
 
-        $version = null;
-
         // Verifi & récupere l'entity Version saisie ou non dans les paramètre Command
-        if($versionInput && $version = $this->chechVersionInDatabase($versionInput) ){
-
+        if($versionInput && $version = $this->chechVersionInDatabase($versionInput)){
+            dd($version);
             /** @var string|bool $keyVersionApi */
             $keyVersionApi = $versionsApi ? array_search($versionInput,$versionsApi) : false;
             if(is_bool($keyVersionApi)){
@@ -106,10 +105,10 @@ class ChampionCommand extends Command
     public function createInfoChampion(array $championApi): InfoChampion
     {
         $infoChampion = (new InfoChampion())
-            ->setAttack($championApi['info']['attack'])
-            ->setDifficulty($championApi['info']['difficulty'])
-            ->setDefense($championApi['info']['defense'])
-            ->setMagic($championApi['info']['magic'])
+            ->setAttack($championApi['attack'])
+            ->setDifficulty($championApi['difficulty'])
+            ->setDefense($championApi['defense'])
+            ->setMagic($championApi['magic'])
         ;
         $this->doctrine->persist($infoChampion);
         return $infoChampion;

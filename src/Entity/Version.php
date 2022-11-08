@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\VersionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -13,21 +14,25 @@ class Version
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: Types::INTEGER)]
     private int $id;
 
-    #[ORM\Column(type: 'string', length: 20)]
+    #[ORM\Column(type: Types::STRING, length: 20)]
     private string $name;
 
     #[Gedmo\Timestampable(on: 'create')]
-    #[ORM\Column(name: 'created', type: 'datetime_immutable')]
+    #[ORM\Column(name: 'created', type: Types::DATETIME_IMMUTABLE)]
     private \DateTimeImmutable$createdAt;
+
+    #[ORM\Column(type: Types::BOOLEAN, options: ["default" => 0])]
+    private bool $lastVersion = false;
 
     /**
      * @var Collection<int, Champion>
      */
     #[ORM\OneToMany(mappedBy: 'version', targetEntity: Champion::class, cascade: ['persist'])]
     private Collection $champions;
+
 
     public function __construct()
     {
@@ -64,6 +69,18 @@ class Version
     public function setCreatedAt(\DateTimeImmutable $createdAt): self
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getLastVersion(): ?bool
+    {
+        return $this->lastVersion;
+    }
+
+    public function setLastVersion(bool $lastVersion): self
+    {
+        $this->lastVersion = $lastVersion;
 
         return $this;
     }

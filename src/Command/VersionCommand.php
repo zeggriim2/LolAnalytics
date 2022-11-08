@@ -36,14 +36,21 @@ class VersionCommand extends Command
         $io->progressStart();
 
         $count = 0;
+        $versions = array_reverse($versions);
+        $firstKey = array_key_first($versions);
         if (null !== $versions) {
-            foreach (array_reverse($versions) as $version) {
+            foreach (array_reverse($versions) as $key => $version) {
                 $io->progressAdvance();
                 $versionRepo = $this->doctrine->getRepository(Version::class)->findOneBy(['name' => $version]);
                 if (null === $versionRepo) {
                     $versionsEntity = (new Version())
                         ->setName($version)
                     ;
+
+                    if($firstKey === $key){
+                        $versionsEntity->setLastVersion(true);
+                    }
+
                     $this->doctrine->persist($versionsEntity);
                     ++$count;
                 }

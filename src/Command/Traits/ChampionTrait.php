@@ -32,6 +32,9 @@ trait ChampionTrait
         $image = $this->createImageChampion($championApi['image']);
         $info = $this->createInfoChampion($championApi['info']);
         $stats = $this->createStatChampion($championApi['stats']);
+        $champion->setImage($image);
+        $champion->setInfoChampion($info);
+        $champion->setStatChampion($stats);
 
         $this->doctrine->persist($champion);
 

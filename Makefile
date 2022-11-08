@@ -2,12 +2,11 @@ sy := symfony console
 php := php bin/console
 ENV?=dev
 
-
 #--VARIABLES-----#
 #---DOCKER---#
 DOCKER= docker
 DOCKER_RUN= ${DOCKER} run
-DOCKER_COMPOSE= docker compose
+DOCKER_COMPOSE= docker-compose
 DOCKER_COMPOSE_UP= ${DOCKER_COMPOSE} up -d
 DOCKER_COMPOSE_STOP= ${DOCKER_COMPOSE} stop
 DOCKER_COMPOSE_EXEC= ${DOCKER_COMPOSE} exec
@@ -51,27 +50,12 @@ help: ## Show this help.
 
 ## === ✨ APP ================================================
 analyse: ## Analyse Composer Valid + PHPStan
-	docker-compose exec server php bin/console doctrine:schema:valid --skip-sync
-	php vendor/bin/phpstan analyse -c phpstan.neon --no-progress
+	$(DOCKER_COMPOSE_EXEC) server php bin/console doctrine:schema:valid --skip-sync
+	$(DOCKER_COMPOSE_EXEC) server php bin/console lint:twig
+	$(DOCKER_COMPOSE_EXEC) server php vendor/bin/phpstan analyse -c phpstan.neon --no-progress
 
 cs-fix: ## CS Fixer
 	vendor\bin\php-cs-fixer fix --allow-risky yes -vvv
-
-data-champions:
-	$(DOCKER_COMPOSE_EXEC) server php bin/console app:champions
-.PHONY:data-champions
-
-data-languages:
-	$(DOCKER_COMPOSE_EXEC) server php bin/console app:languages
-.PHONY:data-languages
-
-data-maps:
-	$(DOCKER_COMPOSE_EXEC) server php bin/console app:maps
-.PHONY:data-maps
-
-data-versions:
-	$(DOCKER_COMPOSE_EXEC) server php bin/console app:versions
-.PHONY:data-versions
 
 init-data: ## Initialise les datas de Versions + Maps + Languages
 	make data-versions
@@ -89,10 +73,33 @@ schemaspy: ## Générer un schema de la BDD avec SchemaSpy (dossier output)
 start: ## Lance le container Docker + composer Install + DB Dev + init Data
 	make docker-compose-env-up
 	make composer-install
-	make db-restore
-	make fixture-user
+	#make db-restore
+	#make fixture-user
 .PHONY: start
 
+#---------------------------------------------#
+## === 📦  COMMANDE ================================================
+
+cmd-init-data: ## Initialise les datas (Version / Maps / Languages) en Dev
+	make cmd-maps
+	make cmd-versions
+	make cmd-languages
+
+cmd-champions: ## Commande Champion
+	$(DOCKER_COMPOSE_EXEC) server php bin/console app:champions
+.PHONY: cmd-champions
+
+cmd-versions: ## Commande Version
+	$(DOCKER_COMPOSE_EXEC) server php bin/console app:version
+.PHONY: cmd-versions
+
+cmd-maps: ## Commande Maps
+	$(DOCKER_COMPOSE_EXEC) server php bin/console app:maps
+.PHONY: cmd-maps
+
+cmd-languages: ## Commande Languages
+	$(DOCKER_COMPOSE_EXEC) server php bin/console app:languages
+.PHONY: cmd-languages
 #---------------------------------------------#
 
 ## === 📦  COMPOSER ================================================
@@ -153,6 +160,10 @@ tests:
 #---------------------------------------------#
 
 ## === 🎛️  SYMFONY ===============================================
+sf-cc: ## Clear symfony cache(in Docker).
+	$(DOCKER_COMPOSE_EXEC) server php bin/console c:c
+.PHONY: sf-cc
+
 sf-migrate: ## Génère la migration (in Docker)
 	$(DOCKER_COMPOSE_EXEC) server php bin/console doctrine:migration:migrate --env=$(ENV) -n
 .PHONY: sf-migrate
@@ -204,19 +215,6 @@ install-env:
 #	@make db-restore-dev
 #	@make init-data
 
-#init-data: ## Initialise les datas (Version / Maps / Languages) en Dev
-#	docker-compose exec server php bin/console app:versions
-#	docker-compose exec server php bin/console app:maps
-#	docker-compose exec server php bin/console app:languages
-#
-#init-data-prod: ## Initialise les datas (Version / Maps / Languages) en Prod
-#	docker-compose exec server php bin/console app:versions --env=prod
-#	docker-compose exec server php bin/console app:maps --env=prod
-#	docker-compose exec server php bin/console app:languages --env=prod
-#
-#
-#
-#
 #fixture-equipe: ## Generer les Equipes et Les compétitions
 ##	php bin/console doctrine:fixtures:load --group=equipe --no-interaction
 #	docker-compose exec server php bin/console doctrine:fixtures:load --group=equipe --no-interaction

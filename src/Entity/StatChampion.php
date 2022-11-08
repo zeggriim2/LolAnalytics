@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\StatChampionRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -14,67 +15,67 @@ class StatChampion
     #[ORM\Column]
     private int $id;
 
-    #[ORM\Column(nullable: true, options: ["comment" => "Point de Vie"])]
+    #[ORM\Column(type: Types::INTEGER,nullable: true, options: ["comment" => "Point de Vie"])]
     private ?int $hp = null;
 
-    #[ORM\Column(nullable: true, options: ["comment" => "Point de vie Obtenir par niveau"])]
+    #[ORM\Column(type: Types::INTEGER,nullable: true, options: ["comment" => "Point de vie Obtenir par niveau"])]
     private ?int $hpperlevel = null;
 
-    #[ORM\Column(nullable: true, options: ["comment" => "Mana"])]
-    private ?int $mp = null;
+    #[ORM\Column(type: Types::FLOAT,nullable: true, options: ["comment" => "Mana"])]
+    private ?float $mp = null;
 
-    #[ORM\Column(nullable: true, options: ["comment" => "Mana par Niveau"])]
-    private ?int $mpperlevel = null;
+    #[ORM\Column(type: Types::FLOAT,nullable: true, options: ["comment" => "Mana par Niveau"])]
+    private ?float $mpperlevel = null;
 
-    #[ORM\Column(nullable: true, options: ["comment" => "Vitesse de deplacement"])]
+    #[ORM\Column(type: Types::INTEGER,nullable: true, options: ["comment" => "Vitesse de deplacement"])]
     private ?int $movespeed = null;
 
-    #[ORM\Column(nullable: true, options: ["comment" => "Armor"])]
+    #[ORM\Column(type: Types::INTEGER,nullable: true, options: ["comment" => "Armor"])]
     private ?int $armor = null;
 
-    #[ORM\Column(nullable: true, options: ["comment" => "Armor par niveau"])]
+    #[ORM\Column(type: Types::FLOAT,nullable: true, options: ["comment" => "Armor par niveau"])]
     private ?float $armorperlevel = null;
 
-    #[ORM\Column(nullable: true)]
+    #[ORM\Column(type: Types::INTEGER,nullable: true)]
     private ?int $spellblock = null;
 
-    #[ORM\Column(nullable: true)]
+    #[ORM\Column(type: Types::FLOAT, nullable: true)]
     private ?float $spellblockperlevel = null;
 
-    #[ORM\Column(nullable: true, options: ["comment" => "Distance d'attaque"])]
+    #[ORM\Column(type: Types::INTEGER, nullable: true, options: ["comment" => "Distance d'attaque"])]
     private ?int $attackrange = null;
 
-    #[ORM\Column(nullable: true, options: ["comment" => "Regen Point de vie"])]
+    #[ORM\Column(type: Types::FLOAT, nullable: true, options: ["comment" => "Regen Point de vie"])]
     private ?float $hpregen = null;
 
-    #[ORM\Column(nullable: true, options: ["comment" => "Regen Point de vie par niveau"])]
+    #[ORM\Column(type: Types::FLOAT, nullable: true, options: ["comment" => "Regen Point de vie par niveau"])]
     private ?float $hpregenperlevel = null;
 
-    #[ORM\Column(nullable: true, options: ["comment" => "Regen Mana"])]
-    private ?int $mpregen = null;
+    #[ORM\Column(type: Types::FLOAT, nullable: true, options: ["comment" => "Regen Mana"])]
+    private ?float $mpregen = null;
 
-    #[ORM\Column(nullable: true, options: ["comment" => "Regen Mana par niveau"])]
+    #[ORM\Column(type: Types::FLOAT,nullable: true, options: ["comment" => "Regen Mana par niveau"])]
     private ?float $mpregenperlevel = null;
 
-    #[ORM\Column(nullable: true, options: ["comment" => "Critique"])]
+    #[ORM\Column(type: Types::INTEGER,nullable: true, options: ["comment" => "Critique"])]
     private ?int $crit = null;
 
-    #[ORM\Column(nullable: true, options: ["comment" => "Critique par niveau"])]
+    #[ORM\Column(type: Types::INTEGER,nullable: true, options: ["comment" => "Critique par niveau"])]
     private ?int $critperlevel = null;
 
-    #[ORM\Column(nullable: true, options: ["comment" => "Dommage d'attaque"])]
+    #[ORM\Column(type: Types::INTEGER,nullable: true, options: ["comment" => "Dommage d'attaque"])]
     private ?int $attackdamage = null;
 
-    #[ORM\Column(nullable: true, options: ["comment" => "Dommage d'attaque par niveau"])]
-    private ?int $attackdamageperlevel = null;
+    #[ORM\Column(type: Types::FLOAT,nullable: true, options: ["comment" => "Dommage d'attaque par niveau"])]
+    private ?float $attackdamageperlevel = null;
 
-    #[ORM\Column(nullable: true, options: ["comment" => "Vitesse d'attaque par niveau"])]
+    #[ORM\Column(type: Types::FLOAT,nullable: true, options: ["comment" => "Vitesse d'attaque par niveau"])]
     private ?float $attackspeedperlevel = null;
 
-    #[ORM\Column(nullable: true, options: ["comment" => "Vitesse d'attaque"])]
+    #[ORM\Column(type: Types::FLOAT,nullable: true, options: ["comment" => "Vitesse d'attaque"])]
     private ?float $attackspeed = null;
 
-    #[ORM\Column]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     #[Gedmo\Timestampable(on: 'create')]
     private \DateTimeImmutable $createdAt;
 
@@ -115,24 +116,24 @@ class StatChampion
         return $this;
     }
 
-    public function getMp(): ?int
+    public function getMp(): ?float
     {
         return $this->mp;
     }
 
-    public function setMp(?int $mp): self
+    public function setMp(?float $mp): self
     {
         $this->mp = $mp;
 
         return $this;
     }
 
-    public function getMpperlevel(): ?int
+    public function getMpperlevel(): ?float
     {
         return $this->mpperlevel;
     }
 
-    public function setMpperlevel(?int $mpperlevel): self
+    public function setMpperlevel(?float $mpperlevel): self
     {
         $this->mpperlevel = $mpperlevel;
 
@@ -235,12 +236,12 @@ class StatChampion
         return $this;
     }
 
-    public function getMpregen(): ?int
+    public function getMpregen(): ?float
     {
         return $this->mpregen;
     }
 
-    public function setMpregen(?int $mpregen): self
+    public function setMpregen(?float $mpregen): self
     {
         $this->mpregen = $mpregen;
 
@@ -295,12 +296,12 @@ class StatChampion
         return $this;
     }
 
-    public function getAttackdamageperlevel(): ?int
+    public function getAttackdamageperlevel(): ?float
     {
         return $this->attackdamageperlevel;
     }
 
-    public function setAttackdamageperlevel(?int $attackdamageperlevel): self
+    public function setAttackdamageperlevel(?float $attackdamageperlevel): self
     {
         $this->attackdamageperlevel = $attackdamageperlevel;
 

@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\ChampionRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -12,32 +13,32 @@ class   Champion
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: Types::INTEGER)]
     private int $id;
 
-    #[ORM\Column(type: 'string', length: 100)]
+    #[ORM\Column(type: Types::STRING, length: 100)]
     private string $idName;
 
-    #[ORM\Column(type: 'string', length: 5)]
+    #[ORM\Column(type: Types::STRING, length: 5)]
     private string $key;
 
-    #[ORM\Column(type: 'string', length: 100)]
+    #[ORM\Column(type: Types::STRING, length: 100)]
     private string$name;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: Types::STRING, length: 255)]
     private string $title;
 
     #[Gedmo\Timestampable(on: 'create')]
-    #[ORM\Column(type: 'datetime_immutable')]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     private \DateTimeImmutable $createdAt;
 
-    #[ORM\Column(type: 'string', length: 50, nullable: true, options: ['default' => null])]
+    #[ORM\Column(type: Types::STRING, length: 50, nullable: true, options: ['default' => null])]
     private ?string $partype;
 
     #[ORM\ManyToOne(targetEntity: Version::class, inversedBy: 'champions')]
     private ?Version $version;
 
-    #[ORM\ManyToOne(targetEntity: Image::class, inversedBy: 'champions')]
+    #[ORM\ManyToOne(targetEntity: Image::class, cascade: ['persist', 'remove'], inversedBy: 'champions')]
     private ?Image $image;
 
     #[ORM\OneToOne(inversedBy: 'champion', cascade: ['persist', 'remove'])]

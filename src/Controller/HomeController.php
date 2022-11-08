@@ -11,9 +11,9 @@ final class HomeController extends AbstractController
     /**
      * @return RedirectResponse
      */
-    #[Route('/home', name: 'app_home')]
+    #[Route('/', name: 'app_home')]
     public function index(): RedirectResponse
     {
-        return $this->redirectToRoute('admin');
+        return $this->redirectToRoute('champion_all');
     }
 }
