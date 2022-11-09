@@ -36,7 +36,12 @@ class VersionCommand extends Command
         $io->progressStart();
 
         $count = 0;
-        $versions = array_reverse($versions);
+        if($versions){
+            $versions = array_reverse($versions);
+        }else{
+            return Command::FAILURE;
+        }
+
         $firstKey = array_key_first($versions);
         if (null !== $versions) {
             foreach (array_reverse($versions) as $key => $version) {

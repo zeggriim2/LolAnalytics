@@ -5,7 +5,6 @@ namespace App\Command;
 use App\Command\Traits\ChampionTrait;
 use App\Entity\Champion;
 use App\Entity\InfoChampion;
-use App\Entity\StatChampion;
 use App\Entity\Version;
 use App\Services\API\LOL\DataDragon\DataDragonApi;
 use Doctrine\ORM\EntityManagerInterface;
@@ -13,7 +12,6 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -62,9 +60,10 @@ class ChampionCommand extends Command
         /** @var array<array-key, string> $versionsApi */
         $versionsApi = $this->dataDragonApi->getVersions();
 
+        $version = null;
+
         // Verifi & récupere l'entity Version saisie ou non dans les paramètre Command
         if($versionInput && $version = $this->chechVersionInDatabase($versionInput)){
-            dd($version);
             /** @var string|bool $keyVersionApi */
             $keyVersionApi = $versionsApi ? array_search($versionInput,$versionsApi) : false;
             if(is_bool($keyVersionApi)){
