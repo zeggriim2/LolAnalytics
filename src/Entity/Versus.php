@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\VersusRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -11,10 +12,10 @@ class Versus
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(type: Types::INTEGER)]
     private ?int $id = null;
 
-    #[ORM\Column]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     private ?\DateTimeImmutable $dateVersus = null;
 
     #[ORM\ManyToOne(inversedBy: 'versusEquipe1')]
@@ -23,13 +24,13 @@ class Versus
     #[ORM\ManyToOne(inversedBy: 'versusEquipe2')]
     private ?Equipe $equipe2 = null;
 
-    #[ORM\Column]
+    #[ORM\Column(type: Types::INTEGER)]
     private int $ScoreEquipe1 = 0;
 
-    #[ORM\Column]
+    #[ORM\Column(type: Types::INTEGER)]
     private int $ScoreEquipe2 = 0;
 
-    #[ORM\Column]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     #[Gedmo\Timestampable(on: 'create')]
     private ?\DateTimeImmutable $createdAt = null;
 

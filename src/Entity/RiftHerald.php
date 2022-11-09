@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\RiftHeraldRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: RiftHeraldRepository::class)]
@@ -10,13 +11,13 @@ class RiftHerald
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: Types::INTEGER)]
     private int $id;
 
-    #[ORM\Column(type: 'boolean')]
+    #[ORM\Column(type: Types::INTEGER)]
     private bool $first;
 
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: Types::INTEGER)]
     private int $kills;
 
     #[ORM\OneToOne(mappedBy: 'riftHerald', targetEntity: Team::class, cascade: ['persist', 'remove'])]

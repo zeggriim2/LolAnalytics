@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\BaronRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: BaronRepository::class)]
@@ -10,13 +11,13 @@ class Baron
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: Types::INTEGER)]
     private int $id;
 
-    #[ORM\Column(type: 'boolean')]
+    #[ORM\Column(type: Types::BOOLEAN)]
     private bool $first;
 
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: Types::INTEGER)]
     private int $kills;
 
     #[ORM\OneToOne(mappedBy: 'baron', targetEntity: Team::class, cascade: ['persist', 'remove'])]

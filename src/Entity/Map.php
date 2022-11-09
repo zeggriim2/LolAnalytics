@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\MapRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -13,20 +14,20 @@ class Map
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: Types::INTEGER)]
     private int $id;
 
-    #[ORM\Column(type: 'integer', unique: true)]
+    #[ORM\Column(type: Types::INTEGER, unique: true)]
     private int $mapIdLol;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: Types::STRING, length: 255)]
     private string $name;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: Types::STRING, length: 255)]
     private string $notes;
 
     #[Gedmo\Timestampable(on: 'create')]
-    #[ORM\Column(name: 'created', type: 'datetime_immutable')]
+    #[ORM\Column(name: 'created', type: Types::DATETIME_IMMUTABLE)]
     private \DateTimeImmutable$createdAt;
 
     /**

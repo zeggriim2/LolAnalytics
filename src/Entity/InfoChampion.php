@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\InfoChampionRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -11,22 +12,22 @@ class InfoChampion
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(type: Types::INTEGER)]
     private int $id;
 
-    #[ORM\Column]
+    #[ORM\Column(type: Types::INTEGER)]
     private int $attack;
 
-    #[ORM\Column]
+    #[ORM\Column(type: Types::INTEGER)]
     private int $defense;
 
-    #[ORM\Column]
+    #[ORM\Column(type: Types::INTEGER)]
     private int $magic;
 
-    #[ORM\Column]
+    #[ORM\Column(type: Types::INTEGER)]
     private int $difficulty;
 
-    #[ORM\Column]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     #[Gedmo\Timestampable(on: 'create')]
     private \DateTimeImmutable $createdAt;
 

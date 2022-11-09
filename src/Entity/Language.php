@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\LanguageRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -11,17 +12,17 @@ class Language
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer', options: ["comment" => "ID interne"])]
+    #[ORM\Column(type: Types::INTEGER, options: ["comment" => "ID interne"])]
     private int $id;
 
-    #[ORM\Column(type: 'string', length: 20, options: ["comment" => "Code langue"])]
+    #[ORM\Column(type: Types::STRING, length: 20, options: ["comment" => "Code langue"])]
     private string $code;
 
-    #[ORM\Column(type: 'string', length: 150, nullable: true, options: ["comment" => "Langue complète"])]
+    #[ORM\Column(type: Types::STRING, length: 150, nullable: true, options: ["comment" => "Langue complète"])]
     private ?string $language;
 
     #[Gedmo\Timestampable(on: 'create')]
-    #[ORM\Column(type: 'datetime_immutable')]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     private \DateTimeImmutable $createdAt;
 
     public function getId(): ?int
