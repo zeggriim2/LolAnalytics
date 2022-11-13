@@ -1,11 +1,9 @@
 version: '3.9'
 
-networks:
-  symfony_project_2021_net:
-
 services:
   database:
     image: postgres:13-alpine
+    container_name: 'database'
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-app}
       POSTGRES_USER: ${POSTGRES_USER:-root}
@@ -16,8 +14,6 @@ services:
       - db-data:/var/lib/postgresql/data:rw
       # You may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
       # - ./docker/db/data:/var/lib/postgresql/data:rw
-    networks:
-      - symfony_project_2021_net
 
   server:
     build:
@@ -36,11 +32,42 @@ services:
       - ./:/var/www/html
       - ./docker/server/apache/sites-enabled:/etc/apache2/sites-enabled
       - ./docker/server/php/php.ini:/usr/local/etc/php/conf.d/extra-php-config.ini
-    networks:
-      - symfony_project_2021_net
+
+  rabbitmq:
+    image: rabbitmq:3.11-management
+    container_name: 'rabbitmq'
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+      - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+
+  netdata:
+    image: netdata/netdata
+    container_name: netdata
+    hostname: lolanalytics-dev.fr/ # set to fqdn of host
+    ports:
+      - 19999:19999
+    restart: unless-stopped
+    cap_add:
+      - SYS_PTRACE
+    security_opt:
+      - apparmor:unconfined
+    volumes:
+      - netdataconfig:/etc/netdata
+      - netdatalib:/var/lib/netdata
+      - netdatacache:/var/cache/netdata
+      - /etc/passwd:/host/etc/passwd:ro
+      - /etc/group:/host/etc/group:ro
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /etc/os-release:/host/etc/os-release:ro
 
 volumes:
   db_admin_data:
 ###> doctrine/doctrine-bundle ###
   db-data:
-###< doctrine/doctrine-bundle ###
+  netdataconfig:
+  netdatalib:
+  netdatacache:
