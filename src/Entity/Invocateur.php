@@ -7,8 +7,8 @@ namespace App\Entity;
 use App\Repository\InvocateurRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping as ORM;
 use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 #[ORM\Entity(repositoryClass: InvocateurRepository::class)]
@@ -45,15 +45,9 @@ class Invocateur
     #[ORM\Column(type: TYPES::DATETIME_IMMUTABLE, nullable: true)]
     private ?\DateTimeImmutable $updatedAt;
 
-    /**
-     * @var Collection<int, Rencontre>
-     */
     #[ORM\ManyToMany(targetEntity: Rencontre::class, mappedBy: 'invocateurs')]
     private Collection $rencontres;
 
-    /**
-     * @var Collection<int, HistoriqueLeague>
-     */
     #[ORM\OneToMany(mappedBy: 'invocateur', targetEntity: HistoriqueLeague::class)]
     private Collection $historiqueLeagues;
 
@@ -168,9 +162,6 @@ class Invocateur
         return $this;
     }
 
-    /**
-     * @return Collection<int, Rencontre>
-     */
     public function getRencontres(): Collection
     {
         return $this->rencontres;
@@ -195,9 +186,6 @@ class Invocateur
         return $this;
     }
 
-    /**
-     * @return Collection<int, HistoriqueLeague>
-     */
     public function getHistoriqueLeagues(): Collection
     {
         return $this->historiqueLeagues;
@@ -225,9 +213,6 @@ class Invocateur
         return $this;
     }
 
-    /**
-     * @return Collection<int, League>
-     */
     public function getLeagues(): Collection
     {
         return $this->leagues;

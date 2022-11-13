@@ -1,6 +1,8 @@
 sy := symfony console
 php := php bin/console
 ENV?=dev
+DIVISION?=IV
+TIER=IRON
 
 #--VARIABLES-----#
 #---DOCKER---#
@@ -51,7 +53,7 @@ help: ## Show this help.
 ## === ✨ APP ================================================
 analyse: ## Analyse Composer Valid + PHPStan
 	$(DOCKER_COMPOSE_EXEC) server php bin/console doctrine:schema:valid --skip-sync
-	$(DOCKER_COMPOSE_EXEC) server php bin/console lint:twig
+	$(DOCKER_COMPOSE_EXEC) server php bin/console lint:twig templates/
 	$(DOCKER_COMPOSE_EXEC) server php vendor/bin/phpstan analyse -c phpstan.neon --no-progress
 
 cs-fix: ## CS Fixer
@@ -89,17 +91,21 @@ cmd-champions: ## Commande Champion
 	$(DOCKER_COMPOSE_EXEC) server php bin/console app:champions
 .PHONY: cmd-champions
 
-cmd-versions: ## Commande Version
-	$(DOCKER_COMPOSE_EXEC) server php bin/console app:version
-.PHONY: cmd-versions
+cmd-languages: ## Commande Languages
+	$(DOCKER_COMPOSE_EXEC) server php bin/console app:languages
+.PHONY: cmd-languages
 
 cmd-maps: ## Commande Maps
 	$(DOCKER_COMPOSE_EXEC) server php bin/console app:maps
 .PHONY: cmd-maps
 
-cmd-languages: ## Commande Languages
-	$(DOCKER_COMPOSE_EXEC) server php bin/console app:languages
-.PHONY: cmd-languages
+cmd-versions: ## Commande Version
+	$(DOCKER_COMPOSE_EXEC) server php bin/console app:version
+.PHONY: cmd-versions
+
+cmd-league: ## Commande League
+	$(DOCKER_COMPOSE_EXEC) server php bin/console app:league $(DIVISION) $(TIER)
+.PHONY: cmd-versions
 #---------------------------------------------#
 
 ## === 📦  COMPOSER ================================================
@@ -164,6 +170,10 @@ sf-cc: ## Clear symfony cache(in Docker).
 	$(DOCKER_COMPOSE_EXEC) server php bin/console c:c
 .PHONY: sf-cc
 
+sf-dmd: ## Migration Diff (in Docker)
+	$(DOCKER_COMPOSE_EXEC) server php bin/console doctrine:migrations:diff
+.PHONY: sf-dmd
+
 sf-migrate: ## Génère la migration (in Docker)
 	$(DOCKER_COMPOSE_EXEC) server php bin/console doctrine:migration:migrate --env=$(ENV) -n
 .PHONY: sf-migrate
@@ -171,6 +181,12 @@ sf-migrate: ## Génère la migration (in Docker)
 sf-mm: ## Make migration (in Docker)
 	$(DOCKER_COMPOSE_EXEC) server php bin/console make:migration
 .PHONY: sf-mm
+
+sf-mc: ## Messenger Consume async(in Docker)
+	$(DOCKER_COMPOSE_EXEC) server php bin/console messenger:consume async -vv
+.PHONY: sf-mm
+
+
 #---------------------------------------------#
 
 ## === 📦  YARN ===================================================
@@ -207,13 +223,6 @@ install-env:
 	sed -i -e 's/ENV/$(env)/' .env.$(env).local
 	make prepare env=$(env)
 
-
-
-#start: ## Lance le container Docker + composer Install + DB Dev + init Data
-#	@make docker-start
-#	@make composer-install-dev
-#	@make db-restore-dev
-#	@make init-data
 
 #fixture-equipe: ## Generer les Equipes et Les compétitions
 ##	php bin/console doctrine:fixtures:load --group=equipe --no-interaction

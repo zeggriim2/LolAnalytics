@@ -4,9 +4,6 @@ namespace App\Command;
 
 use App\Entity\Invocateur;
 use App\Entity\League;
-use App\Manager\SummonerManager;
-use App\Repository\InvocateurRepository;
-use App\Repository\LeagueRepository;
 use App\Services\API\LOL\DataDragon\Division;
 use App\Services\API\LOL\DataDragon\Tier;
 use App\Services\API\LOL\LeagueOfLegends\DTO\League\LeagueEntryDTO;
@@ -17,7 +14,6 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -27,8 +23,11 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 )]
 class LeagueCommand extends Command
 {
+
+    private int $countLeague = 0;
+    private int $countInvocateur = 0;
+
     public function __construct(
-        private InvocateurRepository $invocateurRepository,
         private SummonerApi $summonerApi,
         private EntityManagerInterface $doctrine,
         private LeagueApi $leagueApi,
@@ -54,29 +53,44 @@ class LeagueCommand extends Command
         $tier = $input->getArgument('tier');
         $queue = $input->getArgument('queue');
 
-
         if(!in_array($division, Division::ALL_DIVISION) || !in_array($tier, Tier::ALL_TIERS)) {
             $io->error("Division ou Tier incorrect");
             return Command::INVALID;
         }
+
         $leagues = $this->leagueApi->leagueByQueueByTierByDivision($queue, $tier, $division);
 
+        if ($leagues === null) {
+            $io->error("Aucune league trouvé ($division, $tier)");
+            return Command::INVALID;
+        }
+
+        $progress = $io->createProgressBar(count($leagues));
+
         foreach ($leagues as $league) {
-            // On vérifie si la league à déjà été intégré
+            $progress->advance();
             if(
-                $this->doctrine->getRepository(LeagueRepository::class)
-                    ->findOneBy(['leagueId' => $league->getLeagueId()]) === null
-            ){
-                $invocateur = $this->invocateurRepository->findOneBy(['idLol' => $league->getSummonerId()]);
+                $this->doctrine
+                    ->getRepository(League::class)->findOneBy(['leagueId' => $league->getLeagueId()]) === null) {
+                $invocateur =
+                    $this->doctrine->getRepository(Invocateur::class)->findOneBy(['idLol'=> $league->getSummonerId()]);
                 if($invocateur === null) {
                     $invocateur = $this->invocateur($league->getSummonerName());
                 }
-
                 if($invocateur) {
                     $this->league($invocateur, $league);
                 }
             }
         }
+
+        $progress->finish();
+
+
+        $phraseInvocateur = $this->phraseOutput($this->countInvocateur, 'Invocateur');
+        $io->success($phraseInvocateur);
+
+        $phraseLeague =$this->phraseOutput($this->countLeague, 'League');
+        $io->success($phraseLeague);
 
         $this->doctrine->flush();
 
@@ -88,6 +102,7 @@ class LeagueCommand extends Command
         LeagueEntryDTO $leagueEntryDto
     )
     {
+        $this->countLeague++;
         $league = (new League())
             ->setLeagueId($leagueEntryDto->getLeagueId())
             ->setLeaguePoints($leagueEntryDto->getLeaguePoints())
@@ -103,10 +118,11 @@ class LeagueCommand extends Command
         $this->doctrine->persist($league);
     }
 
-    private function invocateur(string $nameInvocateur): ?Invocateur
+    private function invocateur(string $nameSummoner): ?Invocateur
     {
-        $summonerApi = $this->summonerApi->summonerBySummonerName($nameInvocateur);
+        $summonerApi = $this->summonerApi->summonerBySummonerName($nameSummoner);
         if($summonerApi) {
+            $this->countInvocateur++;
             $invocateur = (new Invocateur())
                 ->setName($summonerApi->getName())
                 ->setIdLol($summonerApi->getId())
@@ -120,5 +136,16 @@ class LeagueCommand extends Command
             return $invocateur;
         }
         return null;
+    }
+
+    private function phraseOutput(int $count,string $libelle): string
+    {
+        if (0 === $count) {
+            $phrase = "Aucun élément de $libelle n'a été ajouté.";
+        } else {
+            $phrase = "$count $libelle ont été ajouté en bdd.";
+        }
+
+        return $phrase;
     }
 }
