@@ -105,7 +105,11 @@ cmd-versions: ## Commande Version
 
 cmd-league: ## Commande League
 	$(DOCKER_COMPOSE_EXEC) server php bin/console app:league $(DIVISION) $(TIER)
-.PHONY: cmd-versions
+.PHONY: cmd-league
+
+cmd-match: ## Commande League
+	$(DOCKER_COMPOSE_EXEC) server php bin/console app:matchs
+.PHONY: cmd-match
 #---------------------------------------------#
 
 ## === 📦  COMPOSER ================================================
@@ -142,6 +146,7 @@ db-restore: ## Supprime, re-crée et joue les migrations de la Base de donnée e
 	make db-remove
 	make db-create
 	make sf-migrate
+	make cmd-init-data
 .PHONY: db-restore
 #---------------------------------------------#
 
