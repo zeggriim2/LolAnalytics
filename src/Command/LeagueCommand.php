@@ -65,13 +65,16 @@ class LeagueCommand extends Command
             return Command::INVALID;
         }
 
-        $progress = $io->createProgressBar(count($leagues));
+        $leagues = array_slice($leagues,0, 10);
+
+        $io->progressStart(count($leagues));
 
         foreach ($leagues as $league) {
-            $progress->advance();
+            $io->progressAdvance();
             if(
                 $this->doctrine
-                    ->getRepository(League::class)->findOneBy(['leagueId' => $league->getLeagueId()]) === null) {
+                    ->getRepository(League::class)->findOneBy(['leagueId' => $league->getLeagueId()]) === null
+            ) {
                 $invocateur =
                     $this->doctrine->getRepository(Invocateur::class)->findOneBy(['idLol'=> $league->getSummonerId()]);
                 if($invocateur === null) {
@@ -83,7 +86,7 @@ class LeagueCommand extends Command
             }
         }
 
-        $progress->finish();
+        $io->progressFinish();
 
 
         $phraseInvocateur = $this->phraseOutput($this->countInvocateur, 'Invocateur');

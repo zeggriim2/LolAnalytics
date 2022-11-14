@@ -39,7 +39,7 @@ class MatchApi
     /**
      * @throws ForbiddenException
      *
-     * @return mixed[]|null
+     * @return array<array-key, string>|null
      */
     public function getMatchByPuuid(
         string $puuid,

@@ -51,8 +51,10 @@ class BaseApi
      */
     public function callApi(string $url, string $method = 'GET', array $options = [], string $return = 'array')
     {
+        $options = array_merge($options, ["timeout" =>  INF]);
         $response = $this->client->request($method, $url, $options);
         $statusCode = $response->getStatusCode();
+        dump($statusCode);
         switch ($statusCode) {
             case Response::HTTP_OK:
                 if ('array' === $return) {
@@ -74,8 +76,10 @@ class BaseApi
      */
     public function callApiArray(string $url, string $method = 'GET', array $options = [])
     {
+        $options = array_merge($options, ["timeout" =>  INF]);
         $response = $this->client->request($method, $url, $options);
         $statusCode = $response->getStatusCode();
+        dump($statusCode);
         if (Response::HTTP_OK === $statusCode) {
             return $response->toArray();
         }
@@ -90,8 +94,10 @@ class BaseApi
      */
     public function callApiString(string $url, string $method = 'GET', array $options = [])
     {
+        $options = array_merge($options, ["timeout" =>  INF]);
         $response = $this->client->request($method, $url, $options);
         $statusCode = $response->getStatusCode();
+        dump($statusCode);
         if (Response::HTTP_OK === $statusCode) {
             return $response->getContent();
         }

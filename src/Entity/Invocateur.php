@@ -10,8 +10,10 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: InvocateurRepository::class)]
+#[UniqueEntity(fields: "puuid", message: 'puuid is already exist')]
 class Invocateur
 {
     #[ORM\Id]

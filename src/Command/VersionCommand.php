@@ -33,7 +33,7 @@ class VersionCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
         $versions = $this->dataDragonApi->getVersions();
-        $io->progressStart();
+
 
         $count = 0;
         if($versions){
@@ -44,6 +44,7 @@ class VersionCommand extends Command
 
         $firstKey = array_key_first($versions);
         if (null !== $versions) {
+            $io->progressStart(count($versions));
             foreach (array_reverse($versions) as $key => $version) {
                 $io->progressAdvance();
                 $versionRepo = $this->doctrine->getRepository(Version::class)->findOneBy(['name' => $version]);

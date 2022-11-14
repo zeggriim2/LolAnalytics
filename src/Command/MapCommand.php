@@ -33,10 +33,11 @@ class MapCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
         $maps = $this->generalApi->getMaps();
-        $io->progressStart();
+
 
         $countMaps = 0;
         if (null !== $maps) {
+            $io->progressStart(count($maps));
             foreach ($maps as $map) {
                 $io->progressAdvance();
                 $mapRepo = $this->doctrine->getRepository(Map::class)->findOneBy(['mapIdLol' => $map['mapId']]);

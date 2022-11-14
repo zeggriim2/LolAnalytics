@@ -8,8 +8,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: RencontreRepository::class)]
+#[UniqueEntity(fields: "gameId", message: 'gameId is already exist')]
 class Rencontre
 {
     #[ORM\Id]
@@ -17,14 +19,20 @@ class Rencontre
     #[ORM\Column(type: Types::INTEGER)]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::BIGINT)]
+    #[ORM\Column(type: Types::BIGINT, unique: true)]
     private string|int $gameId;
 
-    #[ORM\Column(type: Types::INTEGER)]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     private DateTimeImmutable $gameCreation;
 
-    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
-    private DateTimeImmutable $gameDuration;
+    #[ORM\Column(type: Types::INTEGER)]
+    private int $gameDuration;
+
+    #[ORM\Column(type: Types::STRING, nullable: true)]
+    private ?string $gameMode = null;
+
+    #[ORM\Column(type: Types::STRING, nullable: true)]
+    private ?string $gameVersion = null;
 
     /**
      * @var Collection<int, Team>
@@ -35,7 +43,7 @@ class Rencontre
     /**
      * @var Collection<int, Invocateur>
      */
-    #[ORM\ManyToMany(targetEntity: Invocateur::class, inversedBy: 'rencontres')]
+    #[ORM\ManyToMany(targetEntity: Invocateur::class, inversedBy: 'rencontres', )]
     private Collection$invocateurs;
 
     #[ORM\ManyToOne(targetEntity: Map::class, inversedBy: 'rencontres')]
@@ -72,31 +80,45 @@ class Rencontre
         return $this->gameCreation;
     }
 
-    public function setGameCreation(DateTimeImmutable|int $gameCreation): self
+    public function setGameCreation(DateTimeImmutable $gameCreation): self
     {
-        if ($gameCreation instanceof DateTimeImmutable) {
-            $this->gameCreation = $gameCreation;
-        } elseif (\is_int($gameCreation)) {
-            $gameCreation = $gameCreation / 1000;
-            $this->gameCreation = new DateTimeImmutable("@{$gameCreation}");
-        }
+        $this->gameCreation = $gameCreation;
 
         return $this;
     }
 
-    public function getGameDuration(): ?\DateTimeInterface
+    public function getGameDuration(): ?int
     {
         return $this->gameDuration;
     }
 
-    public function setGameDuration(DateTimeImmutable|int $gameDuration): self
+    public function setGameDuration(int $gameDuration): self
     {
-        if ($gameDuration instanceof DateTimeImmutable) {
-            $this->gameDuration = $gameDuration;
-        } elseif (\is_int($gameDuration)) {
-            $gameDuration = $gameDuration / 1000;
-            $this->gameDuration = new DateTimeImmutable("@{$gameDuration}");
-        }
+        $this->gameDuration = $gameDuration;
+
+        return $this;
+    }
+
+    public function getGameMode(): ?string
+    {
+        return $this->gameMode;
+    }
+
+    public function setGameMode(?string $gameMode): self
+    {
+        $this->gameMode = $gameMode;
+
+        return $this;
+    }
+
+    public function getGameVersion(): ?string
+    {
+        return $this->gameVersion;
+    }
+
+    public function setGameVersion(?string $gameVersion): self
+    {
+        $this->gameVersion = $gameVersion;
 
         return $this;
     }
