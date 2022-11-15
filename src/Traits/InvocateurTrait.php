@@ -19,7 +19,7 @@ trait InvocateurTrait
      * @param SummonerDTO $summonerDTO
      * @return Invocateur
      */
-    public function create(SummonerDTO $summonerDTO): Invocateur
+    public function invocateurCreate(SummonerDTO $summonerDTO): Invocateur
     {
         $invocateur = (new Invocateur())
             ->setName($summonerDTO->getName())

@@ -14,6 +14,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: InvocateurRepository::class)]
 #[UniqueEntity(fields: "puuid", message: 'puuid is already exist')]
+#[UniqueEntity(fields: "idLol", message: 'idLol is already exist')]
 class Invocateur
 {
     #[ORM\Id]
@@ -21,22 +22,22 @@ class Invocateur
     #[ORM\Column(type: TYPES::INTEGER)]
     private int $id;
 
-    #[ORM\Column(type: TYPES::STRING, length: 255, unique: true)]
+    #[ORM\Column(type: TYPES::STRING, length: 255, unique: true, nullable: true)]
     private string $puuid;
 
-    #[ORM\Column(type: TYPES::INTEGER)]
+    #[ORM\Column(type: TYPES::INTEGER, nullable: true)]
     private int $summonerLevel;
 
-    #[ORM\Column(type: TYPES::STRING, length: 255)]
+    #[ORM\Column(type: TYPES::STRING, length: 255, nullable: true)]
     private string $name;
 
-    #[ORM\Column(type: TYPES::STRING, length: 255)]
+    #[ORM\Column(type: TYPES::STRING, length: 255, unique: true)]
     private string $idLol;
 
     #[ORM\Column(type: TYPES::INTEGER, nullable: true)]
     private ?int $profileIconId = null;
 
-    #[ORM\Column(type: TYPES::STRING, length: 255)]
+    #[ORM\Column(type: TYPES::STRING, length: 255, nullable: true)]
     private string $accoundId;
 
     #[Gedmo\Timestampable(on: 'create')]

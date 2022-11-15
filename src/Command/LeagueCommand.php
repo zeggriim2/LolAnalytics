@@ -2,6 +2,8 @@
 
 namespace App\Command;
 
+use App\Command\Traits\InvocateurTrait;
+use App\Command\Traits\LeagueTrait;
 use App\Entity\Invocateur;
 use App\Entity\League;
 use App\Services\API\LOL\DataDragon\Division;
@@ -23,6 +25,8 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 )]
 class LeagueCommand extends Command
 {
+    use InvocateurTrait;
+    use LeagueTrait;
 
     private int $countLeague = 0;
     private int $countInvocateur = 0;
@@ -82,9 +86,14 @@ class LeagueCommand extends Command
                 $invocateur =
                     $this->doctrine->getRepository(Invocateur::class)->findOneBy(['idLol'=> $league->getSummonerId()]);
                 if($invocateur === null) {
-                    $invocateur = $this->invocateur($league->getSummonerName());
+                    $summonerApi = $this->summonerApi->summonerBySummonerId($league->getSummonerId());
+                    if($summonerApi){
+                        $this->countInvocateur++;
+                        $invocateur = $this->invocateur($summonerApi, false);
+                    }
                 }
                 if($invocateur) {
+                    $this->countLeague++;
                     $this->league($invocateur, $league);
                 }
             }
@@ -102,47 +111,6 @@ class LeagueCommand extends Command
         $this->doctrine->flush();
 
         return Command::SUCCESS;
-    }
-
-    private function league(
-        Invocateur $invocateur,
-        LeagueEntryDTO $leagueEntryDto
-    ): void
-    {
-        $this->countLeague++;
-        $league = (new League())
-            ->setLeagueId($leagueEntryDto->getLeagueId())
-            ->setLeaguePoints($leagueEntryDto->getLeaguePoints())
-            ->setFreshBlood($leagueEntryDto->isFreshBlood())
-            ->setInactive($leagueEntryDto->isInactive())
-            ->setHotStreak($leagueEntryDto->isHotStreak())
-            ->setVeteran($leagueEntryDto->isVeteran())
-            ->setWins($leagueEntryDto->getWins())
-            ->setLosses($leagueEntryDto->getLosses())
-            ->setInvocateur($invocateur)
-            ;
-
-        $this->doctrine->persist($league);
-    }
-
-    private function invocateur(string $nameSummoner): ?Invocateur
-    {
-        $summonerApi = $this->summonerApi->summonerBySummonerName($nameSummoner);
-        if($summonerApi) {
-            $this->countInvocateur++;
-            $invocateur = (new Invocateur())
-                ->setName($summonerApi->getName())
-                ->setIdLol($summonerApi->getId())
-                ->setAccoundId($summonerApi->getAccountId())
-                ->setPuuid($summonerApi->getPuuid())
-                ->setProfileIconId($summonerApi->getProfileIconId())
-                ->setSummonerLevel($summonerApi->getSummonerLevel())
-            ;
-
-            $this->doctrine->persist($invocateur);
-            return $invocateur;
-        }
-        return null;
     }
 
     private function phraseOutput(int $count,string $libelle): string

@@ -2,10 +2,13 @@
 
 namespace App\Command;
 
+use App\Command\Traits\InvocateurTrait;
+use App\Command\Traits\RencontreTrait;
 use App\Entity\Invocateur;
 use App\Entity\Map;
 use App\Entity\Rencontre;
 use App\Services\API\LOL\LeagueOfLegends\DTO\Match\MatchDto;
+use App\Services\API\LOL\LeagueOfLegends\DTO\SummonerDTO;
 use App\Services\API\LOL\LeagueOfLegends\MatchApi;
 use App\Services\API\LOL\LeagueOfLegends\SummonerApi;
 use Doctrine\ORM\EntityManagerInterface;
@@ -22,6 +25,9 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 )]
 class MatchCommand extends Command
 {
+    use InvocateurTrait;
+    use RencontreTrait;
+
     public function __construct(
         private MatchApi $matchApi,
         private SummonerApi $summonerApi,
@@ -44,26 +50,27 @@ class MatchCommand extends Command
 
         $puuid = $input->getArgument('puuid');
 
-        $critere = [];
-        if($puuid) {
-            $critere['puuid'] = $puuid;
+        $critere = $puuid ? ['puuid' => $puuid] : [];
+
+        // On va voir si un invocateur existe déja dans la base
+        if(
+            (null === $invocateur = $this->doctrine->getRepository(Invocateur::class)->findOneBy($critere)) &&
+                $puuid !== null
+        ) {
+            // On va récupérer les informations de l'invocateur par API comme on ne l'a pas en BDD
+            if(null !== $summonerApi = $this->summonerApi->summonerByPuuid($puuid)) {
+                $invocateur = $this->invocateur($summonerApi);
+            }
         }
 
-        $invocateur = $this->doctrine->getRepository(Invocateur::class)->findOneBy($critere);
-
-
-        if($puuid !== null && $invocateur === null) {
-            $invocateur = $this->invocateur($puuid);
-        }
-
-        if(!$invocateur){
+        // On check si un invocateur à été trouvé dans la BDD ou récupérer par API
+        if($invocateur === null) {
             $io->error('Invocateur introuvable');
             return Command::INVALID;
         }
 
-        $matchsIdApi = $this->matchApi->getMatchByPuuid($invocateur->getPuuid());
-
-        if($matchsIdApi=== null) {
+        // On récupère par API les ID des games réalisé par l'invocateur
+        if(null === $matchsIdApi = $this->matchApi->getMatchByPuuid($invocateur->getPuuid())) {
             $io->error('Match non trouvé');
             return Command::INVALID;
         }
@@ -78,69 +85,31 @@ class MatchCommand extends Command
                 $this->doctrine->getRepository(Rencontre::class)
                     ->findOneBy(['gameId' => $match->getInfo()->getGameId()]) === null
             ){
-                $this->rencontre($match, $invocateur);
+                $map = $this->doctrine->getRepository(Map::class)->findOneBy(['mapIdLol' => $match->getInfo()->getMapId()]);
+                $rencontre = $this->rencontre($match, $map);
+                $participants = $match->getMetadata()->getParticipants();
+
+                foreach($participants as $participant) {
+                    $invocateurRepo = null;
+                    if (
+                        $invocateur->getPuuid() !== $participant &&
+                        (null === $invocateurRepo = $this->doctrine->getRepository(Invocateur::class)->findOneBy(['puuid'=> $participant]))
+                    ){
+                        if(null !== $summonerApi = $this->summonerApi->summonerByPuuid($participant)) {
+                            $invocateurRepo = $this->invocateur($summonerApi);
+                        }
+                    }
+                    if($invocateurRepo) {
+                        $rencontre->addInvocateur($invocateurRepo);
+                    }
+                }
+
+                $this->doctrine->persist($rencontre);
             }
         }
         $io->progressFinish();
         $this->doctrine->flush();
 
-//        $io->success($phrase);
-
         return Command::SUCCESS;
-    }
-
-    private function rencontre(MatchDto $matchDto,Invocateur $invocateur): void
-    {
-
-        $map = $this->doctrine->getRepository(Map::class)->findOneBy(['mapIdLol' => $matchDto->getInfo()->getMapId()]);
-
-        $rencontre = (new Rencontre())
-            ->setGameId($matchDto->getInfo()->getGameId())
-            ->setGameDuration($matchDto->getInfo()->getGameDuration())
-            ->setGameCreation(
-                (new \DateTimeImmutable())->setTimestamp((int)floor($matchDto->getInfo()->getGameCreation() / 1000))
-            )
-            ->setMap($map)
-            ->setGameMode($matchDto->getInfo()->getGameMode())
-            ->setGameVersion($matchDto->getInfo()->getGameVersion())
-            ->addInvocateur($invocateur)
-        ;
-
-        $participants = $matchDto->getMetadata()->getParticipants();
-        foreach($participants as $participant) {
-            $invocateurRepo = null;
-            if ($invocateur->getPuuid() !== $participant){
-                $invocateurRepo = $this->doctrine->getRepository(Invocateur::class)->findOneBy(['puuid'=> $participant]);
-                if($invocateurRepo === null) {
-                    $invocateurRepo = $this->invocateur($participant);
-                }
-                if($invocateurRepo) {
-                    $rencontre->addInvocateur($invocateurRepo);
-                }
-            }
-        }
-
-        $this->doctrine->persist($rencontre);
-
-    }
-
-    private function invocateur(string $puuid): ?Invocateur
-    {
-        $summonerApi = $this->summonerApi->summonerByPuuid($puuid);
-        if($summonerApi) {
-            $invocateur = (new Invocateur())
-                ->setName($summonerApi->getName())
-                ->setIdLol($summonerApi->getId())
-                ->setAccoundId($summonerApi->getAccountId())
-                ->setPuuid($summonerApi->getPuuid())
-                ->setProfileIconId($summonerApi->getProfileIconId())
-                ->setSummonerLevel($summonerApi->getSummonerLevel())
-            ;
-
-            $this->doctrine->persist($invocateur);
-            $this->doctrine->flush();
-            return $invocateur;
-        }
-        return null;
     }
 }

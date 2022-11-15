@@ -34,7 +34,6 @@ class MapCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $maps = $this->generalApi->getMaps();
 
-
         $countMaps = 0;
         if (null !== $maps) {
             $io->progressStart(count($maps));
