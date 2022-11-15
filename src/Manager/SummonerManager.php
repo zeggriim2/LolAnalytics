@@ -31,7 +31,8 @@ class SummonerManager
         $this->create($summonerApi);
     }
 
-    public function create(SummonerDTO $summonerApi){
+    public function create(SummonerDTO $summonerApi): void
+    {
         $invocateur = (new Invocateur())
             ->setName($summonerApi->getName())
             ->setIdLol($summonerApi->getId())

@@ -14,7 +14,7 @@ class RiftHerald
     #[ORM\Column(type: Types::INTEGER)]
     private int $id;
 
-    #[ORM\Column(type: Types::INTEGER)]
+    #[ORM\Column(type: Types::BOOLEAN)]
     private bool $first;
 
     #[ORM\Column(type: Types::INTEGER)]

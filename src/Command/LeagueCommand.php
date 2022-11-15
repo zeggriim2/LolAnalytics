@@ -42,6 +42,7 @@ class LeagueCommand extends Command
             ->addArgument('division', InputArgument::REQUIRED, 'Division de la League')
             ->addArgument('tier', InputArgument::REQUIRED, 'Division de la League')
             ->addArgument('queue', InputArgument::OPTIONAL, 'Division de la League', 'RANKED_SOLO_5x5')
+            ->addArgument('limit', InputArgument::OPTIONAL, 'Limite')
         ;
     }
 
@@ -52,6 +53,7 @@ class LeagueCommand extends Command
         $division = $input->getArgument('division');
         $tier = $input->getArgument('tier');
         $queue = $input->getArgument('queue');
+        $limit = $input->getArgument('limit');
 
         if(!in_array($division, Division::ALL_DIVISION) || !in_array($tier, Tier::ALL_TIERS)) {
             $io->error("Division ou Tier incorrect");
@@ -65,7 +67,9 @@ class LeagueCommand extends Command
             return Command::INVALID;
         }
 
-        $leagues = array_slice($leagues,0, 10);
+        if($limit){
+            $leagues = array_slice($leagues,0, $limit);
+        }
 
         $io->progressStart(count($leagues));
 
@@ -103,7 +107,7 @@ class LeagueCommand extends Command
     private function league(
         Invocateur $invocateur,
         LeagueEntryDTO $leagueEntryDto
-    )
+    ): void
     {
         $this->countLeague++;
         $league = (new League())

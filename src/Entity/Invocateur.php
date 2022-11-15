@@ -47,12 +47,15 @@ class Invocateur
     #[ORM\Column(type: TYPES::DATETIME_IMMUTABLE, nullable: true)]
     private ?\DateTimeImmutable $updatedAt;
 
+    /** @var  Collection<int, Rencontre> $rencontres */
     #[ORM\ManyToMany(targetEntity: Rencontre::class, mappedBy: 'invocateurs')]
     private Collection $rencontres;
 
+    /** @var Collection<int, HistoriqueLeague> $historiqueLeagues */
     #[ORM\OneToMany(mappedBy: 'invocateur', targetEntity: HistoriqueLeague::class)]
     private Collection $historiqueLeagues;
 
+    /** @var Collection<int, League> $leagues */
     #[ORM\OneToMany(mappedBy: 'invocateur', targetEntity: League::class)]
     private Collection $leagues;
 

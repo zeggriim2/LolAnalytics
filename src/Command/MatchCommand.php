@@ -8,13 +8,11 @@ use App\Entity\Rencontre;
 use App\Services\API\LOL\LeagueOfLegends\DTO\Match\MatchDto;
 use App\Services\API\LOL\LeagueOfLegends\MatchApi;
 use App\Services\API\LOL\LeagueOfLegends\SummonerApi;
-use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -44,22 +42,39 @@ class MatchCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
-        $puiid = $input->getArgument('puuid');
+        $puuid = $input->getArgument('puuid');
 
         $critere = [];
-        if($puiid) {
-            $critere['puuid'] = $puiid;
+        if($puuid) {
+            $critere['puuid'] = $puuid;
         }
 
         $invocateur = $this->doctrine->getRepository(Invocateur::class)->findOneBy($critere);
 
+
+        if($puuid !== null && $invocateur === null) {
+            $invocateur = $this->invocateur($puuid);
+        }
+
+        if(!$invocateur){
+            $io->error('Invocateur introuvable');
+            return Command::INVALID;
+        }
+
         $matchsIdApi = $this->matchApi->getMatchByPuuid($invocateur->getPuuid());
 
+        if($matchsIdApi=== null) {
+            $io->error('Match non trouvé');
+            return Command::INVALID;
+        }
+
         $io->progressStart(count($matchsIdApi));
+
         foreach ($matchsIdApi as $matchId) {
             $io->progressAdvance();
             $match = $this->matchApi->getMatchById($matchId);
             if(
+                $match !== null &&
                 $this->doctrine->getRepository(Rencontre::class)
                     ->findOneBy(['gameId' => $match->getInfo()->getGameId()]) === null
             ){
@@ -74,7 +89,7 @@ class MatchCommand extends Command
         return Command::SUCCESS;
     }
 
-    private function rencontre(MatchDto $matchDto,Invocateur $invocateur)
+    private function rencontre(MatchDto $matchDto,Invocateur $invocateur): void
     {
 
         $map = $this->doctrine->getRepository(Map::class)->findOneBy(['mapIdLol' => $matchDto->getInfo()->getMapId()]);
@@ -83,7 +98,7 @@ class MatchCommand extends Command
             ->setGameId($matchDto->getInfo()->getGameId())
             ->setGameDuration($matchDto->getInfo()->getGameDuration())
             ->setGameCreation(
-                (new \DateTimeImmutable())->setTimestamp(floor($matchDto->getInfo()->getGameCreation() / 1000))
+                (new \DateTimeImmutable())->setTimestamp((int)floor($matchDto->getInfo()->getGameCreation() / 1000))
             )
             ->setMap($map)
             ->setGameMode($matchDto->getInfo()->getGameMode())
