@@ -134,7 +134,7 @@ composer-install-prod:
 #---------------------------------------------#
 
 ## === ℹ  DATABASE ================================================
-db-remove: ## Supprime la Base de donnée
+db-drop: ## Supprime la Base de donnée
 	$(DOCKER_COMPOSE_EXEC) server php bin/console doctrine:database:drop --force --env=$(ENV) --if-exists
 .PHONY: db-remove
 
@@ -143,7 +143,7 @@ db-create: ## Créé la Base de donnée
 .PHONY: db-create
 
 db-restore: ## Supprime, re-crée et joue les migrations de la Base de donnée en DEV
-	make db-remove
+	make db-drop
 	make db-create
 	make sf-migrate
 	make cmd-init-data
