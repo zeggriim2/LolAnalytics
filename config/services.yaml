@@ -4,10 +4,6 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
-    reqQueue: !php/const App\Services\API\LOL\DataDragon\Queue::REQUIREMENTS
-    reqTier: !php/const App\Services\API\LOL\DataDragon\Tier::REQUIREMENTS
-    reqDivision: !php/const App\Services\API\LOL\DataDragon\Division::REQUIREMENTS
-
 
 services:
     # default configuration for services in *this* file
@@ -26,31 +22,3 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
-    App\Services\API\LOL\BaseApi:
-        arguments:
-            $platform : '%env(string:PLATFORM)%'
-            $apiKey: '%env(string:APIKEY)%'
-
-    App\Services\API\LOL\LeagueOfLegends\SummonerApi:
-        public: true
-
-    App\Services\API\LOL\LeagueOfLegends\StatusApi:
-        public: true
-
-    App\Services\API\LOL\LeagueOfLegends\LeagueApi:
-        public: true
-
-    App\Services\API\LOL\LeagueOfLegends\ChampionApi:
-        public: true
-
-    App\Services\API\LOL\LeagueOfLegends\ChampionMasteryApi:
-        public: true
-
-    App\Services\API\LOL\LeagueOfLegends\MatchApi:
-        public: true
-
-    App\Services\API\LOL\DataDragon\DataDragonApi:
-        public: true
-
-    App\Services\API\LOL\DataDragon\GeneralApi:
-        public: true

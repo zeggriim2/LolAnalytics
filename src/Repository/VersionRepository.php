@@ -21,7 +21,7 @@ class VersionRepository extends ServiceEntityRepository
         parent::__construct($registry, Version::class);
     }
 
-    public function add(Version $entity, bool $flush = false): void
+    public function save(Version $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
 
