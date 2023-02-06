@@ -7915,16 +7915,16 @@
         },
         {
             "name": "zeggriim/riot-api-datadragon",
-            "version": "1.0.3",
+            "version": "1.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zeggriim2/riot-api-datadragon.git",
-                "reference": "2ed2d89e78f52aefaec59e89192ab6b76839676e"
+                "reference": "496474d0c9d46cdb0d0866ec699782f95394f38f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zeggriim2/riot-api-datadragon/zipball/2ed2d89e78f52aefaec59e89192ab6b76839676e",
-                "reference": "2ed2d89e78f52aefaec59e89192ab6b76839676e",
+                "url": "https://api.github.com/repos/zeggriim2/riot-api-datadragon/zipball/496474d0c9d46cdb0d0866ec699782f95394f38f",
+                "reference": "496474d0c9d46cdb0d0866ec699782f95394f38f",
                 "shasum": ""
             },
             "require": {
@@ -7971,9 +7971,9 @@
             ],
             "support": {
                 "issues": "https://github.com/zeggriim2/riot-api-datadragon/issues",
-                "source": "https://github.com/zeggriim2/riot-api-datadragon/tree/1.0.3"
+                "source": "https://github.com/zeggriim2/riot-api-datadragon/tree/1.0.5"
             },
-            "time": "2023-02-05T23:22:01+00:00"
+            "time": "2023-02-06T12:01:25+00:00"
         }
     ],
     "packages-dev": [
