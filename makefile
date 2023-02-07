@@ -31,6 +31,45 @@ help: ## Show this help.
 	@echo "Targets:"
 	@grep -E '(^[a-zA-Z0-9_-]+:.*?##.*$$)|(^##)' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}{printf "\033[32m%-30s\033[0m %s\n", $$1, $$2}' | sed -e 's/\[32m##/[33m/'
 #---------------------------------------------#
+## ===  Initialisation ================================================
+init-all: ## Initialise toutes les données static (Versions, Maps, Queues, Seasons, GameModes, GameTypes, Languages)
+	make cmd-versions
+	make cmd-maps
+	make cmd-queues
+	make cmd-seasons
+	make cmd-gamemodes
+	make cmd-gametypes
+	make cmd-languages
+
+cmd-versions: ## Command Versions.
+	$(SYMFONY_CONSOLE) app:versions
+.PHONY: cmd-versions
+
+cmd-maps: ## Command Maps.
+	$(SYMFONY_CONSOLE) app:maps
+.PHONY: cmd-maps
+
+cmd-queues: ## Command Queues.
+	$(SYMFONY_CONSOLE) app:queues
+.PHONY: cmd-queues
+
+cmd-seasons: ## Command Seasons.
+	$(SYMFONY_CONSOLE) app:seasons
+.PHONY: cmd-seasons
+
+cmd-gamemodes: ## Command Game Mode.
+	$(SYMFONY_CONSOLE) app:gamemodes
+.PHONY: cmd-gamemodes
+
+cmd-gametypes: ## Command Game Type.
+	$(SYMFONY_CONSOLE) app:gametypes
+.PHONY: cmd-gametypes
+
+cmd-languages: ## Command Languages.
+	$(SYMFONY_CONSOLE) app:languages
+.PHONY: cmd-languages
+
+#---------------------------------------------#
 
 ## === 🐋  DOCKER ================================================
 docker-up: ## Start docker containers.
