@@ -36,9 +36,9 @@ final class GameModesCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $io->progressStart();
 
         $gameModes = $this->dataDragonApi->getGameModes(TypeReturn::RETURN_OBJET);
+        $io->progressStart(count($gameModes));
         $countGameModeAdd = 0;
         foreach ($gameModes as $gameMode) {
             $io->progressAdvance();

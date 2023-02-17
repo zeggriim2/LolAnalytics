@@ -36,9 +36,8 @@ final class VersionsCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
-        $io->progressStart();
-
         $versions = $this->dataDragonApi->getVersions();
+        $io->progressStart(count($versions));
         $countVersionAdd = 0;
         foreach ($versions as $version) {
             $io->progressAdvance();

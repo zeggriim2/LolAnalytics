@@ -36,9 +36,9 @@ final class QueuesCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $io->progressStart();
 
         $queues = $this->dataDragonApi->getQueues(TypeReturn::RETURN_OBJET);
+        $io->progressStart(count($queues));
         $countQueueAdd = 0;
         foreach ($queues as $queue) {
             $io->progressAdvance();

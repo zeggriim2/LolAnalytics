@@ -2,23 +2,23 @@
 
 namespace App\Entity;
 
-use App\Repository\VersionRepository;
+use App\Repository\TagRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: VersionRepository::class)]
-class Version
+#[ORM\Entity(repositoryClass: TagRepository::class)]
+class Tag
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 50,unique: true)]
-    private ?string $code = null;
+    #[ORM\Column(length: 150)]
+    private ?string $name = null;
 
-    #[ORM\OneToMany(mappedBy: 'version', targetEntity: Champion::class)]
+    #[ORM\ManyToMany(targetEntity: Champion::class, mappedBy: 'tags')]
     private Collection $champions;
 
     public function __construct()
@@ -31,14 +31,14 @@ class Version
         return $this->id;
     }
 
-    public function getCode(): ?string
+    public function getName(): ?string
     {
-        return $this->code;
+        return $this->name;
     }
 
-    public function setCode(string $code): self
+    public function setName(string $name): self
     {
-        $this->code = $code;
+        $this->name = $name;
 
         return $this;
     }
@@ -55,7 +55,7 @@ class Version
     {
         if (!$this->champions->contains($champion)) {
             $this->champions->add($champion);
-            $champion->setVersion($this);
+            $champion->addTag($this);
         }
 
         return $this;
@@ -64,10 +64,7 @@ class Version
     public function removeChampion(Champion $champion): self
     {
         if ($this->champions->removeElement($champion)) {
-            // set the owning side to null (unless already changed)
-            if ($champion->getVersion() === $this) {
-                $champion->setVersion(null);
-            }
+            $champion->removeTag($this);
         }
 
         return $this;

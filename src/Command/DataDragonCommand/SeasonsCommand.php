@@ -35,9 +35,9 @@ final class SeasonsCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $io->progressStart();
 
         $seasons = $this->dataDragonApi->getSeasons(TypeReturn::RETURN_OBJET);
+        $io->progressStart(count($seasons));
         $countSeasonAdd = 0;
         foreach ($seasons as $season) {
             $io->progressAdvance();

@@ -35,9 +35,9 @@ final class LanguagesCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $io->progressStart();
 
         $languages = $this->dataDragonApi->getLanguages();
+        $io->progressStart(count($languages));
         $countLanguageAdd = 0;
         foreach ($languages as $language) {
             $io->progressAdvance();

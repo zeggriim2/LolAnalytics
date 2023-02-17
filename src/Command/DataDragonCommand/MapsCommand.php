@@ -36,9 +36,9 @@ final class MapsCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $io->progressStart();
 
         $maps = $this->dataDragonApi->getMaps(TypeReturn::RETURN_OBJET);
+        $io->progressStart(count($maps));
         $countMapAdd = 0;
         foreach ($maps as $map) {
             $io->progressAdvance();
