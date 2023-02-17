@@ -1,6 +1,17 @@
 version: '3'
 
 services:
+  web:
+    image: php:8.2-apache
+    container_name: app
+    ports:
+      - "80:80"
+    volumes:
+      - ./:/var/www/html/
+      - ./docker/apache:/etc/apache2/sites-enabled/
+    environment:
+      - APACHE_DOCUMENT_ROOT=/var/www/html/public
+      - VIRTUAL_HOST=lolanalytics.dev.fr
 ###> doctrine/doctrine-bundle ###
   database:
     image: postgres:${POSTGRES_VERSION:-15}-alpine
@@ -14,6 +25,7 @@ services:
       # You may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
       # - ./docker/db/data:/var/lib/postgresql/data:rw
 ###< doctrine/doctrine-bundle ###
+
 
 volumes:
 ###> doctrine/doctrine-bundle ###
