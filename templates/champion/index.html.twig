@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ChampionController!{% endblock %}
+
+{% block body %}
+    {% block javascripts %}
+        {{ parent() }}
+        {{ encore_entry_script_tags('chart') }}
+    {% endblock %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<div class="example-wrapper">
+    <h1>Hello ! ✅</h1>
+
+    This friendly message is coming from:
+    <ul>
+        <li>Your controller at <code><a href="{{ 'C:/laragon/www/LolAnalytics/src/Controller/ChampionController.php'|file_link(0) }}">src/Controller/ChampionController.php</a></code></li>
+        <li>Your template at <code><a href="{{ 'C:/laragon/www/LolAnalytics/templates/champion/index.html.twig'|file_link(0) }}">templates/champion/index.html.twig</a></code></li>
+    </ul>
+    <canvas
+            id="chartArmor"
+            width="400"
+            height="400"
+            data-chart="{{ {'armor':champion.stat.armor, 'armorPerLevel':champion.stat.armorperlevel }|json_encode }}">
+    </canvas>
+
+    <canvas
+            id="chartCrit"
+            width="400"
+            height="400"
+            data-chart="{{ {'crit':champion.stat.crit, 'critPerLevel':champion.stat.critperlevel }|json_encode }}">
+    </canvas>
+
+    <canvas
+            id="chartAttackDamage"
+            width="400"
+            height="400"
+            data-chart="{{ {'crit':champion.stat.attackdamage, 'critPerLevel':champion.stat.attackdamageperlevel }|json_encode }}">
+    </canvas>
+</div>
+{% endblock %}

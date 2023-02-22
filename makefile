@@ -3,7 +3,7 @@
 DOCKER = docker
 DOCKER_RUN = $(DOCKER) run
 DOCKER_COMPOSE = docker compose
-DOCKER_COMPOSE_UP = $(DOCKER_COMPOSE) --env-file ./.env.dev.local up -d
+DOCKER_COMPOSE_UP = $(DOCKER_COMPOSE) --env-file ./.env.dev.local up --build -d
 DOCKER_COMPOSE_STOP = $(DOCKER_COMPOSE) stop
 DOCKER_COMPOSE_DOWN = $(DOCKER_COMPOSE) down
 #------------#
@@ -32,6 +32,13 @@ help: ## Show this help.
 	@grep -E '(^[a-zA-Z0-9_-]+:.*?##.*$$)|(^##)' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}{printf "\033[32m%-30s\033[0m %s\n", $$1, $$2}' | sed -e 's/\[32m##/[33m/'
 #---------------------------------------------#
 ## ===  Initialisation ================================================
+install: ## Installation de l'application
+	make docker-up
+	composer install
+	make sf-reset-db
+	make init-all
+.PHONY: install
+
 init-all: ## Initialise toutes les données static (Versions, Maps, Queues, Seasons, GameModes, GameTypes, Languages)
 	make cmd-versions
 	make cmd-maps
@@ -40,6 +47,7 @@ init-all: ## Initialise toutes les données static (Versions, Maps, Queues, Seas
 	make cmd-gamemodes
 	make cmd-gametypes
 	make cmd-languages
+.PHONY: init-all
 
 cmd-versions: ## Command Versions.
 	$(SYMFONY_CONSOLE) app:versions
@@ -106,4 +114,11 @@ sf-dmm: ## Migrate.
 sf-fixtures: ## Load fixtures.
 	$(SYMFONY_CONSOLE) doctrine:fixtures:load --no-interaction
 .PHONY: sf-fixtures
+
+sf-reset-db: ## Reset toute la base de donnée
+	make sf-dd
+	make sf-dc
+	make sf-dmm
+.PHONY: sf-reset-db
+
 #---------------------------------------------#
