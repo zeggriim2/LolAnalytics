@@ -22,3 +22,13 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    Zeggriim\RiotApiLeague\Riot\League\LeagueApi:
+        arguments:
+            $platform: '%env(PLATFORM)%'
+            $apiKey: '%env(API_KEY)%'
+
+    Zeggriim\RiotApiLeague\Riot\Summoner\SummonerApi:
+        arguments:
+            $platform: '%env(PLATFORM)%'
+            $apiKey: '%env(API_KEY)%'
