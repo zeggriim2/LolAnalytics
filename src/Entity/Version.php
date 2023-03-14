@@ -5,9 +5,13 @@ namespace App\Entity;
 use App\Repository\VersionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: VersionRepository::class)]
+#[UniqueEntity('actif')]
+
 class Version
 {
     #[ORM\Id]
@@ -15,8 +19,11 @@ class Version
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 50,unique: true)]
+    #[ORM\Column(type: Types::STRING,length: 50,unique: true)]
     private ?string $code = null;
+
+    #[ORM\Column(type: Types::BOOLEAN, unique: true, nullable: true)]
+    private ?bool $actif = null;
 
     #[ORM\OneToMany(mappedBy: 'version', targetEntity: Champion::class)]
     private Collection $champions;
@@ -39,6 +46,18 @@ class Version
     public function setCode(string $code): self
     {
         $this->code = $code;
+
+        return $this;
+    }
+
+    public function isActif(): ?bool
+    {
+        return $this->actif;
+    }
+
+    public function setActif(?bool $actif): Version
+    {
+        $this->actif = $actif;
 
         return $this;
     }
