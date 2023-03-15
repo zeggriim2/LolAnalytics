@@ -1,1 +1,12 @@
 openssl req -x509 -newkey rsa:4096 -keyout docker/ssl/key.pem -out docker/ssl/cert.pem -days 365 -nodes
+
+
+# Requete doublon
+SELECT league_Id, COUNT(*)
+FROM league
+GROUP BY league_Id
+HAVING COUNT(*) > 1;
+
+# Mise à jour des dates avec les heures minute seconde
+UPDATE league
+SET created_at = date_trunc('day', created_at) + interval '00:00:00';
