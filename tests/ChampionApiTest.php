@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests;
 
 use App\Services\API\LOL\LeagueOfLegends\ChampionApi;
@@ -15,7 +17,7 @@ class ChampionApiTest extends KernelTestCase
         $this->championApi = static::getContainer()->get(ChampionApi::class);
     }
 
-    public function testChampionRotationSuccess()
+    public function testChampionRotationSuccess(): void
     {
         $championRotation = $this->championApi->getChampionRotation();
         $this->assertInstanceOf(ChampionInfoDTO::class, $championRotation);

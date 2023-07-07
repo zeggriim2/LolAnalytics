@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services\API\LOL\LeagueOfLegends;
 
 use App\Services\API\LOL\BaseApi;
+use App\Services\API\LOL\Helper\UrlHelper;
 use App\Services\API\LOL\LeagueOfLegends\DTO\Status\PlatformDataDto;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
@@ -12,30 +15,20 @@ class StatusApi
     private const URL_STATUS = BaseApi::URL_RACINE_PLATFORM . 'status/v4/platform-data';
 
     public function __construct(
-        private BaseApi $baseApi,
-        private DenormalizerInterface $denormalizer
+        private readonly BaseApi $baseApi,
+        private readonly DenormalizerInterface $denormalizer
     ) {
     }
 
-    /**
-     * @return PlatformDataDto|null
-     */
-    public function status()
+    public function status(): ?PlatformDataDto
     {
-        $url = $this->baseApi->constructUrl(
-            self::URL_STATUS,
-            [
-                'platform' => $this->baseApi->platform,
-            ]
-        );
+        $url = UrlHelper::constructUrl(self::URL_STATUS, ['platform' => $this->baseApi->platform]);
 
         $status = $this->baseApi->callApi(
             $url,
             Request::METHOD_GET,
             [
-                'headers' => [
-                    'X-Riot-Token' => $this->baseApi->apiKey,
-                ],
+                'headers' => ['X-Riot-Token' => $this->baseApi->apiKey],
             ]
         );
 

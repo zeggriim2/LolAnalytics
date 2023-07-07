@@ -1,11 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services\API\LOL\LeagueOfLegends;
 
 use App\Services\API\LOL\BaseApi;
-use App\Services\API\LOL\DataDragon\Division;
-use App\Services\API\LOL\DataDragon\Queue;
-use App\Services\API\LOL\DataDragon\Tier;
+use App\Services\API\LOL\DataDragon\Enum\Division;
+use App\Services\API\LOL\DataDragon\Enum\Queue;
+use App\Services\API\LOL\DataDragon\Enum\Tier;
+use App\Services\API\LOL\Helper\UrlHelper;
 use App\Services\API\LOL\LeagueOfLegends\DTO\League\LeagueEntryDTO;
 use App\Services\API\LOL\LeagueOfLegends\DTO\League\LeagueListDTO;
 use App\Services\API\LOL\LeagueOfLegends\Exception\ForbiddenException;
@@ -29,8 +32,8 @@ class LeagueApi
         BaseApi::URL_RACINE_PLATFORM . 'league/v4/leagues/{leagueId}';
 
     public function __construct(
-        private BaseApi $baseApi,
-        private DenormalizerInterface $denormalizer
+        private readonly BaseApi $baseApi,
+        private readonly DenormalizerInterface $denormalizer
     ) {
     }
 
@@ -46,8 +49,7 @@ class LeagueApi
             throw new ForbiddenException('Summoner ID est vide');
         }
 
-        $url = $this->baseApi->constructUrl(
-            self::URL_LEAGUE_SUMMONERID,
+        $url = UrlHelper::constructUrl(self::URL_LEAGUE_SUMMONERID,
             [
                 'platform' => $this->baseApi->platform,
                 'summonerId' => $summonerId,
@@ -58,9 +60,7 @@ class LeagueApi
             $url,
             Request::METHOD_GET,
             [
-                'headers' => [
-                    'X-Riot-Token' => $this->baseApi->apiKey,
-                ],
+                'headers' => ['X-Riot-Token' => $this->baseApi->apiKey],
             ]
         );
 
@@ -82,8 +82,7 @@ class LeagueApi
             throw new LeagueArgumentException("N'existe pas dans l'éléments Queue");
         }
 
-        $url = $this->baseApi->constructUrl(
-            self::URL_LEAGUE_CHALLENGER_QUEUE,
+        $url = UrlHelper::constructUrl(self::URL_LEAGUE_CHALLENGER_QUEUE,
             [
                 'platform' => $this->baseApi->platform,
                 'queue' => $queue,
@@ -94,9 +93,7 @@ class LeagueApi
             $url,
             Request::METHOD_GET,
             [
-                'headers' => [
-                    'X-Riot-Token' => $this->baseApi->apiKey,
-                ],
+                'headers' => ['X-Riot-Token' => $this->baseApi->apiKey],
             ]
         );
 
@@ -118,8 +115,7 @@ class LeagueApi
             throw new LeagueArgumentException("N'existe pas dans l'éléments Queue");
         }
 
-        $url = $this->baseApi->constructUrl(
-            self::URL_LEAGUE_GRANDMASTER_QUEUE,
+        $url = UrlHelper::constructUrl(self::URL_LEAGUE_GRANDMASTER_QUEUE,
             [
                 'platform' => $this->baseApi->platform,
                 'queue' => $queue,
@@ -130,9 +126,7 @@ class LeagueApi
             $url,
             Request::METHOD_GET,
             [
-                'headers' => [
-                    'X-Riot-Token' => $this->baseApi->apiKey,
-                ],
+                'headers' => ['X-Riot-Token' => $this->baseApi->apiKey],
             ]
         );
 
@@ -154,8 +148,7 @@ class LeagueApi
             throw new LeagueArgumentException("N'existe pas dans l'éléments Queue");
         }
 
-        $url = $this->baseApi->constructUrl(
-            self::URL_LEAGUE_MASTER_QUEUE,
+        $url = UrlHelper::constructUrl(self::URL_LEAGUE_MASTER_QUEUE,
             [
                 'platform' => $this->baseApi->platform,
                 'queue' => $queue,
@@ -166,9 +159,7 @@ class LeagueApi
             $url,
             Request::METHOD_GET,
             [
-                'headers' => [
-                    'X-Riot-Token' => $this->baseApi->apiKey,
-                ],
+                'headers' => ['X-Riot-Token' => $this->baseApi->apiKey],
             ]
         );
 
@@ -185,8 +176,7 @@ class LeagueApi
             throw new ForbiddenException('League ID est vide.');
         }
 
-        $url = $this->baseApi->constructUrl(
-            self::URL_LEAGUE_LEAGUEID,
+        $url = UrlHelper::constructUrl(self::URL_LEAGUE_LEAGUEID,
             [
                 'platform' => $this->baseApi->platform,
                 'leagueId' => $leagueId,
@@ -197,9 +187,7 @@ class LeagueApi
             $url,
             Request::METHOD_GET,
             [
-                'headers' => [
-                    'X-Riot-Token' => $this->baseApi->apiKey,
-                ],
+                'headers' => ['X-Riot-Token' => $this->baseApi->apiKey],
             ]
         );
 
@@ -222,26 +210,26 @@ class LeagueApi
         }
 
         if (
-            !\in_array($queue, Queue::ALL_QEUEUES, true) ||
-            !\in_array($tier, Tier::ALL_TIERS, true) ||
-            !\in_array($division, Division::ALL_DIVISION, true)
+            !\in_array($queue, Queue::ALL_QEUEUES, true)
+            || !\in_array($tier, Tier::ALL_TIERS, true)
+            || !\in_array($division, Division::ALL_DIVISION, true)
         ) {
             throw new LeagueArgumentException("N'existe pas dans les différents éléments Queue/Tier/Division");
         }
-        $url = $this->baseApi->constructUrl(self::URL_LEAGUE_QUEUE_TIER_DIVISION, [
-            'platform' => $this->baseApi->platform,
-            'queue' => $queue,
-            'tier' => $tier,
-            'division' => $division,
-        ]);
+        $url = UrlHelper::constructUrl(self::URL_LEAGUE_QUEUE_TIER_DIVISION,
+            [
+                'platform' => $this->baseApi->platform,
+                'queue' => $queue,
+                'tier' => $tier,
+                'division' => $division,
+            ]
+        );
 
         $league = $this->baseApi->callApi(
             $url,
             Request::METHOD_GET,
             [
-                'headers' => [
-                    'X-Riot-Token' => $this->baseApi->apiKey,
-                ],
+                'headers' => ['X-Riot-Token' => $this->baseApi->apiKey],
             ]
         );
 

@@ -1,27 +1,29 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services\API\LOL\LeagueOfLegends\DTO\Status;
 
 class StatusDto
 {
-    private int     $id;
+    private int $id;
     private ?string $maintenance_status;
     private ?string $incident_severity;
     /**
      * @var ContentDto[]
      */
-    private array   $titles;
+    private array $titles;
     /**
      * @var UpdateDto[]
      */
-    private array   $updates;
-    private string  $created_at;
+    private array $updates;
+    private string $created_at;
     private ?string $archive_at;
     private ?string $updated_at;
     /**
      * @var array<string>
      */
-    private array   $platforms;
+    private array $platforms;
 
     public function getId(): int
     {

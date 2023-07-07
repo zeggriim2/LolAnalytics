@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Tests;
+declare(strict_types=1);
+
+namespace App\Tests\Service\Api\LOL\LeagueOfLegends;
 
 use App\Services\API\LOL\LeagueOfLegends\DTO\Status\ContentDto;
 use App\Services\API\LOL\LeagueOfLegends\DTO\Status\PlatformDataDto;
@@ -18,7 +20,7 @@ class StatusApiTest extends KernelTestCase
         $this->statusApi = static::getContainer()->get(StatusApi::class);
     }
 
-    public function testStatusSuccess()
+    public function testStatusSuccess(): void
     {
         $status = $this->statusApi->status();
         $this->assertInstanceOf(
@@ -28,7 +30,7 @@ class StatusApiTest extends KernelTestCase
         $this->checkPlatformDataDto($status);
     }
 
-    private function checkPlatformDataDto(PlatformDataDto $platformDataDto)
+    private function checkPlatformDataDto(PlatformDataDto $platformDataDto): void
     {
         $this->assertIsString($platformDataDto->getId());
         $this->assertIsString($platformDataDto->getName());
@@ -45,7 +47,7 @@ class StatusApiTest extends KernelTestCase
         }
     }
 
-    private function checkStatusDTO(StatusDto $statusDto)
+    private function checkStatusDTO(StatusDto $statusDto): void
     {
         $this->assertIsInt($statusDto->getId());
         $this->assertIsString($statusDto->getMaintenanceStatus());
@@ -84,13 +86,13 @@ class StatusApiTest extends KernelTestCase
         }
     }
 
-    private function checkContentDTO(ContentDto $contentDto)
+    private function checkContentDTO(ContentDto $contentDto): void
     {
         $this->assertIsString($contentDto->getContent());
         $this->assertIsString($contentDto->getLocale());
     }
 
-    private function checkUpdateDTO(UpdateDto $updateDto)
+    private function checkUpdateDTO(UpdateDto $updateDto): void
     {
         $this->assertIsInt($updateDto->getId());
         $this->assertIsString($updateDto->getAuthor());

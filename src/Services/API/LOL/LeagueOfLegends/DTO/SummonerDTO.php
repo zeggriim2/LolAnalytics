@@ -1,16 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services\API\LOL\LeagueOfLegends\DTO;
 
 class SummonerDTO
 {
-    private string  $accountId;
-    private int     $profileIconId;
-    private int     $revisionDate;
-    private string  $name;
-    private string  $id;
-    private string  $puuid;
-    private int     $summonerLevel;
+    private string $accountId;
+    private int $profileIconId;
+    private int $revisionDate;
+    private string $name;
+    private string $id;
+    private string $puuid;
+    private int $summonerLevel;
 
     public function getAccountId(): string
     {

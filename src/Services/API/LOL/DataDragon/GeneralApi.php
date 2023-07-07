@@ -1,52 +1,41 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services\API\LOL\DataDragon;
 
+use App\Services\API\LOL\BaseApi;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class GeneralApi
 {
+    public function __construct(
+        private readonly BaseApi $baseApi
+    ) {
+    }
+
     public const URL_SEASON = 'https://static.developer.riotgames.com/docs/lol/seasons.json';
     public const URL_MAPS = 'https://static.developer.riotgames.com/docs/lol/maps.json';
     public const URL_GAMEMODES = 'https://static.developer.riotgames.com/docs/lol/gameModes.json';
     public const URL_GAMETYPES = 'https://static.developer.riotgames.com/docs/lol/gameTypes.json';
 
-    public function __construct(
-        private HttpClientInterface $httpClient
-    ) {
+    public function getSeason(): ?array
+    {
+        return $this->baseApi->callApi(self::URL_SEASON, Request::METHOD_GET);
     }
 
-    public function getSeason()
+    public function getMaps(): ?array
     {
-        return $this->callApi(Request::METHOD_GET, self::URL_SEASON);
+        return $this->baseApi->callApi(self::URL_MAPS, Request::METHOD_GET);
     }
 
-    public function getMaps()
+    public function getGameModes(): ?array
     {
-        return $this->callApi(Request::METHOD_GET, self::URL_MAPS);
+        return $this->baseApi->callApi(self::URL_GAMEMODES, Request::METHOD_GET);
     }
 
-    public function getGameModes()
+    public function getGameTypes(): ?array
     {
-        return $this->callApi(Request::METHOD_GET, self::URL_GAMEMODES);
-    }
-
-    public function getGameTypes()
-    {
-        return $this->callApi(Request::METHOD_GET, self::URL_GAMETYPES);
-    }
-
-    /**
-     * @return array|null
-     */
-    private function callApi(string $method, string $url)
-    {
-        $response = $this->httpClient->request($method, $url);
-        if (200 === $response->getStatusCode()) {
-            return $response->toArray();
-        }
-
-        return null;
+        return $this->baseApi->callApi(self::URL_GAMETYPES, Request::METHOD_GET);
     }
 }

@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services\API\LOL\LeagueOfLegends;
 
 use App\Services\API\LOL\BaseApi;
+use App\Services\API\LOL\Helper\UrlHelper;
 use App\Services\API\LOL\LeagueOfLegends\DTO\ChampionMastery\ChampionMasteryDto;
 use App\Services\API\LOL\LeagueOfLegends\Exception\ForbiddenException;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,8 +21,8 @@ class ChampionMasteryApi
         BaseApi::URL_RACINE_PLATFORM . 'champion-mastery/v4/scores/by-summoner/{summonerId}';
 
     public function __construct(
-        private BaseApi $baseApi,
-        private DenormalizerInterface $denormalizer
+        private readonly BaseApi $baseApi,
+        private readonly DenormalizerInterface $denormalizer
     ) {
     }
 
@@ -35,8 +38,7 @@ class ChampionMasteryApi
             throw new ForbiddenException('Summoner ID est vide');
         }
 
-        $url = $this->baseApi->constructUrl(
-            self::URL_CHAMPION_MASTERY_SUMMONERID,
+        $url = UrlHelper::constructUrl(self::URL_CHAMPION_MASTERY_SUMMONERID,
             [
                 'platform' => $this->baseApi->platform,
                 'summonerId' => $summonerId,
@@ -47,9 +49,7 @@ class ChampionMasteryApi
             $url,
             Request::METHOD_GET,
             [
-                'headers' => [
-                    'X-Riot-Token' => $this->baseApi->apiKey,
-                ],
+                'headers' => ['X-Riot-Token' => $this->baseApi->apiKey],
             ]
         );
 
@@ -71,8 +71,7 @@ class ChampionMasteryApi
             throw new ForbiddenException('Champion ID est vide');
         }
 
-        $url = $this->baseApi->constructUrl(
-            self::URL_CHAMPION_MASTERY_SUMMONERID_CHAMPIONID,
+        $url = UrlHelper::constructUrl(self::URL_CHAMPION_MASTERY_SUMMONERID_CHAMPIONID,
             [
                 'platform' => $this->baseApi->platform,
                 'summonerId' => $summonerId,
@@ -84,9 +83,7 @@ class ChampionMasteryApi
             $url,
             Request::METHOD_GET,
             [
-                'headers' => [
-                    'X-Riot-Token' => $this->baseApi->apiKey,
-                ],
+                'headers' => ['X-Riot-Token' => $this->baseApi->apiKey],
             ]
         );
 
@@ -103,8 +100,7 @@ class ChampionMasteryApi
             throw new ForbiddenException('Summoner ID est vide');
         }
 
-        $url = $this->baseApi->constructUrl(
-            self::URL_CHAMPION_MASTERY_SCORE_SUMMONERID,
+        $url = UrlHelper::constructUrl(self::URL_CHAMPION_MASTERY_SCORE_SUMMONERID,
             [
                 'platform' => $this->baseApi->platform,
                 'summonerId' => $summonerId,
@@ -115,9 +111,7 @@ class ChampionMasteryApi
             $url,
             Request::METHOD_GET,
             [
-                'headers' => [
-                    'X-Riot-Token' => $this->baseApi->apiKey,
-                ],
+                'headers' => ['X-Riot-Token' => $this->baseApi->apiKey],
             ],
             'content'
         );

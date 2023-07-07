@@ -1,13 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services\API\LOL\DataDragon;
 
 use App\Services\API\LOL\BaseApi;
+use App\Services\API\LOL\Helper\UrlHelper;
 use Symfony\Component\HttpFoundation\Request;
 
 class DataDragonApi
 {
-    public const URL_RACINE = 'https://ddragon.leagueoflegends.com/';
+    private const URL_RACINE = 'https://ddragon.leagueoflegends.com/';
     public const URL_VERSION = self::URL_RACINE . 'api/versions.json';
     public const URL_LANGUAGE = self::URL_RACINE . 'cdn/languages.json';
     public const URL_CHAMPIONS = self::URL_RACINE . 'cdn/{version}/data/{lang}/champion.json';
@@ -16,34 +19,27 @@ class DataDragonApi
     public const URL_SUMMONER = self::URL_RACINE . 'cdn/{version}/data/{lang}/summoner.json';
 
     public function __construct(
-        private BaseApi $baseApi,
+        private readonly BaseApi $baseApi,
     ) {
     }
 
-    /**
-     * @return array|null
-     */
-    public function getVersions()
+    public function getVersions(): ?array
     {
         return $this->baseApi->callApi(self::URL_VERSION, Request::METHOD_GET);
     }
 
-    public function getLanguages()
+    public function getLanguages(): ?array
     {
         return $this->baseApi->callApi(self::URL_LANGUAGE, Request::METHOD_GET);
     }
 
-    /**
-     * @return array|null
-     */
-    public function getChampions(string $version = null, string $lang = 'fr_FR')
+    public function getChampions(string $version = null, string $lang = 'fr_FR'): ?array
     {
         if (null === $version) {
             $version = $this->getLastVersion();
         }
 
-        $url = $this->baseApi->constructUrl(
-            self::URL_CHAMPIONS,
+        $url = UrlHelper::constructUrl(self::URL_CHAMPIONS,
             [
                 'version' => $version,
                 'lang' => $lang,
@@ -53,17 +49,13 @@ class DataDragonApi
         return $this->baseApi->callApi($url, Request::METHOD_GET);
     }
 
-    /**
-     * @return array|null
-     */
-    public function getChampion(string $champion, string $version = null, string $lang = 'fr_FR')
+    public function getChampion(string $champion, string $version = null, string $lang = 'fr_FR'): ?array
     {
         if (null === $version) {
             $version = $this->getLastVersion();
         }
 
-        $url = $this->baseApi->constructUrl(
-            self::URL_CHAMPION,
+        $url = UrlHelper::constructUrl(self::URL_CHAMPION,
             [
                 'champion' => ucfirst($champion),
                 'version' => $version,
@@ -74,17 +66,12 @@ class DataDragonApi
         return $this->baseApi->callApi($url, Request::METHOD_GET);
     }
 
-    /**
-     * @return bool[]|int[]|string|string[]|null
-     */
-    public function getItems(string $version = null, string $lang = 'fr_FR')
+    public function getItems(string $version = null, string $lang = 'fr_FR'): ?array
     {
         if (null === $version) {
             $version = $this->getLastVersion();
         }
-
-        $url = $this->baseApi->constructUrl(
-            self::URL_ITEMS,
+        $url = UrlHelper::constructUrl(self::URL_ITEMS,
             [
                 'version' => $version,
                 'lang' => $lang,
@@ -94,26 +81,26 @@ class DataDragonApi
         return $this->baseApi->callApi($url, Request::METHOD_GET);
     }
 
-    public function getSummoner(string $version = null, string $lang = 'fr_FR')
+    public function getSummoner(string $version = null, string $lang = 'fr_FR'): ?array
     {
         if (null === $version) {
             $version = $this->getLastVersion();
         }
 
-        $url = $this->baseApi->constructUrl(
-            self::URL_SUMMONER,
+        $url = UrlHelper::constructUrl(self::URL_SUMMONER,
             [
                 'version' => $version,
                 'lang' => $lang,
             ]
         );
+
+        return $this->baseApi->callApi($url, Request::METHOD_GET);
     }
 
-    /**
-     * @return mixed
-     */
-    private function getLastVersion()
+    public function getLastVersion(): ?string
     {
-        return $this->getVersions()[0];
+        $versions = $this->getVersions();
+
+        return $versions ? $versions[0] : null;
     }
 }

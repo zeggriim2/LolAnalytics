@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services\API\LOL\LeagueOfLegends;
 
 use App\Services\API\LOL\BaseApi;
+use App\Services\API\LOL\Helper\UrlHelper;
 use App\Services\API\LOL\LeagueOfLegends\DTO\Match\MatchDto;
 use App\Services\API\LOL\LeagueOfLegends\Exception\ForbiddenException;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,8 +21,8 @@ class MatchApi
         BaseApi::URL_RACINE_REGION . 'match/v5/matches/{matchId}/timeline';
 
     public function __construct(
-        private BaseApi $baseApi,
-        private DenormalizerInterface $denormalizer
+        private readonly BaseApi $baseApi,
+        private readonly DenormalizerInterface $denormalizer
     ) {
     }
 
@@ -37,13 +40,12 @@ class MatchApi
             throw new ForbiddenException('Puuid est vide');
         }
 
-        $url = $this->baseApi->constructUrl(
-            self::URL_MATCH_PUUID,
+        $url = UrlHelper::constructUrl(self::URL_MATCH_PUUID,
             [
                 'region' => 'europe',
                 'puuid' => $puuid,
-                'start' => $start,
-                'count' => $count,
+                'start' => (string) $start,
+                'count' => (string) $count,
             ]
         );
 
@@ -51,9 +53,7 @@ class MatchApi
             $url,
             Request::METHOD_GET,
             [
-                'headers' => [
-                    'X-Riot-Token' => $this->baseApi->apiKey,
-                ],
+                'headers' => ['X-Riot-Token' => $this->baseApi->apiKey],
             ]
         );
     }
@@ -68,8 +68,7 @@ class MatchApi
             throw new ForbiddenException('Match ID est vide');
         }
 
-        $url = $this->baseApi->constructUrl(
-            self::URL_MATCH_ID,
+        $url = UrlHelper::constructUrl(self::URL_MATCH_ID,
             [
                 'region' => 'europe',
                 'matchId' => $matchId,
@@ -80,9 +79,7 @@ class MatchApi
             $url,
             Request::METHOD_GET,
             [
-                'headers' => [
-                    'X-Riot-Token' => $this->baseApi->apiKey,
-                ],
+                'headers' => ['X-Riot-Token' => $this->baseApi->apiKey],
             ]
         );
 
@@ -96,8 +93,7 @@ class MatchApi
             throw new ForbiddenException('Match ID est vide');
         }
 
-        $url = $this->baseApi->constructUrl(
-            self::URL_MATCH_TIMELINE_MATCH_ID,
+        $url = UrlHelper::constructUrl(self::URL_MATCH_TIMELINE_MATCH_ID,
             [
                 'region' => 'europe',
                 'matchId' => $matchId,
@@ -108,9 +104,7 @@ class MatchApi
             $url,
             Request::METHOD_GET,
             [
-                'headers' => [
-                    'X-Riot-Token' => $this->baseApi->apiKey,
-                ],
+                'headers' => ['X-Riot-Token' => $this->baseApi->apiKey],
             ]
         );
 

@@ -9,7 +9,6 @@
          convertDeprecationsToExceptions="false"
 >
     <php>
-        <env name="SYMFONY_DEPRECATIONS_HELPERS" value="weak" />
         <ini name="display_errors" value="1" />
         <ini name="error_reporting" value="-1" />
         <server name="APP_ENV" value="test" force="true" />
@@ -28,16 +27,12 @@
         <include>
             <directory suffix=".php">src</directory>
         </include>
+        <exclude>
+            <directory suffix=".php">src/Services/API/LOL/DataDragon/Enum</directory>
+        </exclude>
     </coverage>
 
     <listeners>
         <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener" />
     </listeners>
-
-    <!-- Run `composer require symfony/panther` before enabling this extension -->
-    <!--
-    <extensions>
-        <extension class="Symfony\Component\Panther\ServerExtension" />
-    </extensions>
-    -->
 </phpunit>

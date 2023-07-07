@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services\API\LOL\LeagueOfLegends;
 
 use App\Services\API\LOL\BaseApi;
+use App\Services\API\LOL\Helper\UrlHelper;
 use App\Services\API\LOL\LeagueOfLegends\DTO\SummonerDTO;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
@@ -19,26 +22,26 @@ class SummonerApi
         BaseApi::URL_RACINE_PLATFORM . 'summoner/v4/summoners/{summonerId}';
 
     public function __construct(
-        private BaseApi $baseApi,
-        private DenormalizerInterface $denormalizer
+        private readonly BaseApi $baseApi,
+        private readonly DenormalizerInterface $denormalizer
     ) {
     }
 
     public function summonerBySummonerName(string $summonerName): ?SummonerDTO
     {
-        $url = $this->baseApi->constructUrl(self::URL_NAME, [
-            'platform' => $this->baseApi->platform,
-            'name' => $summonerName,
-        ]);
+        $url = UrlHelper::constructUrl(self::URL_NAME,
+            [
+                'platform' => $this->baseApi->platform,
+                'name' => $summonerName,
+            ]
+        );
 
         /** @var array<string,int|string>|null $summoner */
         $summoner = $this->baseApi->callApi(
             $url,
             Request::METHOD_GET,
             [
-                'headers' => [
-                    'X-Riot-Token' => $this->baseApi->apiKey,
-                ],
+                'headers' => ['X-Riot-Token' => $this->baseApi->apiKey],
             ]
         );
         if (null === $summoner) {
@@ -50,18 +53,19 @@ class SummonerApi
 
     public function summonerByAccountId(string $accountId): ?SummonerDTO
     {
-        $url = $this->baseApi->constructUrl(self::URL_ACCOUNTID, [
-            'platform' => $this->baseApi->platform,
-            'accountId' => $accountId,
-        ]);
+        $url = UrlHelper::constructUrl(self::URL_ACCOUNTID,
+            [
+                'platform' => $this->baseApi->platform,
+                'accountId' => $accountId,
+            ]
+        );
+
         /** @var array<string,int|string>|null $summoner */
         $summoner = $summoner = $this->baseApi->callApi(
             $url,
             Request::METHOD_GET,
             [
-                'headers' => [
-                    'X-Riot-Token' => $this->baseApi->apiKey,
-                ],
+                'headers' => ['X-Riot-Token' => $this->baseApi->apiKey],
             ]
         );
 
@@ -74,19 +78,19 @@ class SummonerApi
 
     public function summonerByPuuid(string $puuid): ?SummonerDTO
     {
-        $url = $this->baseApi->constructUrl(self::URL_PUUID, [
-            'platform' => $this->baseApi->platform,
-            'puuid' => $puuid,
-        ]);
+        $url = UrlHelper::constructUrl(self::URL_PUUID,
+            [
+                'platform' => $this->baseApi->platform,
+                'puuid' => $puuid,
+            ]
+        );
 
         /** @var array<string,int|string>|null $summoner */
         $summoner = $summoner = $this->baseApi->callApi(
             $url,
             Request::METHOD_GET,
             [
-                'headers' => [
-                    'X-Riot-Token' => $this->baseApi->apiKey,
-                ],
+                'headers' => ['X-Riot-Token' => $this->baseApi->apiKey],
             ]
         );
 
@@ -99,19 +103,19 @@ class SummonerApi
 
     public function summonerBySummonerId(string $summonerId): ?SummonerDTO
     {
-        $url = $this->baseApi->constructUrl(self::URL_SUMMONER_ID, [
-            'platform' => $this->baseApi->platform,
-            'summonerId' => $summonerId,
-        ]);
+        $url = UrlHelper::constructUrl(self::URL_SUMMONER_ID,
+            [
+                'platform' => $this->baseApi->platform,
+                'summonerId' => $summonerId,
+            ]
+        );
 
         /** @var array<string,int|string>|null $summoner */
-        $summoner = $summoner = $this->baseApi->callApi(
+        $summoner = $this->baseApi->callApi(
             $url,
             Request::METHOD_GET,
             [
-                'headers' => [
-                    'X-Riot-Token' => $this->baseApi->apiKey,
-                ],
+                'headers' => ['X-Riot-Token' => $this->baseApi->apiKey],
             ]
         );
 

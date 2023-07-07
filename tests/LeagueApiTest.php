@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests;
 
-use App\Services\API\LOL\DataDragon\Division;
-use App\Services\API\LOL\DataDragon\Queue;
-use App\Services\API\LOL\DataDragon\Tier;
+use App\Services\API\LOL\DataDragon\Enum\Division;
+use App\Services\API\LOL\DataDragon\Enum\Queue;
+use App\Services\API\LOL\DataDragon\Enum\Tier;
 use App\Services\API\LOL\LeagueOfLegends\DTO\League\LeagueEntryDTO;
 use App\Services\API\LOL\LeagueOfLegends\DTO\League\LeagueListDTO;
 use App\Services\API\LOL\LeagueOfLegends\Exception\ForbiddenException;
@@ -22,7 +24,7 @@ class LeagueApiTest extends KernelTestCase
     }
 
     // League By Summoner ID Start
-    public function testLeagueBySummonerIdSuccess()
+    public function testLeagueBySummonerIdSuccess(): void
     {
         $leaguesSummonerId =
             $this->leagueApi->leagueBySummonerId('tSmVTVjydJYj5gbjMy8IhFkyMpgWhc4JNdH4ZbqHal3maT4');
@@ -34,7 +36,7 @@ class LeagueApiTest extends KernelTestCase
         }
     }
 
-    public function testLeagueBySummonerIdForbiddenException()
+    public function testLeagueBySummonerIdForbiddenException(): void
     {
         $this->expectException(ForbiddenException::class);
         $this->expectExceptionMessage('Summoner ID est vide');
@@ -44,19 +46,19 @@ class LeagueApiTest extends KernelTestCase
     // League By Summoner ID End
 
     // League Challenger By Queue Start
-    public function testLeagueChallengerByQueueSuccess()
+    public function testLeagueChallengerByQueueSuccess(): void
     {
         $leagueChallenger = $this->leagueApi->leagueChallengerByQueue(Queue::RANKED_SOLO);
         $this->assertInstanceOf(LeagueListDTO::class, $leagueChallenger);
     }
 
-    public function testLeagueChallengerByQueueForbiddenException()
+    public function testLeagueChallengerByQueueForbiddenException(): void
     {
         $this->expectException(ForbiddenException::class);
         $leagueChallenger = $this->leagueApi->leagueChallengerByQueue('');
     }
 
-    public function testLeagueChallengerByQueueLeagueArgumentException()
+    public function testLeagueChallengerByQueueLeagueArgumentException(): void
     {
         $this->expectException(LeagueArgumentException::class);
         $leagueChallenger = $this->leagueApi->leagueChallengerByQueue('zerhzaterh');
@@ -64,19 +66,19 @@ class LeagueApiTest extends KernelTestCase
     // League Challenger By Queue End
 
     // League Grand Master By Queue Start
-    public function testLeagueGrandMasterByQueueSuccess()
+    public function testLeagueGrandMasterByQueueSuccess(): void
     {
         $leagueChallenger = $this->leagueApi->leagueGrandMasterByQueue(Queue::RANKED_SOLO);
         $this->assertInstanceOf(LeagueListDTO::class, $leagueChallenger);
     }
 
-    public function testLeagueGrandMasterByQueueForbiddenException()
+    public function testLeagueGrandMasterByQueueForbiddenException(): void
     {
         $this->expectException(ForbiddenException::class);
         $leagueChallenger = $this->leagueApi->leagueGrandMasterByQueue('');
     }
 
-    public function testLeagueGrandMasterByQueueLeagueArgumentException()
+    public function testLeagueGrandMasterByQueueLeagueArgumentException(): void
     {
         $this->expectException(LeagueArgumentException::class);
         $leagueChallenger = $this->leagueApi->leagueGrandMasterByQueue('zerhzaterh');
@@ -84,19 +86,19 @@ class LeagueApiTest extends KernelTestCase
     // League Grand Master By Queue End
 
     // League Master By Queue Start
-    public function testLeagueMasterByQueueSuccess()
+    public function testLeagueMasterByQueueSuccess(): void
     {
         $leagueMaster = $this->leagueApi->leagueMasterByQueue(Queue::RANKED_SOLO);
         $this->assertInstanceOf(LeagueListDTO::class, $leagueMaster);
     }
 
-    public function testLeagueMasterByQueueForbiddenException()
+    public function testLeagueMasterByQueueForbiddenException(): void
     {
         $this->expectException(ForbiddenException::class);
         $leagueMaster = $this->leagueApi->leagueMasterByQueue('');
     }
 
-    public function testLeagueMasterByQueueLeagueArgumentException()
+    public function testLeagueMasterByQueueLeagueArgumentException(): void
     {
         $this->expectException(LeagueArgumentException::class);
         $leagueMaster = $this->leagueApi->leagueMasterByQueue('zerhzaterh');
@@ -104,13 +106,13 @@ class LeagueApiTest extends KernelTestCase
     // League Master By Queue End
 
     // League By League ID Start
-    public function testLeagueByLeagueIdSuccess()
+    public function testLeagueByLeagueIdSuccess(): void
     {
         $league = $this->leagueApi->leagueByLeagueId('86940884-763f-478a-860d-a98c57a85102');
         $this->assertInstanceOf(LeagueListDTO::class, $league);
     }
 
-    public function testLeagueByLeagueIdForbiddenException()
+    public function testLeagueByLeagueIdForbiddenException(): void
     {
         $this->expectException(ForbiddenException::class);
         $league = $this->leagueApi->leagueByLeagueId('');
@@ -118,7 +120,7 @@ class LeagueApiTest extends KernelTestCase
     // League Grand Master By Queue End
 
     // League By Queue By Tier By Division Start
-    public function testLeagueByQueueByTierByDivisionSuccess()
+    public function testLeagueByQueueByTierByDivisionSuccess(): void
     {
         $leagueList = $this->leagueApi->leagueByQueueByTierByDivision(
             Queue::RANKED_SOLO,
@@ -133,7 +135,7 @@ class LeagueApiTest extends KernelTestCase
         }
     }
 
-    public function testLeagueByQueueByTierByDivisionExceptionForbidden()
+    public function testLeagueByQueueByTierByDivisionExceptionForbidden(): void
     {
         $this->expectException(ForbiddenException::class);
         $this->expectExceptionMessage('Queue/Tier/Division est vide');
@@ -156,7 +158,7 @@ class LeagueApiTest extends KernelTestCase
         );
     }
 
-    public function testLeagueByQueueByTierByDivisionExceptionArgumentException()
+    public function testLeagueByQueueByTierByDivisionExceptionArgumentException(): void
     {
         $this->expectException(LeagueArgumentException::class);
         $this->expectExceptionMessage("N'existe pas dans les différents éléments Queue/Tier/Division");

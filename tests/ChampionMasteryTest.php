@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests;
 
 use App\Services\API\LOL\LeagueOfLegends\ChampionMasteryApi;
@@ -16,7 +18,7 @@ class ChampionMasteryTest extends KernelTestCase
         $this->championMasteryApi = static::getContainer()->get(ChampionMasteryApi::class);
     }
 
-    public function testChampionMasteryBySummonerIdSuccess()
+    public function testChampionMasteryBySummonerIdSuccess(): void
     {
         $championMasteryList = $this->championMasteryApi
             ->getChampionMasteryBySummonerId('tSmVTVjydJYj5gbjMy8IhFkyMpgWhc4JNdH4ZbqHal3maT4');
@@ -30,13 +32,13 @@ class ChampionMasteryTest extends KernelTestCase
         }
     }
 
-    public function testChampionMasteryBySummonerIdForbidden()
+    public function testChampionMasteryBySummonerIdForbidden(): void
     {
         $this->expectException(ForbiddenException::class);
         $championMasteryList = $this->championMasteryApi->getChampionMasteryBySummonerId('');
     }
 
-    public function testChampionMasteryBySummonerIdAndByChampionSuccess()
+    public function testChampionMasteryBySummonerIdAndByChampionSuccess(): void
     {
         $championMastery = $this->championMasteryApi->getChampionMasteryBySummonerIdAndByChampionId(
             'tSmVTVjydJYj5gbjMy8IhFkyMpgWhc4JNdH4ZbqHal3maT4',
@@ -45,7 +47,7 @@ class ChampionMasteryTest extends KernelTestCase
         $this->assertInstanceOf(ChampionMasteryDto::class, $championMastery);
     }
 
-    public function testChampionMasteryBySummonerIdAndByChampionForbiddenSummonerId()
+    public function testChampionMasteryBySummonerIdAndByChampionForbiddenSummonerId(): void
     {
         $this->expectException(ForbiddenException::class);
         $championMasteryList = $this->championMasteryApi->getChampionMasteryBySummonerIdAndByChampionId(
@@ -54,7 +56,7 @@ class ChampionMasteryTest extends KernelTestCase
         );
     }
 
-    public function testChampionMasteryBySummonerIdAndByChampionForbiddenChampionId()
+    public function testChampionMasteryBySummonerIdAndByChampionForbiddenChampionId(): void
     {
         $this->expectException(ForbiddenException::class);
         $championMasteryList = $this->championMasteryApi->getChampionMasteryBySummonerIdAndByChampionId(
@@ -63,7 +65,7 @@ class ChampionMasteryTest extends KernelTestCase
         );
     }
 
-    public function testChampionMasteryScoreBySummonerIdSuccess()
+    public function testChampionMasteryScoreBySummonerIdSuccess(): void
     {
         $championMasteryScore = $this->championMasteryApi->getChampionMasteryScoreBySummonerId(
             'tSmVTVjydJYj5gbjMy8IhFkyMpgWhc4JNdH4ZbqHal3maT4'
@@ -72,7 +74,7 @@ class ChampionMasteryTest extends KernelTestCase
         $this->assertIsInt($championMasteryScore);
     }
 
-    public function testChampionMasteryScoreBySummonerIdForbidden()
+    public function testChampionMasteryScoreBySummonerIdForbidden(): void
     {
         $this->expectException(ForbiddenException::class);
         $championMasteryScore = $this->championMasteryApi->getChampionMasteryScoreBySummonerId(

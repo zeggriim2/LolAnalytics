@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests;
 
 use App\Services\API\LOL\LeagueOfLegends\DTO\SummonerDTO;
@@ -15,7 +17,7 @@ class SummonerApiTest extends KernelTestCase
         $this->summonerApi = static::getContainer()->get(SummonerApi::class);
     }
 
-    public function testSummonerByNameSuccess()
+    public function testSummonerByNameSuccess(): void
     {
         $this->assertInstanceOf(
             SummonerDTO::class,
@@ -23,17 +25,17 @@ class SummonerApiTest extends KernelTestCase
         );
     }
 
-    public function testSummonerByNameBad()
+    public function testSummonerByNameBad(): void
     {
         $this->assertNull($this->summonerApi->summonerBySummonerName('rzgakrj'));
     }
 
-    public function testSummonerByNameEmpty()
+    public function testSummonerByNameEmpty(): void
     {
         $this->assertNull($this->summonerApi->summonerBySummonerName(''));
     }
 
-    public function testSummonerByAccountIdSuccess()
+    public function testSummonerByAccountIdSuccess(): void
     {
         $this->assertInstanceOf(
             SummonerDTO::class,
@@ -41,17 +43,17 @@ class SummonerApiTest extends KernelTestCase
         );
     }
 
-    public function testSummonerByAccountIdBad()
+    public function testSummonerByAccountIdBad(): void
     {
         $this->assertNull($this->summonerApi->summonerByAccountId('rzgakrj'));
     }
 
-    public function testSummonerByAccountIdEmpty()
+    public function testSummonerByAccountIdEmpty(): void
     {
         $this->assertNull($this->summonerApi->summonerByAccountId(''));
     }
 
-    public function testSummonerByPuuidSuccess()
+    public function testSummonerByPuuidSuccess(): void
     {
         $this->assertInstanceOf(
             SummonerDTO::class,
@@ -61,17 +63,17 @@ class SummonerApiTest extends KernelTestCase
         );
     }
 
-    public function testSummonerByPuuidBad()
+    public function testSummonerByPuuidBad(): void
     {
         $this->assertNull($this->summonerApi->SummonerByPuuid('rzgakrj'));
     }
 
-    public function testSummonerByPuuidEmpty()
+    public function testSummonerByPuuidEmpty(): void
     {
         $this->assertNull($this->summonerApi->SummonerByPuuid(''));
     }
 
-    public function testSummonerBySummonerIdSuccess()
+    public function testSummonerBySummonerIdSuccess(): void
     {
         $this->assertInstanceOf(
             SummonerDTO::class,
@@ -79,12 +81,12 @@ class SummonerApiTest extends KernelTestCase
         );
     }
 
-    public function testSummonerBySummonerIdBad()
+    public function testSummonerBySummonerIdBad(): void
     {
         $this->assertNull($this->summonerApi->SummonerBySummonerId('rzgakrj'));
     }
 
-    public function testSummonerBySummonerIdEmpty()
+    public function testSummonerBySummonerIdEmpty(): void
     {
         $this->assertNull($this->summonerApi->SummonerBySummonerId(''));
     }
