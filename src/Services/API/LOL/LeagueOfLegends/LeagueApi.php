@@ -33,7 +33,7 @@ class LeagueApi
 
     public function __construct(
         private readonly BaseApi $baseApi,
-        private readonly DenormalizerInterface $denormalizer
+        private DenormalizerInterface $denormalizer
     ) {
     }
 
@@ -253,6 +253,7 @@ class LeagueApi
     private function denormalize(
         array $data
     ): LeagueListDTO {
+        dd($this->denormalizer->denormalize($data, LeagueListDTO::class));
         return $this->denormalizer->denormalize($data, LeagueListDTO::class);
     }
 }

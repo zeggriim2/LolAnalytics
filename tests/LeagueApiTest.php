@@ -50,6 +50,8 @@ class LeagueApiTest extends KernelTestCase
     {
         $leagueChallenger = $this->leagueApi->leagueChallengerByQueue(Queue::RANKED_SOLO);
         $this->assertInstanceOf(LeagueListDTO::class, $leagueChallenger);
+        dd($leagueChallenger->getEntries());
+        $this->assertContainsOnlyInstancesOf(LeagueListDTO::class, $leagueChallenger->getEntries());
     }
 
     public function testLeagueChallengerByQueueForbiddenException(): void
