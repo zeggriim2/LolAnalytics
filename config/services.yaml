@@ -15,6 +15,40 @@ services:
     # this creates a service per class whose id is the fully-qualified class name
     App\:
         resource: '../src/'
+        exclude: 
+            - '../src/Domain/Model/*'
+            - '../src/Infrastructure/SharedContext/Framework/Symfony/Kernel.php'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+    
+    # Version Bounded Context
+    App\Domain\Version\Service\VersionServiceInterface:
+        alias: App\Infrastructure\Version\Service\RiotApiVersionService
+
+    App\Domain\Version\Repository\VersionRepositoryInterface:
+        alias: App\Infrastructure\Version\Repository\DoctrineVersionRepository
+
+    # CQRS Buses
+    App\Application\SharedContext\Bus\CommandBusInterface:
+        alias: App\Infrastructure\Bus\MessengerCommandBus
+
+    App\Application\SharedContext\Bus\QueryBusInterface:
+        alias: App\Infrastructure\Bus\MessengerQueryBus
+        
+    # Infrastructure Services
+    App\Infrastructure\Version\Service\RiotApiVersionService:
+        arguments:
+            $dataDragonClient: '@Zeggriim\RiotApiDataDragon\DataDragon\DataDragonApiInterface'
+
+
+
+#    App\Domain\Version\Service\VersionServiceInterface:
+#        alias: App\Infrastructure\RiotApi\Service\RiotApiVersionService
+#
+#    App\Domain\RiotApi\Repository\VersionRepositoryInterface:
+#        alias: App\Infrastructure\RiotApi\Repository\DoctrineVersionRepository
+#
+#    App\Infrastructure\RiotApi\Service\RiotApiVersionService:
+#        arguments:
+#            $dataDragonClient: '@Zeggriim\RiotApiDataDragon\DataDragon\DataDragonApiInterface'
