@@ -23,25 +23,15 @@ services:
     # please note that last definitions always *replace* previous ones
     
     # Version Bounded Context
-    App\Domain\Version\Service\VersionServiceInterface:
-        alias: App\Infrastructure\Version\Service\RiotApiVersionService
-
-    App\Domain\Version\Repository\VersionRepositoryInterface:
-        alias: App\Infrastructure\Version\Repository\DoctrineVersionRepository
+    App\Match\Domain\Repository\MatchRepositoryInterface:
+        alias: App\Match\Infrastructure\Persistance\Doctrine\Repository\DoctrineMatchRepository
 
     # CQRS Buses
-    App\Application\SharedContext\Bus\CommandBusInterface:
-        alias: App\Infrastructure\Bus\MessengerCommandBus
+    App\SharedContext\Application\Bus\CommandBusInterface:
+        alias: App\SharedContext\Infrastructure\Bus\MessengerCommandBus
 
-    App\Application\SharedContext\Bus\QueryBusInterface:
-        alias: App\Infrastructure\Bus\MessengerQueryBus
-        
-    # Infrastructure Services
-    App\Infrastructure\Version\Service\RiotApiVersionService:
-        arguments:
-            $dataDragonClient: '@Zeggriim\RiotApiDataDragon\DataDragon\DataDragonApiInterface'
-
-
+    App\SharedContext\Application\Bus\QueryBusInterface:
+        alias: App\SharedContext\Infrastructure\Bus\MessengerQueryBus
 
 #    App\Domain\Version\Service\VersionServiceInterface:
 #        alias: App\Infrastructure\RiotApi\Service\RiotApiVersionService
