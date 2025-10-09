@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Liste des matchs</h1>
+
+    <div id="match-list" data-controller="match-list">
+        <ul>
+            {% for match in matches %}
+                <li>
+                    <a href="{{ path('app_match_details', { id: match.id }) }}" data-turbo-frame="match-details">
+                        {{ match.id }} - {{ match.playedAt|date('d/m/Y H:i') }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <turbo-frame id="match-details">
+        <p>Sélectionne un match pour voir les détails.</p>
+    </turbo-frame>
+{% endblock %}

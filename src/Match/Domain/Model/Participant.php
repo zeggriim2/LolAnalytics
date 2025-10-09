@@ -11,6 +11,7 @@ final class Participant
 {
     public function __construct(
         private readonly SummonerId $summonerId,
+        private readonly string $puuid,
         private readonly int $championId,
         private readonly bool $win,
         private readonly KDA $kda,
@@ -26,4 +27,5 @@ final class Participant
     public function win(): bool { return $this->win; }
     public function kda(): KDA { return $this->kda; }
     public function items(): array { return $this->items; }
+    public function puuid(): string { return $this->puuid; }
 }
