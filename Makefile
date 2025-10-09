@@ -4,6 +4,9 @@ DOCKER_COMP = docker-compose
 # Docker containers
 PHP_CONT = $(DOCKER_COMP) exec php
 
+PHPQA_IMAGE = jakzal/phpqa:php8.4-alpine
+DOCKER_RUN_PHPQA = docker run --rm -v $(PWD):/project -w /project $(PHPQA_IMAGE)
+
 # Executables
 PHP      = $(PHP_CONT) php
 COMPOSER = $(PHP_CONT) composer
@@ -59,3 +62,38 @@ sf: ## List all Symfony commands or pass the parameter "c=" to run a given comma
 
 cc: c=c:c ## Clear the cache
 cc: sf
+
+## —— Jakzal 🎵 ———————————————————————————————————————————————————————————————
+.PHONY: qa
+qa: ## Run all quality tools (PHP CS Fixer + PHPStan)
+	@echo "🔍 Running PHP CS Fixer..."
+	$(MAKE) cs-check
+	@echo "🔍 Running PHPStan..."
+	$(MAKE) phpstan
+	@echo "✅ All quality checks completed!"
+
+.PHONY: cs-check
+cs-check: ## Check coding standards (dry-run)
+	@echo "🔍 Checking coding standards..."
+	$(DOCKER_RUN_PHPQA) php-cs-fixer fix --dry-run --diff --verbose
+
+
+.PHONY: cs-fix
+cs-fix: ## Fix coding standards
+	@echo "🔧 Fixing coding standards..."
+	$(DOCKER_RUN_PHPQA) php-cs-fixer fix
+
+.PHONY: phpstan
+phpstan: ## Run PHPStan static analysis
+	@echo "🔍 Running PHPStan analysis..."
+	$(DOCKER_RUN_PHPQA) phpstan analyse --memory-limit=1G
+
+.PHONY: phpstan-baseline
+phpstan-baseline: ## Generate PHPStan baseline
+	@echo "📝 Generating PHPStan baseline..."
+	$(DOCKER_RUN_PHPQA) phpstan analyse --generate-baseline --memory-limit=1G
+
+.PHONY: phpstan-clear
+phpstan-clear: ## Clear PHPStan cache
+	@echo "🗑️ Clearing PHPStan cache..."
+	$(DOCKER_RUN_PHPQA) phpstan clear-result-cache

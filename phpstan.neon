@@ -1,0 +1,12 @@
+parameters:
+    level: 8
+    paths:
+        - src
+        - tests
+    excludePaths:
+        - var/*
+        - vendor/*
+    ignoreErrors:
+        # Ignorer les erreurs liées à Doctrine pour l'instant
+        - '#Property App\\Match\\Infrastructure\\Persistance\\Doctrine\\Entity\\MatchEntity::\$id \(int\|null\) is never assigned int#'
+        - '#Property App\\Match\\Infrastructure\\Persistance\\Doctrine\\Entity\\ParticipantEntity::\$id \(int\|null\) is never assigned int#'
