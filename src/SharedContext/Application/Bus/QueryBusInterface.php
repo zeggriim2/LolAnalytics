@@ -7,5 +7,4 @@ namespace App\SharedContext\Application\Bus;
 interface QueryBusInterface
 {
     public function handle(object $query): mixed;
-
 }

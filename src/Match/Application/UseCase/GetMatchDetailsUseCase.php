@@ -10,7 +10,9 @@ use App\SharedContext\Application\Bus\QueryBusInterface;
 
 final class GetMatchDetailsUseCase
 {
-    public function __construct(private readonly QueryBusInterface $queryBus) {}
+    public function __construct(private readonly QueryBusInterface $queryBus)
+    {
+    }
 
     public function execute(string $id): ?Matche
     {

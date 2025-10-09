@@ -11,7 +11,9 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class ListController extends AbstractController
 {
-    public function __construct(private readonly ListMatchesUseCase $listMatchesUseCase) {}
+    public function __construct(private readonly ListMatchesUseCase $listMatchesUseCase)
+    {
+    }
 
     #[Route('/matches', name: 'app_matches')]
     public function list(): Response

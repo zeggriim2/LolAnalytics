@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace App\Match\Presentation\Console;
 
-use App\Match\Application\Command\IngestMatchCommand;
 use App\Match\Application\UseCase\IngestMatchesUseCase;
-use App\Match\Application\UseCase\IngestMatchUseCase;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -18,12 +16,11 @@ use Symfony\Component\Console\Style\SymfonyStyle;
     name: 'app:matches:ingest',
     description: 'Ingest matches',
 )]
-final class IngestMatchesCommand  extends Command
+final class IngestMatchesCommand extends Command
 {
     public function __construct(
         private readonly IngestMatchesUseCase $ingestMatchesUseCase
-    )
-    {
+    ) {
         parent::__construct();
     }
 
@@ -49,6 +46,7 @@ final class IngestMatchesCommand  extends Command
         } catch (\Exception $e) {
 
             $io->error($e->getMessage());
+
             return Command::FAILURE;
         }
     }

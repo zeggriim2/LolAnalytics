@@ -6,5 +6,7 @@ namespace App\Match\Application\Query;
 
 final class GetMatchByIdQuery
 {
-    public function __construct(public readonly string $id) {}
+    public function __construct(public readonly string $id)
+    {
+    }
 }

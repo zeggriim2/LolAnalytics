@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Tests\Match\Application\UseCase;
 
-
 use App\Match\Application\Query\GetMatchByIdQuery;
 use App\Match\Application\UseCase\GetMatchDetailsUseCase;
 use App\Match\Domain\Model\Matche;
@@ -45,7 +44,7 @@ final class GetMatchDetailsUseCaseTest extends TestCase
             ->method('handle')
             ->with($this->callback(function ($query) {
                 return $query instanceof GetMatchByIdQuery
-                    && $query->id === '123';
+                    && '123' === $query->id;
             }))
             ->willReturn($expectedMatch);
 

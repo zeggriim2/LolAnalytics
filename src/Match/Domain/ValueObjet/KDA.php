@@ -16,12 +16,23 @@ final class KDA
         }
     }
 
-    public function kills(): int { return $this->kills; }
-    public function deaths(): int { return $this->deaths; }
-    public function assists(): int { return $this->assists; }
+    public function kills(): int
+    {
+        return $this->kills;
+    }
+
+    public function deaths(): int
+    {
+        return $this->deaths;
+    }
+
+    public function assists(): int
+    {
+        return $this->assists;
+    }
 
     public function ratio(): float
     {
-        return $this->deaths === 0 ? ($this->kills + $this->assists) : ($this->kills + $this->assists) / $this->deaths;
+        return 0 === $this->deaths ? ($this->kills + $this->assists) : ($this->kills + $this->assists) / $this->deaths;
     }
 }

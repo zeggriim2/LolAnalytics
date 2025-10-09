@@ -6,7 +6,9 @@ namespace App\Match\Domain\ValueObjet;
 
 final class MatchId
 {
-    private function __construct(private readonly string $value) {}
+    private function __construct(private readonly string $value)
+    {
+    }
 
     public static function fromString(string $id): self
     {

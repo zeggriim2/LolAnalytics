@@ -9,5 +9,6 @@ final class MatcheDto
     public function __construct(
         public readonly string $matchId,
         public readonly string $region
-    ) {}
+    ) {
+    }
 }

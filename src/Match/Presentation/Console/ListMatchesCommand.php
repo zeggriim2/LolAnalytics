@@ -20,11 +20,9 @@ final class ListMatchesCommand extends Command
 {
     public function __construct(
         private readonly ListMatchesUseCase $listMatchesUseCase
-    )
-    {
+    ) {
         parent::__construct();
     }
-
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -42,7 +40,7 @@ final class ListMatchesCommand extends Command
                     $match->id(),
                     $match->gameId()->value(),
                     $match->playedAt()->format('d-m-Y H:i:s'),
-                    $this->formatDuration($match->durationSeconds())
+                    $this->formatDuration($match->durationSeconds()),
                 ];
             }
             $io->table($headers, $dataMatch);
@@ -52,12 +50,13 @@ final class ListMatchesCommand extends Command
         } catch (\Exception $e) {
 
             $io->error($e->getMessage());
+
             return Command::FAILURE;
         }
     }
 
     /**
-     * Convertit une durée totale en secondes vers un format "mm:ss"
+     * Convertit une durée totale en secondes vers un format "mm:ss".
      */
     private function formatDuration(int $totalSeconds): string
     {

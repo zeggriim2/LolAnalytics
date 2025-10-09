@@ -55,7 +55,7 @@ final class MatchEntity
     public static function fromDomain(Matche $match, string $region): self
     {
         $e = new self();
-        $e->matchId = (string)$match->id();
+        $e->matchId = (string) $match->id();
         $e->region = $region;
         $e->gameId = $match->gameId()->value();
         $e->playedAt = $match->playedAt();
@@ -69,10 +69,10 @@ final class MatchEntity
         return $e;
     }
 
-
     public function toDomain(): Matche
     {
         $participants = [];
+
         foreach ($this->participants as $participantEntity) {
             $participants[] = $participantEntity->toDomain();
         }
@@ -86,11 +86,38 @@ final class MatchEntity
         );
     }
 
-    public function getId(): ?int { return $this->id; }
-    public function getMatchId(): string { return $this->matchId; }
-    public function setMatchId(string $matchId): void { $this->matchId = $matchId; }
-    public function getGameId(): int { return $this->gameId; }
-    public function setGameId(int $gameId): void { $this->gameId = $gameId; }
-    public function getRegion(): string { return $this->region; }
-    public function setRegion(string $region): void { $this->region = $region; }
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getMatchId(): string
+    {
+        return $this->matchId;
+    }
+
+    public function setMatchId(string $matchId): void
+    {
+        $this->matchId = $matchId;
+    }
+
+    public function getGameId(): int
+    {
+        return $this->gameId;
+    }
+
+    public function setGameId(int $gameId): void
+    {
+        $this->gameId = $gameId;
+    }
+
+    public function getRegion(): string
+    {
+        return $this->region;
+    }
+
+    public function setRegion(string $region): void
+    {
+        $this->region = $region;
+    }
 }

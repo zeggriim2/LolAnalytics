@@ -6,7 +6,9 @@ namespace App\Match\Domain\ValueObjet;
 
 final class GameId
 {
-    private function __construct(private readonly int $value) {}
+    private function __construct(private readonly int $value)
+    {
+    }
 
     public static function fromInt(int $id): self
     {

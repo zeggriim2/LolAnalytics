@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Match\Application\CommandHandler;
 
-
 use App\Match\Application\Command\IngestMatchCommand;
 use App\Match\Domain\Event\MatchesSavedNotification;
 use App\Match\Domain\Repository\MatchRepositoryInterface;
@@ -21,7 +20,8 @@ final class IngestMatchHandler
         private readonly RiotApiClientInterface $riotClient,
         private readonly MatchRepositoryInterface $matchRepository,
         private readonly MessageBusInterface $eventBus
-    ) {}
+    ) {
+    }
 
     public function __invoke(IngestMatchCommand $command): void
     {

@@ -13,5 +13,6 @@ final class MatchesSavedNotification
         public readonly array $matchIds,
         public readonly string $region,
         public readonly \DateTimeImmutable $occurredAt
-    ) {}
+    ) {
+    }
 }

@@ -21,11 +21,13 @@ final class InMemoryMatchRepository implements MatchRepositoryInterface
     public function exists(MatchId $matchId): bool
     {
         $id = (string) $matchId;
+
         foreach ($this->matchesByRegion as $regionMatches) {
             if (isset($regionMatches[$id])) {
                 return true;
             }
         }
+
         return false;
     }
 
@@ -36,15 +38,18 @@ final class InMemoryMatchRepository implements MatchRepositoryInterface
                 return $regionMatches[$matchId];
             }
         }
+
         return null;
     }
 
     public function findAll(): array
     {
         $all = [];
+
         foreach ($this->matchesByRegion as $regionMatches) {
             $all = array_merge($all, $regionMatches);
         }
+
         return $all;
     }
 }

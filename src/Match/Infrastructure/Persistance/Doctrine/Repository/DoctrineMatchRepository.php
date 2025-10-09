@@ -12,7 +12,10 @@ use Doctrine\ORM\EntityManagerInterface;
 
 final class DoctrineMatchRepository implements MatchRepositoryInterface
 {
-    public function __construct(private readonly EntityManagerInterface $em) {}
+    public function __construct(private readonly EntityManagerInterface $em)
+    {
+    }
+
     public function save(Matche $match, string $region): void
     {
         $existing = $this->em->getRepository(MatchEntity::class)->findOneBy(['matchId' => $match->id()]);
@@ -31,13 +34,15 @@ final class DoctrineMatchRepository implements MatchRepositoryInterface
 
     public function exists(MatchId $matchId): bool
     {
-        $e = $this->em->getRepository(MatchEntity::class)->findOneBy(['matchId' => (string)$matchId]);
-        return $e !== null;
+        $e = $this->em->getRepository(MatchEntity::class)->findOneBy(['matchId' => (string) $matchId]);
+
+        return null !== $e;
     }
 
     public function findById(string $matchId): ?Matche
     {
         $e = $this->em->getRepository(MatchEntity::class)->findOneBy(['matchId' => $matchId]);
+
         return $e ? $e->toDomain() : null;
     }
 
@@ -46,6 +51,7 @@ final class DoctrineMatchRepository implements MatchRepositoryInterface
         $entities = $this->em->getRepository(MatchEntity::class)->findAll();
 
         $models = [];
+
         foreach ($entities as $entity) {
             $models[] = $entity->toDomain();
         }

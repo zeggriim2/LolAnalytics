@@ -18,13 +18,12 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 )]
 final class IngestMatchCommand extends Command
 {
-
     public function __construct(
         private readonly IngestMatchUseCase $ingestMatchUseCase,
-    )
-    {
+    ) {
         parent::__construct();
     }
+
     public function configure()
     {
         $this->addArgument('matchId', InputArgument::REQUIRED)
@@ -47,6 +46,7 @@ final class IngestMatchCommand extends Command
         } catch (\Exception $e) {
 
             $io->error($e->getMessage());
+
             return Command::FAILURE;
         }
     }

@@ -11,7 +11,8 @@ final class MessengerCommandBus implements CommandBusInterface
 {
     public function __construct(
         private readonly MessageBusInterface $commandBus,
-    ) {}
+    ) {
+    }
 
     public function dispatch(object $command): mixed
     {
