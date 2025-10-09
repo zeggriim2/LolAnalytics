@@ -44,7 +44,8 @@ final class ParticipantEntity
     #[ORM\JoinColumn(name: 'match_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
     public ?MatchEntity $match = null;
 
-    public static function fromDomain(Participant $participant, MatchEntity $matchEntity): self {
+    public static function fromDomain(Participant $participant, MatchEntity $matchEntity): self
+    {
         $entity = new self();
         $entity->match = $matchEntity;
         $entity->puuid = $participant->puuid();
@@ -74,19 +75,78 @@ final class ParticipantEntity
         );
     }
 
-    public function getId(): ?int { return $this->id; }
-    public function getPuuid(): string { return $this->puuid; }
-    public function setPuuid(string $puuid): void { $this->puuid = $puuid; }
-    public function getSummonerId(): string { return $this->summonerId; }
-    public function setSummonerId(string $summonerId): void { $this->summonerId = $summonerId; }
-    public function getChampionId(): int { return $this->championId; }
-    public function setChampionId(int $championId): void { $this->championId = $championId; }
-    public function getKills(): int { return $this->kills; }
-    public function setKills(int $kills): void { $this->kills = $kills; }
-    public function getDeaths(): int { return $this->deaths; }
-    public function setDeaths(int $deaths): void { $this->deaths = $deaths; }
-    public function getAssists(): int { return $this->assists; }
-    public function setAssists(int $assists): void { $this->assists = $assists; }
-    public function isWin(): bool { return $this->win; }
-    public function setWin(bool $win): void { $this->win = $win; }
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getPuuid(): string
+    {
+        return $this->puuid;
+    }
+
+    public function setPuuid(string $puuid): void
+    {
+        $this->puuid = $puuid;
+    }
+
+    public function getSummonerId(): string
+    {
+        return $this->summonerId;
+    }
+
+    public function setSummonerId(string $summonerId): void
+    {
+        $this->summonerId = $summonerId;
+    }
+
+    public function getChampionId(): int
+    {
+        return $this->championId;
+    }
+
+    public function setChampionId(int $championId): void
+    {
+        $this->championId = $championId;
+    }
+
+    public function getKills(): int
+    {
+        return $this->kills;
+    }
+
+    public function setKills(int $kills): void
+    {
+        $this->kills = $kills;
+    }
+
+    public function getDeaths(): int
+    {
+        return $this->deaths;
+    }
+
+    public function setDeaths(int $deaths): void
+    {
+        $this->deaths = $deaths;
+    }
+
+    public function getAssists(): int
+    {
+        return $this->assists;
+    }
+
+    public function setAssists(int $assists): void
+    {
+        $this->assists = $assists;
+    }
+
+    public function isWin(): bool
+    {
+        return $this->win;
+    }
+
+    public function setWin(bool $win): void
+    {
+        $this->win = $win;
+    }
 }

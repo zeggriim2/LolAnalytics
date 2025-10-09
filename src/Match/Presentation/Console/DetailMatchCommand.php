@@ -20,8 +20,7 @@ final class DetailMatchCommand extends Command
 {
     public function __construct(
         private readonly GetMatchDetailsUseCase $getMatchUseCase
-    )
-    {
+    ) {
         parent::__construct();
     }
 
@@ -43,6 +42,7 @@ final class DetailMatchCommand extends Command
 
             $headers = ['Summoner', 'Champion Id', 'Win', 'Kills', 'Deaths', 'Assists'];
             $dataParticipants = [];
+
             foreach ($match->participants() as $participant) {
                 $dataParticipants[] = [
                     $participant->summonerId(),
@@ -60,6 +60,7 @@ final class DetailMatchCommand extends Command
         } catch (\Exception $e) {
 
             $io->error($e->getMessage());
+
             return Command::FAILURE;
         }
     }

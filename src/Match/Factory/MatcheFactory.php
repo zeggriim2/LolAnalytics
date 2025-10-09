@@ -19,7 +19,7 @@ final class MatcheFactory
      * [
      * 'metadata' => ['matchId' => '...'],
      * 'info' => [ 'gameCreation' => 1234567890, 'gameDuration' => 1800, 'participants' => [ ... ]]
-     * ]
+     * ].
      */
     public static function fromRiotPayload(array $payload): Matche
     {
@@ -27,31 +27,35 @@ final class MatcheFactory
 
         $gameId = GameId::fromInt($payload['info']['gameId']) ?? throw new \InvalidArgumentException('Invalid gameId');
         $gameCreationMs = $payload['info']['gameCreation'] ?? null;
-        $gameDuration = (int)($payload['info']['gameDuration'] ?? 0);
+        $gameDuration = (int) ($payload['info']['gameDuration'] ?? 0);
 
-        if(null === $gameCreationMs) {
+        if (null === $gameCreationMs) {
             throw new \InvalidArgumentException('Invalid gameCreation');
         }
         $gameCreation = (int) ($gameCreationMs / 1000);
         $playedAt = (new \DateTimeImmutable())->setTimestamp($gameCreation);
 
         $participants = [];
+
         foreach ($payload['info']['participants'] as $p) {
-            $summonerId = SummonerId::fromString((string)($p['puuid'] ?? $p['summonerId'] ?? ''));
-            $kda = new KDA((int)($p['kills'] ?? 0), (int)($p['deaths'] ?? 0), (int)($p['assists'] ?? 0));
+            $summonerId = SummonerId::fromString((string) ($p['puuid'] ?? $p['summonerId'] ?? ''));
+            $kda = new KDA((int) ($p['kills'] ?? 0), (int) ($p['deaths'] ?? 0), (int) ($p['assists'] ?? 0));
 
             $items = [];
 
-            for ($i = 0; $i <= 6; $i++) {
+            for ($i = 0; $i <= 6; ++$i) {
                 $key = 'item' . $i;
-                if (isset($p[$key]) && $p[$key] !== 0) $items[] = (int)$p[$key];
+
+                if (isset($p[$key]) && 0 !== $p[$key]) {
+                    $items[] = (int) $p[$key];
+                }
             }
 
             $participant = new Participant(
                 $summonerId,
                 $p['summonerId'],
-                (int)($p['championId'] ?? $p['champion']) ,
-                (bool)($p['win'] ?? false),
+                (int) ($p['championId'] ?? $p['champion']),
+                (bool) ($p['win'] ?? false),
                 $kda,
                 $items
             );

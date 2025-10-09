@@ -11,11 +11,14 @@ use Doctrine\ORM\EntityManagerInterface;
 
 final class DoctrineParticipantRepository implements ParticipantRepositoryInterface
 {
-    public function __construct(private readonly EntityManagerInterface $em) {}
+    public function __construct(private readonly EntityManagerInterface $em)
+    {
+    }
 
     public function findById(string $participantId): ?Participant
     {
         $e = $this->em->getRepository(ParticipantEntity::class)->findOneBy(['id' => $participantId]);
+
         return $e?->toDomain();
     }
 }

@@ -10,5 +10,6 @@ final class IngestMatchesByPuuidCommand
         public readonly string $puuid,
         public readonly string $region,
         public readonly int $count = 20,
-    ) {}
+    ) {
+    }
 }

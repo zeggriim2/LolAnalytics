@@ -22,10 +22,33 @@ final class Participant
         }
     }
 
-    public function summonerId(): SummonerId { return $this->summonerId; }
-    public function championId(): int { return $this->championId; }
-    public function win(): bool { return $this->win; }
-    public function kda(): KDA { return $this->kda; }
-    public function items(): array { return $this->items; }
-    public function puuid(): string { return $this->puuid; }
+    public function summonerId(): SummonerId
+    {
+        return $this->summonerId;
+    }
+
+    public function championId(): int
+    {
+        return $this->championId;
+    }
+
+    public function win(): bool
+    {
+        return $this->win;
+    }
+
+    public function kda(): KDA
+    {
+        return $this->kda;
+    }
+
+    public function items(): array
+    {
+        return $this->items;
+    }
+
+    public function puuid(): string
+    {
+        return $this->puuid;
+    }
 }

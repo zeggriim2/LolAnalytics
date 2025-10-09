@@ -11,7 +11,9 @@ use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 #[AsMessageHandler('query.bus')]
 final class ListMatchesHandler
 {
-    public function __construct(private MatchRepositoryInterface $repository) {}
+    public function __construct(private MatchRepositoryInterface $repository)
+    {
+    }
 
     public function __invoke(ListMatchesQuery $query): array
     {

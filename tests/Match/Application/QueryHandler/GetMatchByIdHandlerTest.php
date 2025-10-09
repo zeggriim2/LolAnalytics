@@ -13,7 +13,6 @@ use App\Match\Domain\ValueObjet\KDA;
 use App\Match\Domain\ValueObjet\MatchId;
 use App\Match\Domain\ValueObjet\SummonerId;
 use App\Tests\Doubles\Repository\InMemoryMatchRepository;
-use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 
 final class GetMatchByIdHandlerTest extends TestCase
@@ -35,7 +34,7 @@ final class GetMatchByIdHandlerTest extends TestCase
         $match = new Matche(
             MatchId::fromString('match_123'),
             GameId::fromInt(456),
-            new DateTimeImmutable(),
+            new \DateTimeImmutable(),
             1800,
             [$participant]
         );
@@ -49,7 +48,7 @@ final class GetMatchByIdHandlerTest extends TestCase
 
         // Assert
         $this->assertInstanceOf(Matche::class, $result);
-        $this->assertSame('match_123', (string)$result->id());
+        $this->assertSame('match_123', (string) $result->id());
         $this->assertCount(1, $result->participants());
         $this->assertSame(1800, $result->durationSeconds());
     }

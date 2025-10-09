@@ -6,5 +6,7 @@ namespace App\Match\Application\Command;
 
 final class IngestMatchCommand
 {
-    public function __construct(public readonly string $matchId, public readonly string $region) {}
+    public function __construct(public readonly string $matchId, public readonly string $region)
+    {
+    }
 }

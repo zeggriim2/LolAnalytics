@@ -9,7 +9,10 @@ use App\SharedContext\Application\Bus\CommandBusInterface;
 
 final class IngestMatchUseCase
 {
-    public function __construct(private readonly CommandBusInterface $commandBus) {}
+    public function __construct(private readonly CommandBusInterface $commandBus)
+    {
+    }
+
     public function execute(string $matchId, string $region): void
     {
         $this->commandBus->dispatch(new IngestMatchCommand($matchId, $region));

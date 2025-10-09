@@ -16,7 +16,8 @@ final class IngestMatchesByPuuidHandler
     public function __construct(
         private readonly RiotApiClientInterface $riotClient,
         private readonly MessageBusInterface $commandBus,
-    ) {}
+    ) {
+    }
 
     public function __invoke(IngestMatchesByPuuidCommand $command): void
     {
