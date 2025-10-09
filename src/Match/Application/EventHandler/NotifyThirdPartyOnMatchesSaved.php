@@ -10,8 +10,7 @@ use Psr\Log\LoggerInterface;
 final class NotifyThirdPartyOnMatchesSaved
 {
     public function __construct(
-        private readonly LoggerInterface $logger,
-        private readonly string $thirdPartyWebhookUrl // injecté depuis parameters.yaml ou env
+        private readonly LoggerInterface $logger
     ) {}
 
     public function __invoke(MatchesSavedNotification $event): void
@@ -21,14 +20,6 @@ final class NotifyThirdPartyOnMatchesSaved
             count($event->matchIds),
             $event->region
         ));
-
-        $payload = [
-            'matches' => $event->matchIds,
-            'region' => $event->region,
-            'timestamp' => $event->occurredAt->format(DATE_ATOM)
-        ];
-
-        // $this->httpClient->request('POST', $this->thirdPartyWebhookUrl, ['json' => $payload]);
 
         $this->logger->info("Third party notified successfully");
 

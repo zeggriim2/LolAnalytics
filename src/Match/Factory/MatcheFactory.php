@@ -6,6 +6,7 @@ namespace App\Match\Factory;
 
 use App\Match\Domain\Model\Matche;
 use App\Match\Domain\Model\Participant;
+use App\Match\Domain\ValueObjet\GameId;
 use App\Match\Domain\ValueObjet\KDA;
 use App\Match\Domain\ValueObjet\MatchId;
 use App\Match\Domain\ValueObjet\SummonerId;
@@ -24,6 +25,7 @@ final class MatcheFactory
     {
         $matchId = MatchId::fromString($payload['metadata']['matchId']) ?? throw new \InvalidArgumentException('Invalid matchId');
 
+        $gameId = GameId::fromInt($payload['info']['gameId']) ?? throw new \InvalidArgumentException('Invalid gameId');
         $gameCreationMs = $payload['info']['gameCreation'] ?? null;
         $gameDuration = (int)($payload['info']['gameDuration'] ?? 0);
 
@@ -39,12 +41,15 @@ final class MatcheFactory
             $kda = new KDA((int)($p['kills'] ?? 0), (int)($p['deaths'] ?? 0), (int)($p['assists'] ?? 0));
 
             $items = [];
+
             for ($i = 0; $i <= 6; $i++) {
                 $key = 'item' . $i;
                 if (isset($p[$key]) && $p[$key] !== 0) $items[] = (int)$p[$key];
             }
+
             $participant = new Participant(
                 $summonerId,
+                $p['summonerId'],
                 (int)($p['championId'] ?? $p['champion']) ,
                 (bool)($p['win'] ?? false),
                 $kda,
@@ -53,6 +58,6 @@ final class MatcheFactory
             $participants[] = $participant;
         }
 
-        return Matche::create($matchId, $playedAt, $gameDuration, $participants);
+        return Matche::create($matchId, $gameId, $playedAt, $gameDuration, $participants);
     }
 }

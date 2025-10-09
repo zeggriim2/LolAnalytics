@@ -4,19 +4,19 @@ declare(strict_types=1);
 
 namespace App\Match\Domain\Model;
 
+use App\Match\Domain\ValueObjet\GameId;
 use App\Match\Domain\ValueObjet\MatchId;
 use DateTimeImmutable;
 
 final class Matche
 {
-    /** @var Participant[] */
-    private array $participants = [];
-
-    private function __construct(
+    public function __construct(
         private readonly MatchId $id,
+        private readonly GameId $gameId,
         private readonly DateTimeImmutable $playedAt,
         private readonly int $durationSeconds,
-        array $participants
+        /** @var Participant[] */
+        private readonly array $participants
     ) {
         if ($durationSeconds <= 0) {
             throw new \InvalidArgumentException('durationSeconds must be > 0');
@@ -30,19 +30,23 @@ final class Matche
         if (count($ids) !== count(array_unique($ids))) {
             throw new \InvalidArgumentException('Duplicate participant summonerId');
         }
-
-        $this->participants = $participants;
     }
 
-
-    public static function create(MatchId $id, DateTimeImmutable $playedAt, int $durationSeconds, array $participants): self
+    public static function create(
+        MatchId $id,
+        GameId $gameId,
+        DateTimeImmutable $playedAt,
+        int $durationSeconds,
+        array $participants
+    ): self
     {
-        return new self($id, $playedAt, $durationSeconds, $participants);
+        return new self($id, $gameId, $playedAt, $durationSeconds, $participants);
     }
 
 
     public function id(): MatchId { return $this->id; }
     public function playedAt(): DateTimeImmutable { return $this->playedAt; }
+    public function gameId(): GameId { return $this->gameId; }
     public function durationSeconds(): int { return $this->durationSeconds; }
     /** @return Participant[] */
     public function participants(): array { return $this->participants; }

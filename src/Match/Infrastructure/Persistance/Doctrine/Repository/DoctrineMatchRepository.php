@@ -40,4 +40,16 @@ final class DoctrineMatchRepository implements MatchRepositoryInterface
         $e = $this->em->getRepository(MatchEntity::class)->findOneBy(['matchId' => $matchId]);
         return $e ? $e->toDomain() : null;
     }
+
+    public function findAll(): array
+    {
+        $entities = $this->em->getRepository(MatchEntity::class)->findAll();
+
+        $models = [];
+        foreach ($entities as $entity) {
+            $models[] = $entity->toDomain();
+        }
+
+        return $models;
+    }
 }
