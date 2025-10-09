@@ -38,6 +38,12 @@ final class DetailMatchCommand extends Command
         try {
             $match = $this->getMatchUseCase->execute($matchId);
 
+            if (!$match) {
+                $io->error('Match not found');
+
+                return Command::FAILURE;
+            }
+
             $io->success((string) $match->id());
 
             $headers = ['Summoner', 'Champion Id', 'Win', 'Kills', 'Deaths', 'Assists'];

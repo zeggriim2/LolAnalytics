@@ -16,5 +16,5 @@ interface RiotApiClientInterface
     /**
      * @return string[] Liste des matchId (EUW1_xxx)
      */
-    public function fetchMatchesByPuuid(string $puuid, string $region, Type $type, int $start, int $count): array;
+    public function fetchMatchesByPuuid(string $puuid, string $region, Type $type, int $start = 0, int $count = 20): array;
 }

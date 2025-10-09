@@ -9,6 +9,9 @@ use App\Match\Domain\ValueObjet\SummonerId;
 
 final class Participant
 {
+    /**
+     * @param string[] $items
+     */
     public function __construct(
         private readonly SummonerId $summonerId,
         private readonly string $puuid,
@@ -42,6 +45,9 @@ final class Participant
         return $this->kda;
     }
 
+    /**
+     * @return string[]
+     */
     public function items(): array
     {
         return $this->items;
