@@ -10,6 +10,7 @@
 
 .idea/
 exemple.md
+.php-cs-fixer.cache
 
 ###> phpunit/phpunit ###
 /phpunit.xml
