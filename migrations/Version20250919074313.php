@@ -16,7 +16,7 @@ final class Version20250919074313 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        $this->addSql('CREATE TABLE matches (id INT AUTO_INCREMENT NOT NULL, game_id BIGINT NOT NULL, match_id VARCHAR(255) NOT NULL, region VARCHAR(255) NOT NULL, played_at DATETIME NOT NULL, duration_seconds INT NOT NULL, participants JSON NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE matches (id INT AUTO_INCREMENT NOT NULL, game_id BIGINT NOT NULL, match_id VARCHAR(255) NOT NULL, region VARCHAR(255) NOT NULL, platform VARCHAR(50) NOT NULL, played_at DATETIME NOT NULL, duration_seconds INT NOT NULL, participants JSON NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
     }
 
     public function down(Schema $schema): void

@@ -9,6 +9,7 @@ use App\Match\Domain\Model\Participant;
 use App\Match\Domain\ValueObjet\GameId;
 use App\Match\Domain\ValueObjet\KDA;
 use App\Match\Domain\ValueObjet\MatchId;
+use App\Match\Domain\ValueObjet\Platform;
 use App\Match\Domain\ValueObjet\SummonerId;
 
 final class MatcheFactory
@@ -20,14 +21,25 @@ final class MatcheFactory
      * 'metadata' => ['matchId' => '...'],
      * 'info' => [ 'gameCreation' => 1234567890, 'gameDuration' => 1800, 'participants' => [ ... ]]
      * ].
+     *
+     * @param array<mixed> $payload
      */
     public static function fromRiotPayload(array $payload): Matche
     {
-        $matchId = MatchId::fromString($payload['metadata']['matchId']) ?? throw new \InvalidArgumentException('Invalid matchId');
+        $matchId = MatchId::fromString($payload['metadata']['matchId']);
+        $platform = Platform::tryFrom(strtolower(explode('_', $payload['metadata']['matchId'])[0]));
 
-        $gameId = GameId::fromInt($payload['info']['gameId']) ?? throw new \InvalidArgumentException('Invalid gameId');
+        if (null === $platform) {
+            throw new \InvalidArgumentException('Invalid platform');
+        }
+
+        $gameId = GameId::fromInt($payload['info']['gameId']);
         $gameCreationMs = $payload['info']['gameCreation'] ?? null;
         $gameDuration = (int) ($payload['info']['gameDuration'] ?? 0);
+        $gameMode = $payload['info']['gameMode'] ?? null;
+        $gameType = $payload['info']['gameType'] ?? null;
+        $queueId = (int) ($payload['info']['queueId'] ?? null);
+        $mapId = (int) ($payload['info']['mapId'] ?? null);
 
         if (null === $gameCreationMs) {
             throw new \InvalidArgumentException('Invalid gameCreation');
@@ -47,7 +59,7 @@ final class MatcheFactory
                 $key = 'item' . $i;
 
                 if (isset($p[$key]) && 0 !== $p[$key]) {
-                    $items[] = (int) $p[$key];
+                    $items[] = (string) $p[$key];
                 }
             }
 
@@ -62,6 +74,6 @@ final class MatcheFactory
             $participants[] = $participant;
         }
 
-        return Matche::create($matchId, $gameId, $playedAt, $gameDuration, $participants);
+        return Matche::create($matchId, $gameId, $playedAt, $gameDuration, $gameMode, $gameType, $mapId, $queueId, $platform, $participants);
     }
 }

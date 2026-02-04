@@ -11,6 +11,7 @@ use App\Match\Domain\Model\Participant;
 use App\Match\Domain\ValueObjet\GameId;
 use App\Match\Domain\ValueObjet\KDA;
 use App\Match\Domain\ValueObjet\MatchId;
+use App\Match\Domain\ValueObjet\Platform;
 use App\Match\Domain\ValueObjet\SummonerId;
 use App\SharedContext\Application\Bus\QueryBusInterface;
 use PHPUnit\Framework\TestCase;
@@ -42,6 +43,11 @@ final class GetMatchDetailsUseCaseTest extends TestCase
             gameId: GameId::fromInt(1234567890),
             playedAt: new \DateTimeImmutable('2024-01-15 14:30:00'),
             durationSeconds: 1800,
+            gameMode: 'gameMode',
+            gameType: 'gameType',
+            queueId: 2,
+            mapId: 1,
+            platform: Platform::EUW1,
             participants: [$participant]
         );
     }

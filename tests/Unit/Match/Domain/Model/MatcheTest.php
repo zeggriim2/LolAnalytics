@@ -9,6 +9,7 @@ use App\Match\Domain\Model\Participant;
 use App\Match\Domain\ValueObjet\GameId;
 use App\Match\Domain\ValueObjet\KDA;
 use App\Match\Domain\ValueObjet\MatchId;
+use App\Match\Domain\ValueObjet\Platform;
 use App\Match\Domain\ValueObjet\SummonerId;
 use PHPUnit\Framework\TestCase;
 
@@ -41,6 +42,11 @@ final class MatcheTest extends TestCase
             gameId: $gameId,
             playedAt: $playedAt,
             durationSeconds: 1800,
+            gameMode: 'gameMode',
+            gameType: 'gameType',
+            queueId: 1,
+            mapId: 900,
+            platform: Platform::EUW1,
             participants: $participants
         );
 
@@ -64,6 +70,11 @@ final class MatcheTest extends TestCase
             gameId: $gameId,
             playedAt: $playedAt,
             durationSeconds: 1800,
+            gameMode: 'gameMode',
+            gameType: 'gameType',
+            mapId: 900,
+            queueId: 1,
+            platform: Platform::EUW1,
             participants: $participants
         );
 
@@ -81,6 +92,11 @@ final class MatcheTest extends TestCase
             gameId: GameId::fromInt(1234567890),
             playedAt: new \DateTimeImmutable(),
             durationSeconds: 0,
+            gameMode: 'gameMode',
+            gameType: 'gameType',
+            queueId: 1,
+            mapId: 900,
+            platform: Platform::EUW1,
             participants: [$this->createParticipant('summoner1')]
         );
     }
@@ -95,6 +111,11 @@ final class MatcheTest extends TestCase
             gameId: GameId::fromInt(1234567890),
             playedAt: new \DateTimeImmutable(),
             durationSeconds: -100,
+            gameMode: 'gameMode',
+            gameType: 'gameType',
+            queueId: 1,
+            mapId: 900,
+            platform: Platform::EUW1,
             participants: [$this->createParticipant('summoner1')]
         );
     }
@@ -109,6 +130,11 @@ final class MatcheTest extends TestCase
             gameId: GameId::fromInt(1234567890),
             playedAt: new \DateTimeImmutable(),
             durationSeconds: 1800,
+            gameMode: 'gameMode',
+            gameType: 'gameType',
+            queueId: 1,
+            mapId: 900,
+            platform: Platform::EUW1,
             participants: []
         );
     }
@@ -128,6 +154,11 @@ final class MatcheTest extends TestCase
             gameId: GameId::fromInt(1234567890),
             playedAt: new \DateTimeImmutable(),
             durationSeconds: 1800,
+            gameMode: 'gameMode',
+            gameType: 'gameType',
+            queueId: 1,
+            mapId: 900,
+            platform: Platform::EUW1,
             participants: $participants
         );
     }
@@ -152,6 +183,11 @@ final class MatcheTest extends TestCase
             gameId: GameId::fromInt(1234567890),
             playedAt: new \DateTimeImmutable(),
             durationSeconds: 1800,
+            gameMode: 'gameMode',
+            gameType: 'gameType',
+            queueId: 1,
+            mapId: 900,
+            platform: Platform::EUW1,
             participants: $participants
         );
 
@@ -170,6 +206,11 @@ final class MatcheTest extends TestCase
             gameId: $gameId,
             playedAt: $playedAt,
             durationSeconds: 1800,
+            gameMode: 'gameMode',
+            gameType: 'gameType',
+            queueId: 1,
+            mapId: 900,
+            platform: Platform::EUW1,
             participants: $participants
         );
 
