@@ -12,6 +12,7 @@ use App\Match\Domain\Repository\MatchRepositoryInterface;
 use App\Match\Domain\ValueObjet\GameId;
 use App\Match\Domain\ValueObjet\KDA;
 use App\Match\Domain\ValueObjet\MatchId;
+use App\Match\Domain\ValueObjet\Platform;
 use App\Match\Domain\ValueObjet\SummonerId;
 use PHPUnit\Framework\TestCase;
 
@@ -42,6 +43,11 @@ final class ListMatchesHandlerTest extends TestCase
             gameId: GameId::fromInt($gameId),
             playedAt: new \DateTimeImmutable(),
             durationSeconds: 1800,
+            gameMode: 'gameMode',
+            gameType: 'gameType',
+            queueId: 2,
+            mapId: 1,
+            platform: Platform::EUW1,
             participants: [$participant]
         );
     }

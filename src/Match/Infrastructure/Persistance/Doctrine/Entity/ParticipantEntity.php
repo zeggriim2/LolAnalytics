@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'participants')]
-final class ParticipantEntity
+class ParticipantEntity
 {
     #[ORM\Id]
     #[ORM\Column(type: Types::INTEGER)]

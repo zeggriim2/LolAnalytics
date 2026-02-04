@@ -22,9 +22,28 @@ services:
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
     
-    # Version Bounded Context
+    # Match Bounded Context
     App\Match\Domain\Repository\MatchRepositoryInterface:
         alias: App\Match\Infrastructure\Persistance\Doctrine\Repository\DoctrineMatchRepository
+
+    # GameData Bounded Context
+    App\GameData\Domain\Repository\QueueRepositoryInterface:
+        alias: App\GameData\Infrastructure\Persistence\Doctrine\Repository\DoctrineQueueRepository
+
+    App\GameData\Domain\Repository\GameModeRepositoryInterface:
+        alias: App\GameData\Infrastructure\Persistence\Doctrine\Repository\DoctrineGameModeRepository
+
+    App\GameData\Domain\Repository\GameTypeRepositoryInterface:
+        alias: App\GameData\Infrastructure\Persistence\Doctrine\Repository\DoctrineGameTypeRepository
+
+    App\GameData\Domain\Repository\MapRepositoryInterface:
+        alias: App\GameData\Infrastructure\Persistence\Doctrine\Repository\DoctrineMapRepository
+
+    App\GameData\Domain\Repository\SeasonRepositoryInterface:
+        alias: App\GameData\Infrastructure\Persistence\Doctrine\Repository\DoctrineSeasonRepository
+
+    App\GameData\Application\Port\RiotStaticDataProviderInterface:
+        alias: App\GameData\Infrastructure\Client\RiotStaticDataProvider
 
     # CQRS Buses
     App\SharedContext\Application\Bus\CommandBusInterface:

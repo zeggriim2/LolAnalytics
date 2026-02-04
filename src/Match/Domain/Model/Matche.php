@@ -6,6 +6,7 @@ namespace App\Match\Domain\Model;
 
 use App\Match\Domain\ValueObjet\GameId;
 use App\Match\Domain\ValueObjet\MatchId;
+use App\Match\Domain\ValueObjet\Platform;
 
 final class Matche
 {
@@ -14,6 +15,11 @@ final class Matche
         private readonly GameId $gameId,
         private readonly \DateTimeImmutable $playedAt,
         private readonly int $durationSeconds,
+        private readonly string $gameMode,
+        private readonly string $gameType,
+        private readonly int $queueId,
+        private readonly int $mapId,
+        private readonly Platform $platform,
         /** @var Participant[] */
         private readonly array $participants
     ) {
@@ -32,14 +38,33 @@ final class Matche
         }
     }
 
+    /**
+     * @param Participant[] $participants
+     */
     public static function create(
         MatchId $id,
         GameId $gameId,
         \DateTimeImmutable $playedAt,
         int $durationSeconds,
+        string $gameMode,
+        string $gameType,
+        int $mapId,
+        int $queueId,
+        Platform $platform,
         array $participants
     ): self {
-        return new self($id, $gameId, $playedAt, $durationSeconds, $participants);
+        return new self(
+            $id,
+            $gameId,
+            $playedAt,
+            $durationSeconds,
+            $gameMode,
+            $gameType,
+            $queueId,
+            $mapId,
+            $platform,
+            $participants
+        );
     }
 
     public function id(): MatchId
@@ -57,6 +82,26 @@ final class Matche
         return $this->gameId;
     }
 
+    public function gameMode(): string
+    {
+        return $this->gameMode;
+    }
+
+    public function gameType(): string
+    {
+        return $this->gameType;
+    }
+
+    public function queueId(): int
+    {
+        return $this->queueId;
+    }
+
+    public function mapId(): int
+    {
+        return $this->mapId;
+    }
+
     public function durationSeconds(): int
     {
         return $this->durationSeconds;
@@ -66,5 +111,10 @@ final class Matche
     public function participants(): array
     {
         return $this->participants;
+    }
+
+    public function platform(): Platform
+    {
+        return $this->platform;
     }
 }

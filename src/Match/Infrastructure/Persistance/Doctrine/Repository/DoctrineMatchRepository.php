@@ -4,9 +4,14 @@ declare(strict_types=1);
 
 namespace App\Match\Infrastructure\Persistance\Doctrine\Repository;
 
+use App\GameData\Infrastructure\Persistence\Doctrine\Entity\GameModeEntity;
+use App\GameData\Infrastructure\Persistence\Doctrine\Entity\GameTypeEntity;
+use App\GameData\Infrastructure\Persistence\Doctrine\Entity\MapEntity;
+use App\GameData\Infrastructure\Persistence\Doctrine\Entity\QueueEntity;
 use App\Match\Domain\Model\Matche;
 use App\Match\Domain\Repository\MatchRepositoryInterface;
 use App\Match\Domain\ValueObjet\MatchId;
+use App\Match\Domain\ValueObjet\Region;
 use App\Match\Infrastructure\Persistance\Doctrine\Entity\MatchEntity;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -16,18 +21,45 @@ final class DoctrineMatchRepository implements MatchRepositoryInterface
     {
     }
 
-    public function save(Matche $match, string $region): void
+    public function save(Matche $match, Region $region): void
     {
         $existing = $this->em->getRepository(MatchEntity::class)->findOneBy(['matchId' => $match->id()]);
 
         if ($existing) {
-            // update minimal fields
-            // pour MVP on remplace participants/raw
-            $entity = $existing;
-        } else {
-            $entity = MatchEntity::fromDomain($match, $region);
-            $this->em->persist($entity);
+            return;
         }
+
+        $gameMode = $this->em->getRepository(GameModeEntity::class)->find($match->gameMode());
+
+        if (null === $gameMode) {
+            return;
+        }
+
+        $gameType = $this->em->getRepository(GameTypeEntity::class)->find($match->gameType());
+
+        if (null === $gameType) {
+            return;
+        }
+
+        $queue = $this->em->getRepository(QueueEntity::class)->find($match->queueId());
+
+        if (null === $queue) {
+            return;
+        }
+
+        $map = $this->em->getRepository(MapEntity::class)->find($match->mapId());
+
+        if (null === $map) {
+            return;
+        }
+
+        $entity = MatchEntity::fromDomain($match, $region->value);
+        $entity->setGameMode($gameMode);
+        $entity->setGameType($gameType);
+        $entity->setQueue($queue);
+        $entity->setMap($map);
+
+        $this->em->persist($entity);
 
         $this->em->flush();
     }

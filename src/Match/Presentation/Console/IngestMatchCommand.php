@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Match\Presentation\Console;
 
 use App\Match\Application\UseCase\IngestMatchUseCase;
+use App\Match\Domain\ValueObjet\Region;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -24,7 +25,7 @@ final class IngestMatchCommand extends Command
         parent::__construct();
     }
 
-    public function configure()
+    public function configure(): void
     {
         $this->addArgument('matchId', InputArgument::REQUIRED)
             ->addArgument('region', InputArgument::REQUIRED);
@@ -38,6 +39,7 @@ final class IngestMatchCommand extends Command
         $region = $input->getArgument('region');
 
         try {
+            $region = Region::from($region);
             $this->ingestMatchUseCase->execute($matchId, $region);
 
             $io->success(sprintf('Ingest match %s successfully', $matchId));

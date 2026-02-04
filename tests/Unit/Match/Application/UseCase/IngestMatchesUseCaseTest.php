@@ -6,6 +6,7 @@ namespace App\Tests\Unit\Match\Application\UseCase;
 
 use App\Match\Application\Command\IngestMatchesByPuuidCommand;
 use App\Match\Application\UseCase\IngestMatchesUseCase;
+use App\Match\Domain\ValueObjet\Region;
 use App\SharedContext\Application\Bus\CommandBusInterface;
 use PHPUnit\Framework\TestCase;
 
@@ -23,7 +24,7 @@ final class IngestMatchesUseCaseTest extends TestCase
     public function testExecuteDispatchesIngestMatchesByPuuidCommand(): void
     {
         $puuid = 'test-puuid-123';
-        $region = 'europe';
+        $region = Region::EUROPE;
 
         $this->commandBus
             ->expects($this->once())
@@ -40,7 +41,7 @@ final class IngestMatchesUseCaseTest extends TestCase
     public function testExecuteWithDifferentPuuidAndRegion(): void
     {
         $puuid = 'another-puuid-456';
-        $region = 'americas';
+        $region = Region::AMERICAS;
 
         $this->commandBus
             ->expects($this->once())
@@ -57,7 +58,7 @@ final class IngestMatchesUseCaseTest extends TestCase
     public function testExecuteCreatesCorrectCommandObject(): void
     {
         $puuid = 'puuid-789';
-        $region = 'asia';
+        $region = Region::ASIA;
 
         $this->commandBus
             ->expects($this->once())

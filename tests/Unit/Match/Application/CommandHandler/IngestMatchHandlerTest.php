@@ -10,26 +10,28 @@ use App\Match\Domain\Event\MatchesSavedNotification;
 use App\Match\Domain\Model\Matche;
 use App\Match\Domain\Repository\MatchRepositoryInterface;
 use App\Match\Domain\ValueObjet\MatchId;
-use App\Match\Infrastructure\Client\RiotApiClientInterface;
+use App\Match\Domain\ValueObjet\Region;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\MessageBusInterface;
+use Zeggriim\RiotApiDataDragon\DataLeague\Endpoint\MatchApiInterface;
+use Zeggriim\RiotApiDataDragon\Enum\Region as RiotRegion;
 
 final class IngestMatchHandlerTest extends TestCase
 {
-    private RiotApiClientInterface $riotClient;
+    private MatchApiInterface $matchApi;
     private MatchRepositoryInterface $matchRepository;
     private MessageBusInterface $eventBus;
     private IngestMatchHandler $handler;
 
     protected function setUp(): void
     {
-        $this->riotClient = $this->createMock(RiotApiClientInterface::class);
+        $this->matchApi = $this->createMock(MatchApiInterface::class);
         $this->matchRepository = $this->createMock(MatchRepositoryInterface::class);
         $this->eventBus = $this->createMock(MessageBusInterface::class);
 
         $this->handler = new IngestMatchHandler(
-            $this->riotClient,
+            $this->matchApi,
             $this->matchRepository,
             $this->eventBus
         );
@@ -38,7 +40,7 @@ final class IngestMatchHandlerTest extends TestCase
     public function testIngestMatchSuccessfully(): void
     {
         $matchId = 'EUW1_1234567890';
-        $region = 'europe';
+        $region = Region::EUROPE;
         $command = new IngestMatchCommand($matchId, $region);
 
         // Match doesn't exist yet
@@ -57,6 +59,10 @@ final class IngestMatchHandlerTest extends TestCase
                 'gameId' => 1234567890,
                 'gameCreation' => 1705328400000,
                 'gameDuration' => 1800,
+                'gameMode' => 'gameMode',
+                'gameType' => 'gameType',
+                'mapId' => 1,
+                'queueId' => 1,
                 'participants' => [
                     [
                         'puuid' => 'puuid-1',
@@ -78,10 +84,11 @@ final class IngestMatchHandlerTest extends TestCase
             ],
         ];
 
-        $this->riotClient
+        $riotRegion = RiotRegion::EUROPE;
+        $this->matchApi
             ->expects($this->once())
-            ->method('fetchMatch')
-            ->with($matchId, $region)
+            ->method('getMatch')
+            ->with($matchId, $riotRegion)
             ->willReturn($riotPayload);
 
         // Match should be saved
@@ -94,7 +101,7 @@ final class IngestMatchHandlerTest extends TestCase
                         && 1800 === $match->durationSeconds()
                         && 1 === count($match->participants());
                 }),
-                'europe'
+                Region::EUROPE
             );
 
         // Event should be dispatched
@@ -110,7 +117,7 @@ final class IngestMatchHandlerTest extends TestCase
     public function testDoesNotIngestMatchIfAlreadyExists(): void
     {
         $matchId = 'EUW1_1234567890';
-        $region = 'europe';
+        $region = Region::EUROPE;
         $command = new IngestMatchCommand($matchId, $region);
 
         // Match already exists
@@ -123,9 +130,9 @@ final class IngestMatchHandlerTest extends TestCase
             ->willReturn(true);
 
         // Should not fetch from Riot API
-        $this->riotClient
+        $this->matchApi
             ->expects($this->never())
-            ->method('fetchMatch');
+            ->method('getMatch');
 
         // Should not save
         $this->matchRepository
@@ -143,7 +150,7 @@ final class IngestMatchHandlerTest extends TestCase
     public function testIngestMatchWithMultipleParticipants(): void
     {
         $matchId = 'EUW1_9876543210';
-        $region = 'americas';
+        $region = Region::AMERICAS;
         $command = new IngestMatchCommand($matchId, $region);
 
         $this->matchRepository
@@ -156,6 +163,10 @@ final class IngestMatchHandlerTest extends TestCase
                 'gameId' => 9876543210,
                 'gameCreation' => 1705328400000,
                 'gameDuration' => 2400,
+                'gameMode' => 'gameMode',
+                'gameType' => 'gameType',
+                'mapId' => 1,
+                'queueId' => 1,
                 'participants' => [
                     [
                         'puuid' => 'puuid-1',
@@ -193,8 +204,8 @@ final class IngestMatchHandlerTest extends TestCase
             ],
         ];
 
-        $this->riotClient
-            ->method('fetchMatch')
+        $this->matchApi
+            ->method('getMatch')
             ->willReturn($riotPayload);
 
         $this->matchRepository
@@ -205,7 +216,7 @@ final class IngestMatchHandlerTest extends TestCase
                     return 2 === count($match->participants())
                         && 2400 === $match->durationSeconds();
                 }),
-                'europe'
+                Region::AMERICAS
             );
 
         $this->eventBus
