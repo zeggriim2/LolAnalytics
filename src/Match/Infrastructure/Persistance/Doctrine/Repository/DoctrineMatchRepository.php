@@ -11,8 +11,8 @@ use App\GameData\Infrastructure\Persistence\Doctrine\Entity\QueueEntity;
 use App\Match\Domain\Model\Matche;
 use App\Match\Domain\Repository\MatchRepositoryInterface;
 use App\Match\Domain\ValueObjet\MatchId;
-use App\Match\Domain\ValueObjet\Region;
 use App\Match\Infrastructure\Persistance\Doctrine\Entity\MatchEntity;
+use App\SharedContext\Domain\ValueObjet\Region;
 use Doctrine\ORM\EntityManagerInterface;
 
 final class DoctrineMatchRepository implements MatchRepositoryInterface

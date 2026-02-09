@@ -7,7 +7,7 @@ namespace App\Tests\Unit\Match\Application\CommandHandler;
 use App\Match\Application\Command\IngestMatchCommand;
 use App\Match\Application\Command\IngestMatchesByPuuidCommand;
 use App\Match\Application\CommandHandler\IngestMatchesByPuuidHandler;
-use App\Match\Domain\ValueObjet\Region;
+use App\SharedContext\Domain\ValueObjet\Region;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\MessageBusInterface;

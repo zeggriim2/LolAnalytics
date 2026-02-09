@@ -4,7 +4,7 @@ namespace App\Match\Domain\Repository;
 
 use App\Match\Domain\Model\Matche;
 use App\Match\Domain\ValueObjet\MatchId;
-use App\Match\Domain\ValueObjet\Region;
+use App\SharedContext\Domain\ValueObjet\Region;
 
 interface MatchRepositoryInterface
 {

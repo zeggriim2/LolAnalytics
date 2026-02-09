@@ -11,7 +11,7 @@ use App\GameData\Infrastructure\Persistence\Doctrine\Entity\QueueEntity;
 use App\Match\Domain\Model\Matche;
 use App\Match\Domain\ValueObjet\GameId;
 use App\Match\Domain\ValueObjet\MatchId;
-use App\Match\Domain\ValueObjet\Platform;
+use App\SharedContext\Domain\ValueObjet\Platform;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;

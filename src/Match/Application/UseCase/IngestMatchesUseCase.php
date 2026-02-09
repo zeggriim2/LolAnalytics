@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Match\Application\UseCase;
 
 use App\Match\Application\Command\IngestMatchesByPuuidCommand;
-use App\Match\Domain\ValueObjet\Region;
 use App\SharedContext\Application\Bus\CommandBusInterface;
+use App\SharedContext\Domain\ValueObjet\Region;
 
 final class IngestMatchesUseCase
 {
