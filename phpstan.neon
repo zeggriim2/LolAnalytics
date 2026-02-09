@@ -2,8 +2,8 @@ parameters:
     level: 8
     paths:
         - src
-        - tests
     excludePaths:
+        - tests/
         - var/*
         - vendor/*
     ignoreErrors:
