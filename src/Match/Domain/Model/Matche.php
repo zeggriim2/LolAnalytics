@@ -6,7 +6,7 @@ namespace App\Match\Domain\Model;
 
 use App\Match\Domain\ValueObjet\GameId;
 use App\Match\Domain\ValueObjet\MatchId;
-use App\Match\Domain\ValueObjet\Platform;
+use App\SharedContext\Domain\ValueObjet\Platform;
 
 final class Matche
 {

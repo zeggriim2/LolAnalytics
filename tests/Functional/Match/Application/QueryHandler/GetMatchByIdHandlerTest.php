@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Functional\Match\Application\QueryHandler;
 
 use App\Match\Application\Query\GetMatchByIdQuery;
-use App\Match\Domain\ValueObjet\Platform;
+use App\SharedContext\Domain\ValueObjet\Platform;
 use App\Tests\Factory\MatchEntityFactory;
 use App\Tests\Factory\ParticipantEntityFactory;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;

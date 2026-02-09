@@ -7,6 +7,7 @@ namespace App\Match\Infrastructure\Persistance\Doctrine\Entity;
 use App\Match\Domain\Model\Participant;
 use App\Match\Domain\ValueObjet\KDA;
 use App\Match\Domain\ValueObjet\SummonerId;
+use App\Summoner\Infrastructure\Persistence\Doctrine\Entity\SummonerEntity;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -43,6 +44,10 @@ class ParticipantEntity
     #[ORM\ManyToOne(targetEntity: MatchEntity::class, inversedBy: 'participants')]
     #[ORM\JoinColumn(name: 'match_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
     public ?MatchEntity $match = null;
+
+    #[ORM\ManyToOne(targetEntity: SummonerEntity::class, inversedBy: 'participants')]
+    #[ORM\JoinColumn(name: 'summoner_puuid', referencedColumnName: 'puuid', nullable: true, onDelete: 'SET NULL')]
+    private ?SummonerEntity $summoner = null;
 
     public static function fromDomain(Participant $participant, MatchEntity $matchEntity): self
     {
@@ -148,5 +153,15 @@ class ParticipantEntity
     public function setWin(bool $win): void
     {
         $this->win = $win;
+    }
+
+    public function getSummoner(): ?SummonerEntity
+    {
+        return $this->summoner;
+    }
+
+    public function setSummoner(?SummonerEntity $summoner): void
+    {
+        $this->summoner = $summoner;
     }
 }

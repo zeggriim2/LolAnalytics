@@ -12,8 +12,8 @@ use App\Match\Domain\Repository\MatchRepositoryInterface;
 use App\Match\Domain\ValueObjet\GameId;
 use App\Match\Domain\ValueObjet\KDA;
 use App\Match\Domain\ValueObjet\MatchId;
-use App\Match\Domain\ValueObjet\Platform;
 use App\Match\Domain\ValueObjet\SummonerId;
+use App\SharedContext\Domain\ValueObjet\Platform;
 use PHPUnit\Framework\TestCase;
 
 final class ListMatchesHandlerTest extends TestCase

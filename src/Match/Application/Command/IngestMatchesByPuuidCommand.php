@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Match\Application\Command;
 
-use App\Match\Domain\ValueObjet\Region;
+use App\SharedContext\Domain\ValueObjet\Region;
 
 final class IngestMatchesByPuuidCommand
 {

@@ -15,8 +15,11 @@ services:
     # this creates a service per class whose id is the fully-qualified class name
     App\:
         resource: '../src/'
-        exclude: 
+        exclude:
             - '../src/Domain/Model/*'
+            - '../src/Match/Domain/Model/*'
+            - '../src/GameData/Domain/Model/*'
+            - '../src/Summoner/Domain/Model/*'
             - '../src/Infrastructure/SharedContext/Framework/Symfony/Kernel.php'
 
     # add more service definitions when explicit configuration is needed
@@ -44,6 +47,13 @@ services:
 
     App\GameData\Application\Port\RiotStaticDataProviderInterface:
         alias: App\GameData\Infrastructure\Client\RiotStaticDataProvider
+
+    # Summoner Bounded Context
+    App\Summoner\Domain\Repository\SummonerRepositoryInterface:
+        alias: App\Summoner\Infrastructure\Persistence\Doctrine\Repository\DoctrineSummonerRepository
+
+    App\Summoner\Application\Port\RiotSummonerProviderInterface:
+        alias: App\Summoner\Infrastructure\Adapter\RiotSummonerProvider
 
     # CQRS Buses
     App\SharedContext\Application\Bus\CommandBusInterface:

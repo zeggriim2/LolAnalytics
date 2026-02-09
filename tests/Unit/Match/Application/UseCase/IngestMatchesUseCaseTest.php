@@ -6,8 +6,8 @@ namespace App\Tests\Unit\Match\Application\UseCase;
 
 use App\Match\Application\Command\IngestMatchesByPuuidCommand;
 use App\Match\Application\UseCase\IngestMatchesUseCase;
-use App\Match\Domain\ValueObjet\Region;
 use App\SharedContext\Application\Bus\CommandBusInterface;
+use App\SharedContext\Domain\ValueObjet\Region;
 use PHPUnit\Framework\TestCase;
 
 final class IngestMatchesUseCaseTest extends TestCase
