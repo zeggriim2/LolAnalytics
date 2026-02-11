@@ -20,8 +20,7 @@ final class DoctrineGameTypeRepository implements GameTypeRepositoryInterface
         $existing = $this->em->find(GameTypeEntity::class, $gameType->gameType());
 
         if (null !== $existing) {
-            $this->em->remove($existing);
-            $this->em->flush();
+            return;
         }
 
         $entity = GameTypeEntity::fromDomain($gameType);

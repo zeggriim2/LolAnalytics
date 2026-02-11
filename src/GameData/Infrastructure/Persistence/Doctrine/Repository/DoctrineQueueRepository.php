@@ -20,8 +20,7 @@ final class DoctrineQueueRepository implements QueueRepositoryInterface
         $existing = $this->em->find(QueueEntity::class, $queue->queueId());
 
         if (null !== $existing) {
-            $this->em->remove($existing);
-            $this->em->flush();
+            return;
         }
 
         $entity = QueueEntity::fromDomain($queue);

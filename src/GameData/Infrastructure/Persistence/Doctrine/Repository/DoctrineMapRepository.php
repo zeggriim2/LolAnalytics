@@ -20,8 +20,7 @@ final class DoctrineMapRepository implements MapRepositoryInterface
         $existing = $this->em->find(MapEntity::class, $map->mapId());
 
         if (null !== $existing) {
-            $this->em->remove($existing);
-            $this->em->flush();
+            return;
         }
 
         $entity = MapEntity::fromDomain($map);

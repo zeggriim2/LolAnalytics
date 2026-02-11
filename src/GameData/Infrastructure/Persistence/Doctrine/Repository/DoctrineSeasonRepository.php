@@ -20,8 +20,7 @@ final class DoctrineSeasonRepository implements SeasonRepositoryInterface
         $existing = $this->em->find(SeasonEntity::class, $season->id());
 
         if (null !== $existing) {
-            $this->em->remove($existing);
-            $this->em->flush();
+            return;
         }
 
         $entity = SeasonEntity::fromDomain($season);

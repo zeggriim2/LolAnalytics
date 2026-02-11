@@ -20,8 +20,7 @@ final class DoctrineGameModeRepository implements GameModeRepositoryInterface
         $existing = $this->em->find(GameModeEntity::class, $gameMode->gameMode());
 
         if (null !== $existing) {
-            $this->em->remove($existing);
-            $this->em->flush();
+            return;
         }
 
         $entity = GameModeEntity::fromDomain($gameMode);

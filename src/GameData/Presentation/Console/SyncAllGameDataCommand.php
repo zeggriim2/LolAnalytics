@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\GameData\Presentation\Console;
 
-use App\GameData\Application\UseCase\SyncGameDataUseCase;
+use App\GameData\Application\UseCase\SyncAllGameDataUseCase;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -15,10 +15,10 @@ use Symfony\Component\Console\Style\SymfonyStyle;
     name: 'app:gamedata:sync',
     description: 'Synchronize game data from Riot static API (queues, game modes, game types, maps, seasons)',
 )]
-final class SyncGameDataCommand extends Command
+final class SyncAllGameDataCommand extends Command
 {
     public function __construct(
-        private readonly SyncGameDataUseCase $syncGameDataUseCase,
+        private readonly SyncAllGameDataUseCase $syncAllGameDataUseCase,
     ) {
         parent::__construct();
     }
@@ -30,7 +30,7 @@ final class SyncGameDataCommand extends Command
         $io->title('Synchronizing Game Data from Riot API');
 
         try {
-            $this->syncGameDataUseCase->execute();
+            $this->syncAllGameDataUseCase->execute();
 
             $io->success('Synchronization completed successfully');
 
