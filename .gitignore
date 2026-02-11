@@ -11,6 +11,7 @@
 .idea/
 exemple.md
 .php-cs-fixer.cache
+/node_modules
 
 ###> phpunit/phpunit ###
 /phpunit.xml
