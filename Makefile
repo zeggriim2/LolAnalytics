@@ -3,6 +3,7 @@ DOCKER_COMP = docker-compose
 
 # Docker containers
 PHP_CONT = $(DOCKER_COMP) exec php
+NODE_CONT = $(DOCKER_COMP) exec node
 
 PHPQA_IMAGE = jakzal/phpqa:php8.4-alpine
 DOCKER_RUN_PHPQA = docker run --rm -v $(PWD):/project -w /project $(PHPQA_IMAGE)
@@ -70,11 +71,15 @@ cc: sf
 
 ## —— Jakzal 🎵 ———————————————————————————————————————————————————————————————
 .PHONY: qa
-qa: ## Run all quality tools (PHP CS Fixer + PHPStan)
+qa: ## Run all quality tools (PHP + Front)
 	@echo "🔍 Running PHP CS Fixer..."
 	$(MAKE) cs-check
 	@echo "🔍 Running PHPStan..."
 	$(MAKE) phpstan
+	@echo "🔍 Running ESLint..."
+	$(MAKE) front-lint
+	@echo "🔍 Running Prettier check..."
+	$(MAKE) front-format-check
 	@echo "✅ All quality checks completed!"
 
 .PHONY: cs-check
@@ -102,3 +107,65 @@ phpstan-baseline: ## Generate PHPStan baseline
 phpstan-clear: ## Clear PHPStan cache
 	@echo "🗑️ Clearing PHPStan cache..."
 	$(DOCKER_RUN_PHPQA) phpstan clear-result-cache
+
+## —— Front Quality 🎨 —————————————————————————————————————————————————————————
+.PHONY: front-lint
+front-lint: ## Run ESLint on front assets
+	@echo "🔍 Running ESLint..."
+	@$(NODE_CONT) yarn lint
+
+.PHONY: front-lint-fix
+front-lint-fix: ## Fix ESLint errors on front assets
+	@echo "🔧 Fixing ESLint errors..."
+	@$(NODE_CONT) yarn lint:fix
+
+.PHONY: front-format
+front-format: ## Format front assets with Prettier
+	@echo "🔧 Formatting with Prettier..."
+	@$(NODE_CONT) yarn format
+
+.PHONY: front-format-check
+front-format-check: ## Check front assets formatting with Prettier
+	@echo "🔍 Checking Prettier formatting..."
+	@$(NODE_CONT) yarn format:check
+
+.PHONY: front-type-check
+front-type-check: ## Run TypeScript type checking
+	@echo "🔍 Running TypeScript type check..."
+	@$(NODE_CONT) yarn type-check
+
+.PHONY: front-qa
+front-qa: ## Run all front quality tools (ESLint + Prettier + TypeScript)
+	@echo "🔍 Running ESLint..."
+	$(MAKE) front-lint
+	@echo "🔍 Checking Prettier formatting..."
+	$(MAKE) front-format-check
+	@echo "🔍 Running TypeScript type check..."
+	$(MAKE) front-type-check
+	@echo "✅ All front quality checks completed!"
+
+## —— Node/Yarn 📦 ——————————————————————————————————————————————————————————————
+.PHONY: yarn
+yarn: ## Run yarn command, pass the parameter "c=" to run a given command, example: make yarn c="add vue"
+	@$(eval c ?=)
+	@$(NODE_CONT) yarn $(c)
+
+.PHONY: yarn-install
+yarn-install: ## Install node dependencies
+	@$(NODE_CONT) yarn install
+
+.PHONY: yarn-dev
+yarn-dev: ## Start Vite dev server
+	@$(NODE_CONT) yarn dev --host
+
+.PHONY: yarn-build
+yarn-build: ## Build assets for production
+	@$(NODE_CONT) yarn build
+
+.PHONY: node-sh
+node-sh: ## Connect to the Node container
+	@$(NODE_CONT) sh
+
+.PHONY: node-logs
+node-logs: ## Show Node container logs
+	@$(DOCKER_COMP) logs --tail=50 --follow node
