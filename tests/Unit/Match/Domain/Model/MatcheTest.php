@@ -9,7 +9,7 @@ use App\Match\Domain\Model\Participant;
 use App\Match\Domain\ValueObjet\GameId;
 use App\Match\Domain\ValueObjet\KDA;
 use App\Match\Domain\ValueObjet\MatchId;
-use App\Match\Domain\ValueObjet\SummonerId;
+use App\Match\Domain\ValueObjet\SummonerPuuid;
 use App\SharedContext\Domain\ValueObjet\Platform;
 use PHPUnit\Framework\TestCase;
 
@@ -18,7 +18,7 @@ final class MatcheTest extends TestCase
     private function createParticipant(string $summonerIdValue, int $championId = 157): Participant
     {
         return new Participant(
-            summonerId: SummonerId::fromString($summonerIdValue),
+            summonerId: SummonerPuuid::fromString($summonerIdValue),
             puuid: 'puuid-' . $summonerIdValue,
             championId: $championId,
             win: true,

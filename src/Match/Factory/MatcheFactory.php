@@ -9,7 +9,7 @@ use App\Match\Domain\Model\Participant;
 use App\Match\Domain\ValueObjet\GameId;
 use App\Match\Domain\ValueObjet\KDA;
 use App\Match\Domain\ValueObjet\MatchId;
-use App\Match\Domain\ValueObjet\SummonerId;
+use App\Match\Domain\ValueObjet\SummonerPuuid;
 use App\SharedContext\Domain\ValueObjet\Platform;
 
 final class MatcheFactory
@@ -50,7 +50,7 @@ final class MatcheFactory
         $participants = [];
 
         foreach ($payload['info']['participants'] as $p) {
-            $summonerId = SummonerId::fromString((string) ($p['puuid'] ?? $p['summonerId'] ?? ''));
+            $summonerPuuid = SummonerPuuid::fromString((string) ($p['puuid'] ?? $p['summonerId'] ?? ''));
             $kda = new KDA((int) ($p['kills'] ?? 0), (int) ($p['deaths'] ?? 0), (int) ($p['assists'] ?? 0));
 
             $items = [];
@@ -64,7 +64,7 @@ final class MatcheFactory
             }
 
             $participant = new Participant(
-                $summonerId,
+                $summonerPuuid,
                 $p['summonerId'],
                 (int) ($p['championId'] ?? $p['champion']),
                 (bool) ($p['win'] ?? false),

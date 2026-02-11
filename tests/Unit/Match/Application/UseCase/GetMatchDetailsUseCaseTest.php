@@ -11,7 +11,7 @@ use App\Match\Domain\Model\Participant;
 use App\Match\Domain\ValueObjet\GameId;
 use App\Match\Domain\ValueObjet\KDA;
 use App\Match\Domain\ValueObjet\MatchId;
-use App\Match\Domain\ValueObjet\SummonerId;
+use App\Match\Domain\ValueObjet\SummonerPuuid;
 use App\SharedContext\Application\Bus\QueryBusInterface;
 use App\SharedContext\Domain\ValueObjet\Platform;
 use PHPUnit\Framework\TestCase;
@@ -30,7 +30,7 @@ final class GetMatchDetailsUseCaseTest extends TestCase
     private function createMatch(string $matchId): Matche
     {
         $participant = new Participant(
-            summonerId: SummonerId::fromString('summoner123'),
+            summonerId: SummonerPuuid::fromString('summoner123'),
             puuid: 'puuid-123',
             championId: 157,
             win: true,

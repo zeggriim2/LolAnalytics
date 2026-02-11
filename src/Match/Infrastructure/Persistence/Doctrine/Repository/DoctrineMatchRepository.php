@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Match\Infrastructure\Persistance\Doctrine\Repository;
+namespace App\Match\Infrastructure\Persistence\Doctrine\Repository;
 
 use App\GameData\Infrastructure\Persistence\Doctrine\Entity\GameModeEntity;
 use App\GameData\Infrastructure\Persistence\Doctrine\Entity\GameTypeEntity;
@@ -11,7 +11,7 @@ use App\GameData\Infrastructure\Persistence\Doctrine\Entity\QueueEntity;
 use App\Match\Domain\Model\Matche;
 use App\Match\Domain\Repository\MatchRepositoryInterface;
 use App\Match\Domain\ValueObjet\MatchId;
-use App\Match\Infrastructure\Persistance\Doctrine\Entity\MatchEntity;
+use App\Match\Infrastructure\Persistence\Doctrine\Entity\MatchEntity;
 use App\SharedContext\Domain\ValueObjet\Region;
 use Doctrine\ORM\EntityManagerInterface;
 

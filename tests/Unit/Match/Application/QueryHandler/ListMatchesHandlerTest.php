@@ -13,7 +13,7 @@ use App\Match\Domain\Repository\MatchRepositoryInterface;
 use App\Match\Domain\ValueObjet\GameId;
 use App\Match\Domain\ValueObjet\KDA;
 use App\Match\Domain\ValueObjet\MatchId;
-use App\Match\Domain\ValueObjet\SummonerId;
+use App\Match\Domain\ValueObjet\SummonerPuuid;
 use App\SharedContext\Domain\ValueObjet\Platform;
 use PHPUnit\Framework\TestCase;
 
@@ -31,7 +31,7 @@ final class ListMatchesHandlerTest extends TestCase
     private function createMatch(string $matchId, int $gameId): Matche
     {
         $participant = new Participant(
-            summonerId: SummonerId::fromString('summoner-' . $matchId),
+            summonerId: SummonerPuuid::fromString('summoner-' . $matchId),
             puuid: 'puuid-' . $matchId,
             championId: 157,
             win: true,

@@ -13,7 +13,7 @@ use App\Match\Domain\Repository\MatchRepositoryInterface;
 use App\Match\Domain\ValueObjet\GameId;
 use App\Match\Domain\ValueObjet\KDA;
 use App\Match\Domain\ValueObjet\MatchId;
-use App\Match\Domain\ValueObjet\SummonerId;
+use App\Match\Domain\ValueObjet\SummonerPuuid;
 use App\SharedContext\Domain\ValueObjet\Platform;
 use PHPUnit\Framework\TestCase;
 
@@ -34,7 +34,7 @@ final class GetMatchByIdHandlerTest extends TestCase
         $query = new GetMatchByIdQuery($matchId);
 
         $participant = new Participant(
-            summonerId: SummonerId::fromString('summoner123'),
+            summonerId: SummonerPuuid::fromString('summoner123'),
             puuid: 'puuid-123',
             championId: 157,
             win: true,

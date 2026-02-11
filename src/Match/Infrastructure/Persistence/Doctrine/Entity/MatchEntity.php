@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Match\Infrastructure\Persistance\Doctrine\Entity;
+namespace App\Match\Infrastructure\Persistence\Doctrine\Entity;
 
 use App\GameData\Infrastructure\Persistence\Doctrine\Entity\GameModeEntity;
 use App\GameData\Infrastructure\Persistence\Doctrine\Entity\GameTypeEntity;

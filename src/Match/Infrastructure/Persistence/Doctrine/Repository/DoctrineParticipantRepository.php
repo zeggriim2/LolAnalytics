@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Match\Infrastructure\Persistance\Doctrine\Repository;
+namespace App\Match\Infrastructure\Persistence\Doctrine\Repository;
 
 use App\Match\Domain\Model\Participant;
 use App\Match\Domain\Repository\ParticipantRepositoryInterface;
-use App\Match\Infrastructure\Persistance\Doctrine\Entity\ParticipantEntity;
+use App\Match\Infrastructure\Persistence\Doctrine\Entity\ParticipantEntity;
 use Doctrine\ORM\EntityManagerInterface;
 
 final class DoctrineParticipantRepository implements ParticipantRepositoryInterface

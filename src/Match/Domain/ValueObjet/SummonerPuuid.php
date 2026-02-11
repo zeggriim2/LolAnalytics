@@ -4,19 +4,19 @@ declare(strict_types=1);
 
 namespace App\Match\Domain\ValueObjet;
 
-final class SummonerId
+final class SummonerPuuid
 {
     private function __construct(private readonly string $value)
     {
     }
 
-    public static function fromString(string $id): self
+    public static function fromString(string $puuid): self
     {
-        if (empty($id)) {
-            throw new \InvalidArgumentException('SummonerId cannot be empty');
+        if (empty($puuid)) {
+            throw new \InvalidArgumentException('SummonerPuuid cannot be empty');
         }
 
-        return new self($id);
+        return new self($puuid);
     }
 
     public function __toString(): string

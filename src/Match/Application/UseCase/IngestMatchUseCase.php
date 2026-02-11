@@ -17,8 +17,8 @@ final class IngestMatchUseCase
     public function execute(
         string $matchId,
         Region $region,
-        ?\DateTime $startTime = null,
-        ?\DateTime $endTime = null,
+        ?\DateTimeImmutable $startTime = null,
+        ?\DateTimeImmutable $endTime = null,
         ?string $queue = null,
         ?string $type = null,
     ): void {

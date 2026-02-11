@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit\Match\Domain\ValueObject;
 
-use App\Match\Domain\ValueObjet\SummonerId;
+use App\Match\Domain\ValueObjet\SummonerPuuid;
 use PHPUnit\Framework\TestCase;
 
 final class SummonerIdTest extends TestCase
 {
     public function testCanCreateSummonerIdFromString(): void
     {
-        $summonerId = SummonerId::fromString('summoner123');
+        $summonerId = SummonerPuuid::fromString('summoner123');
 
-        $this->assertInstanceOf(SummonerId::class, $summonerId);
+        $this->assertInstanceOf(SummonerPuuid::class, $summonerId);
         $this->assertSame('summoner123', (string) $summonerId);
     }
 
@@ -22,28 +22,28 @@ final class SummonerIdTest extends TestCase
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('SummonerId cannot be empty');
 
-        SummonerId::fromString('');
+        SummonerPuuid::fromString('');
     }
 
     public function testEqualsReturnsTrueForSameValue(): void
     {
-        $summonerId1 = SummonerId::fromString('summoner123');
-        $summonerId2 = SummonerId::fromString('summoner123');
+        $summonerId1 = SummonerPuuid::fromString('summoner123');
+        $summonerId2 = SummonerPuuid::fromString('summoner123');
 
         $this->assertTrue($summonerId1->equals($summonerId2));
     }
 
     public function testEqualsReturnsFalseForDifferentValues(): void
     {
-        $summonerId1 = SummonerId::fromString('summoner123');
-        $summonerId2 = SummonerId::fromString('summoner456');
+        $summonerId1 = SummonerPuuid::fromString('summoner123');
+        $summonerId2 = SummonerPuuid::fromString('summoner456');
 
         $this->assertFalse($summonerId1->equals($summonerId2));
     }
 
     public function testToStringReturnsCorrectValue(): void
     {
-        $summonerId = SummonerId::fromString('summoner123');
+        $summonerId = SummonerPuuid::fromString('summoner123');
 
         $this->assertSame('summoner123', (string) $summonerId);
     }

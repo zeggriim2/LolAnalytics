@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Match\Infrastructure\Persistance\Doctrine\Entity;
+namespace App\Match\Infrastructure\Persistence\Doctrine\Entity;
 
 use App\Match\Domain\Model\Participant;
 use App\Match\Domain\ValueObjet\KDA;
-use App\Match\Domain\ValueObjet\SummonerId;
+use App\Match\Domain\ValueObjet\SummonerPuuid;
 use App\Summoner\Infrastructure\Persistence\Doctrine\Entity\SummonerEntity;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -67,7 +67,7 @@ class ParticipantEntity
     public function toDomain(): Participant
     {
         return new Participant(
-            SummonerId::fromString($this->summonerId),
+            SummonerPuuid::fromString($this->summonerId),
             $this->puuid,
             $this->championId,
             $this->win,

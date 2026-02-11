@@ -6,14 +6,14 @@ namespace App\Tests\Unit\Match\Domain\Model;
 
 use App\Match\Domain\Model\Participant;
 use App\Match\Domain\ValueObjet\KDA;
-use App\Match\Domain\ValueObjet\SummonerId;
+use App\Match\Domain\ValueObjet\SummonerPuuid;
 use PHPUnit\Framework\TestCase;
 
 final class ParticipantTest extends TestCase
 {
     public function testCanCreateParticipant(): void
     {
-        $summonerId = SummonerId::fromString('summoner123');
+        $summonerId = SummonerPuuid::fromString('summoner123');
         $kda = new KDA(10, 5, 15);
         $items = ['item1', 'item2', 'item3'];
 
@@ -37,7 +37,7 @@ final class ParticipantTest extends TestCase
 
     public function testCanCreateParticipantWithLoss(): void
     {
-        $summonerId = SummonerId::fromString('summoner456');
+        $summonerId = SummonerPuuid::fromString('summoner456');
         $kda = new KDA(3, 10, 5);
 
         $participant = new Participant(
@@ -54,7 +54,7 @@ final class ParticipantTest extends TestCase
 
     public function testCanCreateParticipantWithEmptyItems(): void
     {
-        $summonerId = SummonerId::fromString('summoner789');
+        $summonerId = SummonerPuuid::fromString('summoner789');
         $kda = new KDA(5, 5, 5);
 
         $participant = new Participant(
@@ -75,7 +75,7 @@ final class ParticipantTest extends TestCase
         $this->expectExceptionMessage('championId must be positive');
 
         new Participant(
-            summonerId: SummonerId::fromString('summoner123'),
+            summonerId: SummonerPuuid::fromString('summoner123'),
             puuid: 'puuid-abc-123',
             championId: 0,
             win: true,
@@ -90,7 +90,7 @@ final class ParticipantTest extends TestCase
         $this->expectExceptionMessage('championId must be positive');
 
         new Participant(
-            summonerId: SummonerId::fromString('summoner123'),
+            summonerId: SummonerPuuid::fromString('summoner123'),
             puuid: 'puuid-abc-123',
             championId: -1,
             win: true,
@@ -101,7 +101,7 @@ final class ParticipantTest extends TestCase
 
     public function testSummonerIdIsImmutable(): void
     {
-        $summonerId = SummonerId::fromString('summoner123');
+        $summonerId = SummonerPuuid::fromString('summoner123');
         $participant = new Participant(
             summonerId: $summonerId,
             puuid: 'puuid-abc-123',
@@ -119,7 +119,7 @@ final class ParticipantTest extends TestCase
     {
         $kda = new KDA(10, 5, 15);
         $participant = new Participant(
-            summonerId: SummonerId::fromString('summoner123'),
+            summonerId: SummonerPuuid::fromString('summoner123'),
             puuid: 'puuid-abc-123',
             championId: 157,
             win: true,
