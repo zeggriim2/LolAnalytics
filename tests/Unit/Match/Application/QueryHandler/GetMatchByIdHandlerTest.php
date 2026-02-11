@@ -6,6 +6,7 @@ namespace App\Tests\Unit\Match\Application\QueryHandler;
 
 use App\Match\Application\Query\GetMatchByIdQuery;
 use App\Match\Application\QueryHandler\GetMatchByIdHandler;
+use App\Match\Application\ReadModel\MatchDetailReadModel;
 use App\Match\Domain\Model\Matche;
 use App\Match\Domain\Model\Participant;
 use App\Match\Domain\Repository\MatchRepositoryInterface;
@@ -62,7 +63,11 @@ final class GetMatchByIdHandlerTest extends TestCase
 
         $result = ($this->handler)($query);
 
-        $this->assertSame($expectedMatch, $result);
+        $this->assertInstanceOf(MatchDetailReadModel::class, $result);
+        $this->assertSame($matchId, $result->id);
+        $this->assertSame(1234567890, $result->gameId);
+        $this->assertSame(1800, $result->durationSeconds);
+        $this->assertCount(1, $result->participants);
     }
 
     public function testReturnsNullWhenMatchNotFound(): void

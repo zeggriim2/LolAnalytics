@@ -53,7 +53,7 @@ final class ListMatchesHandlerTest extends KernelTestCase
         // Then: should return one match
         $this->assertIsArray($matches);
         $this->assertCount(1, $matches);
-        $this->assertSame('EUW1_1234567890', (string) $matches[0]->id());
+        $this->assertSame('EUW1_1234567890', $matches[0]->id);
     }
 
     public function testListMatchesWithMultipleMatches(): void
@@ -87,7 +87,7 @@ final class ListMatchesHandlerTest extends KernelTestCase
         // Then: should return match with participants
         $this->assertCount(1, $matches);
         $match = $matches[0];
-        $this->assertCount(10, $match->participants(), 'Match should have 10 participants by default');
+        $this->assertSame(10, $match->participantsCount, 'Match should have 10 participants by default');
     }
 
     public function testListMatchesReturnsCorrectDomainModels(): void
@@ -109,12 +109,12 @@ final class ListMatchesHandlerTest extends KernelTestCase
         // Then: should return correct domain model
         $this->assertCount(1, $matches);
         $match = $matches[0];
-        $this->assertSame('EUW1_111111111', (string) $match->id());
-        $this->assertSame(123456789, $match->gameId()->value());
-        $this->assertSame(1800, $match->durationSeconds());
+        $this->assertSame('EUW1_111111111', $match->id);
+        $this->assertSame(123456789, $match->gameId);
+        $this->assertSame(1800, $match->durationSeconds);
         $this->assertSame(
             $playedAt->format('Y-m-d H:i:s'),
-            $match->playedAt()->format('Y-m-d H:i:s')
+            $match->playedAt->format('Y-m-d H:i:s')
         );
     }
 }

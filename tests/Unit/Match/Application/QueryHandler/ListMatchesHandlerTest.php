@@ -6,6 +6,7 @@ namespace App\Tests\Unit\Match\Application\QueryHandler;
 
 use App\Match\Application\Query\ListMatchesQuery;
 use App\Match\Application\QueryHandler\ListMatchesHandler;
+use App\Match\Application\ReadModel\MatchReadModel;
 use App\Match\Domain\Model\Matche;
 use App\Match\Domain\Model\Participant;
 use App\Match\Domain\Repository\MatchRepositoryInterface;
@@ -69,8 +70,11 @@ final class ListMatchesHandlerTest extends TestCase
 
         $result = ($this->handler)($query);
 
-        $this->assertSame($matches, $result);
         $this->assertCount(3, $result);
+        $this->assertContainsOnlyInstancesOf(MatchReadModel::class, $result);
+        $this->assertSame('EUW1_1234567890', $result[0]->id);
+        $this->assertSame('EUW1_1234567891', $result[1]->id);
+        $this->assertSame('EUW1_1234567892', $result[2]->id);
     }
 
     public function testReturnsEmptyArrayWhenNoMatches(): void
@@ -101,7 +105,8 @@ final class ListMatchesHandlerTest extends TestCase
         $result = ($this->handler)($query);
 
         $this->assertCount(1, $result);
-        $this->assertSame($match, $result[0]);
+        $this->assertInstanceOf(MatchReadModel::class, $result[0]);
+        $this->assertSame('EUW1_SINGLE', $result[0]->id);
     }
 
     public function testCallsRepositoryFindAll(): void

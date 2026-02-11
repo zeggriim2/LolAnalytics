@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Match\Application\QueryHandler;
 
 use App\Match\Application\Query\ListMatchesQuery;
-use App\Match\Domain\Model\Matche;
+use App\Match\Application\ReadModel\MatchReadModel;
 use App\Match\Domain\Repository\MatchRepositoryInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
@@ -17,10 +17,13 @@ final class ListMatchesHandler
     }
 
     /**
-     * @return Matche[]
+     * @return MatchReadModel[]
      */
     public function __invoke(ListMatchesQuery $query): array
     {
-        return $this->repository->findAll();
+        return array_map(
+            MatchReadModel::fromDomain(...),
+            $this->repository->findAll()
+        );
     }
 }

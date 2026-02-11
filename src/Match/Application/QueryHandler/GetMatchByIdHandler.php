@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Match\Application\QueryHandler;
 
 use App\Match\Application\Query\GetMatchByIdQuery;
-use App\Match\Domain\Model\Matche;
+use App\Match\Application\ReadModel\MatchDetailReadModel;
 use App\Match\Domain\Repository\MatchRepositoryInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
@@ -16,8 +16,14 @@ final class GetMatchByIdHandler
     {
     }
 
-    public function __invoke(GetMatchByIdQuery $query): ?Matche
+    public function __invoke(GetMatchByIdQuery $query): ?MatchDetailReadModel
     {
-        return $this->repository->findById($query->id);
+        $match = $this->repository->findById($query->id);
+
+        if (null === $match) {
+            return null;
+        }
+
+        return MatchDetailReadModel::fromDomain($match);
     }
 }

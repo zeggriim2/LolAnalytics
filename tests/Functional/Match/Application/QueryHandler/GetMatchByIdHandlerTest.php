@@ -53,7 +53,7 @@ final class GetMatchByIdHandlerTest extends KernelTestCase
 
         // Then: should return the match
         $this->assertNotNull($match);
-        $this->assertSame('EUW1_1234567890', (string) $match->id());
+        $this->assertSame('EUW1_1234567890', $match->id);
     }
 
     public function testGetMatchByIdReturnsCorrectDomainModel(): void
@@ -72,14 +72,14 @@ final class GetMatchByIdHandlerTest extends KernelTestCase
         $envelope = $this->queryBus->dispatch(new GetMatchByIdQuery('EUW1_111111111'));
         $match = $envelope->last(HandledStamp::class)?->getResult();
 
-        // Then: should return correct domain model with all properties
+        // Then: should return correct read model with all properties
         $this->assertNotNull($match);
-        $this->assertSame('EUW1_111111111', (string) $match->id());
-        $this->assertSame(987654321, $match->gameId()->value());
-        $this->assertSame(2400, $match->durationSeconds());
+        $this->assertSame('EUW1_111111111', $match->id);
+        $this->assertSame(987654321, $match->gameId);
+        $this->assertSame(2400, $match->durationSeconds);
         $this->assertSame(
             $playedAt->format('Y-m-d H:i:s'),
-            $match->playedAt()->format('Y-m-d H:i:s')
+            $match->playedAt->format('Y-m-d H:i:s')
         );
     }
 
@@ -97,7 +97,7 @@ final class GetMatchByIdHandlerTest extends KernelTestCase
 
         // Then: should return match with all participants
         $this->assertNotNull($match);
-        $this->assertCount(10, $match->participants(), 'Match should have 10 participants by default');
+        $this->assertCount(10, $match->participants, 'Match should have 10 participants by default');
     }
 
     public function testGetMatchByIdReturnsMatchWithCorrectParticipantData(): void
@@ -124,17 +124,17 @@ final class GetMatchByIdHandlerTest extends KernelTestCase
 
         // Then: should return match with correct participant data
         $this->assertNotNull($match);
-        $participants = $match->participants();
+        $participants = $match->participants;
         $this->assertCount(1, $participants);
 
         $participant = $participants[0];
-        $this->assertSame('test-puuid-123', $participant->puuid());
-        $this->assertSame('summoner-123', (string) $participant->summonerId());
-        $this->assertSame(157, $participant->championId());
-        $this->assertTrue($participant->win());
-        $this->assertSame(10, $participant->kda()->kills());
-        $this->assertSame(3, $participant->kda()->deaths());
-        $this->assertSame(15, $participant->kda()->assists());
+        $this->assertSame('test-puuid-123', $participant->puuid);
+        $this->assertSame('summoner-123', $participant->summonerId);
+        $this->assertSame(157, $participant->championId);
+        $this->assertTrue($participant->win);
+        $this->assertSame(10, $participant->kills);
+        $this->assertSame(3, $participant->deaths);
+        $this->assertSame(15, $participant->assists);
     }
 
     public function testGetMatchByIdWithMultipleMatchesInDatabase(): void
@@ -152,6 +152,6 @@ final class GetMatchByIdHandlerTest extends KernelTestCase
 
         // Then: should return only the requested match
         $this->assertNotNull($match);
-        $this->assertSame('EUW1_TARGET_MATCH', (string) $match->id());
+        $this->assertSame('EUW1_TARGET_MATCH', $match->id);
     }
 }
