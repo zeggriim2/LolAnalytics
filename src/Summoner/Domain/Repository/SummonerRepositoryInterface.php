@@ -14,4 +14,9 @@ interface SummonerRepositoryInterface
     public function findByPuuid(Puuid $puuid): ?Summoner;
 
     public function exists(Puuid $puuid): bool;
+
+    /**
+     * @return Summoner[]
+     */
+    public function findAll(?int $limit = null, ?int $offset = null): array;
 }

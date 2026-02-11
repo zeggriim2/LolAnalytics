@@ -85,7 +85,7 @@ final class GetSummonerByPuuidHandlerTest extends KernelTestCase
 
         // Then: DTO should have correct Riot ID format
         $this->assertInstanceOf(SummonerDto::class, $result);
-        $this->assertSame('Faker#KR1', $result->riotId());
+        $this->assertSame('Faker#KR1', $result->riotId);
     }
 
     public function testGetSummonerByPuuidReturnsCorrectLastUpdatedAt(): void

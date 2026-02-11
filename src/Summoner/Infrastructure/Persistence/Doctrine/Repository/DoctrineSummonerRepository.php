@@ -52,4 +52,30 @@ final readonly class DoctrineSummonerRepository implements SummonerRepositoryInt
             ->getRepository(SummonerEntity::class)
             ->find($puuid->value());
     }
+
+    /**
+     * @return Summoner[]
+     */
+    public function findAll(?int $limit = null, ?int $offset = null): array
+    {
+        $qb = $this->entityManager
+            ->getRepository(SummonerEntity::class)
+            ->createQueryBuilder('s')
+            ->orderBy('s.lastUpdatedAt', 'DESC');
+
+        if (null !== $limit) {
+            $qb->setMaxResults($limit);
+        }
+
+        if (null !== $offset) {
+            $qb->setFirstResult($offset);
+        }
+
+        $entities = $qb->getQuery()->getResult();
+
+        return array_map(
+            fn (SummonerEntity $entity) => $entity->toDomain(),
+            $entities
+        );
+    }
 }

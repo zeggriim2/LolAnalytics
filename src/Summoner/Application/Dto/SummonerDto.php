@@ -8,6 +8,8 @@ use App\Summoner\Domain\Model\Summoner;
 
 final readonly class SummonerDto
 {
+    public string $riotId;
+
     public function __construct(
         public string $puuid,
         public string $gameName,
@@ -17,6 +19,7 @@ final readonly class SummonerDto
         public string $platform,
         public \DateTimeImmutable $lastUpdatedAt,
     ) {
+        $this->riotId = sprintf('%s#%s', $this->gameName, $this->tagLine);
     }
 
     public static function fromDomain(Summoner $summoner): self
@@ -30,10 +33,5 @@ final readonly class SummonerDto
             $summoner->platform()->value,
             $summoner->lastUpdatedAt(),
         );
-    }
-
-    public function riotId(): string
-    {
-        return sprintf('%s#%s', $this->gameName, $this->tagLine);
     }
 }
