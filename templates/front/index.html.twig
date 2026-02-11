@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LoL Analytics</title>
+    {% if app.environment == 'dev' %}
+        <script type="module" src="http://localhost:5173/@vite/client"></script>
+        <script type="module" src="http://localhost:5173/assets/front/main.ts"></script>
+    {% else %}
+        {{ encore_entry_link_tags('front') }}
+        {{ encore_entry_script_tags('front') }}
+    {% endif %}
+</head>
+<body>
+    <div id="front-app"></div>
+</body>
+</html>
