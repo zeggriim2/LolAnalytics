@@ -54,7 +54,7 @@ class ParticipantEntity
         $entity = new self();
         $entity->match = $matchEntity;
         $entity->puuid = $participant->puuid();
-        $entity->summonerId = (string) $participant->summonerId();
+        $entity->summonerId = (string) $participant->summonerPuuid();
         $entity->championId = $participant->championId();
         $entity->win = $participant->win();
         $entity->kills = $participant->kda()->kills();

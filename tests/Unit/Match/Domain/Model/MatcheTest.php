@@ -18,7 +18,7 @@ final class MatcheTest extends TestCase
     private function createParticipant(string $summonerIdValue, int $championId = 157): Participant
     {
         return new Participant(
-            summonerId: SummonerPuuid::fromString($summonerIdValue),
+            summonerPuuid: SummonerPuuid::fromString($summonerIdValue),
             puuid: 'puuid-' . $summonerIdValue,
             championId: $championId,
             win: true,

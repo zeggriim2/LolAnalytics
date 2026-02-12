@@ -20,7 +20,7 @@ final class SummonerIdTest extends TestCase
     public function testCannotCreateEmptySummonerId(): void
     {
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('SummonerId cannot be empty');
+        $this->expectExceptionMessage('SummonerPuuid cannot be empty');
 
         SummonerPuuid::fromString('');
     }

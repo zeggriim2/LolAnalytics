@@ -14,11 +14,11 @@ final class Participant
      */
     public function __construct(
         private readonly SummonerPuuid $summonerPuuid,
-        private readonly string        $puuid,
-        private readonly int           $championId,
-        private readonly bool          $win,
-        private readonly KDA           $kda,
-        private readonly array         $items
+        private readonly string $puuid,
+        private readonly int $championId,
+        private readonly bool $win,
+        private readonly KDA $kda,
+        private readonly array $items
     ) {
         if ($championId <= 0) {
             throw new \InvalidArgumentException('championId must be positive');

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\GameData\Infrastructure\Persistence\Doctrine\Entity;
 
 use App\GameData\Domain\Model\GameMode;
-use App\Match\Infrastructure\Persistance\Doctrine\Entity\MatchEntity;
+use App\Match\Infrastructure\Persistence\Doctrine\Entity\MatchEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;

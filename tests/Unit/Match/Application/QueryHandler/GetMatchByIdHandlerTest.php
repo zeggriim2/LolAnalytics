@@ -34,7 +34,7 @@ final class GetMatchByIdHandlerTest extends TestCase
         $query = new GetMatchByIdQuery($matchId);
 
         $participant = new Participant(
-            summonerId: SummonerPuuid::fromString('summoner123'),
+            summonerPuuid: SummonerPuuid::fromString('summoner123'),
             puuid: 'puuid-123',
             championId: 157,
             win: true,

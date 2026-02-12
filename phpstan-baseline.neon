@@ -67,22 +67,22 @@ parameters:
 			path: src/Match/Infrastructure/Client/RiotApiClientInterface.php
 
 		-
-			message: '#^Property App\\Match\\Infrastructure\\Persistance\\Doctrine\\Entity\\MatchEntity\:\:\$id \(int\|null\) is never assigned int so it can be removed from the property type\.$#'
+			message: '#^Property App\\Match\\Infrastructure\\Persistence\\Doctrine\\Entity\\MatchEntity\:\:\$id \(int\|null\) is never assigned int so it can be removed from the property type\.$#'
 			identifier: property.unusedType
 			count: 1
-			path: src/Match/Infrastructure/Persistance/Doctrine/Entity/MatchEntity.php
+			path: src/Match/Infrastructure/Persistence/Doctrine/Entity/MatchEntity.php
 
 		-
-			message: '#^Property App\\Match\\Infrastructure\\Persistance\\Doctrine\\Entity\\ParticipantEntity\:\:\$id \(int\|null\) is never assigned int so it can be removed from the property type\.$#'
+			message: '#^Property App\\Match\\Infrastructure\\Persistence\\Doctrine\\Entity\\ParticipantEntity\:\:\$id \(int\|null\) is never assigned int so it can be removed from the property type\.$#'
 			identifier: property.unusedType
 			count: 1
-			path: src/Match/Infrastructure/Persistance/Doctrine/Entity/ParticipantEntity.php
+			path: src/Match/Infrastructure/Persistence/Doctrine/Entity/ParticipantEntity.php
 
 		-
-			message: '#^Method App\\Match\\Infrastructure\\Persistance\\Doctrine\\Repository\\DoctrineMatchRepository\:\:findAll\(\) return type has no value type specified in iterable type array\.$#'
+			message: '#^Method App\\Match\\Infrastructure\\Persistence\\Doctrine\\Repository\\DoctrineMatchRepository\:\:findAll\(\) return type has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Match/Infrastructure/Persistance/Doctrine/Repository/DoctrineMatchRepository.php
+			path: src/Match/Infrastructure/Persistence/Doctrine/Repository/DoctrineMatchRepository.php
 
 		-
 			message: '#^Method App\\Tests\\Doubles\\Repository\\InMemoryMatchRepository\:\:findAll\(\) return type has no value type specified in iterable type array\.$#'

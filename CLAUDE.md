@@ -43,17 +43,17 @@ All buses are configured in `config/packages/messenger.yaml`. The default bus is
 
 - **ORM**: Doctrine ORM with attribute-based mapping
 - **Database**: MySQL 8
-- **Entities**: Located in `src/Match/Infrastructure/Persistance/Doctrine/Entity/`
+- **Entities**: Located in `src/Match/Infrastructure/Persistence/Doctrine/Entity/`
   - `MatchEntity`: Represents a League of Legends match
   - `ParticipantEntity`: Represents a player's participation in a match
 - **Migrations**: Located in `migrations/` directory
-- **Repository Pattern**: Domain repository interfaces in `Domain/Repository/`, implemented by Doctrine repositories in `Infrastructure/Persistance/Doctrine/Repository/`
+- **Repository Pattern**: Domain repository interfaces in `Domain/Repository/`, implemented by Doctrine repositories in `Infrastructure/Persistence/Doctrine/Repository/`
 
 ### Domain Models vs Entities
 
 The architecture separates domain models from persistence:
 - **Domain Models** (`src/Match/Domain/Model/`): Rich domain objects with business logic
-- **Doctrine Entities** (`src/Match/Infrastructure/Persistance/Doctrine/Entity/`): Persistence layer, mapped to database
+- **Doctrine Entities** (`src/Match/Infrastructure/Persistence/Doctrine/Entity/`): Persistence layer, mapped to database
 
 ## Development Commands
 
@@ -147,8 +147,8 @@ Service bindings are in `config/services.yaml`:
 ### Doctrine Mapping
 - Match context entities mapped via attributes
 - Mapping configuration in `config/packages/doctrine.yaml`
-- Entity path: `src/Match/Infrastructure/Persistance/Doctrine/Entity`
-- Namespace: `App\Match\Infrastructure\Persistance\Doctrine\Entity`
+- Entity path: `src/Match/Infrastructure/Persistence/Doctrine/Entity`
+- Namespace: `App\Match\Infrastructure\Persistence\Doctrine\Entity`
 - Alias: `Match`
 
 ### Environment Variables

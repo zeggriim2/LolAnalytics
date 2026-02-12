@@ -31,7 +31,7 @@ final class Matche
             throw new \InvalidArgumentException('Match must have at least one participant');
         }
 
-        $ids = array_map(fn (Participant $p) => (string) $p->summonerId(), $participants);
+        $ids = array_map(fn (Participant $p) => (string) $p->summonerPuuid(), $participants);
 
         if (count($ids) !== count(array_unique($ids))) {
             throw new \InvalidArgumentException('Duplicate participant summonerId');

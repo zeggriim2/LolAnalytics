@@ -27,7 +27,7 @@ services:
     
     # Match Bounded Context
     App\Match\Domain\Repository\MatchRepositoryInterface:
-        alias: App\Match\Infrastructure\Persistance\Doctrine\Repository\DoctrineMatchRepository
+        alias: App\Match\Infrastructure\Persistence\Doctrine\Repository\DoctrineMatchRepository
 
     # GameData Bounded Context
     App\GameData\Domain\Repository\QueueRepositoryInterface:

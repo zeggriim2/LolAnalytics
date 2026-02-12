@@ -21,8 +21,8 @@ doctrine:
             Match:
                 type: attribute
                 is_bundle: false
-                dir: '%kernel.project_dir%/src/Match/Infrastructure/Persistance/Doctrine/Entity'
-                prefix: 'App\Match\Infrastructure\Persistance\Doctrine\Entity'
+                dir: '%kernel.project_dir%/src/Match/Infrastructure/Persistence/Doctrine/Entity'
+                prefix: 'App\Match\Infrastructure\Persistence\Doctrine\Entity'
                 alias: Match
 
             GameData:

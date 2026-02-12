@@ -31,7 +31,7 @@ final class ListMatchesHandlerTest extends TestCase
     private function createMatch(string $matchId, int $gameId): Matche
     {
         $participant = new Participant(
-            summonerId: SummonerPuuid::fromString('summoner-' . $matchId),
+            summonerPuuid: SummonerPuuid::fromString('summoner-' . $matchId),
             puuid: 'puuid-' . $matchId,
             championId: 157,
             win: true,

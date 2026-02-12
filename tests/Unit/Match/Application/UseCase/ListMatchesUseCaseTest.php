@@ -30,7 +30,7 @@ final class ListMatchesUseCaseTest extends TestCase
     private function createMatch(string $matchId): Matche
     {
         $participant = new Participant(
-            summonerId: SummonerPuuid::fromString('summoner-' . $matchId),
+            summonerPuuid: SummonerPuuid::fromString('summoner-' . $matchId),
             puuid: 'puuid-' . $matchId,
             championId: 157,
             win: true,

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Factory;
 
-use App\Match\Infrastructure\Persistance\Doctrine\Entity\MatchEntity;
-use App\Match\Infrastructure\Persistance\Doctrine\Entity\ParticipantEntity;
+use App\Match\Infrastructure\Persistence\Doctrine\Entity\MatchEntity;
+use App\Match\Infrastructure\Persistence\Doctrine\Entity\ParticipantEntity;
 use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
 
 /**

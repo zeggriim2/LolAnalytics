@@ -13,12 +13,12 @@ final class ParticipantTest extends TestCase
 {
     public function testCanCreateParticipant(): void
     {
-        $summonerId = SummonerPuuid::fromString('summoner123');
+        $summonerPuuid = SummonerPuuid::fromString('summoner123');
         $kda = new KDA(10, 5, 15);
         $items = ['item1', 'item2', 'item3'];
 
         $participant = new Participant(
-            summonerId: $summonerId,
+            summonerPuuid: $summonerPuuid,
             puuid: 'puuid-abc-123',
             championId: 157,
             win: true,
@@ -27,7 +27,7 @@ final class ParticipantTest extends TestCase
         );
 
         $this->assertInstanceOf(Participant::class, $participant);
-        $this->assertSame($summonerId, $participant->summonerId());
+        $this->assertSame($summonerPuuid, $participant->summonerPuuid());
         $this->assertSame('puuid-abc-123', $participant->puuid());
         $this->assertSame(157, $participant->championId());
         $this->assertTrue($participant->win());
@@ -37,11 +37,11 @@ final class ParticipantTest extends TestCase
 
     public function testCanCreateParticipantWithLoss(): void
     {
-        $summonerId = SummonerPuuid::fromString('summoner456');
+        $summonerPuuid = SummonerPuuid::fromString('summoner456');
         $kda = new KDA(3, 10, 5);
 
         $participant = new Participant(
-            summonerId: $summonerId,
+            summonerPuuid: $summonerPuuid,
             puuid: 'puuid-def-456',
             championId: 64,
             win: false,
@@ -54,11 +54,11 @@ final class ParticipantTest extends TestCase
 
     public function testCanCreateParticipantWithEmptyItems(): void
     {
-        $summonerId = SummonerPuuid::fromString('summoner789');
+        $summonerPuuid = SummonerPuuid::fromString('summoner789');
         $kda = new KDA(5, 5, 5);
 
         $participant = new Participant(
-            summonerId: $summonerId,
+            summonerPuuid: $summonerPuuid,
             puuid: 'puuid-ghi-789',
             championId: 1,
             win: true,
@@ -75,7 +75,7 @@ final class ParticipantTest extends TestCase
         $this->expectExceptionMessage('championId must be positive');
 
         new Participant(
-            summonerId: SummonerPuuid::fromString('summoner123'),
+            summonerPuuid: SummonerPuuid::fromString('summoner123'),
             puuid: 'puuid-abc-123',
             championId: 0,
             win: true,
@@ -90,7 +90,7 @@ final class ParticipantTest extends TestCase
         $this->expectExceptionMessage('championId must be positive');
 
         new Participant(
-            summonerId: SummonerPuuid::fromString('summoner123'),
+            summonerPuuid: SummonerPuuid::fromString('summoner123'),
             puuid: 'puuid-abc-123',
             championId: -1,
             win: true,
@@ -99,11 +99,11 @@ final class ParticipantTest extends TestCase
         );
     }
 
-    public function testSummonerIdIsImmutable(): void
+    public function testSummonerPuuidIsImmutable(): void
     {
-        $summonerId = SummonerPuuid::fromString('summoner123');
+        $summonerPuuid = SummonerPuuid::fromString('summoner123');
         $participant = new Participant(
-            summonerId: $summonerId,
+            summonerPuuid: $summonerPuuid,
             puuid: 'puuid-abc-123',
             championId: 157,
             win: true,
@@ -111,15 +111,15 @@ final class ParticipantTest extends TestCase
             items: []
         );
 
-        $retrievedSummonerId = $participant->summonerId();
-        $this->assertTrue($summonerId->equals($retrievedSummonerId));
+        $retrievedSummonerPuuid = $participant->summonerPuuid();
+        $this->assertTrue($summonerPuuid->equals($retrievedSummonerPuuid));
     }
 
     public function testKdaIsImmutable(): void
     {
         $kda = new KDA(10, 5, 15);
         $participant = new Participant(
-            summonerId: SummonerPuuid::fromString('summoner123'),
+            summonerPuuid: SummonerPuuid::fromString('summoner123'),
             puuid: 'puuid-abc-123',
             championId: 157,
             win: true,

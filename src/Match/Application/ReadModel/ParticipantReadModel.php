@@ -30,7 +30,7 @@ final readonly class ParticipantReadModel
 
         return new self(
             puuid: $participant->puuid(),
-            summonerId: (string) $participant->summonerId(),
+            summonerId: (string) $participant->summonerPuuid(),
             championId: $participant->championId(),
             kills: $kda->kills(),
             deaths: $kda->deaths(),

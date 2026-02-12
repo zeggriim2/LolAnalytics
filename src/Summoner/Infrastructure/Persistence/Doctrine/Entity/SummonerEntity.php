@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Summoner\Infrastructure\Persistence\Doctrine\Entity;
 
-use App\Match\Infrastructure\Persistance\Doctrine\Entity\ParticipantEntity;
+use App\Match\Infrastructure\Persistence\Doctrine\Entity\ParticipantEntity;
 use App\SharedContext\Domain\ValueObjet\Platform;
 use App\Summoner\Domain\Model\Summoner;
 use App\Summoner\Domain\ValueObject\Puuid;

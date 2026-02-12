@@ -51,7 +51,7 @@ final class DetailMatchCommand extends Command
 
             foreach ($match->participants() as $participant) {
                 $dataParticipants[] = [
-                    $participant->summonerId(),
+                    $participant->summonerPuuid(),
                     $participant->championId(),
                     $participant->win() ? '✅' : '❌',
                     $participant->kda()->kills(),
