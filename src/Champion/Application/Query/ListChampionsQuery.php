@@ -1,0 +1,13 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Champion\Application\Query;
+
+final readonly class ListChampionsQuery
+{
+    public function __construct(
+        public ?string $version = null,
+    ) {
+    }
+}

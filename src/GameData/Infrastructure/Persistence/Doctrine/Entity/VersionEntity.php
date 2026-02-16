@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace App\GameData\Infrastructure\Persistence\Doctrine\Entity;
 
+use App\Champion\Infrastructure\Persistence\Doctrine\Entity\ChampionEntity;
 use App\GameData\Domain\Model\Version;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -15,6 +18,21 @@ class VersionEntity
     #[ORM\Id()]
     #[ORM\Column(type: Types::STRING, length: 100)]
     private string $version;
+
+    /**
+     * @var Collection<int, ChampionEntity>
+     */
+    #[ORM\OneToMany(
+        targetEntity: ChampionEntity::class,
+        mappedBy: 'gameMode',
+        cascade: ['persist']
+    )]
+    public Collection $champions;
+
+    public function __construct()
+    {
+        $this->champions = new ArrayCollection();
+    }
 
     public static function fromDomain(Version $version): self
     {
