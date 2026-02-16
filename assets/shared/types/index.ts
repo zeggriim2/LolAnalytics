@@ -64,6 +64,11 @@ export interface Version {
   version: string
 }
 
+export interface Platform {
+  value: string
+  label: string
+}
+
 export interface ApiResponse<T> {
   data: T
   total?: number

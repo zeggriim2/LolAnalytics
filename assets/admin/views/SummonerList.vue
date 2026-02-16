@@ -1,24 +1,36 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
-import { api } from '@shared/api/client'
+import { summonerApi } from '@shared/api/summonerApi'
 import type { Summoner } from '@shared/types'
+import AlertMessage from '@shared/components/AlertMessage.vue'
+import SummonerImportForm from '@admin/components/SummonerImportForm.vue'
 
 const summoners = ref<Summoner[]>([])
 const loading = ref(true)
 const error = ref<string | null>(null)
+const importMessage = ref<{ type: 'success' | 'error'; text: string } | null>(null)
 
-onMounted(async () => {
-  try {
-    const response = await api.getSummoners()
-    summoners.value = response.data
-  } catch (e) {
-    error.value = 'Failed to load summoners'
-    console.error(e)
-  } finally {
-    loading.value = false
-  }
-})
+function showMessage(type: 'success' | 'error', text: string) {
+  importMessage.value = { type, text }
+  setTimeout(() => {
+    importMessage.value = null
+  }, 4000)
+}
+
+async function loadSummoners() {
+  const response = await summonerApi.getSummoners()
+  summoners.value = response.data
+}
+
+async function onImportSuccess(message: string) {
+  await loadSummoners()
+  showMessage('success', message)
+}
+
+function onImportError(message: string) {
+  showMessage('error', message)
+}
 
 function formatDate(dateString: string): string {
   return new Date(dateString).toLocaleDateString('fr-FR', {
@@ -27,6 +39,17 @@ function formatDate(dateString: string): string {
     day: 'numeric',
   })
 }
+
+onMounted(async () => {
+  try {
+    await loadSummoners()
+  } catch (e) {
+    error.value = 'Failed to load summoners'
+    console.error(e)
+  } finally {
+    loading.value = false
+  }
+})
 </script>
 
 <template>
@@ -34,6 +57,10 @@ function formatDate(dateString: string): string {
     <header class="page-header">
       <h2>Summoners</h2>
     </header>
+
+    <SummonerImportForm @success="onImportSuccess" @error="onImportError" />
+
+    <AlertMessage v-if="importMessage" :type="importMessage.type" :message="importMessage.text" />
 
     <div v-if="loading" class="loading">Loading...</div>
     <div v-else-if="error" class="error">{{ error }}</div>

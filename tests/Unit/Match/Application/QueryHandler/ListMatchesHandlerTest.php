@@ -48,7 +48,7 @@ final class ListMatchesHandlerTest extends TestCase
             gameType: 'gameType',
             queueId: 2,
             mapId: 1,
-            version: "16.3",
+            version: '16.3',
             platform: Platform::EUW1,
             participants: [$participant]
         );

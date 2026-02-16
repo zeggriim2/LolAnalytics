@@ -51,7 +51,7 @@ final class GetMatchByIdHandlerTest extends TestCase
             gameType: 'gameType',
             queueId: 1,
             mapId: 1,
-            version: "16.3",
+            version: '16.3',
             platform: Platform::EUW1,
             participants: [$participant]
         );

@@ -2,6 +2,8 @@
 import { ref, onMounted } from 'vue'
 import { gameDataApi } from '@shared/api/gameDataApi'
 import type { Queue, GameMap, GameMode, GameType, Version } from '@shared/types'
+import AlertMessage from '@shared/components/AlertMessage.vue'
+import SpinnerButton from '@shared/components/SpinnerButton.vue'
 
 const queues = ref<Queue[]>([])
 const maps = ref<GameMap[]>([])
@@ -108,15 +110,16 @@ onMounted(async () => {
   <div>
     <header class="page-header">
       <h2>Game Data</h2>
-      <button class="btn btn-primary" :disabled="isSyncing()" @click="syncAll">
-        <span v-if="syncingAll" class="spinner"></span>
-        {{ syncingAll ? 'Syncing...' : 'Sync All' }}
-      </button>
+      <SpinnerButton
+        :loading="syncingAll"
+        :disabled="isSyncing()"
+        label="Sync All"
+        loading-label="Syncing..."
+        @click="syncAll"
+      />
     </header>
 
-    <div v-if="syncMessage" :class="['alert', `alert-${syncMessage.type}`]">
-      {{ syncMessage.text }}
-    </div>
+    <AlertMessage v-if="syncMessage" :type="syncMessage.type" :message="syncMessage.text" />
 
     <div v-if="loading" class="loading">Loading...</div>
     <div v-else-if="error" class="error">{{ error }}</div>
@@ -327,24 +330,6 @@ onMounted(async () => {
 .btn-sync {
   font-size: 0.75rem;
   padding: 0.2rem 0.5rem;
-}
-
-.alert {
-  padding: 0.75rem 1rem;
-  margin-bottom: 1rem;
-  border-radius: 4px;
-}
-
-.alert-success {
-  background-color: #d4edda;
-  color: #155724;
-  border: 1px solid #c3e6cb;
-}
-
-.alert-error {
-  background-color: #f8d7da;
-  color: #721c24;
-  border: 1px solid #f5c6cb;
 }
 
 .spinner {
