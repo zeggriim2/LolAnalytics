@@ -53,9 +53,3 @@ parameters:
 			identifier: property.onlyWritten
 			count: 1
 			path: src/Champion/Infrastructure/Persistence/Doctrine/Entity/ChampionStatsEntity.php
-
-		-
-			message: '#^Unreachable statement \- code above always terminates\.$#'
-			identifier: deadCode.unreachable
-			count: 1
-			path: src/GameData/Infrastructure/Persistence/Doctrine/Repository/DoctrineVersionRepository.php
