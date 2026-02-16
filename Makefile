@@ -52,6 +52,14 @@ test-unit: ## Run unit tests only
 test-functional: ## Run functional tests only
 	@$(DOCKER_COMP) exec -e APP_ENV=test php bin/phpunit tests/Functional
 
+test-coverage: ## Run tests with code coverage (HTML report in var/coverage/)
+	@$(eval c ?=)
+	@$(DOCKER_COMP) exec -e APP_ENV=test -e XDEBUG_MODE=coverage php bin/phpunit --coverage-html var/coverage $(c)
+
+test-coverage-text: ## Run tests with code coverage (text summary in terminal)
+	@$(eval c ?=)
+	@$(DOCKER_COMP) exec -e APP_ENV=test -e XDEBUG_MODE=coverage php bin/phpunit --coverage-text $(c)
+
 ## —— Composer 🧙 ——————————————————————————————————————————————————————————————
 composer: ## Run composer, pass the parameter "c=" to run a given command, example: make composer c='req symfony/orm-pack'
 	@$(eval c ?=)
