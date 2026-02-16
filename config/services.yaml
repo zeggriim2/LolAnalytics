@@ -20,6 +20,7 @@ services:
             - '../src/Match/Domain/Model/*'
             - '../src/GameData/Domain/Model/*'
             - '../src/Summoner/Domain/Model/*'
+            - '../src/Champion/Domain/Model/*'
             - '../src/Infrastructure/SharedContext/Framework/Symfony/Kernel.php'
 
     # add more service definitions when explicit configuration is needed
@@ -55,19 +56,16 @@ services:
     App\Summoner\Application\Port\RiotSummonerProviderInterface:
         alias: App\Summoner\Infrastructure\Adapter\RiotSummonerProvider
 
+    # Champion Bounded Context
+    App\Champion\Domain\Repository\ChampionRepositoryInterface:
+        alias: App\Champion\Infrastructure\Persistence\Doctrine\Repository\DoctrineChampionRepository
+
+    App\Champion\Application\Port\RiotChampionProviderInterface:
+        alias: App\Champion\Infrastructure\Adapter\RiotChampionProvider
+
     # CQRS Buses
     App\SharedContext\Application\Bus\CommandBusInterface:
         alias: App\SharedContext\Infrastructure\Bus\MessengerCommandBus
 
     App\SharedContext\Application\Bus\QueryBusInterface:
         alias: App\SharedContext\Infrastructure\Bus\MessengerQueryBus
-
-#    App\Domain\Version\Service\VersionServiceInterface:
-#        alias: App\Infrastructure\RiotApi\Service\RiotApiVersionService
-#
-#    App\Domain\RiotApi\Repository\VersionRepositoryInterface:
-#        alias: App\Infrastructure\RiotApi\Repository\DoctrineVersionRepository
-#
-#    App\Infrastructure\RiotApi\Service\RiotApiVersionService:
-#        arguments:
-#            $dataDragonClient: '@Zeggriim\RiotApiDataDragon\DataDragon\DataDragonApiInterface'

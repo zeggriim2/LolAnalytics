@@ -1,97 +1,61 @@
 parameters:
 	ignoreErrors:
 		-
-			message: '#^Method App\\Match\\Infrastructure\\Client\\RiotApiClientInterface\:\:fetchMatchesByPuuid\(\) invoked with 2 parameters, 5 required\.$#'
-			identifier: arguments.count
+			message: '#^Property App\\Champion\\Infrastructure\\Persistence\\Doctrine\\Entity\\ChampionImageEntity\:\:\$champion is never read, only written\.$#'
+			identifier: property.onlyWritten
 			count: 1
-			path: src/Match/Application/CommandHandler/IngestMatchesByPuuidHandler.php
+			path: src/Champion/Infrastructure/Persistence/Doctrine/Entity/ChampionImageEntity.php
 
 		-
-			message: '#^Method App\\Match\\Application\\QueryHandler\\ListMatchesHandler\:\:__invoke\(\) return type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Match/Application/QueryHandler/ListMatchesHandler.php
-
-		-
-			message: '#^Method App\\Match\\Application\\UseCase\\ListMatchesUseCase\:\:execute\(\) return type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Match/Application/UseCase/ListMatchesUseCase.php
-
-		-
-			message: '#^Method App\\Match\\Domain\\Model\\Matche\:\:create\(\) has parameter \$participants with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Match/Domain/Model/Matche.php
-
-		-
-			message: '#^Method App\\Match\\Domain\\Model\\Participant\:\:__construct\(\) has parameter \$items with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Match/Domain/Model/Participant.php
-
-		-
-			message: '#^Method App\\Match\\Domain\\Model\\Participant\:\:items\(\) return type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Match/Domain/Model/Participant.php
-
-		-
-			message: '#^Method App\\Match\\Domain\\Repository\\MatchRepositoryInterface\:\:findAll\(\) return type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Match/Domain/Repository/MatchRepositoryInterface.php
-
-		-
-			message: '#^Expression on left side of \?\? is not nullable\.$#'
-			identifier: nullCoalesce.expr
-			count: 2
-			path: src/Match/Factory/MatcheFactory.php
-
-		-
-			message: '#^Method App\\Match\\Factory\\MatcheFactory\:\:fromRiotPayload\(\) has parameter \$payload with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Match/Factory/MatcheFactory.php
-
-		-
-			message: '#^Method App\\Match\\Infrastructure\\Client\\RiotApiClient\:\:fetchMatch\(\) return type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Match/Infrastructure/Client/RiotApiClient.php
-
-		-
-			message: '#^Method App\\Match\\Infrastructure\\Client\\RiotApiClientInterface\:\:fetchMatch\(\) return type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Match/Infrastructure/Client/RiotApiClientInterface.php
-
-		-
-			message: '#^Property App\\Match\\Infrastructure\\Persistence\\Doctrine\\Entity\\MatchEntity\:\:\$id \(int\|null\) is never assigned int so it can be removed from the property type\.$#'
+			message: '#^Property App\\Champion\\Infrastructure\\Persistence\\Doctrine\\Entity\\ChampionImageEntity\:\:\$id \(int\|null\) is never assigned int so it can be removed from the property type\.$#'
 			identifier: property.unusedType
 			count: 1
-			path: src/Match/Infrastructure/Persistence/Doctrine/Entity/MatchEntity.php
+			path: src/Champion/Infrastructure/Persistence/Doctrine/Entity/ChampionImageEntity.php
 
 		-
-			message: '#^Property App\\Match\\Infrastructure\\Persistence\\Doctrine\\Entity\\ParticipantEntity\:\:\$id \(int\|null\) is never assigned int so it can be removed from the property type\.$#'
+			message: '#^Property App\\Champion\\Infrastructure\\Persistence\\Doctrine\\Entity\\ChampionImageEntity\:\:\$id is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: src/Champion/Infrastructure/Persistence/Doctrine/Entity/ChampionImageEntity.php
+
+		-
+			message: '#^Property App\\Champion\\Infrastructure\\Persistence\\Doctrine\\Entity\\ChampionInfoEntity\:\:\$champion is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: src/Champion/Infrastructure/Persistence/Doctrine/Entity/ChampionInfoEntity.php
+
+		-
+			message: '#^Property App\\Champion\\Infrastructure\\Persistence\\Doctrine\\Entity\\ChampionInfoEntity\:\:\$id \(int\|null\) is never assigned int so it can be removed from the property type\.$#'
 			identifier: property.unusedType
 			count: 1
-			path: src/Match/Infrastructure/Persistence/Doctrine/Entity/ParticipantEntity.php
+			path: src/Champion/Infrastructure/Persistence/Doctrine/Entity/ChampionInfoEntity.php
 
 		-
-			message: '#^Method App\\Match\\Infrastructure\\Persistence\\Doctrine\\Repository\\DoctrineMatchRepository\:\:findAll\(\) return type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
+			message: '#^Property App\\Champion\\Infrastructure\\Persistence\\Doctrine\\Entity\\ChampionInfoEntity\:\:\$id is never read, only written\.$#'
+			identifier: property.onlyWritten
 			count: 1
-			path: src/Match/Infrastructure/Persistence/Doctrine/Repository/DoctrineMatchRepository.php
+			path: src/Champion/Infrastructure/Persistence/Doctrine/Entity/ChampionInfoEntity.php
 
 		-
-			message: '#^Method App\\Tests\\Doubles\\Repository\\InMemoryMatchRepository\:\:findAll\(\) return type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
+			message: '#^Property App\\Champion\\Infrastructure\\Persistence\\Doctrine\\Entity\\ChampionStatsEntity\:\:\$champion is never read, only written\.$#'
+			identifier: property.onlyWritten
 			count: 1
-			path: tests/Doubles/Repository/InMemoryMatchRepository.php
+			path: src/Champion/Infrastructure/Persistence/Doctrine/Entity/ChampionStatsEntity.php
 
 		-
-			message: '#^Call to function method_exists\(\) with ''Symfony\\\\Component\\\\Dotenv\\\\Dotenv'' and ''bootEnv'' will always evaluate to true\.$#'
-			identifier: function.alreadyNarrowedType
+			message: '#^Property App\\Champion\\Infrastructure\\Persistence\\Doctrine\\Entity\\ChampionStatsEntity\:\:\$id \(int\|null\) is never assigned int so it can be removed from the property type\.$#'
+			identifier: property.unusedType
 			count: 1
-			path: tests/bootstrap.php
+			path: src/Champion/Infrastructure/Persistence/Doctrine/Entity/ChampionStatsEntity.php
+
+		-
+			message: '#^Property App\\Champion\\Infrastructure\\Persistence\\Doctrine\\Entity\\ChampionStatsEntity\:\:\$id is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: src/Champion/Infrastructure/Persistence/Doctrine/Entity/ChampionStatsEntity.php
+
+		-
+			message: '#^Unreachable statement \- code above always terminates\.$#'
+			identifier: deadCode.unreachable
+			count: 1
+			path: src/GameData/Infrastructure/Persistence/Doctrine/Repository/DoctrineVersionRepository.php
