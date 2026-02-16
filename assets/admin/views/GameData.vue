@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { api } from '@shared/api/client'
+import { gameDataApi } from '@shared/api/gameDataApi'
 import type { Queue, GameMap, GameMode, GameType, Version } from '@shared/types'
 
 const queues = ref<Queue[]>([])
@@ -12,20 +12,89 @@ const loading = ref(true)
 const error = ref<string | null>(null)
 const activeTab = ref('queues')
 
+const syncingAll = ref(false)
+const syncingType = ref<string | null>(null)
+const syncMessage = ref<{ type: 'success' | 'error'; text: string } | null>(null)
+
+async function loadAllData() {
+  const [queuesRes, mapsRes, modesRes, typesRes, versionsRes] = await Promise.all([
+    gameDataApi.getQueues(),
+    gameDataApi.getMaps(),
+    gameDataApi.getGameModes(),
+    gameDataApi.getGameTypes(),
+    gameDataApi.getVersions(),
+  ])
+  queues.value = queuesRes.data
+  maps.value = mapsRes.data
+  gameModes.value = modesRes.data
+  gameTypes.value = typesRes.data
+  versions.value = versionsRes.data
+}
+
+async function loadDataByType(type: string) {
+  switch (type) {
+    case 'queues':
+      queues.value = (await gameDataApi.getQueues()).data
+      break
+    case 'maps':
+      maps.value = (await gameDataApi.getMaps()).data
+      break
+    case 'game-modes':
+      gameModes.value = (await gameDataApi.getGameModes()).data
+      break
+    case 'game-types':
+      gameTypes.value = (await gameDataApi.getGameTypes()).data
+      break
+    case 'versions':
+      versions.value = (await gameDataApi.getVersions()).data
+      break
+  }
+}
+
+function showMessage(type: 'success' | 'error', text: string) {
+  syncMessage.value = { type, text }
+  setTimeout(() => {
+    syncMessage.value = null
+  }, 4000)
+}
+
+async function syncAll() {
+  syncingAll.value = true
+  syncMessage.value = null
+  try {
+    const res = await gameDataApi.syncAll()
+    await loadAllData()
+    showMessage('success', res.message)
+  } catch (e) {
+    showMessage('error', e instanceof Error ? e.message : 'Sync failed')
+  } finally {
+    syncingAll.value = false
+  }
+}
+
+async function syncType(type: string) {
+  syncingType.value = type
+  syncMessage.value = null
+  try {
+    const res = await gameDataApi.sync(type)
+    await loadDataByType(type)
+    showMessage('success', res.message)
+  } catch (e) {
+    showMessage('error', e instanceof Error ? e.message : 'Sync failed')
+  } finally {
+    syncingType.value = null
+  }
+}
+
+const isSyncing = (type?: string) => {
+  if (syncingAll.value) return true
+  if (type) return syncingType.value === type
+  return syncingType.value !== null
+}
+
 onMounted(async () => {
   try {
-    const [queuesRes, mapsRes, modesRes, typesRes, versionsRes] = await Promise.all([
-      api.getQueues(),
-      api.getMaps(),
-      api.getGameModes(),
-      api.getGameTypes(),
-      api.getVersions(),
-    ])
-    queues.value = queuesRes.data
-    maps.value = mapsRes.data
-    gameModes.value = modesRes.data
-    gameTypes.value = typesRes.data
-    versions.value = versionsRes.data
+    await loadAllData()
   } catch (e) {
     error.value = 'Failed to load game data'
     console.error(e)
@@ -39,47 +108,103 @@ onMounted(async () => {
   <div>
     <header class="page-header">
       <h2>Game Data</h2>
+      <button class="btn btn-primary" :disabled="isSyncing()" @click="syncAll">
+        <span v-if="syncingAll" class="spinner"></span>
+        {{ syncingAll ? 'Syncing...' : 'Sync All' }}
+      </button>
     </header>
+
+    <div v-if="syncMessage" :class="['alert', `alert-${syncMessage.type}`]">
+      {{ syncMessage.text }}
+    </div>
 
     <div v-if="loading" class="loading">Loading...</div>
     <div v-else-if="error" class="error">{{ error }}</div>
     <div v-else>
       <div class="panel">
-        <button
-          class="btn"
-          :class="activeTab === 'queues' ? 'btn-primary' : 'btn-secondary'"
-          @click="activeTab = 'queues'"
-        >
-          Queues ({{ queues.length }})
-        </button>
-        <button
-          class="btn"
-          :class="activeTab === 'maps' ? 'btn-primary' : 'btn-secondary'"
-          @click="activeTab = 'maps'"
-        >
-          Maps ({{ maps.length }})
-        </button>
-        <button
-          class="btn"
-          :class="activeTab === 'modes' ? 'btn-primary' : 'btn-secondary'"
-          @click="activeTab = 'modes'"
-        >
-          Game Modes ({{ gameModes.length }})
-        </button>
-        <button
-          class="btn"
-          :class="activeTab === 'types' ? 'btn-primary' : 'btn-secondary'"
-          @click="activeTab = 'types'"
-        >
-          Game Types ({{ gameTypes.length }})
-        </button>
-        <button
-          class="btn"
-          :class="activeTab === 'versions' ? 'btn-primary' : 'btn-secondary'"
-          @click="activeTab = 'versions'"
-        >
-          Version ({{ versions.length }})
-        </button>
+        <div class="tab-group">
+          <div class="tab-item">
+            <button
+              class="btn"
+              :class="activeTab === 'queues' ? 'btn-primary' : 'btn-secondary'"
+              @click="activeTab = 'queues'"
+            >
+              Queues ({{ queues.length }})
+            </button>
+            <button
+              class="btn btn-sync"
+              :disabled="isSyncing('queues')"
+              @click="syncType('queues')"
+            >
+              <span v-if="syncingType === 'queues'" class="spinner"></span>
+              {{ syncingType === 'queues' ? '...' : 'Sync' }}
+            </button>
+          </div>
+          <div class="tab-item">
+            <button
+              class="btn"
+              :class="activeTab === 'maps' ? 'btn-primary' : 'btn-secondary'"
+              @click="activeTab = 'maps'"
+            >
+              Maps ({{ maps.length }})
+            </button>
+            <button class="btn btn-sync" :disabled="isSyncing('maps')" @click="syncType('maps')">
+              <span v-if="syncingType === 'maps'" class="spinner"></span>
+              {{ syncingType === 'maps' ? '...' : 'Sync' }}
+            </button>
+          </div>
+          <div class="tab-item">
+            <button
+              class="btn"
+              :class="activeTab === 'modes' ? 'btn-primary' : 'btn-secondary'"
+              @click="activeTab = 'modes'"
+            >
+              Game Modes ({{ gameModes.length }})
+            </button>
+            <button
+              class="btn btn-sync"
+              :disabled="isSyncing('game-modes')"
+              @click="syncType('game-modes')"
+            >
+              <span v-if="syncingType === 'game-modes'" class="spinner"></span>
+              {{ syncingType === 'game-modes' ? '...' : 'Sync' }}
+            </button>
+          </div>
+          <div class="tab-item">
+            <button
+              class="btn"
+              :class="activeTab === 'types' ? 'btn-primary' : 'btn-secondary'"
+              @click="activeTab = 'types'"
+            >
+              Game Types ({{ gameTypes.length }})
+            </button>
+            <button
+              class="btn btn-sync"
+              :disabled="isSyncing('game-types')"
+              @click="syncType('game-types')"
+            >
+              <span v-if="syncingType === 'game-types'" class="spinner"></span>
+              {{ syncingType === 'game-types' ? '...' : 'Sync' }}
+            </button>
+          </div>
+          <div class="tab-item">
+            <button
+              class="btn"
+              :class="activeTab === 'versions' ? 'btn-primary' : 'btn-secondary'"
+              @click="activeTab = 'versions'"
+            >
+              Version ({{ versions.length }})
+            </button>
+            <button
+              class="btn btn-sync"
+              :disabled="isSyncing('versions')"
+              @click="syncType('versions')"
+            >
+              <span v-if="syncingType === 'versions'" class="spinner"></span>
+              {{ syncingType === 'versions' ? '...' : 'Sync' }}
+            </button>
+          </div>
+        </div>
       </div>
 
       <div v-if="activeTab === 'queues'" class="card">
@@ -173,11 +298,69 @@ onMounted(async () => {
 </template>
 
 <style scoped>
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .btn {
   margin-left: 0.5rem;
 }
 
 .panel {
   margin-bottom: 1rem;
+}
+
+.tab-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.tab-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.btn-sync {
+  font-size: 0.75rem;
+  padding: 0.2rem 0.5rem;
+}
+
+.alert {
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  border-radius: 4px;
+}
+
+.alert-success {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.alert-error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+.spinner {
+  display: inline-block;
+  width: 0.75rem;
+  height: 0.75rem;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+  margin-right: 0.25rem;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 </style>
