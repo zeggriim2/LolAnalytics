@@ -44,6 +44,7 @@ function formatDate(dateString: string): string {
         <thead>
           <tr>
             <th>Match ID</th>
+            <th>Version</th>
             <th>Played At</th>
             <th>Duration</th>
             <th>Mode</th>
@@ -55,6 +56,7 @@ function formatDate(dateString: string): string {
         <tbody>
           <tr v-for="match in matches" :key="match.id">
             <td>{{ match.id }}</td>
+            <td>{{ match.version }}</td>
             <td>{{ formatDate(match.playedAt) }}</td>
             <td>{{ match.durationFormatted }}</td>
             <td>{{ match.gameMode }}</td>

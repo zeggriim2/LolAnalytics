@@ -6,6 +6,7 @@ namespace App\GameData\Infrastructure\Persistence\Doctrine\Entity;
 
 use App\Champion\Infrastructure\Persistence\Doctrine\Entity\ChampionEntity;
 use App\GameData\Domain\Model\Version;
+use App\Match\Infrastructure\Persistence\Doctrine\Entity\MatchEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -28,6 +29,16 @@ class VersionEntity
         cascade: ['persist']
     )]
     public Collection $champions;
+
+    /**
+     * @var Collection<int, MatchEntity>
+     */
+    #[ORM\OneToMany(
+        targetEntity: MatchEntity::class,
+        mappedBy: 'version',
+        cascade: ['persist']
+    )]
+    public Collection $matchs;
 
     public function __construct()
     {

@@ -8,6 +8,7 @@ use App\GameData\Infrastructure\Persistence\Doctrine\Entity\GameModeEntity;
 use App\GameData\Infrastructure\Persistence\Doctrine\Entity\GameTypeEntity;
 use App\GameData\Infrastructure\Persistence\Doctrine\Entity\MapEntity;
 use App\GameData\Infrastructure\Persistence\Doctrine\Entity\QueueEntity;
+use App\GameData\Infrastructure\Persistence\Doctrine\Entity\VersionEntity;
 use App\Match\Domain\Model\Matche;
 use App\Match\Domain\Repository\MatchRepositoryInterface;
 use App\Match\Domain\ValueObjet\MatchId;
@@ -17,8 +18,9 @@ use Doctrine\ORM\EntityManagerInterface;
 
 final class DoctrineMatchRepository implements MatchRepositoryInterface
 {
-    public function __construct(private readonly EntityManagerInterface $em)
-    {
+    public function __construct(
+        private readonly EntityManagerInterface $em
+    ) {
     }
 
     public function save(Matche $match, Region $region): void
@@ -53,11 +55,28 @@ final class DoctrineMatchRepository implements MatchRepositoryInterface
             return;
         }
 
+        $parts = explode('.', $match->version());
+        $versionMatch = $parts[0] . '.' . $parts[1];
+
+        $version = $this->em->createQueryBuilder()
+            ->select('v')
+            ->from(VersionEntity::class, 'v')
+            ->where('v.version LIKE :version')
+            ->setParameter('version', sprintf('%s%%', $versionMatch))
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        if (!$version instanceof VersionEntity) {
+            return;
+        }
+
         $entity = MatchEntity::fromDomain($match, $region->value);
         $entity->setGameMode($gameMode);
         $entity->setGameType($gameType);
         $entity->setQueue($queue);
         $entity->setMap($map);
+        $entity->setVersion($version);
 
         $this->em->persist($entity);
 

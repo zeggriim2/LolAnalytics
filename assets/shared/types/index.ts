@@ -7,6 +7,7 @@ export interface Match {
   gameMode: string
   gameType: string
   mapId: number
+  version: string
   queueId: number
   platform: string
   participantsCount: number

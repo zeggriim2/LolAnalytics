@@ -62,6 +62,7 @@ final class IngestMatchHandlerTest extends TestCase
                 'gameMode' => 'gameMode',
                 'gameType' => 'gameType',
                 'mapId' => 1,
+                'gameVersion' => '16.3.1.6658',
                 'queueId' => 1,
                 'participants' => [
                     [
@@ -166,6 +167,7 @@ final class IngestMatchHandlerTest extends TestCase
                 'gameMode' => 'gameMode',
                 'gameType' => 'gameType',
                 'mapId' => 1,
+                'gameVersion' => '16.3.1.165848',
                 'queueId' => 1,
                 'participants' => [
                     [

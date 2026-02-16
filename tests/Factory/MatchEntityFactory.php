@@ -35,6 +35,7 @@ final class MatchEntityFactory extends PersistentProxyObjectFactory
             'gameType' => GameTypeEntityFactory::createOne(),
             'map' => MapEntityFactory::createOne(),
             'queue' => QueueEntityFactory::createOne(),
+            'version' => VersionEntityFactory::createOne(),
         ];
     }
 

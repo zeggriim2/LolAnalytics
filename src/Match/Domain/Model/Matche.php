@@ -19,6 +19,7 @@ final class Matche
         private readonly string $gameType,
         private readonly int $queueId,
         private readonly int $mapId,
+        private readonly string $version,
         private readonly Platform $platform,
         /** @var Participant[] */
         private readonly array $participants
@@ -49,6 +50,7 @@ final class Matche
         string $gameMode,
         string $gameType,
         int $mapId,
+        string $gameVersion,
         int $queueId,
         Platform $platform,
         array $participants
@@ -62,6 +64,7 @@ final class Matche
             $gameType,
             $queueId,
             $mapId,
+            $gameVersion,
             $platform,
             $participants
         );
@@ -100,6 +103,11 @@ final class Matche
     public function mapId(): int
     {
         return $this->mapId;
+    }
+
+    public function version(): string
+    {
+        return $this->version;
     }
 
     public function durationSeconds(): int

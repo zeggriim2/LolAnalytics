@@ -6,6 +6,7 @@ namespace App\Tests\Functional\Match\Application\QueryHandler;
 
 use App\Match\Application\Query\ListMatchesQuery;
 use App\Tests\Factory\MatchEntityFactory;
+use App\Tests\Factory\VersionEntityFactory;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Messenger\Stamp\HandledStamp;
@@ -94,12 +95,14 @@ final class ListMatchesHandlerTest extends KernelTestCase
     {
         // Given: a match with specific data
         $playedAt = new \DateTime('2024-01-15 14:30:00');
+        $version = VersionEntityFactory::createOne(['version' => '15.3.1']);
         MatchEntityFactory::createOne([
             'matchId' => 'EUW1_111111111',
             'gameId' => 123456789,
             'region' => 'EUW1',
             'playedAt' => $playedAt,
             'durationSeconds' => 1800,
+            'version' => $version,
         ]);
 
         // When: listing matches

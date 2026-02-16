@@ -38,6 +38,7 @@ final class MatcheFactory
         $gameDuration = (int) ($payload['info']['gameDuration'] ?? 0);
         $gameMode = $payload['info']['gameMode'] ?? null;
         $gameType = $payload['info']['gameType'] ?? null;
+        $gameVersion = $payload['info']['gameVersion'] ?? null;
         $queueId = (int) ($payload['info']['queueId'] ?? null);
         $mapId = (int) ($payload['info']['mapId'] ?? null);
 
@@ -74,6 +75,6 @@ final class MatcheFactory
             $participants[] = $participant;
         }
 
-        return Matche::create($matchId, $gameId, $playedAt, $gameDuration, $gameMode, $gameType, $mapId, $queueId, $platform, $participants);
+        return Matche::create($matchId, $gameId, $playedAt, $gameDuration, $gameMode, $gameType, $mapId, $gameVersion, $queueId, $platform, $participants);
     }
 }

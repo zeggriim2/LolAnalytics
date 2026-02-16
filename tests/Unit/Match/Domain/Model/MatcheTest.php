@@ -46,6 +46,7 @@ final class MatcheTest extends TestCase
             gameType: 'gameType',
             queueId: 1,
             mapId: 900,
+            version: "16.3",
             platform: Platform::EUW1,
             participants: $participants
         );
@@ -73,6 +74,7 @@ final class MatcheTest extends TestCase
             gameMode: 'gameMode',
             gameType: 'gameType',
             mapId: 900,
+            gameVersion: "16.3.1.568",
             queueId: 1,
             platform: Platform::EUW1,
             participants: $participants
@@ -96,6 +98,7 @@ final class MatcheTest extends TestCase
             gameType: 'gameType',
             queueId: 1,
             mapId: 900,
+            version: "16.3",
             platform: Platform::EUW1,
             participants: [$this->createParticipant('summoner1')]
         );
@@ -115,6 +118,7 @@ final class MatcheTest extends TestCase
             gameType: 'gameType',
             queueId: 1,
             mapId: 900,
+            version: "16.3",
             platform: Platform::EUW1,
             participants: [$this->createParticipant('summoner1')]
         );
@@ -134,6 +138,7 @@ final class MatcheTest extends TestCase
             gameType: 'gameType',
             queueId: 1,
             mapId: 900,
+            version: "16.3",
             platform: Platform::EUW1,
             participants: []
         );
@@ -158,6 +163,7 @@ final class MatcheTest extends TestCase
             gameType: 'gameType',
             queueId: 1,
             mapId: 900,
+            version: "16.3",
             platform: Platform::EUW1,
             participants: $participants
         );
@@ -187,6 +193,7 @@ final class MatcheTest extends TestCase
             gameType: 'gameType',
             queueId: 1,
             mapId: 900,
+            version: "16.3",
             platform: Platform::EUW1,
             participants: $participants
         );
@@ -210,6 +217,7 @@ final class MatcheTest extends TestCase
             gameType: 'gameType',
             queueId: 1,
             mapId: 900,
+            version: "16.3",
             platform: Platform::EUW1,
             participants: $participants
         );

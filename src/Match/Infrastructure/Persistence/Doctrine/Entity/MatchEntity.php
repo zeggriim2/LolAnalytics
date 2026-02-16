@@ -8,6 +8,7 @@ use App\GameData\Infrastructure\Persistence\Doctrine\Entity\GameModeEntity;
 use App\GameData\Infrastructure\Persistence\Doctrine\Entity\GameTypeEntity;
 use App\GameData\Infrastructure\Persistence\Doctrine\Entity\MapEntity;
 use App\GameData\Infrastructure\Persistence\Doctrine\Entity\QueueEntity;
+use App\GameData\Infrastructure\Persistence\Doctrine\Entity\VersionEntity;
 use App\Match\Domain\Model\Matche;
 use App\Match\Domain\ValueObjet\GameId;
 use App\Match\Domain\ValueObjet\MatchId;
@@ -60,6 +61,10 @@ class MatchEntity
     #[ORM\JoinColumn(name: 'queue_id', referencedColumnName: 'queue_id', nullable: false)]
     private QueueEntity $queue;
 
+    #[ORM\ManyToOne(targetEntity: VersionEntity::class, inversedBy: 'matchs')]
+    #[ORM\JoinColumn(name: 'version', referencedColumnName: 'version', nullable: false)]
+    private VersionEntity $version;
+
     /**
      * @var Collection<int, ParticipantEntity>
      */
@@ -110,6 +115,7 @@ class MatchEntity
             $this->gameMode->getGameMode(),
             $this->gameType->getGameType(),
             $this->map->getMapId(),
+            $this->version->getVersion(),
             $this->queue->getQueueId(),
             Platform::from($this->platform),
             $participants
@@ -219,6 +225,16 @@ class MatchEntity
     public function setQueue(QueueEntity $queue): void
     {
         $this->queue = $queue;
+    }
+
+    public function getVersion(): VersionEntity
+    {
+        return $this->version;
+    }
+
+    public function setVersion(VersionEntity $version): void
+    {
+        $this->version = $version;
     }
 
     /**
