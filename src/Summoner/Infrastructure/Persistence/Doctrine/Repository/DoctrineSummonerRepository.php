@@ -56,26 +56,40 @@ final readonly class DoctrineSummonerRepository implements SummonerRepositoryInt
     /**
      * @return Summoner[]
      */
-    public function findAll(?int $limit = null, ?int $offset = null): array
+    public function findAll(): array
     {
-        $qb = $this->entityManager
+        $entities = $this->entityManager
             ->getRepository(SummonerEntity::class)
-            ->createQueryBuilder('s')
-            ->orderBy('s.lastUpdatedAt', 'DESC');
-
-        if (null !== $limit) {
-            $qb->setMaxResults($limit);
-        }
-
-        if (null !== $offset) {
-            $qb->setFirstResult($offset);
-        }
-
-        $entities = $qb->getQuery()->getResult();
+            ->findAll();
 
         return array_map(
             fn (SummonerEntity $entity) => $entity->toDomain(),
             $entities
         );
+    }
+
+    public function findPaginated(int $offset, int $limit): array
+    {
+        $entities = $this->entityManager->getRepository(SummonerEntity::class)
+            ->createQueryBuilder('s')
+            ->orderBy('s.gameName', 'DESC')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+
+        return array_map(
+            static fn (SummonerEntity $entity): Summoner => $entity->toDomain(),
+            $entities,
+        );
+    }
+
+    public function count(): int
+    {
+        return (int) $this->entityManager->getRepository(SummonerEntity::class)
+            ->createQueryBuilder('s')
+            ->select('COUNT(s.puuid)')
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 }

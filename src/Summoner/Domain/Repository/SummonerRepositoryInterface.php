@@ -18,5 +18,12 @@ interface SummonerRepositoryInterface
     /**
      * @return Summoner[]
      */
-    public function findAll(?int $limit = null, ?int $offset = null): array;
+    public function findAll(): array;
+
+    /**
+     * @return Summoner[]
+     */
+    public function findPaginated(int $offset, int $limit): array;
+
+    public function count(): int;
 }
