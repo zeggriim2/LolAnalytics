@@ -39,10 +39,8 @@ function formatDate(dateString: string): string {
 <template>
   <div>
     <header class="page-header">
-      <RouterLink to="/matches" class="btn btn-secondary" style="margin-right: 1rem">
-        &larr; Back
-      </RouterLink>
-      <h2 style="display: inline">Match Details</h2>
+      <RouterLink to="/matches" class="btn btn-secondary mr-4"> &larr; Back </RouterLink>
+      <h2 class="inline">Match Details</h2>
     </header>
 
     <div v-if="loading" class="loading">Loading...</div>
@@ -70,7 +68,7 @@ function formatDate(dateString: string): string {
       <div class="card">
         <div class="card-header">
           <h3>Winners</h3>
-          <span class="badge badge-win">Victory</span>
+          <span class="badge bg-lol-win text-white">Victory</span>
         </div>
         <table class="table">
           <thead>
@@ -99,7 +97,7 @@ function formatDate(dateString: string): string {
       <div class="card">
         <div class="card-header">
           <h3>Losers</h3>
-          <span class="badge badge-loss">Defeat</span>
+          <span class="badge bg-lol-loss text-white">Defeat</span>
         </div>
         <table class="table">
           <thead>
@@ -127,15 +125,3 @@ function formatDate(dateString: string): string {
     </div>
   </div>
 </template>
-
-<style scoped>
-.badge-win {
-  background-color: var(--success-color);
-  color: white;
-}
-
-.badge-loss {
-  background-color: var(--danger-color);
-  color: white;
-}
-</style>

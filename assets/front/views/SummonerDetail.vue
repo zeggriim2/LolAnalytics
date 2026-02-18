@@ -36,10 +36,8 @@ function formatDate(dateString: string): string {
 <template>
   <div class="container">
     <header class="page-header">
-      <RouterLink to="/summoners" class="btn btn-secondary" style="margin-right: 1rem">
-        &larr; Back
-      </RouterLink>
-      <h2 style="display: inline">Summoner Details</h2>
+      <RouterLink to="/summoners" class="btn btn-secondary mr-4"> &larr; Back </RouterLink>
+      <h2 class="inline">Summoner Details</h2>
     </header>
 
     <div v-if="loading" class="loading">Loading...</div>
@@ -63,10 +61,8 @@ function formatDate(dateString: string): string {
             <div class="stat-label">Profile Icon ID</div>
           </div>
         </div>
-        <p style="color: var(--text-muted)">
-          Last updated: {{ formatDate(summoner.lastUpdatedAt) }}
-        </p>
-        <p style="color: var(--text-muted); margin-top: 0.5rem">
+        <p class="text-lol-muted">Last updated: {{ formatDate(summoner.lastUpdatedAt) }}</p>
+        <p class="text-lol-muted mt-2">
           PUUID: <code>{{ summoner.puuid }}</code>
         </p>
       </div>

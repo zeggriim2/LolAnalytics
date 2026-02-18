@@ -39,10 +39,8 @@ function formatDate(dateString: string): string {
 <template>
   <div class="container">
     <header class="page-header">
-      <RouterLink to="/" class="btn btn-secondary" style="margin-right: 1rem">
-        &larr; Back
-      </RouterLink>
-      <h2 style="display: inline">Match Details</h2>
+      <RouterLink to="/" class="btn btn-secondary mr-4"> &larr; Back </RouterLink>
+      <h2 class="inline">Match Details</h2>
     </header>
 
     <div v-if="loading" class="loading">Loading...</div>
@@ -70,7 +68,7 @@ function formatDate(dateString: string): string {
       <div class="card">
         <div class="card-header">
           <h3>Winners</h3>
-          <span class="badge badge-win">Victory</span>
+          <span class="badge bg-lol-win text-white">Victory</span>
         </div>
         <table class="table">
           <thead>
@@ -87,7 +85,10 @@ function formatDate(dateString: string): string {
               <td>{{ participant.kills }}/{{ participant.deaths }}/{{ participant.assists }}</td>
               <td>{{ participant.kda }}</td>
               <td>
-                <RouterLink :to="`/summoners/${participant.puuid}`">
+                <RouterLink
+                  :to="`/summoners/${participant.puuid}`"
+                  class="text-lol-gold no-underline hover:underline"
+                >
                   {{ participant.puuid.substring(0, 8) }}...
                 </RouterLink>
               </td>
@@ -99,7 +100,7 @@ function formatDate(dateString: string): string {
       <div class="card">
         <div class="card-header">
           <h3>Losers</h3>
-          <span class="badge badge-loss">Defeat</span>
+          <span class="badge bg-lol-loss text-white">Defeat</span>
         </div>
         <table class="table">
           <thead>
@@ -116,7 +117,10 @@ function formatDate(dateString: string): string {
               <td>{{ participant.kills }}/{{ participant.deaths }}/{{ participant.assists }}</td>
               <td>{{ participant.kda }}</td>
               <td>
-                <RouterLink :to="`/summoners/${participant.puuid}`">
+                <RouterLink
+                  :to="`/summoners/${participant.puuid}`"
+                  class="text-lol-gold no-underline hover:underline"
+                >
                   {{ participant.puuid.substring(0, 8) }}...
                 </RouterLink>
               </td>
@@ -127,47 +131,3 @@ function formatDate(dateString: string): string {
     </div>
   </div>
 </template>
-
-<style scoped>
-.badge-loss {
-  background-color: var(--danger-color);
-  color: white;
-}
-
-.badge-win {
-  background-color: var(--success-color);
-  color: white;
-}
-
-.table {
-  width: 100%;
-  border-collapse: collapse;
-
-  th,
-  td {
-    padding: 0.75rem;
-    text-align: left;
-    border-bottom: 1px solid var(--border-color);
-  }
-
-  th {
-    color: var(--text-muted);
-    font-weight: 600;
-    text-transform: uppercase;
-    font-size: 0.75rem;
-  }
-
-  tr:hover {
-    background-color: rgba(200, 155, 60, 0.1);
-  }
-
-  a {
-    color: var(--accent-color);
-    text-decoration: none;
-  }
-
-  &:hover {
-    text-decoration: underline;
-  }
-}
-</style>

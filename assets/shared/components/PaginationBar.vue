@@ -48,71 +48,39 @@ const pages = computed(() => {
 </script>
 
 <template>
-  <div v-if="meta.totalPages > 1" class="pagination">
-    <div class="pagination-info">
+  <div
+    v-if="meta.totalPages > 1"
+    class="flex justify-between items-center py-4 mt-4 border-t border-lol-border"
+  >
+    <div class="text-lol-muted text-sm">
       Page {{ meta.page }} / {{ meta.totalPages }} ({{ meta.total }} results)
     </div>
-    <div class="pagination-controls">
+    <div class="flex gap-1 items-center">
       <button
-        class="btn btn-secondary pagination-btn"
+        class="btn btn-secondary px-3 py-1.5 text-xs min-w-[2.2rem] text-center disabled:opacity-40 disabled:cursor-not-allowed"
         :disabled="!hasPrevious"
         @click="emit('previous')"
       >
         Previous
       </button>
       <template v-for="(page, index) in pages" :key="index">
-        <span v-if="page === '...'" class="pagination-ellipsis">...</span>
+        <span v-if="page === '...'" class="px-1 py-1.5 text-lol-muted">...</span>
         <button
           v-else
-          class="btn pagination-btn"
+          class="btn px-3 py-1.5 text-xs min-w-[2.2rem] text-center"
           :class="page === meta.page ? 'btn-primary' : 'btn-secondary'"
           @click="emit('goToPage', page)"
         >
           {{ page }}
         </button>
       </template>
-      <button class="btn btn-secondary pagination-btn" :disabled="!hasNext" @click="emit('next')">
+      <button
+        class="btn btn-secondary px-3 py-1.5 text-xs min-w-[2.2rem] text-center disabled:opacity-40 disabled:cursor-not-allowed"
+        :disabled="!hasNext"
+        @click="emit('next')"
+      >
         Next
       </button>
     </div>
   </div>
 </template>
-
-<style scoped>
-.pagination {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 0;
-  margin-top: 1rem;
-  border-top: 1px solid var(--border-color);
-}
-
-.pagination-info {
-  color: var(--text-muted);
-  font-size: 0.875rem;
-}
-
-.pagination-controls {
-  display: flex;
-  gap: 0.25rem;
-  align-items: center;
-}
-
-.pagination-btn {
-  padding: 0.4rem 0.75rem;
-  font-size: 0.8rem;
-  min-width: 2.2rem;
-  text-align: center;
-}
-
-.pagination-btn:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-
-.pagination-ellipsis {
-  padding: 0.4rem 0.25rem;
-  color: var(--text-muted);
-}
-</style>

@@ -38,10 +38,12 @@ function formatDate(dateString: string): string {
 
 <template>
   <div>
-    <section class="hero">
+    <section class="text-center py-16">
       <div class="container">
-        <h2>Analyze Your League of Legends Matches</h2>
-        <p>Search for a summoner to view their match history and statistics</p>
+        <h2 class="text-4xl mb-4 text-lol-gold">Analyze Your League of Legends Matches</h2>
+        <p class="text-xl text-lol-muted mb-8">
+          Search for a summoner to view their match history and statistics
+        </p>
         <form class="search-box" @submit.prevent="onSearch">
           <input
             v-model="searchQuery"
@@ -54,20 +56,19 @@ function formatDate(dateString: string): string {
       </div>
     </section>
 
-    <section class="section">
+    <section class="py-12">
       <div class="container">
-        <h3 class="section-title">Recent Matches</h3>
+        <h3 class="text-2xl mb-6 text-lol-gold">Recent Matches</h3>
         <div v-if="loading" class="loading">Loading...</div>
-        <div v-else class="matches-grid">
+        <div v-else class="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-4">
           <RouterLink
             v-for="match in recentMatches"
             :key="match.id"
             :to="`/matches/${match.id}`"
-            class="match-card"
-            style="text-decoration: none; color: inherit"
+            class="bg-lol-card rounded-lg p-6 border border-lol-border no-underline text-inherit transition-transform duration-200 hover:-translate-y-0.5 hover:shadow-lg"
           >
-            <h3>{{ match.gameMode }}</h3>
-            <p class="meta">
+            <h3 class="text-base mb-2">{{ match.gameMode }}</h3>
+            <p class="text-lol-muted text-sm">
               {{ formatDate(match.playedAt) }} · {{ match.durationFormatted }} ·
               {{ match.participantsCount }} players
             </p>
@@ -78,27 +79,3 @@ function formatDate(dateString: string): string {
     </section>
   </div>
 </template>
-
-<style scoped>
-.match-card .meta {
-  color: var(--text-muted);
-  font-size: 0.875rem;
-}
-
-.hero {
-  padding: 4rem 0;
-  text-align: center;
-
-  h2 {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
-    color: var(--accent-color);
-  }
-
-  p {
-    font-size: 1.25rem;
-    color: var(--text-muted);
-    margin-bottom: 2rem;
-  }
-}
-</style>

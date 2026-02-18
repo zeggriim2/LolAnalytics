@@ -58,9 +58,9 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="import-card card">
-    <h3>Import Summoner</h3>
-    <div class="mode-toggle">
+  <div class="card mb-4">
+    <h3 class="mt-0 mb-3">Import Summoner</h3>
+    <div class="flex gap-2 mb-3">
       <button
         class="btn"
         :class="importMode === 'riot-id' ? 'btn-primary' : 'btn-secondary'"
@@ -77,19 +77,19 @@ onMounted(async () => {
       </button>
     </div>
 
-    <form class="import-form" @submit.prevent="importSummoner">
+    <form class="flex flex-wrap gap-2 items-center" @submit.prevent="importSummoner">
       <template v-if="importMode === 'riot-id'">
         <input
           v-model="gameName"
           type="text"
-          class="input"
+          class="px-2.5 py-1.5 border border-lol-border rounded text-sm bg-lol-card text-lol-text"
           placeholder="Game Name"
           :disabled="importing"
         />
         <input
           v-model="tagLine"
           type="text"
-          class="input"
+          class="px-2.5 py-1.5 border border-lol-border rounded text-sm bg-lol-card text-lol-text"
           placeholder="Tag Line"
           :disabled="importing"
         />
@@ -98,13 +98,17 @@ onMounted(async () => {
         <input
           v-model="puuid"
           type="text"
-          class="input"
+          class="px-2.5 py-1.5 border border-lol-border rounded text-sm bg-lol-card text-lol-text"
           placeholder="PUUID"
           :disabled="importing"
         />
       </template>
 
-      <select v-model="selectedPlatform" class="input" :disabled="importing">
+      <select
+        v-model="selectedPlatform"
+        class="px-2.5 py-1.5 border border-lol-border rounded text-sm bg-lol-card text-lol-text"
+        :disabled="importing"
+      >
         <option v-for="p in platforms" :key="p.value" :value="p.value">
           {{ p.label }}
         </option>
@@ -119,34 +123,3 @@ onMounted(async () => {
     </form>
   </div>
 </template>
-
-<style scoped>
-.import-card {
-  margin-bottom: 1rem;
-}
-
-.import-card h3 {
-  margin-top: 0;
-  margin-bottom: 0.75rem;
-}
-
-.mode-toggle {
-  display: flex;
-  gap: 0.5rem;
-  margin-bottom: 0.75rem;
-}
-
-.import-form {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  align-items: center;
-}
-
-.input {
-  padding: 0.4rem 0.6rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 0.9rem;
-}
-</style>

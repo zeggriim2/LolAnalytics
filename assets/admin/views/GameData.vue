@@ -108,7 +108,7 @@ onMounted(async () => {
 
 <template>
   <div>
-    <header class="page-header">
+    <header class="page-header flex items-center justify-between">
       <h2>Game Data</h2>
       <SpinnerButton
         :loading="syncingAll"
@@ -124,18 +124,18 @@ onMounted(async () => {
     <div v-if="loading" class="loading">Loading...</div>
     <div v-else-if="error" class="error">{{ error }}</div>
     <div v-else>
-      <div class="panel">
-        <div class="tab-group">
-          <div class="tab-item">
+      <div class="mb-4">
+        <div class="flex flex-wrap gap-1">
+          <div class="inline-flex items-center gap-1">
             <button
-              class="btn"
+              class="btn ml-2"
               :class="activeTab === 'queues' ? 'btn-primary' : 'btn-secondary'"
               @click="activeTab = 'queues'"
             >
               Queues ({{ queues.length }})
             </button>
             <button
-              class="btn btn-sync"
+              class="btn text-xs px-2 py-0.5"
               :disabled="isSyncing('queues')"
               @click="syncType('queues')"
             >
@@ -143,29 +143,33 @@ onMounted(async () => {
               {{ syncingType === 'queues' ? '...' : 'Sync' }}
             </button>
           </div>
-          <div class="tab-item">
+          <div class="inline-flex items-center gap-1">
             <button
-              class="btn"
+              class="btn ml-2"
               :class="activeTab === 'maps' ? 'btn-primary' : 'btn-secondary'"
               @click="activeTab = 'maps'"
             >
               Maps ({{ maps.length }})
             </button>
-            <button class="btn btn-sync" :disabled="isSyncing('maps')" @click="syncType('maps')">
+            <button
+              class="btn text-xs px-2 py-0.5"
+              :disabled="isSyncing('maps')"
+              @click="syncType('maps')"
+            >
               <span v-if="syncingType === 'maps'" class="spinner"></span>
               {{ syncingType === 'maps' ? '...' : 'Sync' }}
             </button>
           </div>
-          <div class="tab-item">
+          <div class="inline-flex items-center gap-1">
             <button
-              class="btn"
+              class="btn ml-2"
               :class="activeTab === 'modes' ? 'btn-primary' : 'btn-secondary'"
               @click="activeTab = 'modes'"
             >
               Game Modes ({{ gameModes.length }})
             </button>
             <button
-              class="btn btn-sync"
+              class="btn text-xs px-2 py-0.5"
               :disabled="isSyncing('game-modes')"
               @click="syncType('game-modes')"
             >
@@ -173,16 +177,16 @@ onMounted(async () => {
               {{ syncingType === 'game-modes' ? '...' : 'Sync' }}
             </button>
           </div>
-          <div class="tab-item">
+          <div class="inline-flex items-center gap-1">
             <button
-              class="btn"
+              class="btn ml-2"
               :class="activeTab === 'types' ? 'btn-primary' : 'btn-secondary'"
               @click="activeTab = 'types'"
             >
               Game Types ({{ gameTypes.length }})
             </button>
             <button
-              class="btn btn-sync"
+              class="btn text-xs px-2 py-0.5"
               :disabled="isSyncing('game-types')"
               @click="syncType('game-types')"
             >
@@ -190,16 +194,16 @@ onMounted(async () => {
               {{ syncingType === 'game-types' ? '...' : 'Sync' }}
             </button>
           </div>
-          <div class="tab-item">
+          <div class="inline-flex items-center gap-1">
             <button
-              class="btn"
+              class="btn ml-2"
               :class="activeTab === 'versions' ? 'btn-primary' : 'btn-secondary'"
               @click="activeTab = 'versions'"
             >
               Version ({{ versions.length }})
             </button>
             <button
-              class="btn btn-sync"
+              class="btn text-xs px-2 py-0.5"
               :disabled="isSyncing('versions')"
               @click="syncType('versions')"
             >
@@ -299,53 +303,3 @@ onMounted(async () => {
     </div>
   </div>
 </template>
-
-<style scoped>
-.page-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.btn {
-  margin-left: 0.5rem;
-}
-
-.panel {
-  margin-bottom: 1rem;
-}
-
-.tab-group {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.25rem;
-}
-
-.tab-item {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25rem;
-}
-
-.btn-sync {
-  font-size: 0.75rem;
-  padding: 0.2rem 0.5rem;
-}
-
-.spinner {
-  display: inline-block;
-  width: 0.75rem;
-  height: 0.75rem;
-  border: 2px solid currentColor;
-  border-right-color: transparent;
-  border-radius: 50%;
-  animation: spin 0.6s linear infinite;
-  margin-right: 0.25rem;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-</style>

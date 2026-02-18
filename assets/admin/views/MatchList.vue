@@ -42,7 +42,10 @@ function formatDate(dateString: string): string {
     <div v-if="initialLoading" class="loading">Loading...</div>
     <div v-else-if="error" class="error">{{ error }}</div>
     <div v-else class="card">
-      <div class="table-wrapper" :class="{ 'is-loading': loading }">
+      <div
+        class="transition-opacity duration-200"
+        :class="{ 'opacity-50 pointer-events-none': loading }"
+      >
         <table class="table">
           <thead>
             <tr>
@@ -70,7 +73,7 @@ function formatDate(dateString: string): string {
               </td>
             </tr>
             <tr v-if="matches.length === 0">
-              <td colspan="8" style="text-align: center">No matches found</td>
+              <td colspan="8" class="text-center">No matches found</td>
             </tr>
           </tbody>
         </table>
@@ -87,14 +90,3 @@ function formatDate(dateString: string): string {
     </div>
   </div>
 </template>
-
-<style scoped>
-.table-wrapper {
-  transition: opacity 0.2s ease;
-}
-
-.table-wrapper.is-loading {
-  opacity: 0.5;
-  pointer-events: none;
-}
-</style>
