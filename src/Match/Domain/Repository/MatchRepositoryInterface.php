@@ -18,4 +18,11 @@ interface MatchRepositoryInterface
      * @return Matche[]
      */
     public function findAll(): array;
+
+    /**
+     * @return Matche[]
+     */
+    public function findPaginated(int $offset, int $limit): array;
+
+    public function count(): int;
 }

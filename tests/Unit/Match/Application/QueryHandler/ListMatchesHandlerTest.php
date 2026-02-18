@@ -14,6 +14,8 @@ use App\Match\Domain\ValueObjet\GameId;
 use App\Match\Domain\ValueObjet\KDA;
 use App\Match\Domain\ValueObjet\MatchId;
 use App\Match\Domain\ValueObjet\SummonerPuuid;
+use App\SharedContext\Domain\Pagination\PaginatedResult;
+use App\SharedContext\Domain\Pagination\PaginationRequest;
 use App\SharedContext\Domain\ValueObjet\Platform;
 use PHPUnit\Framework\TestCase;
 
@@ -66,16 +68,24 @@ final class ListMatchesHandlerTest extends TestCase
 
         $this->repository
             ->expects($this->once())
-            ->method('findAll')
+            ->method('findPaginated')
+            ->with(0, 20)
             ->willReturn($matches);
+
+        $this->repository
+            ->expects($this->once())
+            ->method('count')
+            ->willReturn(3);
 
         $result = ($this->handler)($query);
 
-        $this->assertCount(3, $result);
-        $this->assertContainsOnlyInstancesOf(MatchReadModel::class, $result);
-        $this->assertSame('EUW1_1234567890', $result[0]->id);
-        $this->assertSame('EUW1_1234567891', $result[1]->id);
-        $this->assertSame('EUW1_1234567892', $result[2]->id);
+        $this->assertInstanceOf(PaginatedResult::class, $result);
+        $this->assertCount(3, $result->items);
+        $this->assertContainsOnlyInstancesOf(MatchReadModel::class, $result->items);
+        $this->assertSame('EUW1_1234567890', $result->items[0]->id);
+        $this->assertSame('EUW1_1234567891', $result->items[1]->id);
+        $this->assertSame('EUW1_1234567892', $result->items[2]->id);
+        $this->assertSame(3, $result->total);
     }
 
     public function testReturnsEmptyArrayWhenNoMatches(): void
@@ -84,13 +94,19 @@ final class ListMatchesHandlerTest extends TestCase
 
         $this->repository
             ->expects($this->once())
-            ->method('findAll')
+            ->method('findPaginated')
             ->willReturn([]);
+
+        $this->repository
+            ->expects($this->once())
+            ->method('count')
+            ->willReturn(0);
 
         $result = ($this->handler)($query);
 
-        $this->assertIsArray($result);
-        $this->assertEmpty($result);
+        $this->assertInstanceOf(PaginatedResult::class, $result);
+        $this->assertEmpty($result->items);
+        $this->assertSame(0, $result->total);
     }
 
     public function testReturnsSingleMatch(): void
@@ -100,24 +116,34 @@ final class ListMatchesHandlerTest extends TestCase
         $match = $this->createMatch('EUW1_SINGLE', 111111111);
 
         $this->repository
-            ->method('findAll')
+            ->method('findPaginated')
             ->willReturn([$match]);
+
+        $this->repository
+            ->method('count')
+            ->willReturn(1);
 
         $result = ($this->handler)($query);
 
-        $this->assertCount(1, $result);
-        $this->assertInstanceOf(MatchReadModel::class, $result[0]);
-        $this->assertSame('EUW1_SINGLE', $result[0]->id);
+        $this->assertCount(1, $result->items);
+        $this->assertInstanceOf(MatchReadModel::class, $result->items[0]);
+        $this->assertSame('EUW1_SINGLE', $result->items[0]->id);
     }
 
-    public function testCallsRepositoryFindAll(): void
+    public function testCallsRepositoryWithPaginationParams(): void
     {
-        $query = new ListMatchesQuery();
+        $query = new ListMatchesQuery(new PaginationRequest(2, 10));
 
         $this->repository
             ->expects($this->once())
-            ->method('findAll')
+            ->method('findPaginated')
+            ->with(10, 10)
             ->willReturn([]);
+
+        $this->repository
+            ->expects($this->once())
+            ->method('count')
+            ->willReturn(0);
 
         ($this->handler)($query);
     }

@@ -87,8 +87,8 @@ function formatDate(dateString: string): string {
               <td>{{ participant.kills }}/{{ participant.deaths }}/{{ participant.assists }}</td>
               <td>{{ participant.kda }}</td>
               <td>
-                <RouterLink :to="`/summoners/${participant.puuid}`">
-                  {{ participant.puuid.substring(0, 8) }}...
+                <RouterLink :to="`/summoners/${participant.summonerId}`">
+                  {{ participant.summonerId.substring(0, 8) }}...
                 </RouterLink>
               </td>
             </tr>
@@ -116,8 +116,8 @@ function formatDate(dateString: string): string {
               <td>{{ participant.kills }}/{{ participant.deaths }}/{{ participant.assists }}</td>
               <td>{{ participant.kda }}</td>
               <td>
-                <RouterLink :to="`/summoners/${participant.puuid}`">
-                  {{ participant.puuid.substring(0, 8) }}...
+                <RouterLink :to="`/summoners/${participant.summonerId}`">
+                  {{ participant.summonerId.substring(0, 8) }}...
                 </RouterLink>
               </td>
             </tr>

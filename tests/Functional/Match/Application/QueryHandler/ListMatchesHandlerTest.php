@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Tests\Functional\Match\Application\QueryHandler;
 
 use App\Match\Application\Query\ListMatchesQuery;
+use App\SharedContext\Domain\Pagination\PaginatedResult;
+use App\SharedContext\Domain\Pagination\PaginationRequest;
 use App\Tests\Factory\MatchEntityFactory;
 use App\Tests\Factory\VersionEntityFactory;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -32,11 +34,12 @@ final class ListMatchesHandlerTest extends KernelTestCase
         // Given: empty database
         // When: listing matches
         $envelope = $this->queryBus->dispatch(new ListMatchesQuery());
-        $matches = $envelope->last(HandledStamp::class)?->getResult();
+        $result = $envelope->last(HandledStamp::class)?->getResult();
 
-        // Then: should return empty array
-        $this->assertIsArray($matches);
-        $this->assertCount(0, $matches);
+        // Then: should return empty paginated result
+        $this->assertInstanceOf(PaginatedResult::class, $result);
+        $this->assertCount(0, $result->items);
+        $this->assertSame(0, $result->total);
     }
 
     public function testListMatchesWithSingleMatch(): void
@@ -49,12 +52,13 @@ final class ListMatchesHandlerTest extends KernelTestCase
 
         // When: listing matches
         $envelope = $this->queryBus->dispatch(new ListMatchesQuery());
-        $matches = $envelope->last(HandledStamp::class)?->getResult();
+        $result = $envelope->last(HandledStamp::class)?->getResult();
 
         // Then: should return one match
-        $this->assertIsArray($matches);
-        $this->assertCount(1, $matches);
-        $this->assertSame('EUW1_1234567890', $matches[0]->id);
+        $this->assertInstanceOf(PaginatedResult::class, $result);
+        $this->assertCount(1, $result->items);
+        $this->assertSame(1, $result->total);
+        $this->assertSame('EUW1_1234567890', $result->items[0]->id);
     }
 
     public function testListMatchesWithMultipleMatches(): void
@@ -66,11 +70,12 @@ final class ListMatchesHandlerTest extends KernelTestCase
 
         // When: listing matches
         $envelope = $this->queryBus->dispatch(new ListMatchesQuery());
-        $matches = $envelope->last(HandledStamp::class)?->getResult();
+        $result = $envelope->last(HandledStamp::class)?->getResult();
 
         // Then: should return all matches
-        $this->assertIsArray($matches);
-        $this->assertCount(5, $matches);
+        $this->assertInstanceOf(PaginatedResult::class, $result);
+        $this->assertCount(5, $result->items);
+        $this->assertSame(5, $result->total);
     }
 
     public function testListMatchesReturnsMatchesWithParticipants(): void
@@ -83,11 +88,12 @@ final class ListMatchesHandlerTest extends KernelTestCase
 
         // When: listing matches
         $envelope = $this->queryBus->dispatch(new ListMatchesQuery());
-        $matches = $envelope->last(HandledStamp::class)?->getResult();
+        $result = $envelope->last(HandledStamp::class)?->getResult();
 
         // Then: should return match with participants
-        $this->assertCount(1, $matches);
-        $match = $matches[0];
+        $this->assertInstanceOf(PaginatedResult::class, $result);
+        $this->assertCount(1, $result->items);
+        $match = $result->items[0];
         $this->assertSame(10, $match->participantsCount, 'Match should have 10 participants by default');
     }
 
@@ -107,11 +113,12 @@ final class ListMatchesHandlerTest extends KernelTestCase
 
         // When: listing matches
         $envelope = $this->queryBus->dispatch(new ListMatchesQuery());
-        $matches = $envelope->last(HandledStamp::class)?->getResult();
+        $result = $envelope->last(HandledStamp::class)?->getResult();
 
         // Then: should return correct domain model
-        $this->assertCount(1, $matches);
-        $match = $matches[0];
+        $this->assertInstanceOf(PaginatedResult::class, $result);
+        $this->assertCount(1, $result->items);
+        $match = $result->items[0];
         $this->assertSame('EUW1_111111111', $match->id);
         $this->assertSame(123456789, $match->gameId);
         $this->assertSame(1800, $match->durationSeconds);
@@ -119,5 +126,26 @@ final class ListMatchesHandlerTest extends KernelTestCase
             $playedAt->format('Y-m-d H:i:s'),
             $match->playedAt->format('Y-m-d H:i:s')
         );
+    }
+
+    public function testListMatchesWithPagination(): void
+    {
+        // Given: 5 matches in database
+        MatchEntityFactory::createMany(5, [
+            'region' => 'EUW1',
+        ]);
+
+        // When: listing with limit 2, page 1
+        $envelope = $this->queryBus->dispatch(
+            new ListMatchesQuery(new PaginationRequest(1, 2))
+        );
+        $result = $envelope->last(HandledStamp::class)?->getResult();
+
+        // Then: should return 2 items with total of 5
+        $this->assertInstanceOf(PaginatedResult::class, $result);
+        $this->assertCount(2, $result->items);
+        $this->assertSame(5, $result->total);
+        $this->assertSame(1, $result->page);
+        $this->assertSame(3, $result->totalPages);
     }
 }

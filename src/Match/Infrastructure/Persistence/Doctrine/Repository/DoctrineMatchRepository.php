@@ -109,4 +109,29 @@ final class DoctrineMatchRepository implements MatchRepositoryInterface
 
         return $models;
     }
+
+    public function findPaginated(int $offset, int $limit): array
+    {
+        $entities = $this->em->getRepository(MatchEntity::class)
+            ->createQueryBuilder('m')
+            ->orderBy('m.id', 'DESC')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+
+        return array_map(
+            static fn (MatchEntity $entity): Matche => $entity->toDomain(),
+            $entities,
+        );
+    }
+
+    public function count(): int
+    {
+        return (int) $this->em->getRepository(MatchEntity::class)
+            ->createQueryBuilder('m')
+            ->select('COUNT(m.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
 }

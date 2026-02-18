@@ -10,8 +10,8 @@ const error = ref<string | null>(null)
 onMounted(async () => {
   try {
     const [matchesRes, summonersRes] = await Promise.all([api.getMatches(), api.getSummoners()])
-    matchesCount.value = matchesRes.total ?? 0
-    summonersCount.value = summonersRes.total ?? 0
+    matchesCount.value = matchesRes.meta.total
+    summonersCount.value = summonersRes.meta.total
   } catch (e) {
     error.value = 'Failed to load dashboard data'
     console.error(e)
