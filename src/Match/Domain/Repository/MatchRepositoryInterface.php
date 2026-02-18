@@ -4,9 +4,10 @@ namespace App\Match\Domain\Repository;
 
 use App\Match\Domain\Model\Matche;
 use App\Match\Domain\ValueObjet\MatchId;
+use App\SharedContext\Domain\Repository\PaginatableRepositoryInterface;
 use App\SharedContext\Domain\ValueObjet\Region;
 
-interface MatchRepositoryInterface
+interface MatchRepositoryInterface extends PaginatableRepositoryInterface
 {
     public function save(Matche $match, Region $region): void;
 
@@ -18,11 +19,4 @@ interface MatchRepositoryInterface
      * @return Matche[]
      */
     public function findAll(): array;
-
-    /**
-     * @return Matche[]
-     */
-    public function findPaginated(int $offset, int $limit): array;
-
-    public function count(): int;
 }
