@@ -6,14 +6,8 @@ namespace App\Tests\Unit\Match\Application\UseCase;
 
 use App\Match\Application\Query\ListMatchesQuery;
 use App\Match\Application\UseCase\ListMatchesUseCase;
-use App\Match\Domain\Model\Matche;
-use App\Match\Domain\Model\Participant;
-use App\Match\Domain\ValueObjet\GameId;
-use App\Match\Domain\ValueObjet\KDA;
-use App\Match\Domain\ValueObjet\MatchId;
-use App\Match\Domain\ValueObjet\SummonerPuuid;
 use App\SharedContext\Application\Bus\QueryBusInterface;
-use App\SharedContext\Domain\ValueObjet\Platform;
+use App\SharedContext\Domain\Pagination\PaginatedResult;
 use PHPUnit\Framework\TestCase;
 
 final class ListMatchesUseCaseTest extends TestCase
@@ -27,75 +21,88 @@ final class ListMatchesUseCaseTest extends TestCase
         $this->useCase = new ListMatchesUseCase($this->queryBus);
     }
 
-    private function createMatch(string $matchId): Matche
+    public function testExecuteReturnsPaginatedResult(): void
     {
-        $participant = new Participant(
-            summonerPuuid: SummonerPuuid::fromString('summoner-' . $matchId),
-            puuid: 'puuid-' . $matchId,
-            championId: 157,
-            win: true,
-            kda: new KDA(10, 5, 15),
-            items: []
+        $paginatedResult = new PaginatedResult(
+            items: [],
+            total: 2,
+            page: 1,
+            limit: 20,
         );
-
-        return new Matche(
-            id: MatchId::fromString($matchId),
-            gameId: GameId::fromInt(123456789),
-            playedAt: new \DateTimeImmutable(),
-            durationSeconds: 1800,
-            gameMode: 'gameMode',
-            gameType: 'gameType',
-            queueId: 1,
-            mapId: 900,
-            version: '16.3',
-            platform: Platform::EUW1,
-            participants: [$participant]
-        );
-    }
-
-    public function testExecuteReturnsMatchesFromQueryBus(): void
-    {
-        $matches = [
-            $this->createMatch('EUW1_1234567890'),
-            $this->createMatch('EUW1_1234567891'),
-        ];
 
         $this->queryBus
             ->expects($this->once())
             ->method('handle')
             ->with($this->isInstanceOf(ListMatchesQuery::class))
-            ->willReturn($matches);
+            ->willReturn($paginatedResult);
 
         $result = $this->useCase->execute();
 
-        $this->assertSame($matches, $result);
-        $this->assertCount(2, $result);
+        $this->assertInstanceOf(PaginatedResult::class, $result);
+        $this->assertSame(2, $result->total);
     }
 
-    public function testExecuteReturnsEmptyArrayWhenNoMatches(): void
+    public function testExecuteReturnsEmptyPaginatedResult(): void
     {
+        $paginatedResult = new PaginatedResult(
+            items: [],
+            total: 0,
+            page: 1,
+            limit: 20,
+        );
+
         $this->queryBus
             ->expects($this->once())
             ->method('handle')
             ->with($this->isInstanceOf(ListMatchesQuery::class))
-            ->willReturn([]);
+            ->willReturn($paginatedResult);
 
         $result = $this->useCase->execute();
 
-        $this->assertIsArray($result);
-        $this->assertEmpty($result);
+        $this->assertInstanceOf(PaginatedResult::class, $result);
+        $this->assertEmpty($result->items);
+        $this->assertSame(0, $result->total);
     }
 
     public function testExecuteDispatchesCorrectQuery(): void
     {
+        $paginatedResult = new PaginatedResult(
+            items: [],
+            total: 0,
+            page: 1,
+            limit: 20,
+        );
+
         $this->queryBus
             ->expects($this->once())
             ->method('handle')
             ->with($this->callback(function ($query) {
                 return $query instanceof ListMatchesQuery;
             }))
-            ->willReturn([]);
+            ->willReturn($paginatedResult);
 
         $this->useCase->execute();
+    }
+
+    public function testExecutePassesPaginationParams(): void
+    {
+        $paginatedResult = new PaginatedResult(
+            items: [],
+            total: 0,
+            page: 3,
+            limit: 10,
+        );
+
+        $this->queryBus
+            ->expects($this->once())
+            ->method('handle')
+            ->with($this->callback(function ($query) {
+                return $query instanceof ListMatchesQuery
+                    && 3 === $query->pagination->page
+                    && 10 === $query->pagination->limit;
+            }))
+            ->willReturn($paginatedResult);
+
+        $this->useCase->execute(3, 10);
     }
 }
