@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Summoner\Presentation\Api;
 
 use App\SharedContext\Application\Bus\QueryBusInterface;
+use App\SharedContext\Domain\Pagination\PaginatedResult;
+use App\SharedContext\Domain\Pagination\PaginationRequest;
 use App\Summoner\Application\Dto\SummonerDto;
 use App\Summoner\Application\Query\GetSummonerByPuuidQuery;
 use App\Summoner\Application\Query\ListSummonersQuery;
@@ -24,17 +26,22 @@ final class SummonerApiController extends AbstractController
     #[Route('', name: 'list', methods: [Request::METHOD_GET])]
     public function list(Request $request): JsonResponse
     {
-        $limit = $request->query->getInt('limit', 50);
-        $offset = $request->query->getInt('offset', 0);
+        $page = $request->query->getInt('page', 1);
+        $limit = $request->query->getInt('limit', 20);
 
-        /** @var SummonerDto[] $summoners */
-        $summoners = $this->queryBus->handle(new ListSummonersQuery($limit, $offset));
+        /** @var PaginatedResult<SummonerDto> $result */
+        $result = $this->queryBus->handle(
+            new ListSummonersQuery(new PaginationRequest($page, $limit))
+        );
 
         return $this->json([
-            'data' => $summoners,
-            'total' => count($summoners),
-            'limit' => $limit,
-            'offset' => $offset,
+            'data' => $result->items,
+            'meta' => [
+                'total' => $result->total,
+                'page' => $result->page,
+                'limit' => $result->limit,
+                'totalPages' => $result->totalPages,
+            ],
         ]);
     }
 
