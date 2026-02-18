@@ -25,7 +25,7 @@ class VersionEntity
      */
     #[ORM\OneToMany(
         targetEntity: ChampionEntity::class,
-        mappedBy: 'gameMode',
+        mappedBy: 'version',
         cascade: ['persist']
     )]
     public Collection $champions;

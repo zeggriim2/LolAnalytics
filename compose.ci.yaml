@@ -1,0 +1,17 @@
+# CI-specific overrides
+# Credentials are injected via environment variables from GitHub Secrets
+services:
+  php:
+    healthcheck:
+      start_period: 180s
+    environment:
+      DATABASE_URL: mysql://${MYSQL_ROOT_USER:-root}:${MYSQL_ROOT_PASSWORD:-root}@database:3306/${MYSQL_DATABASE:-app}?serverVersion=${MYSQL_VERSION:-8}&charset=utf8mb4
+
+  database:
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
+
+  # Frontend dev server is not needed in CI
+  node:
+    profiles:
+      - frontend

@@ -16,7 +16,10 @@ jobs:
     name: Tests
     runs-on: ubuntu-latest
     env:
-      DATABASE_URL: mysql://app:!ChangeMe!@database:3306/app?serverVersion=8&charset=utf8mb4
+      COMPOSE_FILE: compose.yaml:compose.override.yaml:compose.ci.yaml
+      MYSQL_ROOT_USER: ${{ secrets.MYSQL_ROOT_USER }}
+      MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
+      MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
     steps:
       -
         name: Checkout
