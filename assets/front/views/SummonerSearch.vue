@@ -28,7 +28,7 @@ watch(
 
 onMounted(async () => {
   try {
-    const response = await api.getSummoners(200)
+    const response = await api.getSummoners()
     allSummoners.value = response.data
   } catch (e) {
     error.value = 'Failed to load summoners'

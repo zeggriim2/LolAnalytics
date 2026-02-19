@@ -9,9 +9,9 @@ export const gameDataApi = {
   getVersions: () => fetchApi<ApiResponse<Version[]>>('/game-data/versions'),
 
   syncAll: () =>
-    fetchApi<{ status: string; message: string }>('/admin/game-data/sync', { method: 'POST' }),
+    fetchApi<{ status: string; message: string }>('/game-data/sync', { method: 'POST' }),
   sync: (type: string) =>
-    fetchApi<{ status: string; message: string }>(`/admin/game-data/sync/${type}`, {
+    fetchApi<{ status: string; message: string }>(`/game-data/sync/${type}`, {
       method: 'POST',
     }),
 }

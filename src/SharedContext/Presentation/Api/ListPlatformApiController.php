@@ -10,11 +10,10 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/api/platforms', name: 'api_platforms_')]
-final class PlatformApiController extends AbstractController
+#[Route('/platforms', name: 'api_platforms_list')]
+final class ListPlatformApiController extends AbstractController
 {
-    #[Route('', name: 'list', methods: [Request::METHOD_GET])]
-    public function list(): JsonResponse
+    public function __invoke(): JsonResponse
     {
         $platforms = array_map(
             static fn (Platform $platform) => [

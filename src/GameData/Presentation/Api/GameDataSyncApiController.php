@@ -18,7 +18,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/api/admin/game-data', name: 'api_admin_game_data_')]
 final class GameDataSyncApiController extends AbstractController
 {
     public function __construct(

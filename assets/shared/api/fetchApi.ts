@@ -1,4 +1,4 @@
-const API_BASE = '/api'
+const API_BASE = '/api/admin'
 
 export async function fetchApi<T>(endpoint: string, options?: RequestInit): Promise<T> {
   const response = await fetch(`${API_BASE}${endpoint}`, {

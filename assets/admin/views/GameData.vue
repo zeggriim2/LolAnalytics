@@ -135,7 +135,7 @@ onMounted(async () => {
               Queues ({{ queues.length }})
             </button>
             <button
-              class="btn text-xs px-2 py-0.5"
+              class="btn"
               :disabled="isSyncing('queues')"
               @click="syncType('queues')"
             >

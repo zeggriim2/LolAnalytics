@@ -6,12 +6,12 @@ export const summonerApi = {
     fetchApi<PaginatedResponse<Summoner>>(`/summoners?page=${page}&limit=${limit}`),
   getSummoner: (puuid: string) => fetchApi<ApiResponse<Summoner>>(`/summoners/${puuid}`),
   importByRiotId: (gameName: string, tagLine: string, platform: string) =>
-    fetchApi<{ status: string; message: string }>('/admin/summoners/import/riot-id', {
+    fetchApi<{ status: string; message: string }>('/summoners/import/riot-id', {
       method: 'POST',
       body: JSON.stringify({ gameName, tagLine, platform }),
     }),
   importByPuuid: (puuid: string, platform: string) =>
-    fetchApi<{ status: string; message: string }>('/admin/summoners/import/puuid', {
+    fetchApi<{ status: string; message: string }>('/summoners/import/puuid', {
       method: 'POST',
       body: JSON.stringify({ puuid, platform }),
     }),

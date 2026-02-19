@@ -1,3 +1,31 @@
 controllers:
     resource: ../src/
     type: attribute
+    exclude:
+        - '../src/Match/Presentation/Api/'
+
+match_api:
+    resource: ../src/Match/Presentation/Api/
+    type: attribute
+    prefix: /api/admin/matches
+    
+summoner_api:
+    resource: ../src/Summoner/Presentation/Api/
+    type: attribute
+    prefix: /api/admin/summoners
+
+
+champion_api:
+    resource: ../src/Champion/Presentation/Api/
+    type: attribute
+    prefix: /api/admin/champions
+
+game_data_api:
+    resource: ../src/GameData/Presentation/Api/
+    type: attribute
+    prefix: /api/admin/game-data
+    
+api:
+    resource: ../src/SharedContext/Presentation/Api/
+    type: attribute
+    prefix: /api/admin
