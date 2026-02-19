@@ -19,4 +19,11 @@ interface MatchRepositoryInterface extends PaginatableRepositoryInterface
      * @return Matche[]
      */
     public function findAll(): array;
+
+    /**
+     * @return Matche[]
+     */
+    public function findBySummonerPuuid(string $puuid, int $offset, int $limit): array;
+
+    public function countBySummonerPuuid(string $puuid): int;
 }

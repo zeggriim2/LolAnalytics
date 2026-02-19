@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Match\Presentation\Api;
 
 use App\Match\Application\Query\GetMatchByIdQuery;
+use App\Match\Application\Query\ListMatchesBySummonerQuery;
 use App\Match\Application\Query\ListMatchesQuery;
 use App\Match\Application\ReadModel\MatchDetailReadModel;
 use App\Match\Application\ReadModel\MatchReadModel;
@@ -34,6 +35,28 @@ final class MatchApiController extends AbstractController
         /** @var PaginatedResult<MatchReadModel> $result */
         $result = $this->queryBus->handle(
             new ListMatchesQuery(new PaginationRequest($page, $limit))
+        );
+
+        return $this->json([
+            'data' => $result->items,
+            'meta' => [
+                'total' => $result->total,
+                'page' => $result->page,
+                'limit' => $result->limit,
+                'totalPages' => $result->totalPages,
+            ],
+        ]);
+    }
+
+    #[Route('/summoner/{puuid}', name: 'by_summoner', methods: [Request::METHOD_GET])]
+    public function bySummoner(string $puuid, Request $request): JsonResponse
+    {
+        $page = $request->query->getInt('page', 1);
+        $limit = $request->query->getInt('limit', 10);
+
+        /** @var PaginatedResult<MatchDetailReadModel> $result */
+        $result = $this->queryBus->handle(
+            new ListMatchesBySummonerQuery($puuid, new PaginationRequest($page, $limit))
         );
 
         return $this->json([

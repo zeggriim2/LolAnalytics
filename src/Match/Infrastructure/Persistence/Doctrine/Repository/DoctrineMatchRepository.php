@@ -134,4 +134,35 @@ final class DoctrineMatchRepository implements MatchRepositoryInterface
             ->getQuery()
             ->getSingleScalarResult();
     }
+
+    public function findBySummonerPuuid(string $puuid, int $offset, int $limit): array
+    {
+        $entities = $this->em->getRepository(MatchEntity::class)
+            ->createQueryBuilder('m')
+            ->innerJoin('m.participants', 'p')
+            ->where('p.summonerId = :puuid')
+            ->setParameter('puuid', $puuid)
+            ->orderBy('m.id', 'DESC')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+
+        return array_map(
+            static fn (MatchEntity $entity): Matche => $entity->toDomain(),
+            $entities,
+        );
+    }
+
+    public function countBySummonerPuuid(string $puuid): int
+    {
+        return (int) $this->em->getRepository(MatchEntity::class)
+            ->createQueryBuilder('m')
+            ->select('COUNT(m.id)')
+            ->innerJoin('m.participants', 'p')
+            ->where('p.puuid = :puuid')
+            ->setParameter('puuid', $puuid)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
 }
