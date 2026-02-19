@@ -43,7 +43,7 @@ onMounted(async () => {
 })
 
 function findParticipant(match: Match) {
-  return match.participants?.find((p) => p.puuid === puuid)
+  return match.participants?.find((p) => p.summonerId === puuid)
 }
 
 function formatDate(dateString: string): string {
