@@ -9,10 +9,11 @@ use App\Champion\Domain\Model\Champion;
 final readonly class ChampionDetailReadModel
 {
     /**
-     * @param string[]                  $tags
-     * @param array<string, int|string> $image
-     * @param array<string, int>        $info
-     * @param array<string, float>      $stats
+     * @param string[]                                                             $tags
+     * @param array<string, int|string>                                            $image
+     * @param array<string, int>                                                   $info
+     * @param array<string, float>                                                 $stats
+     * @param array<int, array{id: string, num: int, name: string, chromas: bool}> $skins
      */
     public function __construct(
         public string $riotId,
@@ -26,6 +27,7 @@ final readonly class ChampionDetailReadModel
         public array $image,
         public array $info,
         public array $stats,
+        public array $skins,
     ) {
     }
 
@@ -81,6 +83,15 @@ final readonly class ChampionDetailReadModel
                 'attackSpeed' => $stats->attackSpeed(),
                 'attackSpeedPerLevel' => $stats->attackSpeedPerLevel(),
             ],
+            skins: array_map(
+                static fn ($skin) => [
+                    'id' => $skin->skinId(),
+                    'num' => $skin->num(),
+                    'name' => $skin->name(),
+                    'chromas' => $skin->chromas(),
+                ],
+                $champion->skins(),
+            ),
         );
     }
 }

@@ -7,7 +7,8 @@ namespace App\Champion\Domain\Model;
 final class Champion
 {
     /**
-     * @param string[] $tags
+     * @param string[]       $tags
+     * @param ChampionSkin[] $skins
      */
     private function __construct(
         private readonly string $riotId,
@@ -21,11 +22,13 @@ final class Champion
         private readonly ChampionImage $image,
         private readonly ChampionInfo $info,
         private readonly ChampionStats $stats,
+        private readonly array $skins,
     ) {
     }
 
     /**
-     * @param string[] $tags
+     * @param string[]       $tags
+     * @param ChampionSkin[] $skins
      */
     public static function create(
         string $riotId,
@@ -39,6 +42,7 @@ final class Champion
         ChampionImage $image,
         ChampionInfo $info,
         ChampionStats $stats,
+        array $skins = [],
     ): self {
         if ('' === $riotId) {
             throw new \InvalidArgumentException('riotId must not be empty');
@@ -68,6 +72,7 @@ final class Champion
             $image,
             $info,
             $stats,
+            $skins,
         );
     }
 
@@ -127,5 +132,13 @@ final class Champion
     public function stats(): ChampionStats
     {
         return $this->stats;
+    }
+
+    /**
+     * @return ChampionSkin[]
+     */
+    public function skins(): array
+    {
+        return $this->skins;
     }
 }

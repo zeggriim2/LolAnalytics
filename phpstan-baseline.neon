@@ -53,3 +53,21 @@ parameters:
 			identifier: property.onlyWritten
 			count: 1
 			path: src/Champion/Infrastructure/Persistence/Doctrine/Entity/ChampionStatsEntity.php
+
+		-
+			message: '#^Property App\\Champion\\Infrastructure\\Persistence\\Doctrine\\Entity\\ChampionSkinEntity\:\:\$champion is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: src/Champion/Infrastructure/Persistence/Doctrine/Entity/ChampionSkinEntity.php
+
+		-
+			message: '#^Property App\\Champion\\Infrastructure\\Persistence\\Doctrine\\Entity\\ChampionSkinEntity\:\:\$id \(int\|null\) is never assigned int so it can be removed from the property type\.$#'
+			identifier: property.unusedType
+			count: 1
+			path: src/Champion/Infrastructure/Persistence/Doctrine/Entity/ChampionSkinEntity.php
+
+		-
+			message: '#^Property App\\Champion\\Infrastructure\\Persistence\\Doctrine\\Entity\\ChampionSkinEntity\:\:\$id is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: src/Champion/Infrastructure/Persistence/Doctrine/Entity/ChampionSkinEntity.php

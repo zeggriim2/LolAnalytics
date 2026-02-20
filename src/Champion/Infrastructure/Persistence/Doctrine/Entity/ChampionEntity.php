@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace App\Champion\Infrastructure\Persistence\Doctrine\Entity;
 
 use App\Champion\Domain\Model\Champion;
+use App\Champion\Domain\Model\ChampionSkin;
 use App\GameData\Infrastructure\Persistence\Doctrine\Entity\VersionEntity;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -50,6 +53,15 @@ class ChampionEntity
     #[ORM\OneToOne(targetEntity: ChampionImageEntity::class, mappedBy: 'champion', cascade: ['persist', 'remove'])]
     private ChampionImageEntity $image;
 
+    /** @var Collection<int, ChampionSkinEntity> */
+    #[ORM\OneToMany(targetEntity: ChampionSkinEntity::class, mappedBy: 'champion', cascade: ['persist', 'remove'])]
+    private Collection $skins;
+
+    public function __construct()
+    {
+        $this->skins = new ArrayCollection();
+    }
+
     public static function fromDomain(Champion $champion): self
     {
         $e = new self();
@@ -64,6 +76,10 @@ class ChampionEntity
         $e->info = ChampionInfoEntity::fromDomain($champion->info(), $e);
         $e->stats = ChampionStatsEntity::fromDomain($champion->stats(), $e);
         $e->image = ChampionImageEntity::fromDomain($champion->image(), $e);
+
+        foreach ($champion->skins() as $skin) {
+            $e->skins->add(ChampionSkinEntity::fromDomain($skin, $e));
+        }
 
         return $e;
     }
@@ -82,6 +98,10 @@ class ChampionEntity
             image: $this->image->toDomain(),
             info: $this->info->toDomain(),
             stats: $this->stats->toDomain(),
+            skins: array_map(
+                static fn (ChampionSkinEntity $s): ChampionSkin => $s->toDomain(),
+                $this->skins->toArray()
+            ),
         );
     }
 

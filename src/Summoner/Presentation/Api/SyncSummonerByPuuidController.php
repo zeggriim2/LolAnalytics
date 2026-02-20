@@ -6,7 +6,6 @@ namespace App\Summoner\Presentation\Api;
 
 use App\SharedContext\Application\Bus\CommandBusInterface;
 use App\SharedContext\Domain\ValueObjet\Platform;
-use App\Summoner\Application\Command\ImportSummonerByRiotIdCommand;
 use App\Summoner\Application\Command\ImportSummonerCommand;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;

@@ -10,7 +10,8 @@ use Zeggriim\RiotApiDataDragon\DataDragon\Dto\Champion\Champion as BundleChampio
 final readonly class ChampionDto
 {
     /**
-     * @param string[] $tags
+     * @param string[]          $tags
+     * @param ChampionSkinDto[] $skins
      */
     public function __construct(
         #[Assert\NotBlank]
@@ -41,6 +42,8 @@ final readonly class ChampionDto
         public ChampionInfoDto $info,
         #[Assert\Valid]
         public ChampionStatsDto $stats,
+        #[Assert\Valid]
+        public array $skins = [],
     ) {
     }
 
@@ -58,6 +61,14 @@ final readonly class ChampionDto
             throw new \InvalidArgumentException(sprintf('Champion "%s" has no image data', $champion->id ?? 'unknown'));
         }
 
+        $skins = [];
+
+        if (count($champion->skins) > 0) {
+            foreach ($champion->skins as $skin) {
+                $skins[] = ChampionSkinDto::fromBundleDto($skin);
+            }
+        }
+
         return new self(
             riotId: $champion->id ?? '',
             version: $version,
@@ -70,6 +81,7 @@ final readonly class ChampionDto
             image: ChampionImageDto::fromBundleDto($champion->image),
             info: ChampionInfoDto::fromBundleDto($champion->info),
             stats: ChampionStatsDto::fromBundleDto($champion->stats),
+            skins: $skins,
         );
     }
 }

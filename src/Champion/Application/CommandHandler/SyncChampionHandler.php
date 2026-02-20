@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Champion\Application\CommandHandler;
 
-use App\Champion\Application\Command\SyncChampionsCommand;
+use App\Champion\Application\Command\SyncChampionCommand;
 use App\Champion\Application\Dto\ChampionDto;
 use App\Champion\Application\Port\RiotChampionProviderInterface;
 use App\Champion\Domain\Model\Champion;
@@ -17,7 +17,7 @@ use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 #[AsMessageHandler('command.bus')]
-final class SyncChampionsHandler
+final class SyncChampionHandler
 {
     public function __construct(
         private readonly RiotChampionProviderInterface $provider,
@@ -26,20 +26,22 @@ final class SyncChampionsHandler
     ) {
     }
 
-    public function __invoke(SyncChampionsCommand $command): void
+    public function __invoke(SyncChampionCommand $command): void
     {
-        $championDtos = $this->provider->fetchAllChampions($command->version, $command->locale);
+        $dto = $this->provider->fetchChampion(
+            $command->champion,
+            $command->version,
+            $command->locale
+        );
 
-        foreach ($championDtos as $dto) {
-            $violations = $this->validator->validate($dto);
+        $violations = $this->validator->validate($dto);
 
-            if ($violations->count() > 0) {
-                continue;
-            }
-
-            $champion = $this->createDomainModel($dto);
-            $this->repository->save($champion);
+        if ($violations->count() > 0) {
+            return;
         }
+
+        $champion = $this->createDomainModel($dto);
+        $this->repository->save($champion);
     }
 
     private function createDomainModel(ChampionDto $dto): Champion
