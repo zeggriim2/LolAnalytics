@@ -48,6 +48,10 @@ function formatDate(dateString: string): string {
     <div v-else-if="match">
       <div class="stats-grid">
         <div class="stat-card">
+          <div class="stat-value">{{ match.version }}</div>
+          <div class="stat-label">Patch</div>
+        </div>
+        <div class="stat-card">
           <div class="stat-value">{{ match.durationFormatted }}</div>
           <div class="stat-label">Duration</div>
         </div>

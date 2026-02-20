@@ -134,11 +134,7 @@ onMounted(async () => {
             >
               Queues ({{ queues.length }})
             </button>
-            <button
-              class="btn"
-              :disabled="isSyncing('queues')"
-              @click="syncType('queues')"
-            >
+            <button class="btn" :disabled="isSyncing('queues')" @click="syncType('queues')">
               <span v-if="syncingType === 'queues'" class="spinner"></span>
               {{ syncingType === 'queues' ? '...' : 'Sync' }}
             </button>
