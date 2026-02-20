@@ -8,27 +8,34 @@ use App\SharedContext\Domain\ValueObjet\Platform;
 use App\Summoner\Application\Command\ImportSummonerByRiotIdCommand;
 use App\Summoner\Application\CommandHandler\ImportSummonerByRiotIdHandler;
 use App\Summoner\Application\Dto\SummonerDto;
+use App\Summoner\Application\Exception\SummonerValidationException;
 use App\Summoner\Application\Port\RiotSummonerProviderInterface;
 use App\Summoner\Domain\Model\Summoner;
 use App\Summoner\Domain\Repository\SummonerRepositoryInterface;
 use App\Summoner\Domain\ValueObject\Puuid;
 use App\Summoner\Domain\ValueObject\RiotId;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Validator\ConstraintViolationInterface;
+use Symfony\Component\Validator\ConstraintViolationList;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 final class ImportSummonerByRiotIdHandlerTest extends TestCase
 {
     private RiotSummonerProviderInterface $summonerProvider;
     private SummonerRepositoryInterface $summonerRepository;
+    private ValidatorInterface $validator;
     private ImportSummonerByRiotIdHandler $handler;
 
     protected function setUp(): void
     {
         $this->summonerProvider = $this->createMock(RiotSummonerProviderInterface::class);
         $this->summonerRepository = $this->createMock(SummonerRepositoryInterface::class);
+        $this->validator = $this->createMock(ValidatorInterface::class);
 
         $this->handler = new ImportSummonerByRiotIdHandler(
             $this->summonerProvider,
             $this->summonerRepository,
+            $this->validator,
         );
     }
 
@@ -55,6 +62,11 @@ final class ImportSummonerByRiotIdHandlerTest extends TestCase
             ->method('fetchByRiotId')
             ->with($gameName, $tagLine, $platform, $platform->toRegion())
             ->willReturn($dto);
+
+        $this->validator
+            ->expects($this->once())
+            ->method('validate')
+            ->willReturn(new ConstraintViolationList());
 
         $this->summonerRepository
             ->expects($this->once())
@@ -107,6 +119,11 @@ final class ImportSummonerByRiotIdHandlerTest extends TestCase
             ->method('fetchByRiotId')
             ->willReturn($dto);
 
+        $this->validator
+            ->expects($this->once())
+            ->method('validate')
+            ->willReturn(new ConstraintViolationList());
+
         $this->summonerRepository
             ->expects($this->once())
             ->method('findByPuuid')
@@ -149,6 +166,11 @@ final class ImportSummonerByRiotIdHandlerTest extends TestCase
             ->with($gameName, $tagLine, $platform, $platform->toRegion())
             ->willReturn($dto);
 
+        $this->validator
+            ->expects($this->once())
+            ->method('validate')
+            ->willReturn(new ConstraintViolationList());
+
         $this->summonerRepository
             ->method('findByPuuid')
             ->willReturn(null);
@@ -161,6 +183,46 @@ final class ImportSummonerByRiotIdHandlerTest extends TestCase
             }));
 
         // When
+        ($this->handler)($command);
+    }
+
+    public function testThrowsExceptionWhenDtoValidationFails(): void
+    {
+        $gameName = 'Faker';
+        $tagLine = 'KR1';
+        $platform = Platform::KR;
+        $command = new ImportSummonerByRiotIdCommand($gameName, $tagLine, $platform);
+
+        $dto = new SummonerDto(
+            puuid: 'faker-puuid-123',
+            gameName: '',
+            tagLine: '',
+            profileIconId: 0,
+            summonerLevel: 1,
+            platform: 'kr',
+            lastUpdatedAt: new \DateTimeImmutable(),
+        );
+
+        $this->summonerProvider
+            ->expects($this->once())
+            ->method('fetchByRiotId')
+            ->willReturn($dto);
+
+        $violation = $this->createMock(ConstraintViolationInterface::class);
+        $violation->method('getPropertyPath')->willReturn('gameName');
+        $violation->method('getMessage')->willReturn('This value should not be blank.');
+
+        $this->validator
+            ->expects($this->once())
+            ->method('validate')
+            ->willReturn(new ConstraintViolationList([$violation]));
+
+        $this->summonerRepository
+            ->expects($this->never())
+            ->method('save');
+
+        $this->expectException(SummonerValidationException::class);
+
         ($this->handler)($command);
     }
 }

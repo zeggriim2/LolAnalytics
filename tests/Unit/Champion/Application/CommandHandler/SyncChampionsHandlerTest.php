@@ -6,6 +6,7 @@ namespace App\Tests\Unit\Champion\Application\CommandHandler;
 
 use App\Champion\Application\Command\SyncChampionsCommand;
 use App\Champion\Application\CommandHandler\SyncChampionsHandler;
+use App\Champion\Application\Exception\ChampionValidationException;
 use App\Champion\Application\Dto\ChampionDto;
 use App\Champion\Application\Dto\ChampionImageDto;
 use App\Champion\Application\Dto\ChampionInfoDto;
@@ -91,7 +92,7 @@ final class SyncChampionsHandlerTest extends TestCase
         ($this->handler)($command);
     }
 
-    public function testSkipsChampionWithValidationErrors(): void
+    public function testThrowsExceptionForInvalidChampionButSavesValidOnes(): void
     {
         $command = new SyncChampionsCommand('15.1.1');
 
@@ -104,6 +105,8 @@ final class SyncChampionsHandlerTest extends TestCase
             ->willReturn([$invalidDto, $validDto]);
 
         $violation = $this->createMock(\Symfony\Component\Validator\ConstraintViolationInterface::class);
+        $violation->method('getPropertyPath')->willReturn('riotId');
+        $violation->method('getMessage')->willReturn('This value should not be blank.');
         $violationList = new ConstraintViolationList([$violation]);
 
         $this->validator
@@ -116,6 +119,8 @@ final class SyncChampionsHandlerTest extends TestCase
             ->expects($this->once())
             ->method('save')
             ->with($this->callback(fn (Champion $c) => 'Aatrox' === $c->riotId()));
+
+        $this->expectException(ChampionValidationException::class);
 
         ($this->handler)($command);
     }

@@ -6,6 +6,7 @@ namespace App\Champion\Application\CommandHandler;
 
 use App\Champion\Application\Command\SyncChampionCommand;
 use App\Champion\Application\Dto\ChampionDto;
+use App\Champion\Application\Exception\ChampionValidationException;
 use App\Champion\Application\Port\RiotChampionProviderInterface;
 use App\Champion\Domain\Model\Champion;
 use App\Champion\Domain\Model\ChampionImage;
@@ -37,7 +38,7 @@ final class SyncChampionHandler
         $violations = $this->validator->validate($dto);
 
         if ($violations->count() > 0) {
-            return;
+            throw ChampionValidationException::forSingle($dto->riotId, $violations);
         }
 
         $champion = $this->createDomainModel($dto);

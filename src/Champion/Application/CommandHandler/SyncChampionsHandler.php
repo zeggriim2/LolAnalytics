@@ -6,6 +6,7 @@ namespace App\Champion\Application\CommandHandler;
 
 use App\Champion\Application\Command\SyncChampionsCommand;
 use App\Champion\Application\Dto\ChampionDto;
+use App\Champion\Application\Exception\ChampionValidationException;
 use App\Champion\Application\Port\RiotChampionProviderInterface;
 use App\Champion\Domain\Model\Champion;
 use App\Champion\Domain\Model\ChampionImage;
@@ -30,15 +31,22 @@ final class SyncChampionsHandler
     {
         $championDtos = $this->provider->fetchAllChampions($command->version, $command->locale);
 
+        $failures = [];
+
         foreach ($championDtos as $dto) {
             $violations = $this->validator->validate($dto);
 
             if ($violations->count() > 0) {
+                $failures[$dto->riotId] = $violations;
                 continue;
             }
 
             $champion = $this->createDomainModel($dto);
             $this->repository->save($champion);
+        }
+
+        if ([] !== $failures) {
+            throw ChampionValidationException::forBulk($failures);
         }
     }
 

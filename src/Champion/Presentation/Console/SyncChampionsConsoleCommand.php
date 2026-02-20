@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Champion\Presentation\Console;
 
+use App\Champion\Application\Exception\ChampionValidationException;
 use App\Champion\Application\UseCase\SyncChampionsUseCase;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -44,6 +45,14 @@ final class SyncChampionsConsoleCommand extends Command
             $io->success(sprintf('Champions synced successfully for version %s', $version));
 
             return Command::SUCCESS;
+        } catch (ChampionValidationException $e) {
+            $io->warning(sprintf('Sync completed with %d validation failure(s):', count($e->failuresByRiotId())));
+
+            foreach ($e->failuresByRiotId() as $riotId => $messages) {
+                $io->error(sprintf('[%s] %s', $riotId, implode(' | ', $messages)));
+            }
+
+            return Command::FAILURE;
         } catch (\Exception $e) {
             $io->error($e->getMessage());
 

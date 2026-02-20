@@ -7,6 +7,7 @@ namespace App\Summoner\Presentation\Console;
 use App\SharedContext\Application\Bus\CommandBusInterface;
 use App\SharedContext\Domain\ValueObjet\Platform;
 use App\Summoner\Application\Command\ImportSummonerCommand as AppImportSummonerCommand;
+use App\Summoner\Application\Exception\SummonerValidationException;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -55,6 +56,12 @@ final class ImportSummonerCommand extends Command
             $io->success('Summoner imported successfully!');
 
             return Command::SUCCESS;
+        } catch (SummonerValidationException $e) {
+            foreach ($e->failuresByIdentifier() as $identifier => $messages) {
+                $io->error(sprintf('[%s] %s', $identifier, implode(' | ', $messages)));
+            }
+
+            return Command::FAILURE;
         } catch (\Throwable $e) {
             $io->error(sprintf('Failed to import summoner: %s', $e->getMessage()));
 

@@ -6,12 +6,14 @@ namespace App\Summoner\Application\CommandHandler;
 
 use App\SharedContext\Domain\ValueObjet\Platform;
 use App\Summoner\Application\Command\ImportSummonerCommand;
+use App\Summoner\Application\Exception\SummonerValidationException;
 use App\Summoner\Application\Port\RiotSummonerProviderInterface;
 use App\Summoner\Domain\Model\Summoner;
 use App\Summoner\Domain\Repository\SummonerRepositoryInterface;
 use App\Summoner\Domain\ValueObject\Puuid;
 use App\Summoner\Domain\ValueObject\RiotId;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 #[AsMessageHandler(bus: 'command.bus')]
 final readonly class ImportSummonerHandler
@@ -19,6 +21,7 @@ final readonly class ImportSummonerHandler
     public function __construct(
         private RiotSummonerProviderInterface $summonerProvider,
         private SummonerRepositoryInterface $summonerRepository,
+        private ValidatorInterface $validator,
     ) {
     }
 
@@ -32,6 +35,12 @@ final readonly class ImportSummonerHandler
             $command->platform,
             $region,
         );
+
+        $violations = $this->validator->validate($dto);
+
+        if ($violations->count() > 0) {
+            throw SummonerValidationException::forSingle($dto->puuid, $violations);
+        }
 
         $existingSummoner = $this->summonerRepository->findByPuuid($puuid);
 
