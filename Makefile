@@ -1,5 +1,5 @@
 # Executables (local)
-DOCKER_COMP = docker-compose
+DOCKER_COMP = $(shell docker compose version > /dev/null 2>&1 && echo "docker compose" || echo "docker-compose")
 
 # Docker containers
 PHP_CONT = $(DOCKER_COMP) exec php

@@ -14,19 +14,21 @@ The codebase follows **Domain-Driven Design (DDD)** principles with a **modular 
 
 ### Bounded Contexts
 
-1. **Match Context** (`src/Match/`): Core business logic for League of Legends matches
-   - `Domain/`: Domain models (`Matche`, `Participant`), value objects (`MatchId`, `GameId`, `KDA`, `SummonerId`), and repository interfaces
-   - `Application/`: CQRS commands, queries, handlers, DTOs, use cases, and event handlers
-   - `Infrastructure/`: Doctrine entities, repositories, and Riot API client implementation
-   - `Presentation/`: Web controllers
-   - `Factory/`: Object factories
+Each context under `src/` follows this internal structure:
+- `Domain/`: Models, value objects, repository interfaces, domain events
+- `Application/`: CQRS commands, queries, handlers, DTOs, use cases, ports (interfaces to external services)
+- `Infrastructure/`: Doctrine entities, repositories, external API adapters/clients
+- `Presentation/Api/` and `Presentation/Console/`: HTTP controllers and CLI commands
 
-2. **SharedContext** (`src/SharedContext/`): Shared infrastructure and utilities
+1. **Match** (`src/Match/`): Core match ingestion and querying
+2. **Champion** (`src/Champion/`): Champion data and skin management
+3. **GameData** (`src/GameData/`): Generic League of Legends game data (versions, assets)
+4. **Summoner** (`src/Summoner/`): Summoner/player profile data
+5. **SharedContext** (`src/SharedContext/`): Cross-cutting concerns
    - `Application/Bus/`: Command, query, and event bus interfaces
    - `Infrastructure/Bus/`: Messenger-based bus implementations
-   - `Infrastructure/Framework/Symfony/`: Symfony kernel and framework integration
-   - `Infrastructure/Middleware/`: Message bus middleware
-   - `Infrastructure/Messenger/`: Symfony Messenger integration
+   - `Infrastructure/Framework/Symfony/`: Symfony kernel integration
+   - `Domain/Pagination/`, `Domain/ValueObjet/`: Shared domain primitives
 
 ### CQRS Architecture
 
@@ -80,14 +82,23 @@ make sf c=messenger:consume
 
 ### Testing
 ```bash
-make test                     # Run all PHPUnit tests
+make test                                    # Run all PHPUnit tests
 make test c="--filter=TestName"              # Run specific test
-make test c="--group=e2e --stop-on-failure"  # Run with options
+make test-unit                               # Run only tests/Unit/
+make test-functional                         # Run only tests/Functional/
+make test-coverage                           # HTML coverage report in var/coverage/
+make test-coverage-text                      # Coverage summary in terminal
 ```
+
+Tests are organized under `tests/`:
+- `tests/Unit/`: Pure unit tests (per bounded context)
+- `tests/Functional/`: Integration tests using real DB/services
+- `tests/Story/`: Story/scenario-based tests
+- `tests/Factory/`: Shared test factories
 
 ### Code Quality
 ```bash
-make qa                       # Run all quality tools (PHP CS Fixer + PHPStan)
+make qa                       # Run all quality tools (PHP CS Fixer + PHPStan + ESLint + Prettier)
 make cs-check                 # Check coding standards (dry-run)
 make cs-fix                   # Fix coding standards
 make phpstan                  # Run PHPStan static analysis (level 8)
@@ -95,7 +106,7 @@ make phpstan-baseline         # Generate PHPStan baseline
 make phpstan-clear            # Clear PHPStan cache
 ```
 
-All quality tools run via the `jakzal/phpqa:php8.4-alpine` Docker image.
+PHP quality tools run via the `jakzal/phpqa:php8.4-alpine` Docker image (no containers needed).
 
 ### Composer
 ```bash
@@ -114,14 +125,40 @@ make sf c=doctrine:migrations:diff              # Generate migration from entity
 make sf c=doctrine:migrations:status            # Check migration status
 ```
 
+## Frontend Stack
+
+The frontend is a **Vue 3 + TypeScript** SPA served by a dedicated `node` container:
+- **Build tool**: Vite 5
+- **UI framework**: Vue 3 with Vue Router and Pinia (state management)
+- **Styling**: Tailwind CSS 4
+- **Charts**: Chart.js via vue-chartjs
+- **Source**: `assets/` directory
+
+### Frontend Commands
+```bash
+make yarn c=<command>       # Run arbitrary yarn command
+make yarn-install           # Install node dependencies
+make yarn-dev               # Start Vite dev server (hot reload on port 5173)
+make yarn-build             # Build assets for production
+make node-sh                # Shell into the Node container
+make node-logs              # Tail Node container logs
+
+# Front quality
+make front-lint             # ESLint on assets/
+make front-lint-fix         # ESLint auto-fix
+make front-format           # Prettier format
+make front-format-check     # Prettier check (dry-run)
+make front-type-check       # TypeScript tsc --noEmit
+make front-qa               # All front quality tools
+```
+
 ## Docker Services
 
-The application runs four Docker services (see `compose.yaml`):
+The application runs three Docker services (see `compose.yaml` + `compose.override.yaml`):
 
 1. **php**: FrankenPHP application server (ports 80, 443 HTTP/3)
-2. **database**: MySQL 8 database
-3. **redis**: Redis 7 for Symfony Messenger transport
-4. **messenger_worker**: Background worker consuming async messages from Redis
+2. **node**: Node 22 container running the Vite dev server (port 5173)
+3. **database**: MySQL 8 database (port 3306 exposed in dev)
 
 All services use environment variables defined in `.env` (never commit secrets).
 
@@ -134,8 +171,7 @@ All services use environment variables defined in `.env` (never commit secrets).
 
 ### Messenger Configuration
 - Currently uses `sync` transport (configured in `messenger.yaml`)
-- Redis transport configured but commented out
-- Worker command: `php bin/console messenger:consume async --time-limit=3600 --memory-limit=128M`
+- Redis transport configured but commented out (no redis/messenger_worker service active)
 
 ### Service Configuration
 Service bindings are in `config/services.yaml`:
