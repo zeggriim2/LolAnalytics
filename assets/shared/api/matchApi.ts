@@ -7,4 +7,6 @@ export const matchApi = {
   getMatch: (matchId: string) => fetchApi<ApiResponse<Match>>(`/matches/${matchId}`),
   getMatchesBySummoner: (puuid: string, page = 1, limit = 10) =>
     fetchApi<PaginatedResponse<Match>>(`/matches/summoner/${puuid}?page=${page}&limit=${limit}`),
+  syncMatchesBySummoner: (puuid: string) =>
+    fetchApi<void>(`/matches/summoner/${puuid}/sync`, { method: 'POST' }),
 }

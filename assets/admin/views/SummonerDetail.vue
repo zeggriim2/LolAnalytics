@@ -12,6 +12,8 @@ const route = useRoute()
 const summoner = ref<Summoner | null>(null)
 const loading = ref(true)
 const error = ref<string | null>(null)
+const syncLoading = ref(false)
+const syncError = ref<string | null>(null)
 
 const puuid = route.params.puuid as string
 
@@ -42,6 +44,20 @@ onMounted(async () => {
   }
 })
 
+async function syncMatches() {
+  syncLoading.value = true
+  syncError.value = null
+  try {
+    await matchApi.syncMatchesBySummoner(puuid)
+    fetchPage(1)
+  } catch (e) {
+    syncError.value = 'Failed to sync matches'
+    console.error(e)
+  } finally {
+    syncLoading.value = false
+  }
+}
+
 function findParticipant(match: Match) {
   return match.participants?.find((p) => p.summonerId === puuid)
 }
@@ -70,7 +86,14 @@ function formatDate(dateString: string): string {
       <div class="card">
         <div class="card-header">
           <h3>{{ summoner.riotId }}</h3>
+          <div class="flex items-center gap-2">
+            <button class="btn btn-primary" :disabled="syncLoading" @click="syncMatches">
+              <span v-if="syncLoading">Syncing...</span>
+              <span v-else>Sync Matches</span>
+            </button>
+          </div>
         </div>
+        <div v-if="syncError" class="error">{{ syncError }}</div>
         <div class="stats-grid">
           <div class="stat-card">
             <div class="stat-value">{{ summoner.summonerLevel }}</div>
