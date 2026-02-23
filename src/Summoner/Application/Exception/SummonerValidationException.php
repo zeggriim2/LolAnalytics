@@ -36,8 +36,9 @@ final class SummonerValidationException extends \RuntimeException
     private static function extractMessages(ConstraintViolationListInterface $violations): array
     {
         $messages = [];
+
         foreach ($violations as $violation) {
-            $messages[] = $violation->getPropertyPath().': '.$violation->getMessage();
+            $messages[] = $violation->getPropertyPath() . ': ' . $violation->getMessage();
         }
 
         return $messages;

@@ -56,8 +56,9 @@ final class ChampionValidationException extends \RuntimeException
     private static function extractMessages(ConstraintViolationListInterface $violations): array
     {
         $messages = [];
+
         foreach ($violations as $violation) {
-            $messages[] = $violation->getPropertyPath().': '.$violation->getMessage();
+            $messages[] = $violation->getPropertyPath() . ': ' . $violation->getMessage();
         }
 
         return $messages;

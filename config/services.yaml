@@ -21,6 +21,7 @@ services:
             - '../src/GameData/Domain/Model/*'
             - '../src/Summoner/Domain/Model/*'
             - '../src/Champion/Domain/Model/*'
+            - '../src/Auth/Domain/Model/*'
             - '../src/Infrastructure/SharedContext/Framework/Symfony/Kernel.php'
 
     # add more service definitions when explicit configuration is needed
@@ -62,6 +63,10 @@ services:
 
     App\Champion\Application\Port\RiotChampionProviderInterface:
         alias: App\Champion\Infrastructure\Adapter\RiotChampionProvider
+
+    # Auth Bounded Context
+    App\Auth\Domain\Repository\AdminUserRepositoryInterface:
+        alias: App\Auth\Infrastructure\Persistence\Doctrine\Repository\DoctrineAdminUserRepository
 
     # CQRS Buses
     App\SharedContext\Application\Bus\CommandBusInterface:

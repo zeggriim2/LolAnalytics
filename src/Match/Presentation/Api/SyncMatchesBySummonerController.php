@@ -4,13 +4,9 @@ declare(strict_types=1);
 
 namespace App\Match\Presentation\Api;
 
-use App\Match\Application\Command\IngestMatchesByPuuidCommand;
 use App\Match\Application\UseCase\IngestMatchesUseCase;
-use App\Match\Application\UseCase\IngestMatchUseCase;
-use App\SharedContext\Application\Bus\CommandBusInterface;
 use App\Summoner\Domain\Repository\SummonerRepositoryInterface;
 use App\Summoner\Domain\ValueObject\Puuid;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

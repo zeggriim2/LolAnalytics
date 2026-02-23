@@ -6,11 +6,11 @@ namespace App\Tests\Unit\Champion\Application\CommandHandler;
 
 use App\Champion\Application\Command\SyncChampionsCommand;
 use App\Champion\Application\CommandHandler\SyncChampionsHandler;
-use App\Champion\Application\Exception\ChampionValidationException;
 use App\Champion\Application\Dto\ChampionDto;
 use App\Champion\Application\Dto\ChampionImageDto;
 use App\Champion\Application\Dto\ChampionInfoDto;
 use App\Champion\Application\Dto\ChampionStatsDto;
+use App\Champion\Application\Exception\ChampionValidationException;
 use App\Champion\Application\Port\RiotChampionProviderInterface;
 use App\Champion\Domain\Model\Champion;
 use App\Champion\Domain\Repository\ChampionRepositoryInterface;

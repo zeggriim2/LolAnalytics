@@ -1,9 +1,12 @@
 const API_BASE = '/api/admin'
 
 export async function fetchApi<T>(endpoint: string, options?: RequestInit): Promise<T> {
+  const token = localStorage.getItem('admin_token')
+
   const response = await fetch(`${API_BASE}${endpoint}`, {
     headers: {
       'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...options?.headers,
     },
     ...options,

@@ -45,6 +45,13 @@ doctrine:
                 dir: '%kernel.project_dir%/src/Champion/Infrastructure/Persistence/Doctrine/Entity'
                 prefix: 'App\Champion\Infrastructure\Persistence\Doctrine\Entity'
                 alias: Champion
+
+            Auth:
+                type: attribute
+                is_bundle: false
+                dir: '%kernel.project_dir%/src/Auth/Infrastructure/Persistence/Doctrine/Entity'
+                prefix: 'App\Auth\Infrastructure\Persistence\Doctrine\Entity'
+                alias: Auth
         controller_resolver:
             auto_mapping: false
 

@@ -4,6 +4,10 @@ controllers:
     exclude:
         - '../src/Match/Presentation/Api/'
 
+api_auth_login:
+    path: /api/admin/auth/login
+    methods: [POST]
+
 match_api:
     resource: ../src/Match/Presentation/Api/
     type: attribute
