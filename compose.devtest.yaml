@@ -1,0 +1,55 @@
+# DevTest environment — uses pre-built image from GitHub Container Registry
+# Deployed via: .github/workflows/cd-devtest.yml
+# On VPS: /opt/lolanalytics-devtest/
+# JWT keys: ./jwt/private.pem + ./jwt/public.pem (bind-mounted, never in image)
+
+services:
+  php:
+    image: ${PHP_IMAGE}
+    restart: unless-stopped
+    depends_on:
+      database:
+        condition: service_healthy
+    environment:
+      SERVER_NAME: ${SERVER_NAME:-localhost}, php:80
+      APP_SECRET: ${APP_SECRET}
+      DATABASE_URL: ${DATABASE_URL}
+      API_RIOT_KEY: ${API_RIOT_KEY}
+      JWT_PASSPHRASE: ${JWT_PASSPHRASE}
+      MERCURE_URL: http://php/.well-known/mercure
+      MERCURE_PUBLIC_URL: https://${SERVER_NAME:-localhost}/.well-known/mercure
+      MERCURE_JWT_SECRET: ${CADDY_MERCURE_JWT_SECRET}
+      MERCURE_PUBLISHER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET}
+      MERCURE_SUBSCRIBER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET}
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
+      - jwt_keys:/var/www/html/config/jwt
+    ports:
+      - "${HTTP_PORT:-80}:80"
+      - "${HTTPS_PORT:-443}:443"
+      - "${HTTPS_PORT:-443}:443/udp"
+
+  database:
+    image: mysql:8
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - database_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+
+volumes:
+  caddy_data:
+  caddy_config:
+  database_data:
+  jwt_keys:

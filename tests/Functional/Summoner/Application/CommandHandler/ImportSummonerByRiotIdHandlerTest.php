@@ -120,7 +120,7 @@ final class ImportSummonerByRiotIdHandlerTest extends KernelTestCase
     public function testImportSummonerByRiotIdWithSpacesInName(): void
     {
         // Given: mock the Riot API provider for a player with spaces in name
-        $gameName = 'Player With Spaces';
+        $gameName = 'PlayerWithSpace';
         $tagLine = 'EUW';
         $puuid = 'spaces-name-puuid';
 
@@ -151,8 +151,8 @@ final class ImportSummonerByRiotIdHandlerTest extends KernelTestCase
         $summoner = $this->repository->findByPuuid(Puuid::fromString($puuid));
 
         $this->assertNotNull($summoner);
-        $this->assertSame('Player With Spaces', $summoner->riotId()->gameName());
-        $this->assertSame('Player With Spaces#EUW', $summoner->riotId()->fullName());
+        $this->assertSame('PlayerWithSpace', $summoner->riotId()->gameName());
+        $this->assertSame('PlayerWithSpace#EUW', $summoner->riotId()->fullName());
     }
 
     public function testImportMultipleSummonersByRiotId(): void

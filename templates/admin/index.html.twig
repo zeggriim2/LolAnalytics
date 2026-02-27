@@ -4,13 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LoL Analytics - Admin</title>
-    {% if app.environment == 'dev' %}
-        <script type="module" src="http://localhost:5173/@vite/client"></script>
-        <script type="module" src="http://localhost:5173/assets/admin/main.ts"></script>
-    {% else %}
-        {{ encore_entry_link_tags('admin') }}
-        {{ encore_entry_script_tags('admin') }}
-    {% endif %}
+    {% block stylesheets %}
+        {{ vite_entry_link_tags('admin') }}
+    {% endblock %}
+    {% block javascripts %}
+        {{ vite_entry_script_tags('admin') }}
+    {% endblock %}
 </head>
 <body>
     <div id="admin-app"></div>

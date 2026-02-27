@@ -57,6 +57,14 @@ if [ "$1" = 'frankenphp' ] || [ "$1" = 'php' ] || [ "$1" = 'bin/console' ]; then
 		fi
 	fi
 
+	# Generate JWT keypair if not already present (persisted via Docker named volume)
+	if [ ! -f config/jwt/private.pem ] || [ ! -f config/jwt/public.pem ]; then
+		echo 'JWT keys not found — generating keypair...'
+		mkdir -p config/jwt
+		php bin/console lexik:jwt:generate-keypair --overwrite --no-interaction
+		echo 'JWT keypair generated successfully.'
+	fi
+
 	setfacl -R -m u:www-data:rwX -m u:"$(whoami)":rwX var
 	setfacl -dR -m u:www-data:rwX -m u:"$(whoami)":rwX var
 

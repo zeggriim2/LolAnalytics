@@ -39,7 +39,7 @@ final class ImportSummonerHandlerTest extends KernelTestCase
         $puuid = 'functional-test-puuid-123';
         $dto = new SummonerDto(
             puuid: $puuid,
-            gameName: 'FunctionalTestPlayer',
+            gameName: 'FuncTestPlayer',
             tagLine: 'EUW',
             profileIconId: 1234,
             summonerLevel: 150,
@@ -65,7 +65,7 @@ final class ImportSummonerHandlerTest extends KernelTestCase
 
         $this->assertNotNull($summoner);
         $this->assertSame($puuid, $summoner->puuid()->value());
-        $this->assertSame('FunctionalTestPlayer', $summoner->riotId()->gameName());
+        $this->assertSame('FuncTestPlayer', $summoner->riotId()->gameName());
         $this->assertSame('EUW', $summoner->riotId()->tagLine());
         $this->assertSame(1234, $summoner->profileIconId());
         $this->assertSame(150, $summoner->summonerLevel());

@@ -3,19 +3,18 @@ import { defineConfig } from 'vite'
 import tailwindcss from '@tailwindcss/vite'
 import vue from '@vitejs/plugin-vue'
 import { resolve } from 'path'
+import symfonyPlugin from "vite-plugin-symfony";
 
-export default defineConfig(({ command}) => ({
-  plugins: [tailwindcss(), vue()],
-  root: '.',
+export default defineConfig(({ command }) => ({
+  plugins: [tailwindcss(), vue(), symfonyPlugin()],
   base: command === 'build' ? '/build/' : '/',
   build: {
     outDir: 'public/build',
     emptyOutDir: true,
-    manifest: true,
     rollupOptions: {
       input: {
-        admin: resolve(__dirname, 'assets/admin/main.ts'),
-        front: resolve(__dirname, 'assets/front/main.ts'),
+        admin: "./assets/admin/main.ts",
+        front: "./assets/front/main.ts",
       },
     },
   },

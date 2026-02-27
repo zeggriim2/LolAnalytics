@@ -57,6 +57,22 @@ ENTRYPOINT ["docker-entrypoint"]
 HEALTHCHECK --start-period=60s CMD curl -f http://localhost:2019/metrics || exit 1
 CMD [ "frankenphp", "run", "--config", "/etc/frankenphp/Caddyfile" ]
 
+# Node build stage — compile les assets frontend (Vite + Vue + TypeScript)
+FROM node:22-alpine AS node_build
+
+WORKDIR /app
+
+# Installer les dépendances en premier (cache Docker : ne réinstalle que si le lock file change)
+COPY --link package.json yarn.lock .yarnrc.yml ./
+RUN corepack enable && yarn install --frozen-lockfile
+
+# Copier les sources nécessaires à Vite
+COPY --link assets/ assets/
+COPY --link vite.config.js tsconfig*.json ./
+
+RUN yarn build
+# Résultat : /app/public/build/ (assets compilés avec noms fixes)
+
 # Dev FrankenPHP image
 FROM frankenphp_base AS frankenphp_dev
 
@@ -93,9 +109,40 @@ RUN set -eux; \
 COPY --link . ./
 RUN rm -Rf frankenphp/
 
+# Injecter les assets frontend compilés par le stage Node
+COPY --from=node_build --link /app/public/build ./public/build
+
 RUN set -eux; \
 	mkdir -p var/cache var/log; \
 	composer dump-autoload --classmap-authoritative --no-dev; \
 	composer dump-env prod; \
 	composer run-script --no-dev post-install-cmd; \
+	chmod +x bin/console; sync;
+
+# DevTest FrankenPHP image — APP_ENV=dev, toutes les dépendances (dont dev)
+FROM frankenphp_base AS frankenphp_devtest
+
+ENV APP_ENV=dev
+
+RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
+
+COPY --link frankenphp/conf.d/20-app.dev.ini $PHP_INI_DIR/app.conf.d/
+
+# Installer toutes les dépendances y compris dev
+COPY --link composer.* symfony.* ./
+RUN set -eux; \
+	composer install --no-cache --prefer-dist --no-autoloader --no-scripts --no-progress
+
+# Copier les sources
+COPY --link . ./
+RUN rm -Rf frankenphp/
+
+# Injecter les assets frontend compilés par le stage Node
+COPY --from=node_build --link /app/public/build ./public/build
+
+RUN set -eux; \
+	mkdir -p var/cache var/log; \
+	composer dump-autoload --classmap-authoritative; \
+	composer dump-env dev; \
+	composer run-script post-install-cmd; \
 	chmod +x bin/console; sync;
