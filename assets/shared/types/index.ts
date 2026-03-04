@@ -37,6 +37,15 @@ export interface Summoner {
   lastUpdatedAt: string
 }
 
+export interface Champion {
+  riotId: string
+  version: string
+  championKey: string
+  name: string
+  title: string
+  imageFull: string
+}
+
 export interface Queue {
   queueId: number
   map: string

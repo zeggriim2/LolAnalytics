@@ -6,6 +6,7 @@ import { matchApi } from '@shared/api/matchApi'
 import { usePagination } from '@shared/composables/usePagination'
 import PaginationBar from '@shared/components/PaginationBar.vue'
 import SummonerMatchCharts from '@shared/components/SummonerMatchCharts.vue'
+import ChampionIcon from '@shared/components/ChampionIcon.vue'
 import type { Summoner, Match } from '@shared/types'
 
 const route = useRoute()
@@ -139,7 +140,12 @@ function formatDate(dateString: string): string {
             <tbody>
               <tr v-for="match in matches" :key="match.id">
                 <td>{{ match.gameMode }}</td>
-                <td>Champion #{{ findParticipant(match)?.championId }}</td>
+                <td>
+                  <ChampionIcon
+                    v-if="findParticipant(match)?.championId"
+                    :champion-id="findParticipant(match)!.championId"
+                  />
+                </td>
                 <td>
                   {{ findParticipant(match)?.kills }}/{{ findParticipant(match)?.deaths }}/{{
                     findParticipant(match)?.assists
