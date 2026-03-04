@@ -67,7 +67,7 @@ final class CreateAdminUserHandlerTest extends KernelTestCase
     {
         // Given: an existing user with the same email
         AdminUserEntityFactory::createOne([
-            'email' => 'admin@lol.local'
+            'email' => 'admin@lol.local',
         ]);
 
         // Then
