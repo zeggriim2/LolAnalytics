@@ -3,6 +3,7 @@ import { ref, onMounted, computed } from 'vue'
 import { useRoute, RouterLink } from 'vue-router'
 import { api } from '@shared/api/client'
 import type { Match } from '@shared/types'
+import ChampionIcon from '@shared/components/ChampionIcon.vue'
 
 const route = useRoute()
 const match = ref<Match | null>(null)
@@ -85,7 +86,7 @@ function formatDate(dateString: string): string {
           </thead>
           <tbody>
             <tr v-for="participant in winners" :key="participant.puuid">
-              <td>Champion #{{ participant.championId }}</td>
+              <td><ChampionIcon :champion-id="participant.championId" :size="36" /></td>
               <td>{{ participant.kills }}/{{ participant.deaths }}/{{ participant.assists }}</td>
               <td>{{ participant.kda }}</td>
               <td>
@@ -114,7 +115,7 @@ function formatDate(dateString: string): string {
           </thead>
           <tbody>
             <tr v-for="participant in losers" :key="participant.puuid">
-              <td>Champion #{{ participant.championId }}</td>
+              <td><ChampionIcon :champion-id="participant.championId" :size="36" /></td>
               <td>{{ participant.kills }}/{{ participant.deaths }}/{{ participant.assists }}</td>
               <td>{{ participant.kda }}</td>
               <td>
