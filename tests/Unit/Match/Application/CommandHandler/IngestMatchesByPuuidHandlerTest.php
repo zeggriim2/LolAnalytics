@@ -97,6 +97,7 @@ final class IngestMatchesByPuuidHandlerTest extends TestCase
         $matchIds = ['KR_9876543210'];
 
         $this->matchApi
+            ->expects($this->once())
             ->method('getMatches')
             ->willReturn($matchIds);
 

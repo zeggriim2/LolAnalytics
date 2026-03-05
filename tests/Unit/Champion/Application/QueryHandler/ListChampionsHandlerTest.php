@@ -75,6 +75,7 @@ final class ListChampionsHandlerTest extends TestCase
         $query = new ListChampionsQuery();
 
         $this->repository
+            ->expects($this->once())
             ->method('findAll')
             ->willReturn([]);
 

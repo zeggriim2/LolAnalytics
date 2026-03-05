@@ -14,7 +14,9 @@ use App\Champion\Application\Exception\ChampionValidationException;
 use App\Champion\Application\Port\RiotChampionProviderInterface;
 use App\Champion\Domain\Model\Champion;
 use App\Champion\Domain\Repository\ChampionRepositoryInterface;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Validator\ConstraintViolationInterface;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -82,6 +84,7 @@ final class SyncChampionsHandlerTest extends TestCase
             ->willReturn([$dto1, $dto2]);
 
         $this->validator
+            ->expects($this->exactly(2))
             ->method('validate')
             ->willReturn(new ConstraintViolationList());
 
@@ -104,12 +107,13 @@ final class SyncChampionsHandlerTest extends TestCase
             ->method('fetchAllChampions')
             ->willReturn([$invalidDto, $validDto]);
 
-        $violation = $this->createMock(\Symfony\Component\Validator\ConstraintViolationInterface::class);
+        $violation = $this->createStub(ConstraintViolationInterface::class);
         $violation->method('getPropertyPath')->willReturn('riotId');
         $violation->method('getMessage')->willReturn('This value should not be blank.');
         $violationList = new ConstraintViolationList([$violation]);
 
         $this->validator
+            ->expects($this->exactly(2))
             ->method('validate')
             ->willReturnCallback(function ($dto) use ($invalidDto, $violationList) {
                 return $dto === $invalidDto ? $violationList : new ConstraintViolationList();
@@ -134,6 +138,10 @@ final class SyncChampionsHandlerTest extends TestCase
             ->method('fetchAllChampions')
             ->willReturn([]);
 
+        $this->validator
+            ->expects($this->never())
+            ->method('validate');
+
         $this->repository
             ->expects($this->never())
             ->method('save');
@@ -141,6 +149,7 @@ final class SyncChampionsHandlerTest extends TestCase
         ($this->handler)($command);
     }
 
+    #[AllowMockObjectsWithoutExpectations]
     public function testSyncUsesDefaultLocale(): void
     {
         $command = new SyncChampionsCommand('15.1.1');

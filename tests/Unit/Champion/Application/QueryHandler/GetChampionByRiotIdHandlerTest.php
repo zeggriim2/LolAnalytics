@@ -73,6 +73,7 @@ final class GetChampionByRiotIdHandlerTest extends TestCase
         $query = new GetChampionByRiotIdQuery('NonExistent');
 
         $this->repository
+            ->expects($this->once())
             ->method('findByRiotId')
             ->willReturn(null);
 
@@ -86,6 +87,7 @@ final class GetChampionByRiotIdHandlerTest extends TestCase
         $query = new GetChampionByRiotIdQuery('Aatrox', '99.99.99');
 
         $this->repository
+            ->expects($this->once())
             ->method('findByRiotIdAndVersion')
             ->willReturn(null);
 
@@ -100,6 +102,7 @@ final class GetChampionByRiotIdHandlerTest extends TestCase
         $champion = $this->createChampion('Aatrox');
 
         $this->repository
+            ->expects($this->once())
             ->method('findByRiotId')
             ->willReturn($champion);
 
@@ -119,6 +122,7 @@ final class GetChampionByRiotIdHandlerTest extends TestCase
         $champion = $this->createChampion('Aatrox');
 
         $this->repository
+            ->expects($this->once())
             ->method('findByRiotId')
             ->willReturn($champion);
 
