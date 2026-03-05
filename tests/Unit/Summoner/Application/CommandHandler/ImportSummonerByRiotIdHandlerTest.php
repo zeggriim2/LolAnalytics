@@ -172,6 +172,7 @@ final class ImportSummonerByRiotIdHandlerTest extends TestCase
             ->willReturn(new ConstraintViolationList());
 
         $this->summonerRepository
+            ->expects($this->once())
             ->method('findByPuuid')
             ->willReturn(null);
 
@@ -208,7 +209,7 @@ final class ImportSummonerByRiotIdHandlerTest extends TestCase
             ->method('fetchByRiotId')
             ->willReturn($dto);
 
-        $violation = $this->createMock(ConstraintViolationInterface::class);
+        $violation = $this->createStub(ConstraintViolationInterface::class);
         $violation->method('getPropertyPath')->willReturn('gameName');
         $violation->method('getMessage')->willReturn('This value should not be blank.');
 

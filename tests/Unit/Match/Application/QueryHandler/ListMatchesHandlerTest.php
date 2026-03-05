@@ -116,10 +116,12 @@ final class ListMatchesHandlerTest extends TestCase
         $match = $this->createMatch('EUW1_SINGLE', 111111111);
 
         $this->repository
+            ->expects($this->once())
             ->method('findPaginated')
             ->willReturn([$match]);
 
         $this->repository
+            ->expects($this->once())
             ->method('count')
             ->willReturn(1);
 

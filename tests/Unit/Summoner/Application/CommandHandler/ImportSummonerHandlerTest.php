@@ -170,6 +170,7 @@ final class ImportSummonerHandlerTest extends TestCase
             ->willReturn(new ConstraintViolationList());
 
         $this->summonerRepository
+            ->expects($this->once())
             ->method('findByPuuid')
             ->willReturn(null);
 
@@ -205,7 +206,7 @@ final class ImportSummonerHandlerTest extends TestCase
             ->method('fetchByPuuid')
             ->willReturn($dto);
 
-        $violation = $this->createMock(ConstraintViolationInterface::class);
+        $violation = $this->createStub(ConstraintViolationInterface::class);
         $violation->method('getPropertyPath')->willReturn('puuid');
         $violation->method('getMessage')->willReturn('This value should not be blank.');
 

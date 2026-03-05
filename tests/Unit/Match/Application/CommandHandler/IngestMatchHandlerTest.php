@@ -155,6 +155,7 @@ final class IngestMatchHandlerTest extends TestCase
         $command = new IngestMatchCommand($matchId, $region);
 
         $this->matchRepository
+            ->expects($this->once())
             ->method('exists')
             ->willReturn(false);
 
@@ -207,6 +208,7 @@ final class IngestMatchHandlerTest extends TestCase
         ];
 
         $this->matchApi
+            ->expects($this->once())
             ->method('getMatch')
             ->willReturn($riotPayload);
 

@@ -88,6 +88,7 @@ final class CreateAdminUserHandlerTest extends TestCase
         $command = new CreateAdminUserCommand('admin@lol.local', 'plainpassword');
 
         $this->passwordHasher
+            ->expects($this->once())
             ->method('hashPassword')
             ->willReturn('hashed');
 
