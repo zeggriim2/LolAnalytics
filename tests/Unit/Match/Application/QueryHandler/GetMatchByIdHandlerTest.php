@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit\Match\Application\QueryHandler;
 
+use App\Match\Application\Port\SummonerAdapterInterface;
 use App\Match\Application\Query\GetMatchByIdQuery;
 use App\Match\Application\QueryHandler\GetMatchByIdHandler;
 use App\Match\Application\ReadModel\MatchDetailReadModel;
@@ -20,12 +21,14 @@ use PHPUnit\Framework\TestCase;
 final class GetMatchByIdHandlerTest extends TestCase
 {
     private MatchRepositoryInterface $repository;
+    private SummonerAdapterInterface $summonerAdapter;
     private GetMatchByIdHandler $handler;
 
     protected function setUp(): void
     {
         $this->repository = $this->createMock(MatchRepositoryInterface::class);
-        $this->handler = new GetMatchByIdHandler($this->repository);
+        $this->summonerAdapter = $this->createMock(SummonerAdapterInterface::class);
+        $this->handler = new GetMatchByIdHandler($this->repository, $this->summonerAdapter);
     }
 
     public function testReturnsMatchWhenFound(): void
@@ -62,6 +65,12 @@ final class GetMatchByIdHandlerTest extends TestCase
             ->with($matchId)
             ->willReturn($expectedMatch);
 
+        $this->summonerAdapter
+            ->expects($this->once())
+            ->method('findGameNamesByPuuids')
+            ->with([$participant->summonerPuuid()])
+            ->willReturn([(string) $participant->summonerPuuid() => 'gameName']);
+
         $result = ($this->handler)($query);
 
         $this->assertInstanceOf(MatchDetailReadModel::class, $result);
@@ -82,6 +91,10 @@ final class GetMatchByIdHandlerTest extends TestCase
             ->with($matchId)
             ->willReturn(null);
 
+        $this->summonerAdapter
+            ->expects($this->never())
+            ->method('findGameNamesByPuuids');
+
         $result = ($this->handler)($query);
 
         $this->assertNull($result);
@@ -97,6 +110,12 @@ final class GetMatchByIdHandlerTest extends TestCase
             ->method('findById')
             ->with($this->identicalTo($matchId))
             ->willReturn(null);
+
+        $this->summonerAdapter
+            ->expects($this->never())
+            ->method('findGameNamesByPuuids')
+            ->with([])
+            ->willReturn([]);
 
         ($this->handler)($query);
     }

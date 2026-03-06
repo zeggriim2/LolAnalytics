@@ -24,6 +24,7 @@ export interface Participant {
   kda: string
   win: boolean
   items: string[]
+  gameName: string | null
 }
 
 export interface Summoner {
