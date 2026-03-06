@@ -1,8 +1,3 @@
-# This file is the entry point to configure your own services.
-# Files in the packages/ subdirectory configure your dependencies.
-
-# Put parameters here that don't need to change on each machine where the app is deployed
-# https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
 
 services:
@@ -24,56 +19,10 @@ services:
             - '../src/Auth/Domain/Model/*'
             - '../src/Infrastructure/SharedContext/Framework/Symfony/Kernel.php'
 
-    # add more service definitions when explicit configuration is needed
-    # please note that last definitions always *replace* previous ones
-    
-    # Match Bounded Context
-    App\Match\Domain\Repository\MatchRepositoryInterface:
-        alias: App\Match\Infrastructure\Persistence\Doctrine\Repository\DoctrineMatchRepository
-        
-    App\Match\Application\Port\SummonerAdapterInterface:
-        alias: App\Match\Infrastructure\Adapter\DoctrineSummonerAdapter
-
-    # GameData Bounded Context
-    App\GameData\Domain\Repository\QueueRepositoryInterface:
-        alias: App\GameData\Infrastructure\Persistence\Doctrine\Repository\DoctrineQueueRepository
-
-    App\GameData\Domain\Repository\GameModeRepositoryInterface:
-        alias: App\GameData\Infrastructure\Persistence\Doctrine\Repository\DoctrineGameModeRepository
-
-    App\GameData\Domain\Repository\GameTypeRepositoryInterface:
-        alias: App\GameData\Infrastructure\Persistence\Doctrine\Repository\DoctrineGameTypeRepository
-
-    App\GameData\Domain\Repository\MapRepositoryInterface:
-        alias: App\GameData\Infrastructure\Persistence\Doctrine\Repository\DoctrineMapRepository
-
-    App\GameData\Domain\Repository\SeasonRepositoryInterface:
-        alias: App\GameData\Infrastructure\Persistence\Doctrine\Repository\DoctrineSeasonRepository
-
-    App\GameData\Application\Port\RiotStaticDataProviderInterface:
-        alias: App\GameData\Infrastructure\Client\RiotStaticDataProvider
-
-    # Summoner Bounded Context
-    App\Summoner\Domain\Repository\SummonerRepositoryInterface:
-        alias: App\Summoner\Infrastructure\Persistence\Doctrine\Repository\DoctrineSummonerRepository
-
-    App\Summoner\Application\Port\RiotSummonerAdapterInterface:
-        alias: App\Summoner\Infrastructure\Adapter\RiotSummonerProvider
-
-    # Champion Bounded Context
-    App\Champion\Domain\Repository\ChampionRepositoryInterface:
-        alias: App\Champion\Infrastructure\Persistence\Doctrine\Repository\DoctrineChampionRepository
-
-    App\Champion\Application\Port\RiotChampionProviderInterface:
-        alias: App\Champion\Infrastructure\Adapter\RiotChampionProvider
-
-    # Auth Bounded Context
-    App\Auth\Domain\Repository\AdminUserRepositoryInterface:
-        alias: App\Auth\Infrastructure\Persistence\Doctrine\Repository\DoctrineAdminUserRepository
-
-    # CQRS Buses
-    App\SharedContext\Application\Bus\CommandBusInterface:
-        alias: App\SharedContext\Infrastructure\Bus\MessengerCommandBus
-
-    App\SharedContext\Application\Bus\QueryBusInterface:
-        alias: App\SharedContext\Infrastructure\Bus\MessengerQueryBus
+imports:
+    - { resource: services/match.yaml }
+    - { resource: services/game_data.yaml }
+    - { resource: services/summoner.yaml }
+    - { resource: services/champion.yaml }
+    - { resource: services/auth.yaml }
+    - { resource: services/shared_context.yaml }

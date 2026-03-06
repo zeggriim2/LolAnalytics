@@ -1,0 +1,6 @@
+services:
+    App\SharedContext\Application\Bus\CommandBusInterface:
+        alias: App\SharedContext\Infrastructure\Bus\MessengerCommandBus
+
+    App\SharedContext\Application\Bus\QueryBusInterface:
+        alias: App\SharedContext\Infrastructure\Bus\MessengerQueryBus

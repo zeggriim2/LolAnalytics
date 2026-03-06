@@ -69,7 +69,7 @@ final class SyncChampionsHandlerTest extends KernelTestCase
 
         $dto = $this->createChampionDto('Aatrox', '266', '15.1.1');
 
-        $mockProvider = $this->createMock(RiotChampionProviderInterface::class);
+        $mockProvider = $this->createStub(RiotChampionProviderInterface::class);
         $mockProvider
             ->method('fetchAllChampions')
             ->willReturn([$dto]);
@@ -100,7 +100,7 @@ final class SyncChampionsHandlerTest extends KernelTestCase
 
         $dto = $this->createChampionDto('Aatrox', '266', '15.1.1');
 
-        $mockProvider = $this->createMock(RiotChampionProviderInterface::class);
+        $mockProvider = $this->createStub(RiotChampionProviderInterface::class);
         $mockProvider
             ->method('fetchAllChampions')
             ->willReturn([$dto]);
@@ -131,7 +131,7 @@ final class SyncChampionsHandlerTest extends KernelTestCase
             $this->createChampionDto('Zed', '238', '15.1.1'),
         ];
 
-        $mockProvider = $this->createMock(RiotChampionProviderInterface::class);
+        $mockProvider = $this->createStub(RiotChampionProviderInterface::class);
         $mockProvider
             ->method('fetchAllChampions')
             ->willReturn($dtos);
@@ -153,7 +153,7 @@ final class SyncChampionsHandlerTest extends KernelTestCase
 
         $dto = $this->createChampionDto('Aatrox', '266', '15.1.1');
 
-        $mockProvider = $this->createMock(RiotChampionProviderInterface::class);
+        $mockProvider = $this->createStub(RiotChampionProviderInterface::class);
         $mockProvider
             ->method('fetchAllChampions')
             ->willReturn([$dto]);
@@ -174,7 +174,7 @@ final class SyncChampionsHandlerTest extends KernelTestCase
         // Given: no VersionEntity for '99.99.99'
         $dto = $this->createChampionDto('Aatrox', '266', '99.99.99');
 
-        $mockProvider = $this->createMock(RiotChampionProviderInterface::class);
+        $mockProvider = $this->createStub(RiotChampionProviderInterface::class);
         $mockProvider
             ->method('fetchAllChampions')
             ->willReturn([$dto]);

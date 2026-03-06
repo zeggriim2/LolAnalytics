@@ -96,7 +96,7 @@ final class ImportSummonerHandlerTest extends KernelTestCase
             lastUpdatedAt: new \DateTimeImmutable('2024-06-15 10:00:00'),
         );
 
-        $mockProvider = $this->createMock(RiotSummonerProviderInterface::class);
+        $mockProvider = $this->createStub(RiotSummonerProviderInterface::class);
         $mockProvider
             ->method('fetchByPuuid')
             ->willReturn($dto);
@@ -166,7 +166,7 @@ final class ImportSummonerHandlerTest extends KernelTestCase
             lastUpdatedAt: new \DateTimeImmutable(),
         );
 
-        $mockProvider = $this->createMock(RiotSummonerProviderInterface::class);
+        $mockProvider = $this->createStub(RiotSummonerProviderInterface::class);
         $mockProvider
             ->method('fetchByPuuid')
             ->willReturn($dto);

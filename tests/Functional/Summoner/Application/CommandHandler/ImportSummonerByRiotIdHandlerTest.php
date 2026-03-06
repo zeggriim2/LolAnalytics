@@ -97,7 +97,7 @@ final class ImportSummonerByRiotIdHandlerTest extends KernelTestCase
             lastUpdatedAt: new \DateTimeImmutable(),
         );
 
-        $mockProvider = $this->createMock(RiotSummonerProviderInterface::class);
+        $mockProvider = $this->createStub(RiotSummonerProviderInterface::class);
         $mockProvider
             ->method('fetchByRiotId')
             ->willReturn($dto);
@@ -158,7 +158,7 @@ final class ImportSummonerByRiotIdHandlerTest extends KernelTestCase
     public function testImportMultipleSummonersByRiotId(): void
     {
         // Given: mock the Riot API provider for multiple summoners
-        $mockProvider = $this->createMock(RiotSummonerProviderInterface::class);
+        $mockProvider = $this->createStub(RiotSummonerProviderInterface::class);
 
         $mockProvider
             ->method('fetchByRiotId')

@@ -1,0 +1,6 @@
+services:
+    App\Match\Domain\Repository\MatchRepositoryInterface:
+        alias: App\Match\Infrastructure\Persistence\Doctrine\Repository\DoctrineMatchRepository
+
+    App\Match\Application\Port\SummonerAdapterInterface:
+        alias: App\Match\Infrastructure\Adapter\DoctrineSummonerAdapter

@@ -1,0 +1,3 @@
+services:
+    App\Auth\Domain\Repository\AdminUserRepositoryInterface:
+        alias: App\Auth\Infrastructure\Persistence\Doctrine\Repository\DoctrineAdminUserRepository
