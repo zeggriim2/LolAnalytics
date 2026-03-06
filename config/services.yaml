@@ -31,6 +31,9 @@ services:
     App\Match\Domain\Repository\MatchRepositoryInterface:
         alias: App\Match\Infrastructure\Persistence\Doctrine\Repository\DoctrineMatchRepository
 
+    App\Match\Application\Port\SummonerAdapterInterface:
+        alias: App\Match\Infrastructure\Adapter\DoctrineSummonerAdapter
+
     # GameData Bounded Context
     App\GameData\Domain\Repository\QueueRepositoryInterface:
         alias: App\GameData\Infrastructure\Persistence\Doctrine\Repository\DoctrineQueueRepository
@@ -54,7 +57,7 @@ services:
     App\Summoner\Domain\Repository\SummonerRepositoryInterface:
         alias: App\Summoner\Infrastructure\Persistence\Doctrine\Repository\DoctrineSummonerRepository
 
-    App\Summoner\Application\Port\RiotSummonerProviderInterface:
+    App\Summoner\Application\Port\RiotSummonerAdapterInterface:
         alias: App\Summoner\Infrastructure\Adapter\RiotSummonerProvider
 
     # Champion Bounded Context

@@ -82,6 +82,7 @@ function formatDate(dateString: string): string {
               <th>K/D/A</th>
               <th>KDA Ratio</th>
               <th>Summoner</th>
+              <th>Name</th>
             </tr>
           </thead>
           <tbody>
@@ -89,6 +90,7 @@ function formatDate(dateString: string): string {
               <td><ChampionIcon :champion-id="participant.championId" :size="36" /></td>
               <td>{{ participant.kills }}/{{ participant.deaths }}/{{ participant.assists }}</td>
               <td>{{ participant.kda }}</td>
+              <td>{{ participant.gameName }}</td>
               <td>
                 <RouterLink :to="`/summoners/${participant.summonerId}`">
                   {{ participant.summonerId.substring(0, 8) }}...
@@ -111,6 +113,7 @@ function formatDate(dateString: string): string {
               <th>K/D/A</th>
               <th>KDA Ratio</th>
               <th>Summoner</th>
+              <th>Name</th>
             </tr>
           </thead>
           <tbody>
@@ -118,6 +121,7 @@ function formatDate(dateString: string): string {
               <td><ChampionIcon :champion-id="participant.championId" :size="36" /></td>
               <td>{{ participant.kills }}/{{ participant.deaths }}/{{ participant.assists }}</td>
               <td>{{ participant.kda }}</td>
+              <td>{{ participant.gameName }}</td>
               <td>
                 <RouterLink :to="`/summoners/${participant.summonerId}`">
                   {{ participant.summonerId.substring(0, 8) }}...

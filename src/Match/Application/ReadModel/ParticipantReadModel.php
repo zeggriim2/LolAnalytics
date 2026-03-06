@@ -21,10 +21,11 @@ final readonly class ParticipantReadModel
         public string $kda,
         public bool $win,
         public array $items,
+        public ?string $gameName,
     ) {
     }
 
-    public static function fromDomain(Participant $participant): self
+    public static function fromDomain(Participant $participant, ?string $gameName = null): self
     {
         $kda = $participant->kda();
 
@@ -38,6 +39,7 @@ final readonly class ParticipantReadModel
             kda: 0 === $kda->deaths() ? 'Perfect' : number_format(($kda->kills() + $kda->assists()) / $kda->deaths(), 2),
             win: $participant->win(),
             items: $participant->items(),
+            gameName: $gameName,
         );
     }
 }

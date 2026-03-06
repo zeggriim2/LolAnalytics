@@ -13,8 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/import/puuid', name: 'import_riot_id', methods: [Request::METHOD_POST])]
-
+#[Route('/import/puuid', name: 'import_by_puuid', methods: [Request::METHOD_POST])]
 final class SyncSummonerByPuuidController extends AbstractController
 {
     public function __construct(

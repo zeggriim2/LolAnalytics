@@ -12,17 +12,19 @@ match_api:
     resource: ../src/Match/Presentation/Api/
     type: attribute
     prefix: /api/admin/matches
+    trailing_slash_on_root: false
     
 summoner_api:
     resource: ../src/Summoner/Presentation/Api/
     type: attribute
     prefix: /api/admin/summoners
-
+    trailing_slash_on_root: false
 
 champion_api:
     resource: ../src/Champion/Presentation/Api/
     type: attribute
     prefix: /api/admin/champions
+    trailing_slash_on_root: false
 
 game_data_api:
     resource: ../src/GameData/Presentation/Api/

@@ -28,7 +28,10 @@ final readonly class MatchDetailReadModel
     ) {
     }
 
-    public static function fromDomain(Matche $match): self
+    /**
+     * @param array<string, string> $gameNames map of summonerPuuid => gameName
+     */
+    public static function fromDomain(Matche $match, array $gameNames = []): self
     {
         $seconds = $match->durationSeconds();
         $minutes = (int) floor($seconds / 60);
@@ -48,7 +51,7 @@ final readonly class MatchDetailReadModel
             platform: $match->platform()->value,
             participantsCount: count($match->participants()),
             participants: array_map(
-                ParticipantReadModel::fromDomain(...),
+                static fn ($p) => ParticipantReadModel::fromDomain($p, $gameNames[(string) $p->summonerPuuid()] ?? null),
                 $match->participants()
             ),
         );
