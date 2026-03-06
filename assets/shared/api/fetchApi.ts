@@ -1,24 +1,21 @@
-const API_BASE = '/api/admin'
+import { ofetch } from 'ofetch'
 
-export async function fetchApi<T>(endpoint: string, options?: RequestInit): Promise<T> {
-  const token = localStorage.getItem('admin_token')
+const fetchApi = ofetch.create({
+  baseURL: '/api/admin',
+  onRequest({ options }) {
+    const token = localStorage.getItem('admin_token')
+    if (token) {
+      const headers = new Headers(options.headers as HeadersInit)
+      headers.set('Authorization', `Bearer ${token}`)
+      options.headers = headers
+    }
+  },
+  onResponseError({ response }) {
+    if (response.status === 401 && window.location.pathname !== '/admin/login') {
+      localStorage.removeItem('admin_token')
+      window.location.href = '/admin/login'
+    }
+  },
+})
 
-  const response = await fetch(`${API_BASE}${endpoint}`, {
-    headers: {
-      'Content-Type': 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      ...options?.headers,
-    },
-    ...options,
-  })
-
-  if (!response.ok) {
-    throw new Error(`API Error: ${response.status} ${response.statusText}`)
-  }
-
-  if (response.status === 204 || response.status === 205) {
-    return undefined as T
-  }
-
-  return response.json()
-}
+export { fetchApi }

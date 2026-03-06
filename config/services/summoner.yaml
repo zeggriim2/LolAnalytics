@@ -1,6 +1,6 @@
 services:
     App\Summoner\Domain\Repository\SummonerRepositoryInterface:
         alias: App\Summoner\Infrastructure\Persistence\Doctrine\Repository\DoctrineSummonerRepository
-
-    App\Summoner\Application\Port\RiotSummonerAdapterInterface:
+    
+    App\Summoner\Application\Port\RiotSummonerProviderInterface:
         alias: App\Summoner\Infrastructure\Adapter\RiotSummonerProvider
