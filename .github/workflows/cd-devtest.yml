@@ -98,6 +98,8 @@ jobs:
           SERVER_NAME: ${{ secrets.DEVTEST_SERVER_NAME }}
           # JWT (keypair auto-généré au 1er démarrage, persisté dans le volume jwt_keys)
           JWT_PASSPHRASE: ${{ secrets.DEVTEST_JWT_PASSPHRASE }}
+          # Traefik — Let's Encrypt
+          ACME_EMAIL: ${{ secrets.DEVTEST_ACME_EMAIL }}
         run: |
           set -euo pipefail
 
@@ -118,6 +120,7 @@ jobs:
             --arg mercure_jwt          "${CADDY_MERCURE_JWT_SECRET}" \
             --arg server_name          "${SERVER_NAME}" \
             --arg jwt_passphrase       "${JWT_PASSPHRASE}" \
+            --arg acme_email           "${ACME_EMAIL}" \
             '[
               {"name": "PHP_IMAGE",                "value": $php_image},
               {"name": "APP_SECRET",               "value": $app_secret},
@@ -129,7 +132,8 @@ jobs:
               {"name": "MYSQL_PASSWORD",           "value": $mysql_pw},
               {"name": "CADDY_MERCURE_JWT_SECRET", "value": $mercure_jwt},
               {"name": "SERVER_NAME",              "value": $server_name},
-              {"name": "JWT_PASSPHRASE",           "value": $jwt_passphrase}
+              {"name": "JWT_PASSPHRASE",           "value": $jwt_passphrase},
+              {"name": "ACME_EMAIL",               "value": $acme_email}
             ]')
 
           # -k : ignore le certificat auto-signé de Portainer
