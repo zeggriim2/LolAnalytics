@@ -142,7 +142,7 @@ final class DoctrineMatchRepository implements MatchRepositoryInterface
             ->innerJoin('m.participants', 'p')
             ->where('p.summonerId = :puuid')
             ->setParameter('puuid', $puuid)
-            ->orderBy('m.id', 'DESC')
+            ->orderBy('m.playedAt', 'DESC')
             ->setFirstResult($offset)
             ->setMaxResults($limit)
             ->getQuery()
