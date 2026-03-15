@@ -1,25 +1,25 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { onMounted } from 'vue'
 import { useRoute, RouterLink } from 'vue-router'
-import { api } from '@shared/api/client'
+
 import { matchApi } from '@shared/api/matchApi'
+import { useSummoner } from '@admin/composables/useSummoner'
+import { useSyncMatches } from '@admin/composables/useSyncMatches'
 import { usePagination } from '@shared/composables/usePagination'
 import PaginationBar from '@shared/components/PaginationBar.vue'
 import SummonerMatchCharts from '@shared/components/SummonerMatchCharts.vue'
 import ChampionIcon from '@shared/components/ChampionIcon.vue'
-import type { Summoner, Match } from '@shared/types'
+import SummonerNotFound from '@admin/components/SummonerNotFound.vue'
+import type { Match } from '@shared/types'
 
 const route = useRoute()
-const summoner = ref<Summoner | null>(null)
-const loading = ref(true)
-const error = ref<string | null>(null)
-const syncLoading = ref(false)
-const syncError = ref<string | null>(null)
-
 const puuid = route.params.puuid as string
+
+const { summoner, loading, error, notFound, load } = useSummoner(puuid)
 
 const {
   items: matches,
+
   initialLoading: matchesInitialLoading,
   loading: matchesLoading,
   error: matchesError,
@@ -32,31 +32,20 @@ const {
   previousPage,
 } = usePagination<Match>((page, limit) => matchApi.getMatchesBySummoner(puuid, page, limit), 10)
 
+const {
+  loading: syncLoading,
+  error: syncError,
+  sync: syncMatches,
+} = useSyncMatches(puuid, () => fetchPage(1))
+
 onMounted(async () => {
-  try {
-    const response = await api.getSummoner(puuid)
-    summoner.value = response.data
-    fetchPage(1)
-  } catch (e) {
-    error.value = 'Failed to load summoner details'
-    console.error(e)
-  } finally {
-    loading.value = false
-  }
+  await load()
+  if (summoner.value) fetchPage(1)
 })
 
-async function syncMatches() {
-  syncLoading.value = true
-  syncError.value = null
-  try {
-    await matchApi.syncMatchesBySummoner(puuid)
-    fetchPage(1)
-  } catch (e) {
-    syncError.value = 'Failed to sync matches'
-    console.error(e)
-  } finally {
-    syncLoading.value = false
-  }
+async function onSummonerSynced() {
+  await load()
+  if (summoner.value) fetchPage(1)
 }
 
 function findParticipant(match: Match) {
@@ -83,6 +72,9 @@ function formatDate(dateString: string): string {
 
     <div v-if="loading" class="loading">Loading...</div>
     <div v-else-if="error" class="error">{{ error }}</div>
+
+    <SummonerNotFound v-else-if="notFound" :puuid="puuid" @synced="onSummonerSynced" />
+
     <div v-else-if="summoner">
       <div class="card">
         <div class="card-header">
@@ -115,12 +107,10 @@ function formatDate(dateString: string): string {
         </p>
       </div>
 
-      <!-- Charts -->
       <div v-if="matchesInitialLoading" class="loading">Loading matches...</div>
       <template v-else-if="matches.length > 0">
         <SummonerMatchCharts :matches="matches" :summoner-puuid="puuid" />
 
-        <!-- Match History Table -->
         <div class="card" :class="{ 'opacity-50': matchesLoading }">
           <div class="card-header">
             <h3>Match History</h3>
