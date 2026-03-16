@@ -1,5 +1,6 @@
 includes:
     - phpstan-baseline.neon
+    - vendor/phpstan/phpstan-doctrine/extension.neon
 
 parameters:
     level: 8
@@ -9,7 +10,3 @@ parameters:
         - tests/
         - var/*
         - vendor/*
-    ignoreErrors:
-        # Ignorer les erreurs liées à Doctrine pour l'instant
-        - '#Property App\\Match\\Infrastructure\\Persistence\\Doctrine\\Entity\\MatchEntity::\$id \(int\|null\) is never assigned int#'
-        - '#Property App\\Match\\Infrastructure\\Persistence\\Doctrine\\Entity\\ParticipantEntity::\$id \(int\|null\) is never assigned int#'

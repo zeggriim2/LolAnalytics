@@ -37,7 +37,7 @@
         "twig/extra-bundle": "^2.12|^3.21",
         "twig/twig": "^2.12|^3.21.1",
         "webmozart/assert": "^1.12",
-        "zeggriim/riot-api-datadragon": "v3.0.8-beta"
+        "zeggriim/riot-api-datadragon": "v3.0.0-beta"
     },
     "config": {
         "allow-plugins": {
@@ -92,6 +92,7 @@
     },
     "require-dev": {
         "dama/doctrine-test-bundle": "^8.6",
+        "phpstan/phpstan-doctrine": "^2.0",
         "phpunit/phpunit": "^12.5.14",
         "symfony/maker-bundle": "^1.65",
         "symfony/stopwatch": "7.3.*",

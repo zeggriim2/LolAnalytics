@@ -134,6 +134,48 @@ The frontend is a **Vue 3 + TypeScript** SPA served by a dedicated `node` contai
 - **Charts**: Chart.js via vue-chartjs
 - **Source**: `assets/` directory
 
+### Atomic Design
+
+The frontend follows **Atomic Design** methodology for organizing components. Components are split into five levels of abstraction:
+
+| Level | Directory | Description |
+|-------|-----------|-------------|
+| **Atoms** | `components/atoms/` | Smallest indivisible UI elements (button, icon, badge, input, label…) |
+| **Molecules** | `components/molecules/` | Simple combinations of atoms forming a functional unit (search field, stat card, item tooltip…) |
+| **Organisms** | `components/organisms/` | Complex UI sections composed of molecules and/or atoms (match header, scoreboard, champion list…) |
+| **Templates** | `components/templates/` | Page-level layouts that define structure with slots, without real data |
+| **Pages / Views** | `views/` | Concrete instances of templates wired to real data (via Pinia stores or API calls) |
+
+#### Directory structure per app
+
+```
+assets/
+├── front/
+│   ├── components/
+│   │   ├── atoms/
+│   │   ├── molecules/
+│   │   ├── organisms/
+│   │   └── templates/
+│   └── views/
+├── admin/
+│   ├── components/
+│   │   ├── atoms/
+│   │   ├── molecules/
+│   │   ├── organisms/
+│   │   └── templates/
+│   └── views/
+└── shared/
+    └── components/        # Atoms/molecules shared between front and admin
+```
+
+#### Rules
+- **Always start at the lowest level** that makes sense — prefer atoms over copy-pasted markup.
+- **Atoms must have no business logic** — they only receive props and emit events.
+- **Organisms may access Pinia stores** directly; atoms and molecules must not.
+- **Templates never contain real data** — use slots or skeleton props.
+- **Shared components** in `assets/shared/components/` must remain generic enough to be used in both `front` and `admin` apps.
+- When creating a new component, pick the level by asking: *"Does this component know about the domain?"* — if yes, it's at least a molecule; if it manages page state, it's an organism or above.
+
 ### Frontend Commands
 ```bash
 make yarn c=<command>       # Run arbitrary yarn command
