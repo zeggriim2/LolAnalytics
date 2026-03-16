@@ -37,7 +37,7 @@
         "twig/extra-bundle": "^2.12|^3.21",
         "twig/twig": "^2.12|^3.21.1",
         "webmozart/assert": "^1.12",
-        "zeggriim/riot-api-datadragon": "3.0.0.x-dev"
+        "zeggriim/riot-api-datadragon": "v3.0.8-beta"
     },
     "config": {
         "allow-plugins": {

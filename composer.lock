@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b2d769651f6b66f4dd7ea7c756e793ae",
+    "content-hash": "9a56f1db6f1f3ff7eed52b2c606c8823",
     "packages": [
         {
             "name": "doctrine/collections",
@@ -6706,16 +6706,16 @@
         },
         {
             "name": "zeggriim/riot-api-datadragon",
-            "version": "3.0.0.x-dev",
+            "version": "v3.0.8-beta",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zeggriim2/riot-api-datadragon.git",
-                "reference": "ec96a20f3030d83da407fc08e338686cebe222d1"
+                "reference": "edaaff2ed88f7aa54d663fe5d78ed5ac1ddd66d3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zeggriim2/riot-api-datadragon/zipball/ec96a20f3030d83da407fc08e338686cebe222d1",
-                "reference": "ec96a20f3030d83da407fc08e338686cebe222d1",
+                "url": "https://api.github.com/repos/zeggriim2/riot-api-datadragon/zipball/edaaff2ed88f7aa54d663fe5d78ed5ac1ddd66d3",
+                "reference": "edaaff2ed88f7aa54d663fe5d78ed5ac1ddd66d3",
                 "shasum": ""
             },
             "require": {
@@ -6759,9 +6759,9 @@
             "description": "Riot DataDragon API wrapper",
             "support": {
                 "issues": "https://github.com/zeggriim2/riot-api-datadragon/issues",
-                "source": "https://github.com/zeggriim2/riot-api-datadragon/tree/3.0.0"
+                "source": "https://github.com/zeggriim2/riot-api-datadragon/tree/v3.0.8-beta"
             },
-            "time": "2026-02-12T23:06:29+00:00"
+            "time": "2026-03-15T23:27:11+00:00"
         }
     ],
     "packages-dev": [
@@ -9023,7 +9023,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "zeggriim/riot-api-datadragon": 20
+        "zeggriim/riot-api-datadragon": 10
     },
     "prefer-stable": true,
     "prefer-lowest": false,
