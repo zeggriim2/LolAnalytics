@@ -5,17 +5,39 @@ declare(strict_types=1);
 namespace App\Tests\Unit\Match\Domain\Model;
 
 use App\Match\Domain\Model\Participant;
+use App\Match\Domain\Model\ParticipantStats;
 use App\Match\Domain\ValueObjet\KDA;
 use App\Match\Domain\ValueObjet\SummonerPuuid;
 use PHPUnit\Framework\TestCase;
 
 final class ParticipantTest extends TestCase
 {
+    private function makeStats(array $items = []): ParticipantStats
+    {
+        return new ParticipantStats(
+            cs: 150,
+            goldEarned: 12000,
+            totalDamageDealtToChampions: 45000,
+            totalDamageTaken: 30000,
+            visionScore: 25,
+            lane: 'MIDDLE',
+            individualPosition: 'MIDDLE',
+            summoner1Id: 4,
+            summoner2Id: 14,
+            champLevel: 16,
+            wardsPlaced: 10,
+            wardsKilled: 5,
+            firstBloodKill: false,
+            items: $items,
+        );
+    }
+
     public function testCanCreateParticipant(): void
     {
         $summonerPuuid = SummonerPuuid::fromString('summoner123');
         $kda = new KDA(10, 5, 15);
         $items = ['item1', 'item2', 'item3'];
+        $stats = $this->makeStats($items);
 
         $participant = new Participant(
             summonerPuuid: $summonerPuuid,
@@ -23,7 +45,7 @@ final class ParticipantTest extends TestCase
             championId: 157,
             win: true,
             kda: $kda,
-            items: $items
+            stats: $stats,
         );
 
         $this->assertInstanceOf(Participant::class, $participant);
@@ -32,7 +54,8 @@ final class ParticipantTest extends TestCase
         $this->assertSame(157, $participant->championId());
         $this->assertTrue($participant->win());
         $this->assertSame($kda, $participant->kda());
-        $this->assertSame($items, $participant->items());
+        $this->assertSame($stats, $participant->stats());
+        $this->assertSame($items, $participant->stats()->items());
     }
 
     public function testCanCreateParticipantWithLoss(): void
@@ -46,7 +69,7 @@ final class ParticipantTest extends TestCase
             championId: 64,
             win: false,
             kda: $kda,
-            items: []
+            stats: $this->makeStats(),
         );
 
         $this->assertFalse($participant->win());
@@ -63,10 +86,10 @@ final class ParticipantTest extends TestCase
             championId: 1,
             win: true,
             kda: $kda,
-            items: []
+            stats: $this->makeStats([]),
         );
 
-        $this->assertSame([], $participant->items());
+        $this->assertSame([], $participant->stats()->items());
     }
 
     public function testCannotCreateParticipantWithZeroChampionId(): void
@@ -80,7 +103,7 @@ final class ParticipantTest extends TestCase
             championId: 0,
             win: true,
             kda: new KDA(10, 5, 15),
-            items: []
+            stats: $this->makeStats(),
         );
     }
 
@@ -95,7 +118,7 @@ final class ParticipantTest extends TestCase
             championId: -1,
             win: true,
             kda: new KDA(10, 5, 15),
-            items: []
+            stats: $this->makeStats(),
         );
     }
 
@@ -108,7 +131,7 @@ final class ParticipantTest extends TestCase
             championId: 157,
             win: true,
             kda: new KDA(10, 5, 15),
-            items: []
+            stats: $this->makeStats(),
         );
 
         $retrievedSummonerPuuid = $participant->summonerPuuid();
@@ -124,7 +147,7 @@ final class ParticipantTest extends TestCase
             championId: 157,
             win: true,
             kda: $kda,
-            items: []
+            stats: $this->makeStats(),
         );
 
         $retrievedKda = $participant->kda();

@@ -9,6 +9,7 @@ use App\Match\Application\QueryHandler\ListMatchesHandler;
 use App\Match\Application\ReadModel\MatchReadModel;
 use App\Match\Domain\Model\Matche;
 use App\Match\Domain\Model\Participant;
+use App\Match\Domain\Model\ParticipantStats;
 use App\Match\Domain\Repository\MatchRepositoryInterface;
 use App\Match\Domain\ValueObjet\GameId;
 use App\Match\Domain\ValueObjet\KDA;
@@ -38,7 +39,7 @@ final class ListMatchesHandlerTest extends TestCase
             championId: 157,
             win: true,
             kda: new KDA(10, 5, 15),
-            items: []
+            stats: ParticipantStats::empty(),
         );
 
         return new Matche(

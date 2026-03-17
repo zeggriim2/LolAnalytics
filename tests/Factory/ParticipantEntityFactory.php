@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Tests\Factory;
 
+use App\Match\Domain\Model\ParticipantStats;
 use App\Match\Infrastructure\Persistence\Doctrine\Entity\MatchEntity;
 use App\Match\Infrastructure\Persistence\Doctrine\Entity\ParticipantEntity;
+use App\Match\Infrastructure\Persistence\Doctrine\Entity\ParticipantStatsEntity;
 use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
 
 /**
@@ -29,6 +31,15 @@ final class ParticipantEntityFactory extends PersistentProxyObjectFactory
             'assists' => self::faker()->numberBetween(0, 40),
             'win' => self::faker()->boolean(),
         ];
+    }
+
+    protected function initialize(): static
+    {
+        return $this->afterInstantiate(function (ParticipantEntity $entity): void {
+            if (null === $entity->stats) {
+                $entity->stats = ParticipantStatsEntity::fromDomain(ParticipantStats::empty(), $entity);
+            }
+        });
     }
 
     public function withMatch(MatchEntity $match): self

@@ -3,6 +3,7 @@ import { ref, onMounted, computed } from 'vue'
 import { useRoute, RouterLink } from 'vue-router'
 import { api } from '@shared/api/client'
 import type { Match } from '@shared/types'
+import ItemIcon from '@shared/components/ItemIcon.vue'
 
 const route = useRoute()
 const match = ref<Match | null>(null)
@@ -33,6 +34,10 @@ function formatDate(dateString: string): string {
     hour: '2-digit',
     minute: '2-digit',
   })
+}
+
+function formatGold(value: number): string {
+  return value.toLocaleString('fr-FR')
 }
 </script>
 
@@ -74,16 +79,22 @@ function formatDate(dateString: string): string {
           <thead>
             <tr>
               <th>Champion</th>
-              <th>K/D/A</th>
-              <th>KDA Ratio</th>
               <th>Summoner</th>
+              <th>Lvl</th>
+              <th>K/D/A</th>
+              <th>KDA</th>
+              <th>CS</th>
+              <th>Gold</th>
+              <th>Dmg dealt</th>
+              <th>Dmg taken</th>
+              <th>Vision</th>
+              <th>Wards</th>
+              <th>Items</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="participant in winners" :key="participant.puuid">
               <td>Champion #{{ participant.championId }}</td>
-              <td>{{ participant.kills }}/{{ participant.deaths }}/{{ participant.assists }}</td>
-              <td>{{ participant.kda }}</td>
               <td>
                 <RouterLink
                   :to="`/summoners/${participant.puuid}`"
@@ -91,6 +102,26 @@ function formatDate(dateString: string): string {
                 >
                   {{ participant.puuid.substring(0, 8) }}...
                 </RouterLink>
+              </td>
+              <td>{{ participant.champLevel }}</td>
+              <td>{{ participant.kills }}/{{ participant.deaths }}/{{ participant.assists }}</td>
+              <td>{{ participant.kda }}</td>
+              <td>{{ participant.cs }}</td>
+              <td>{{ formatGold(participant.goldEarned) }}</td>
+              <td>{{ formatGold(participant.totalDamageDealtToChampions) }}</td>
+              <td>{{ formatGold(participant.totalDamageTaken) }}</td>
+              <td>{{ participant.visionScore }}</td>
+              <td>{{ participant.wardsPlaced }}/{{ participant.wardsKilled }}</td>
+              <td>
+                <div class="items-row">
+                  <ItemIcon
+                    v-for="itemId in participant.items"
+                    :key="itemId"
+                    :item-id="itemId"
+                    :version="match.version"
+                    :size="28"
+                  />
+                </div>
               </td>
             </tr>
           </tbody>
@@ -106,16 +137,22 @@ function formatDate(dateString: string): string {
           <thead>
             <tr>
               <th>Champion</th>
-              <th>K/D/A</th>
-              <th>KDA Ratio</th>
               <th>Summoner</th>
+              <th>Lvl</th>
+              <th>K/D/A</th>
+              <th>KDA</th>
+              <th>CS</th>
+              <th>Gold</th>
+              <th>Dmg dealt</th>
+              <th>Dmg taken</th>
+              <th>Vision</th>
+              <th>Wards</th>
+              <th>Items</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="participant in losers" :key="participant.puuid">
               <td>Champion #{{ participant.championId }}</td>
-              <td>{{ participant.kills }}/{{ participant.deaths }}/{{ participant.assists }}</td>
-              <td>{{ participant.kda }}</td>
               <td>
                 <RouterLink
                   :to="`/summoners/${participant.puuid}`"
@@ -124,6 +161,26 @@ function formatDate(dateString: string): string {
                   {{ participant.puuid.substring(0, 8) }}...
                 </RouterLink>
               </td>
+              <td>{{ participant.champLevel }}</td>
+              <td>{{ participant.kills }}/{{ participant.deaths }}/{{ participant.assists }}</td>
+              <td>{{ participant.kda }}</td>
+              <td>{{ participant.cs }}</td>
+              <td>{{ formatGold(participant.goldEarned) }}</td>
+              <td>{{ formatGold(participant.totalDamageDealtToChampions) }}</td>
+              <td>{{ formatGold(participant.totalDamageTaken) }}</td>
+              <td>{{ participant.visionScore }}</td>
+              <td>{{ participant.wardsPlaced }}/{{ participant.wardsKilled }}</td>
+              <td>
+                <div class="items-row">
+                  <ItemIcon
+                    v-for="itemId in participant.items"
+                    :key="itemId"
+                    :item-id="itemId"
+                    :version="match.version"
+                    :size="28"
+                  />
+                </div>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -131,3 +188,11 @@ function formatDate(dateString: string): string {
     </div>
   </div>
 </template>
+
+<style scoped>
+.items-row {
+  display: flex;
+  gap: 2px;
+  flex-wrap: wrap;
+}
+</style>

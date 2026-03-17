@@ -23,8 +23,21 @@ export interface Participant {
   assists: number
   kda: string
   win: boolean
-  items: string[]
   gameName: string | null
+  cs: number
+  goldEarned: number
+  totalDamageDealtToChampions: number
+  totalDamageTaken: number
+  visionScore: number
+  lane: string
+  individualPosition: string
+  summoner1Id: number
+  summoner2Id: number
+  champLevel: number
+  wardsPlaced: number
+  wardsKilled: number
+  firstBloodKill: boolean
+  items: string[]
 }
 
 export interface Summoner {

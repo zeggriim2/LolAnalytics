@@ -10,6 +10,7 @@ use App\Match\Application\QueryHandler\GetMatchByIdHandler;
 use App\Match\Application\ReadModel\MatchDetailReadModel;
 use App\Match\Domain\Model\Matche;
 use App\Match\Domain\Model\Participant;
+use App\Match\Domain\Model\ParticipantStats;
 use App\Match\Domain\Repository\MatchRepositoryInterface;
 use App\Match\Domain\ValueObjet\GameId;
 use App\Match\Domain\ValueObjet\KDA;
@@ -42,7 +43,7 @@ final class GetMatchByIdHandlerTest extends TestCase
             championId: 157,
             win: true,
             kda: new KDA(10, 5, 15),
-            items: []
+            stats: ParticipantStats::empty(),
         );
 
         $expectedMatch = new Matche(

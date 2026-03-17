@@ -8,6 +8,7 @@ use App\Match\Application\Query\GetMatchByIdQuery;
 use App\Match\Application\UseCase\GetMatchDetailsUseCase;
 use App\Match\Domain\Model\Matche;
 use App\Match\Domain\Model\Participant;
+use App\Match\Domain\Model\ParticipantStats;
 use App\Match\Domain\ValueObjet\GameId;
 use App\Match\Domain\ValueObjet\KDA;
 use App\Match\Domain\ValueObjet\MatchId;
@@ -35,7 +36,7 @@ final class GetMatchDetailsUseCaseTest extends TestCase
             championId: 157,
             win: true,
             kda: new KDA(10, 5, 15),
-            items: ['item1', 'item2']
+            stats: ParticipantStats::empty(),
         );
 
         return new Matche(

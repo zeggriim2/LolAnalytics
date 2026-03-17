@@ -20,14 +20,28 @@ final readonly class ParticipantReadModel
         public int $assists,
         public string $kda,
         public bool $win,
-        public array $items,
         public ?string $gameName,
+        public int $cs,
+        public int $goldEarned,
+        public int $totalDamageDealtToChampions,
+        public int $totalDamageTaken,
+        public int $visionScore,
+        public string $lane,
+        public string $individualPosition,
+        public int $summoner1Id,
+        public int $summoner2Id,
+        public int $champLevel,
+        public int $wardsPlaced,
+        public int $wardsKilled,
+        public bool $firstBloodKill,
+        public array $items,
     ) {
     }
 
     public static function fromDomain(Participant $participant, ?string $gameName = null): self
     {
         $kda = $participant->kda();
+        $stats = $participant->stats();
 
         return new self(
             puuid: $participant->puuid(),
@@ -38,8 +52,21 @@ final readonly class ParticipantReadModel
             assists: $kda->assists(),
             kda: 0 === $kda->deaths() ? 'Perfect' : number_format(($kda->kills() + $kda->assists()) / $kda->deaths(), 2),
             win: $participant->win(),
-            items: $participant->items(),
             gameName: $gameName,
+            cs: $stats->cs(),
+            goldEarned: $stats->goldEarned(),
+            totalDamageDealtToChampions: $stats->totalDamageDealtToChampions(),
+            totalDamageTaken: $stats->totalDamageTaken(),
+            visionScore: $stats->visionScore(),
+            lane: $stats->lane(),
+            individualPosition: $stats->individualPosition(),
+            summoner1Id: $stats->summoner1Id(),
+            summoner2Id: $stats->summoner2Id(),
+            champLevel: $stats->champLevel(),
+            wardsPlaced: $stats->wardsPlaced(),
+            wardsKilled: $stats->wardsKilled(),
+            firstBloodKill: $stats->firstBloodKill(),
+            items: $stats->items(),
         );
     }
 }

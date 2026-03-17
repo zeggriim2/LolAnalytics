@@ -114,7 +114,7 @@ final class DoctrineMatchRepository implements MatchRepositoryInterface
     {
         $entities = $this->em->getRepository(MatchEntity::class)
             ->createQueryBuilder('m')
-            ->orderBy('m.id', 'DESC')
+            ->orderBy('m.playedAt', 'DESC')
             ->setFirstResult($offset)
             ->setMaxResults($limit)
             ->getQuery()

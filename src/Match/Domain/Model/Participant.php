@@ -9,16 +9,13 @@ use App\Match\Domain\ValueObjet\SummonerPuuid;
 
 final class Participant
 {
-    /**
-     * @param string[] $items
-     */
     public function __construct(
         private readonly SummonerPuuid $summonerPuuid,
         private readonly string $puuid,
         private readonly int $championId,
         private readonly bool $win,
         private readonly KDA $kda,
-        private readonly array $items
+        private readonly ParticipantStats $stats,
     ) {
         if ($championId <= 0) {
             throw new \InvalidArgumentException('championId must be positive');
@@ -45,12 +42,9 @@ final class Participant
         return $this->kda;
     }
 
-    /**
-     * @return string[]
-     */
-    public function items(): array
+    public function stats(): ParticipantStats
     {
-        return $this->items;
+        return $this->stats;
     }
 
     public function puuid(): string
