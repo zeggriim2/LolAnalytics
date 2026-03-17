@@ -6,6 +6,7 @@ namespace App\Match\Factory;
 
 use App\Match\Domain\Model\Matche;
 use App\Match\Domain\Model\Participant;
+use App\Match\Domain\Model\ParticipantStats;
 use App\Match\Domain\ValueObjet\GameId;
 use App\Match\Domain\ValueObjet\KDA;
 use App\Match\Domain\ValueObjet\MatchId;
@@ -64,13 +65,30 @@ final class MatcheFactory
                 }
             }
 
+            $stats = new ParticipantStats(
+                cs: (int) ($p['totalMinionsKilled'] ?? 0) + (int) ($p['neutralMinionsKilled'] ?? 0),
+                goldEarned: (int) ($p['goldEarned'] ?? 0),
+                totalDamageDealtToChampions: (int) ($p['totalDamageDealtToChampions'] ?? 0),
+                totalDamageTaken: (int) ($p['totalDamageTaken'] ?? 0),
+                visionScore: (int) ($p['visionScore'] ?? 0),
+                lane: (string) ($p['lane'] ?? ''),
+                individualPosition: (string) ($p['individualPosition'] ?? ''),
+                summoner1Id: (int) ($p['summoner1Id'] ?? 0),
+                summoner2Id: (int) ($p['summoner2Id'] ?? 0),
+                champLevel: (int) ($p['champLevel'] ?? 1),
+                wardsPlaced: (int) ($p['wardsPlaced'] ?? 0),
+                wardsKilled: (int) ($p['wardsKilled'] ?? 0),
+                firstBloodKill: (bool) ($p['firstBloodKill'] ?? false),
+                items: $items,
+            );
+
             $participant = new Participant(
-                $summonerPuuid,
-                $p['summonerId'],
-                (int) ($p['championId'] ?? $p['champion']),
-                (bool) ($p['win'] ?? false),
-                $kda,
-                $items
+                summonerPuuid: $summonerPuuid,
+                puuid: $p['summonerId'],
+                championId: (int) ($p['championId'] ?? $p['champion']),
+                win: (bool) ($p['win'] ?? false),
+                kda: $kda,
+                stats: $stats,
             );
             $participants[] = $participant;
         }

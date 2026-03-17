@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Match\Infrastructure\Persistence\Doctrine\Entity;
 
 use App\Match\Domain\Model\Participant;
+use App\Match\Domain\Model\ParticipantStats;
 use App\Match\Domain\ValueObjet\KDA;
 use App\Match\Domain\ValueObjet\SummonerPuuid;
 use App\Summoner\Infrastructure\Persistence\Doctrine\Entity\SummonerEntity;
@@ -49,6 +50,9 @@ class ParticipantEntity
     #[ORM\JoinColumn(name: 'summoner_puuid', referencedColumnName: 'puuid', nullable: true, onDelete: 'SET NULL')]
     private ?SummonerEntity $summoner = null;
 
+    #[ORM\OneToOne(targetEntity: ParticipantStatsEntity::class, mappedBy: 'participant', fetch: 'LAZY', cascade: ['persist'])]
+    public ?ParticipantStatsEntity $stats = null;
+
     public static function fromDomain(Participant $participant, MatchEntity $matchEntity): self
     {
         $entity = new self();
@@ -60,6 +64,7 @@ class ParticipantEntity
         $entity->kills = $participant->kda()->kills();
         $entity->deaths = $participant->kda()->deaths();
         $entity->assists = $participant->kda()->assists();
+        $entity->stats = ParticipantStatsEntity::fromDomain($participant->stats(), $entity);
 
         return $entity;
     }
@@ -67,16 +72,12 @@ class ParticipantEntity
     public function toDomain(): Participant
     {
         return new Participant(
-            SummonerPuuid::fromString($this->summonerId),
-            $this->puuid,
-            $this->championId,
-            $this->win,
-            new KDA(
-                $this->kills,
-                $this->deaths,
-                $this->assists
-            ),
-            []
+            summonerPuuid: SummonerPuuid::fromString($this->summonerId),
+            puuid: $this->puuid,
+            championId: $this->championId,
+            win: $this->win,
+            kda: new KDA($this->kills, $this->deaths, $this->assists),
+            stats: null !== $this->stats ? $this->stats->toDomain() : ParticipantStats::empty(),
         );
     }
 

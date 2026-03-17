@@ -4,6 +4,7 @@ import { useRoute, RouterLink } from 'vue-router'
 import { api } from '@shared/api/client'
 import type { Match } from '@shared/types'
 import ChampionIcon from '@shared/components/ChampionIcon.vue'
+import ItemIcon from '@shared/components/ItemIcon.vue'
 
 const route = useRoute()
 const match = ref<Match | null>(null)
@@ -34,6 +35,10 @@ function formatDate(dateString: string): string {
     hour: '2-digit',
     minute: '2-digit',
   })
+}
+
+function formatGold(value: number): string {
+  return value.toLocaleString('fr-FR')
 }
 </script>
 
@@ -75,30 +80,60 @@ function formatDate(dateString: string): string {
           <h3>Winners</h3>
           <span class="badge bg-lol-win text-white">Victory</span>
         </div>
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Champion</th>
-              <th>K/D/A</th>
-              <th>KDA Ratio</th>
-              <th>Summoner</th>
-              <th>Name</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="participant in winners" :key="participant.puuid">
-              <td><ChampionIcon :champion-id="participant.championId" :size="36" /></td>
-              <td>{{ participant.kills }}/{{ participant.deaths }}/{{ participant.assists }}</td>
-              <td>{{ participant.kda }}</td>
-              <td>{{ participant.gameName }}</td>
-              <td>
-                <RouterLink :to="`/summoners/${participant.summonerId}`">
-                  {{ participant.summonerId.substring(0, 8) }}...
-                </RouterLink>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="table-wrapper">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Champion</th>
+                <th>Summoner</th>
+                <th>Lvl</th>
+                <th>K/D/A</th>
+                <th>KDA</th>
+                <th>CS</th>
+                <th>Gold</th>
+                <th>Dmg dealt</th>
+                <th>Dmg taken</th>
+                <th>Vision</th>
+                <th>Wards</th>
+                <th>Items</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="participant in winners" :key="participant.puuid">
+                <td><ChampionIcon :champion-id="participant.championId" :size="36" /></td>
+                <td>
+                  <div>{{ participant.gameName }}</div>
+                  <RouterLink
+                    :to="`/summoners/${participant.summonerId}`"
+                    class="text-muted text-sm"
+                  >
+                    {{ participant.summonerId.substring(0, 8) }}...
+                  </RouterLink>
+                </td>
+                <td>{{ participant.champLevel }}</td>
+                <td>{{ participant.kills }}/{{ participant.deaths }}/{{ participant.assists }}</td>
+                <td>{{ participant.kda }}</td>
+                <td>{{ participant.cs }}</td>
+                <td>{{ formatGold(participant.goldEarned) }}</td>
+                <td>{{ formatGold(participant.totalDamageDealtToChampions) }}</td>
+                <td>{{ formatGold(participant.totalDamageTaken) }}</td>
+                <td>{{ participant.visionScore }}</td>
+                <td>{{ participant.wardsPlaced }}/{{ participant.wardsKilled }}</td>
+                <td>
+                  <div class="items-row">
+                    <ItemIcon
+                      v-for="itemId in participant.items"
+                      :key="itemId"
+                      :item-id="itemId"
+                      :version="match.version"
+                      :size="28"
+                    />
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
 
       <div class="card">
@@ -106,31 +141,81 @@ function formatDate(dateString: string): string {
           <h3>Losers</h3>
           <span class="badge bg-lol-loss text-white">Defeat</span>
         </div>
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Champion</th>
-              <th>K/D/A</th>
-              <th>KDA Ratio</th>
-              <th>Summoner</th>
-              <th>Name</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="participant in losers" :key="participant.puuid">
-              <td><ChampionIcon :champion-id="participant.championId" :size="36" /></td>
-              <td>{{ participant.kills }}/{{ participant.deaths }}/{{ participant.assists }}</td>
-              <td>{{ participant.kda }}</td>
-              <td>{{ participant.gameName }}</td>
-              <td>
-                <RouterLink :to="`/summoners/${participant.summonerId}`">
-                  {{ participant.summonerId.substring(0, 8) }}...
-                </RouterLink>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="table-wrapper">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Champion</th>
+                <th>Summoner</th>
+                <th>Lvl</th>
+                <th>K/D/A</th>
+                <th>KDA</th>
+                <th>CS</th>
+                <th>Gold</th>
+                <th>Dmg dealt</th>
+                <th>Dmg taken</th>
+                <th>Vision</th>
+                <th>Wards</th>
+                <th>Items</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="participant in losers" :key="participant.puuid">
+                <td><ChampionIcon :champion-id="participant.championId" :size="36" /></td>
+                <td>
+                  <div>{{ participant.gameName }}</div>
+                  <RouterLink
+                    :to="`/summoners/${participant.summonerId}`"
+                    class="text-muted text-sm"
+                  >
+                    {{ participant.summonerId.substring(0, 8) }}...
+                  </RouterLink>
+                </td>
+                <td>{{ participant.champLevel }}</td>
+                <td>{{ participant.kills }}/{{ participant.deaths }}/{{ participant.assists }}</td>
+                <td>{{ participant.kda }}</td>
+                <td>{{ participant.cs }}</td>
+                <td>{{ formatGold(participant.goldEarned) }}</td>
+                <td>{{ formatGold(participant.totalDamageDealtToChampions) }}</td>
+                <td>{{ formatGold(participant.totalDamageTaken) }}</td>
+                <td>{{ participant.visionScore }}</td>
+                <td>{{ participant.wardsPlaced }}/{{ participant.wardsKilled }}</td>
+                <td>
+                  <div class="items-row">
+                    <ItemIcon
+                      v-for="itemId in participant.items"
+                      :key="itemId"
+                      :item-id="itemId"
+                      :version="match.version"
+                      :size="28"
+                    />
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
 </template>
+
+<style scoped>
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.items-row {
+  display: flex;
+  gap: 2px;
+  flex-wrap: wrap;
+}
+
+.text-muted {
+  color: var(--lol-muted, #8a9bb2);
+}
+
+.text-sm {
+  font-size: 0.75rem;
+}
+</style>

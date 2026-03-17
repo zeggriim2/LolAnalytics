@@ -6,6 +6,7 @@ namespace App\Tests\Unit\Match\Domain\Model;
 
 use App\Match\Domain\Model\Matche;
 use App\Match\Domain\Model\Participant;
+use App\Match\Domain\Model\ParticipantStats;
 use App\Match\Domain\ValueObjet\GameId;
 use App\Match\Domain\ValueObjet\KDA;
 use App\Match\Domain\ValueObjet\MatchId;
@@ -23,7 +24,7 @@ final class MatcheTest extends TestCase
             championId: $championId,
             win: true,
             kda: new KDA(10, 5, 15),
-            items: ['item1', 'item2']
+            stats: ParticipantStats::empty(),
         );
     }
 
