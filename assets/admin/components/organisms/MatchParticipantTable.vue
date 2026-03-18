@@ -43,7 +43,9 @@ function formatGold(value: number): string {
         </thead>
         <tbody>
           <tr v-for="participant in participants" :key="participant.puuid">
-            <td><ChampionIcon :champion-id="participant.championId" :size="36" /></td>
+            <td>
+              <ChampionIcon :champion-id="participant.championId" :version="version" :size="36" />
+            </td>
             <td>
               <div>{{ participant.gameName }}</div>
               <RouterLink :to="`/summoners/${participant.summonerId}`" class="text-muted text-sm">
