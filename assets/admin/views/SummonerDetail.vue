@@ -136,6 +136,7 @@ function formatDate(dateString: string): string {
                   <ChampionIcon
                     v-if="findParticipant(match)?.championId"
                     :champion-id="findParticipant(match)!.championId"
+                    :version="match.version"
                   />
                 </td>
                 <td>

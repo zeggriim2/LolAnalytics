@@ -5,6 +5,7 @@ import { useChampions } from '@shared/composables/useChampions'
 const props = withDefaults(
   defineProps<{
     championId: number
+    version: string
     size?: number
   }>(),
   { size: 40 },
@@ -12,9 +13,9 @@ const props = withDefaults(
 
 const { load, findById, getImageUrl } = useChampions()
 
-onMounted(load)
+onMounted(() => load(props.version))
 
-const champion = computed(() => findById(props.championId))
+const champion = computed(() => findById(props.championId, props.version))
 const imageUrl = computed(() => (champion.value ? getImageUrl(champion.value) : null))
 </script>
 
