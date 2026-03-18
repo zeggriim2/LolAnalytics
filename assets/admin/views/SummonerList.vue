@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { ref, onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
 import { summonerApi } from '@shared/api/summonerApi'
 import type { Summoner } from '@shared/types'
 import { usePagination } from '@shared/composables/usePagination'
 import PaginationBar from '@shared/components/PaginationBar.vue'
 import AlertMessage from '@shared/components/AlertMessage.vue'
-import SummonerImportForm from '@admin/components/SummonerImportForm.vue'
-import { ref } from 'vue'
+import SummonerImportForm from '@admin/components/organisms/SummonerImportForm.vue'
+import AdminPageTemplate from '@admin/components/templates/AdminPageTemplate.vue'
 
 const {
   items: summoners,
@@ -53,10 +53,10 @@ onMounted(() => fetchPage(1))
 </script>
 
 <template>
-  <div>
-    <header class="page-header">
+  <AdminPageTemplate>
+    <template #header>
       <h2>Summoners</h2>
-    </header>
+    </template>
 
     <SummonerImportForm @success="onImportSuccess" @error="onImportError" />
 
@@ -107,5 +107,5 @@ onMounted(() => fetchPage(1))
         @go-to-page="goToPage"
       />
     </div>
-  </div>
+  </AdminPageTemplate>
 </template>

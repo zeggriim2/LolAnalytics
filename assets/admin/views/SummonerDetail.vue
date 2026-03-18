@@ -8,6 +8,9 @@ import PaginationBar from '@shared/components/PaginationBar.vue'
 import SummonerMatchCharts from '@shared/components/SummonerMatchCharts.vue'
 import ChampionIcon from '@shared/components/ChampionIcon.vue'
 import type { Summoner, Match } from '@shared/types'
+import StatCard from '@admin/components/atoms/StatCard.vue'
+import WinBadge from '@admin/components/atoms/WinBadge.vue'
+import AdminPageTemplate from '@admin/components/templates/AdminPageTemplate.vue'
 
 const route = useRoute()
 const summoner = ref<Summoner | null>(null)
@@ -75,11 +78,11 @@ function formatDate(dateString: string): string {
 </script>
 
 <template>
-  <div>
-    <header class="page-header">
-      <RouterLink to="/summoners" class="btn btn-secondary mr-4"> &larr; Back </RouterLink>
+  <AdminPageTemplate>
+    <template #header>
+      <RouterLink to="/summoners" class="btn btn-secondary mr-4">&larr; Back</RouterLink>
       <h2 class="inline">Summoner Details</h2>
-    </header>
+    </template>
 
     <div v-if="loading" class="loading">Loading...</div>
     <div v-else-if="error" class="error">{{ error }}</div>
@@ -96,18 +99,9 @@ function formatDate(dateString: string): string {
         </div>
         <div v-if="syncError" class="error">{{ syncError }}</div>
         <div class="stats-grid">
-          <div class="stat-card">
-            <div class="stat-value">{{ summoner.summonerLevel }}</div>
-            <div class="stat-label">Level</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-value">{{ summoner.platform.toUpperCase() }}</div>
-            <div class="stat-label">Platform</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-value">{{ summoner.profileIconId }}</div>
-            <div class="stat-label">Profile Icon ID</div>
-          </div>
+          <StatCard :value="summoner.summonerLevel" label="Level" />
+          <StatCard :value="summoner.platform.toUpperCase()" label="Platform" />
+          <StatCard :value="summoner.profileIconId" label="Profile Icon ID" />
         </div>
         <p class="text-lol-muted">Last updated: {{ formatDate(summoner.lastUpdatedAt) }}</p>
         <p class="text-lol-muted mt-2">
@@ -115,12 +109,10 @@ function formatDate(dateString: string): string {
         </p>
       </div>
 
-      <!-- Charts -->
       <div v-if="matchesInitialLoading" class="loading">Loading matches...</div>
       <template v-else-if="matches.length > 0">
         <SummonerMatchCharts :matches="matches" :summoner-puuid="puuid" />
 
-        <!-- Match History Table -->
         <div class="card" :class="{ 'opacity-50': matchesLoading }">
           <div class="card-header">
             <h3>Match History</h3>
@@ -152,12 +144,7 @@ function formatDate(dateString: string): string {
                   }}
                 </td>
                 <td>
-                  <span
-                    class="badge text-white"
-                    :class="findParticipant(match)?.win ? 'bg-lol-win' : 'bg-lol-loss'"
-                  >
-                    {{ findParticipant(match)?.win ? 'Victory' : 'Defeat' }}
-                  </span>
+                  <WinBadge :win="findParticipant(match)?.win ?? false" />
                 </td>
                 <td>{{ formatDate(match.playedAt) }}</td>
                 <td>{{ match.durationFormatted }}</td>
@@ -181,5 +168,5 @@ function formatDate(dateString: string): string {
       </template>
       <div v-else-if="matchesError" class="error">{{ matchesError }}</div>
     </div>
-  </div>
+  </AdminPageTemplate>
 </template>

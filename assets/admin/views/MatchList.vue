@@ -5,6 +5,7 @@ import { api } from '@shared/api/client'
 import type { Match } from '@shared/types'
 import { usePagination } from '@shared/composables/usePagination'
 import PaginationBar from '@shared/components/PaginationBar.vue'
+import AdminPageTemplate from '@admin/components/templates/AdminPageTemplate.vue'
 
 const {
   items: matches,
@@ -34,10 +35,10 @@ function formatDate(dateString: string): string {
 </script>
 
 <template>
-  <div>
-    <header class="page-header">
+  <AdminPageTemplate>
+    <template #header>
       <h2>Matches</h2>
-    </header>
+    </template>
 
     <div v-if="initialLoading" class="loading">Loading...</div>
     <div v-else-if="error" class="error">{{ error }}</div>
@@ -69,7 +70,7 @@ function formatDate(dateString: string): string {
               <td>{{ match.platform }}</td>
               <td>{{ match.participantsCount }}</td>
               <td>
-                <RouterLink :to="`/matches/${match.id}`" class="btn btn-primary"> View </RouterLink>
+                <RouterLink :to="`/matches/${match.id}`" class="btn btn-primary">View</RouterLink>
               </td>
             </tr>
             <tr v-if="matches.length === 0">
@@ -88,5 +89,5 @@ function formatDate(dateString: string): string {
         @go-to-page="goToPage"
       />
     </div>
-  </div>
+  </AdminPageTemplate>
 </template>

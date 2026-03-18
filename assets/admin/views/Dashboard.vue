@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { api } from '@shared/api/client'
+import StatCard from '@admin/components/atoms/StatCard.vue'
+import AdminPageTemplate from '@admin/components/templates/AdminPageTemplate.vue'
 
 const matchesCount = ref(0)
 const summonersCount = ref(0)
@@ -22,22 +24,16 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div>
-    <header class="page-header">
+  <AdminPageTemplate>
+    <template #header>
       <h2>Dashboard</h2>
-    </header>
+    </template>
 
     <div v-if="loading" class="loading">Loading...</div>
     <div v-else-if="error" class="error">{{ error }}</div>
     <div v-else class="stats-grid">
-      <div class="stat-card">
-        <div class="stat-value">{{ matchesCount }}</div>
-        <div class="stat-label">Total Matches</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-value">{{ summonersCount }}</div>
-        <div class="stat-label">Total Summoners</div>
-      </div>
+      <StatCard :value="matchesCount" label="Total Matches" />
+      <StatCard :value="summonersCount" label="Total Summoners" />
     </div>
-  </div>
+  </AdminPageTemplate>
 </template>
