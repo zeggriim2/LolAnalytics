@@ -4,6 +4,8 @@ import { gameDataApi } from '@shared/api/gameDataApi'
 import type { Queue, GameMap, GameMode, GameType, Version } from '@shared/types'
 import AlertMessage from '@shared/components/AlertMessage.vue'
 import SpinnerButton from '@shared/components/SpinnerButton.vue'
+import GameDataTabItem from '@admin/components/molecules/GameDataTabItem.vue'
+import AdminPageTemplate from '@admin/components/templates/AdminPageTemplate.vue'
 
 const queues = ref<Queue[]>([])
 const maps = ref<GameMap[]>([])
@@ -107,8 +109,8 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div>
-    <header class="page-header flex items-center justify-between">
+  <AdminPageTemplate>
+    <template #header>
       <h2>Game Data</h2>
       <SpinnerButton
         :loading="syncingAll"
@@ -117,7 +119,7 @@ onMounted(async () => {
         loading-label="Syncing..."
         @click="syncAll"
       />
-    </header>
+    </template>
 
     <AlertMessage v-if="syncMessage" :type="syncMessage.type" :message="syncMessage.text" />
 
@@ -126,87 +128,51 @@ onMounted(async () => {
     <div v-else>
       <div class="mb-4">
         <div class="flex flex-wrap gap-1">
-          <div class="inline-flex items-center gap-1">
-            <button
-              class="btn ml-2"
-              :class="activeTab === 'queues' ? 'btn-primary' : 'btn-secondary'"
-              @click="activeTab = 'queues'"
-            >
-              Queues ({{ queues.length }})
-            </button>
-            <button class="btn" :disabled="isSyncing('queues')" @click="syncType('queues')">
-              <span v-if="syncingType === 'queues'" class="spinner"></span>
-              {{ syncingType === 'queues' ? '...' : 'Sync' }}
-            </button>
-          </div>
-          <div class="inline-flex items-center gap-1">
-            <button
-              class="btn ml-2"
-              :class="activeTab === 'maps' ? 'btn-primary' : 'btn-secondary'"
-              @click="activeTab = 'maps'"
-            >
-              Maps ({{ maps.length }})
-            </button>
-            <button
-              class="btn text-xs px-2 py-0.5"
-              :disabled="isSyncing('maps')"
-              @click="syncType('maps')"
-            >
-              <span v-if="syncingType === 'maps'" class="spinner"></span>
-              {{ syncingType === 'maps' ? '...' : 'Sync' }}
-            </button>
-          </div>
-          <div class="inline-flex items-center gap-1">
-            <button
-              class="btn ml-2"
-              :class="activeTab === 'modes' ? 'btn-primary' : 'btn-secondary'"
-              @click="activeTab = 'modes'"
-            >
-              Game Modes ({{ gameModes.length }})
-            </button>
-            <button
-              class="btn text-xs px-2 py-0.5"
-              :disabled="isSyncing('game-modes')"
-              @click="syncType('game-modes')"
-            >
-              <span v-if="syncingType === 'game-modes'" class="spinner"></span>
-              {{ syncingType === 'game-modes' ? '...' : 'Sync' }}
-            </button>
-          </div>
-          <div class="inline-flex items-center gap-1">
-            <button
-              class="btn ml-2"
-              :class="activeTab === 'types' ? 'btn-primary' : 'btn-secondary'"
-              @click="activeTab = 'types'"
-            >
-              Game Types ({{ gameTypes.length }})
-            </button>
-            <button
-              class="btn text-xs px-2 py-0.5"
-              :disabled="isSyncing('game-types')"
-              @click="syncType('game-types')"
-            >
-              <span v-if="syncingType === 'game-types'" class="spinner"></span>
-              {{ syncingType === 'game-types' ? '...' : 'Sync' }}
-            </button>
-          </div>
-          <div class="inline-flex items-center gap-1">
-            <button
-              class="btn ml-2"
-              :class="activeTab === 'versions' ? 'btn-primary' : 'btn-secondary'"
-              @click="activeTab = 'versions'"
-            >
-              Version ({{ versions.length }})
-            </button>
-            <button
-              class="btn text-xs px-2 py-0.5"
-              :disabled="isSyncing('versions')"
-              @click="syncType('versions')"
-            >
-              <span v-if="syncingType === 'versions'" class="spinner"></span>
-              {{ syncingType === 'versions' ? '...' : 'Sync' }}
-            </button>
-          </div>
+          <GameDataTabItem
+            label="Queues"
+            :count="queues.length"
+            :active="activeTab === 'queues'"
+            :syncing="syncingType === 'queues'"
+            :disabled="isSyncing('queues')"
+            @select="activeTab = 'queues'"
+            @sync="syncType('queues')"
+          />
+          <GameDataTabItem
+            label="Maps"
+            :count="maps.length"
+            :active="activeTab === 'maps'"
+            :syncing="syncingType === 'maps'"
+            :disabled="isSyncing('maps')"
+            @select="activeTab = 'maps'"
+            @sync="syncType('maps')"
+          />
+          <GameDataTabItem
+            label="Game Modes"
+            :count="gameModes.length"
+            :active="activeTab === 'modes'"
+            :syncing="syncingType === 'game-modes'"
+            :disabled="isSyncing('game-modes')"
+            @select="activeTab = 'modes'"
+            @sync="syncType('game-modes')"
+          />
+          <GameDataTabItem
+            label="Game Types"
+            :count="gameTypes.length"
+            :active="activeTab === 'types'"
+            :syncing="syncingType === 'game-types'"
+            :disabled="isSyncing('game-types')"
+            @select="activeTab = 'types'"
+            @sync="syncType('game-types')"
+          />
+          <GameDataTabItem
+            label="Version"
+            :count="versions.length"
+            :active="activeTab === 'versions'"
+            :syncing="syncingType === 'versions'"
+            :disabled="isSyncing('versions')"
+            @select="activeTab = 'versions'"
+            @sync="syncType('versions')"
+          />
         </div>
       </div>
 
@@ -297,5 +263,5 @@ onMounted(async () => {
         </table>
       </div>
     </div>
-  </div>
+  </AdminPageTemplate>
 </template>
