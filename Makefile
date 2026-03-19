@@ -28,7 +28,10 @@ build: ## Builds the Docker images
 up: ## Start the docker hub in detached mode (no logs)
 	@$(DOCKER_COMP) up --detach
 
-start: build up ## Build and start the containers
+start: build up install-hooks ## Build and start the containers
+
+install-hooks: ## Install git hooks via Lefthook
+	lefthook install
 
 down: ## Stop the docker hub
 	@$(DOCKER_COMP) down --remove-orphans

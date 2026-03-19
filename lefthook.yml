@@ -1,0 +1,51 @@
+pre-commit:
+  parallel: true
+  commands:
+    php-cs-fixer:
+      glob: "src/**/*.php"
+      run: make cs-check
+
+    phpstan:
+      glob: "src/**/*.php"
+      run: make phpstan
+
+    eslint:
+      glob: "assets/**/*.{ts,vue,js}"
+      run: make front-lint
+
+    prettier:
+      glob: "assets/**/*.{ts,vue,js,css}"
+      run: make front-format-check
+
+commit-msg:
+  commands:
+    conventional-commits:
+      run: |
+        grep -Eq "^(feat|fix|chore|docs|refactor|test|style|perf|ci|build|revert)(\(.+\))?: .{3,}" {1} || {
+          echo ""
+          echo "  Format de commit invalide."
+          echo "  Attendu : <type>(<scope>): <description>"
+          echo ""
+          echo "  Types autorisés : feat, fix, chore, docs, refactor, test, style, perf, ci, build, revert"
+          echo "  Exemples :"
+          echo "    feat(match): ajouter le calcul du KDA"
+          echo "    fix(summoner): corriger l'import du PUUID"
+          echo "    chore: mettre à jour les dépendances"
+          echo ""
+          exit 1
+        }
+
+pre-push:
+  commands:
+    unit-tests:
+      run: make test-unit
+
+post-merge:
+  commands:
+    composer-install:
+      glob: "composer.lock"
+      run: 'echo "composer.lock a change -- relance : make composer c=install"'
+
+    yarn-install:
+      glob: "yarn.lock"
+      run: 'echo "yarn.lock a change -- relance : make yarn-install"'
