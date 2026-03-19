@@ -8,7 +8,7 @@ const props = withDefaults(
   { size: 32 },
 )
 
-const imageUrl = `https://ddragon.leagueoflegends.com/cdn/${props.version}/img/item/${props.itemId}.png`
+const imageUrl = `/images/items/${props.version}/${props.itemId}.png`
 </script>
 
 <template>
