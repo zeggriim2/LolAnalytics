@@ -16,3 +16,6 @@ services:
 
     App\GameData\Application\Port\RiotStaticDataProviderInterface:
         alias: App\GameData\Infrastructure\Client\RiotStaticDataProvider
+
+    App\GameData\Application\Port\ItemAssetDownloaderInterface:
+        alias: App\GameData\Infrastructure\Adapter\ItemAssetDownloader

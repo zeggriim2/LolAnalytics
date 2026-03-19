@@ -1,5 +1,6 @@
 parameters:
     app.champions_images_dir: '%kernel.project_dir%/public/images/champions'
+    app.items_images_dir: '%kernel.project_dir%/public/images/items'
 services:
     # default configuration for services in *this* file
     _defaults:
