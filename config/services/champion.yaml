@@ -7,3 +7,9 @@ services:
 
     App\Champion\Application\Port\ChampionAssetDownloaderInterface:
         alias: App\Champion\Infrastructure\Adapter\ChampionAssetDownloader
+
+    app.asset_downloader.champion:
+        class: App\SharedContext\Infrastructure\Asset\GameAssetDownloader
+        arguments:
+            $cdnBaseUrl: 'https://ddragon.leagueoflegends.com/cdn/%%s/img/champion/%%s'
+            $imagesDir: '%app.champions_images_dir%'
