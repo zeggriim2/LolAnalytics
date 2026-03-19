@@ -10,7 +10,9 @@ use App\Champion\Application\Dto\ChampionInfoDto;
 use App\Champion\Application\Dto\ChampionStatsDto;
 use App\Champion\Application\Port\RiotChampionProviderInterface;
 use App\Champion\Infrastructure\Adapter\ChampionAssetDownloader;
+use App\SharedContext\Infrastructure\Asset\GameAssetDownloader;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
@@ -64,7 +66,7 @@ final class ChampionAssetDownloaderTest extends TestCase
         $httpClient
             ->expects($this->once())
             ->method('request')
-            ->with('GET', 'https://ddragon.leagueoflegends.com/cdn/15.1.1/img/champion/Aatrox.png')
+            ->with(Request::METHOD_GET, 'https://ddragon.leagueoflegends.com/cdn/15.1.1/img/champion/Aatrox.png')
             ->willReturn($response);
 
         $downloader = $this->buildDownloader(httpClient: $httpClient);
@@ -130,7 +132,7 @@ final class ChampionAssetDownloaderTest extends TestCase
         $httpClient
             ->expects($this->once())
             ->method('request')
-            ->with('GET', 'https://ddragon.leagueoflegends.com/cdn/15.1.1/img/champion/Aatrox.png')
+            ->with(Request::METHOD_GET, 'https://ddragon.leagueoflegends.com/cdn/15.1.1/img/champion/Aatrox.png')
             ->willReturn($response);
 
         $results = iterator_to_array(
@@ -172,7 +174,7 @@ final class ChampionAssetDownloaderTest extends TestCase
         $httpClient
             ->expects($this->once())
             ->method('request')
-            ->with('GET', 'https://ddragon.leagueoflegends.com/cdn/15.1.1/img/champion/Yasuo.png')
+            ->with(Request::METHOD_GET, 'https://ddragon.leagueoflegends.com/cdn/15.1.1/img/champion/Yasuo.png')
             ->willReturn($response);
 
         $results = iterator_to_array(
@@ -187,10 +189,15 @@ final class ChampionAssetDownloaderTest extends TestCase
         ?RiotChampionProviderInterface $provider = null,
         ?HttpClientInterface $httpClient = null,
     ): ChampionAssetDownloader {
+        $assetDownloader = new GameAssetDownloader(
+            $httpClient ?? $this->createStub(HttpClientInterface::class),
+            'https://ddragon.leagueoflegends.com/cdn/%s/img/champion/%s',
+            $this->imagesDir,
+        );
+
         return new ChampionAssetDownloader(
             $provider ?? $this->createStub(RiotChampionProviderInterface::class),
-            $httpClient ?? $this->createStub(HttpClientInterface::class),
-            $this->imagesDir,
+            $assetDownloader,
         );
     }
 
