@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { Loader2 } from 'lucide-vue-next'
+
 defineProps<{
   loading: boolean
   label: string
@@ -9,7 +11,7 @@ defineProps<{
 
 <template>
   <button class="btn btn-primary" :disabled="loading || disabled" v-bind="$attrs">
-    <span v-if="loading" class="spinner"></span>
+    <Loader2 v-if="loading" class="inline w-4 h-4 mr-1 animate-spin" />
     {{ loading ? (loadingLabel ?? label) : label }}
   </button>
 </template>
