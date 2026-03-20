@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { gameDataApi } from '@shared/api/gameDataApi'
 import type { Queue, GameMap, GameMode, GameType, Version } from '@shared/types'
+import { useTableControls } from '@shared/composables/useTableControls'
 import AlertMessage from '@shared/components/AlertMessage.vue'
 import SpinnerButton from '@shared/components/SpinnerButton.vue'
+import SortableHeader from '@shared/components/SortableHeader.vue'
 import GameDataTabItem from '@admin/components/molecules/GameDataTabItem.vue'
 import AdminPageTemplate from '@admin/components/templates/AdminPageTemplate.vue'
 
@@ -19,6 +21,20 @@ const activeTab = ref('queues')
 const syncingAll = ref(false)
 const syncingType = ref<string | null>(null)
 const syncMessage = ref<{ type: 'success' | 'error'; text: string } | null>(null)
+
+const queuesCtrl = useTableControls(() => queues.value)
+const mapsCtrl = useTableControls(() => maps.value)
+const modesCtrl = useTableControls(() => gameModes.value)
+const typesCtrl = useTableControls(() => gameTypes.value)
+const versionsCtrl = useTableControls(() => versions.value)
+
+const tabDefs = computed(() => [
+  { key: 'queues', label: 'Queues', count: queues.value.length },
+  { key: 'maps', label: 'Maps', count: maps.value.length },
+  { key: 'modes', label: 'Game Modes', count: gameModes.value.length },
+  { key: 'types', label: 'Game Types', count: gameTypes.value.length },
+  { key: 'versions', label: 'Versions', count: versions.value.length },
+])
 
 async function loadAllData() {
   const [queuesRes, mapsRes, modesRes, typesRes, versionsRes] = await Promise.all([
@@ -125,142 +141,261 @@ onMounted(async () => {
 
     <div v-if="loading" class="loading">Loading...</div>
     <div v-else-if="error" class="error">{{ error }}</div>
-    <div v-else>
-      <div class="mb-4">
-        <div class="flex flex-wrap gap-1">
-          <GameDataTabItem
-            label="Queues"
-            :count="queues.length"
-            :active="activeTab === 'queues'"
-            :syncing="syncingType === 'queues'"
-            :disabled="isSyncing('queues')"
-            @select="activeTab = 'queues'"
-            @sync="syncType('queues')"
-          />
-          <GameDataTabItem
-            label="Maps"
-            :count="maps.length"
-            :active="activeTab === 'maps'"
-            :syncing="syncingType === 'maps'"
-            :disabled="isSyncing('maps')"
-            @select="activeTab = 'maps'"
-            @sync="syncType('maps')"
-          />
-          <GameDataTabItem
-            label="Game Modes"
-            :count="gameModes.length"
-            :active="activeTab === 'modes'"
-            :syncing="syncingType === 'game-modes'"
-            :disabled="isSyncing('game-modes')"
-            @select="activeTab = 'modes'"
-            @sync="syncType('game-modes')"
-          />
-          <GameDataTabItem
-            label="Game Types"
-            :count="gameTypes.length"
-            :active="activeTab === 'types'"
-            :syncing="syncingType === 'game-types'"
-            :disabled="isSyncing('game-types')"
-            @select="activeTab = 'types'"
-            @sync="syncType('game-types')"
-          />
-          <GameDataTabItem
-            label="Version"
-            :count="versions.length"
-            :active="activeTab === 'versions'"
-            :syncing="syncingType === 'versions'"
-            :disabled="isSyncing('versions')"
-            @select="activeTab = 'versions'"
-            @sync="syncType('versions')"
-          />
+    <div v-else class="bg-lol-card rounded-lg border border-lol-border mb-6">
+      <div class="tab-bar px-2">
+        <GameDataTabItem
+          v-for="tab in tabDefs"
+          :key="tab.key"
+          :label="tab.label"
+          :count="tab.count"
+          :active="activeTab === tab.key"
+          @select="activeTab = tab.key"
+        />
+      </div>
+
+      <div class="p-6">
+        <!-- Queues -->
+        <div v-if="activeTab === 'queues'">
+          <div class="flex items-center gap-3 mb-4">
+            <input
+              v-model="queuesCtrl.search"
+              class="table-search flex-1"
+              placeholder="Rechercher dans les queues..."
+            />
+            <SpinnerButton
+              :loading="syncingType === 'queues'"
+              :disabled="isSyncing('queues')"
+              label="Sync"
+              loading-label="Syncing..."
+              @click="syncType('queues')"
+            />
+          </div>
+          <table class="table">
+            <thead>
+              <tr>
+                <SortableHeader
+                  label="Queue ID"
+                  sort-key="queueId"
+                  :active-sort-key="queuesCtrl.sortKey"
+                  :sort-dir="queuesCtrl.sortDir"
+                  @sort="queuesCtrl.toggleSort"
+                />
+                <SortableHeader
+                  label="Map"
+                  sort-key="map"
+                  :active-sort-key="queuesCtrl.sortKey"
+                  :sort-dir="queuesCtrl.sortDir"
+                  @sort="queuesCtrl.toggleSort"
+                />
+                <SortableHeader
+                  label="Description"
+                  sort-key="description"
+                  :active-sort-key="queuesCtrl.sortKey"
+                  :sort-dir="queuesCtrl.sortDir"
+                  @sort="queuesCtrl.toggleSort"
+                />
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="queue in queuesCtrl.rows" :key="(queue as Queue).queueId">
+                <td>{{ (queue as Queue).queueId }}</td>
+                <td>{{ (queue as Queue).map }}</td>
+                <td>{{ (queue as Queue).description || '-' }}</td>
+              </tr>
+              <tr v-if="queuesCtrl.rows.length === 0">
+                <td colspan="3" class="text-center text-lol-muted">Aucun résultat</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-      </div>
 
-      <div v-if="activeTab === 'queues'" class="card">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Queue ID</th>
-              <th>Map</th>
-              <th>Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="queue in queues" :key="queue.queueId">
-              <td>{{ queue.queueId }}</td>
-              <td>{{ queue.map }}</td>
-              <td>{{ queue.description || '-' }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+        <!-- Maps -->
+        <div v-if="activeTab === 'maps'">
+          <div class="flex items-center gap-3 mb-4">
+            <input
+              v-model="mapsCtrl.search"
+              class="table-search flex-1"
+              placeholder="Rechercher dans les maps..."
+            />
+            <SpinnerButton
+              :loading="syncingType === 'maps'"
+              :disabled="isSyncing('maps')"
+              label="Sync"
+              loading-label="Syncing..."
+              @click="syncType('maps')"
+            />
+          </div>
+          <table class="table">
+            <thead>
+              <tr>
+                <SortableHeader
+                  label="Map ID"
+                  sort-key="mapId"
+                  :active-sort-key="mapsCtrl.sortKey"
+                  :sort-dir="mapsCtrl.sortDir"
+                  @sort="mapsCtrl.toggleSort"
+                />
+                <SortableHeader
+                  label="Map Name"
+                  sort-key="mapName"
+                  :active-sort-key="mapsCtrl.sortKey"
+                  :sort-dir="mapsCtrl.sortDir"
+                  @sort="mapsCtrl.toggleSort"
+                />
+                <SortableHeader
+                  label="Notes"
+                  sort-key="notes"
+                  :active-sort-key="mapsCtrl.sortKey"
+                  :sort-dir="mapsCtrl.sortDir"
+                  @sort="mapsCtrl.toggleSort"
+                />
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="map in mapsCtrl.rows" :key="(map as GameMap).mapId">
+                <td>{{ (map as GameMap).mapId }}</td>
+                <td>{{ (map as GameMap).mapName }}</td>
+                <td>{{ (map as GameMap).notes || '-' }}</td>
+              </tr>
+              <tr v-if="mapsCtrl.rows.length === 0">
+                <td colspan="3" class="text-center text-lol-muted">Aucun résultat</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
-      <div v-if="activeTab === 'maps'" class="card">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Map ID</th>
-              <th>Map Name</th>
-              <th>Notes</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="map in maps" :key="map.mapId">
-              <td>{{ map.mapId }}</td>
-              <td>{{ map.mapName }}</td>
-              <td>{{ map.notes || '-' }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+        <!-- Game Modes -->
+        <div v-if="activeTab === 'modes'">
+          <div class="flex items-center gap-3 mb-4">
+            <input
+              v-model="modesCtrl.search"
+              class="table-search flex-1"
+              placeholder="Rechercher dans les modes..."
+            />
+            <SpinnerButton
+              :loading="syncingType === 'game-modes'"
+              :disabled="isSyncing('game-modes')"
+              label="Sync"
+              loading-label="Syncing..."
+              @click="syncType('game-modes')"
+            />
+          </div>
+          <table class="table">
+            <thead>
+              <tr>
+                <SortableHeader
+                  label="Game Mode"
+                  sort-key="gameMode"
+                  :active-sort-key="modesCtrl.sortKey"
+                  :sort-dir="modesCtrl.sortDir"
+                  @sort="modesCtrl.toggleSort"
+                />
+                <SortableHeader
+                  label="Description"
+                  sort-key="description"
+                  :active-sort-key="modesCtrl.sortKey"
+                  :sort-dir="modesCtrl.sortDir"
+                  @sort="modesCtrl.toggleSort"
+                />
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="mode in modesCtrl.rows" :key="(mode as GameMode).gameMode">
+                <td>{{ (mode as GameMode).gameMode }}</td>
+                <td>{{ (mode as GameMode).description }}</td>
+              </tr>
+              <tr v-if="modesCtrl.rows.length === 0">
+                <td colspan="2" class="text-center text-lol-muted">Aucun résultat</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
-      <div v-if="activeTab === 'modes'" class="card">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Game Mode</th>
-              <th>Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="mode in gameModes" :key="mode.gameMode">
-              <td>{{ mode.gameMode }}</td>
-              <td>{{ mode.description }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+        <!-- Game Types -->
+        <div v-if="activeTab === 'types'">
+          <div class="flex items-center gap-3 mb-4">
+            <input
+              v-model="typesCtrl.search"
+              class="table-search flex-1"
+              placeholder="Rechercher dans les types..."
+            />
+            <SpinnerButton
+              :loading="syncingType === 'game-types'"
+              :disabled="isSyncing('game-types')"
+              label="Sync"
+              loading-label="Syncing..."
+              @click="syncType('game-types')"
+            />
+          </div>
+          <table class="table">
+            <thead>
+              <tr>
+                <SortableHeader
+                  label="Game Type"
+                  sort-key="gameType"
+                  :active-sort-key="typesCtrl.sortKey"
+                  :sort-dir="typesCtrl.sortDir"
+                  @sort="typesCtrl.toggleSort"
+                />
+                <SortableHeader
+                  label="Description"
+                  sort-key="description"
+                  :active-sort-key="typesCtrl.sortKey"
+                  :sort-dir="typesCtrl.sortDir"
+                  @sort="typesCtrl.toggleSort"
+                />
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="type in typesCtrl.rows" :key="(type as GameType).gameType">
+                <td>{{ (type as GameType).gameType }}</td>
+                <td>{{ (type as GameType).description }}</td>
+              </tr>
+              <tr v-if="typesCtrl.rows.length === 0">
+                <td colspan="2" class="text-center text-lol-muted">Aucun résultat</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
-      <div v-if="activeTab === 'types'" class="card">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Game Type</th>
-              <th>Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="type in gameTypes" :key="type.gameType">
-              <td>{{ type.gameType }}</td>
-              <td>{{ type.description }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div v-if="activeTab === 'versions'" class="card">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Version</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="version in versions" :key="version.version">
-              <td>{{ version.version }}</td>
-            </tr>
-          </tbody>
-        </table>
+        <!-- Versions -->
+        <div v-if="activeTab === 'versions'">
+          <div class="flex items-center gap-3 mb-4">
+            <input
+              v-model="versionsCtrl.search"
+              class="table-search flex-1"
+              placeholder="Rechercher une version..."
+            />
+            <SpinnerButton
+              :loading="syncingType === 'versions'"
+              :disabled="isSyncing('versions')"
+              label="Sync"
+              loading-label="Syncing..."
+              @click="syncType('versions')"
+            />
+          </div>
+          <table class="table">
+            <thead>
+              <tr>
+                <SortableHeader
+                  label="Version"
+                  sort-key="version"
+                  :active-sort-key="versionsCtrl.sortKey"
+                  :sort-dir="versionsCtrl.sortDir"
+                  @sort="versionsCtrl.toggleSort"
+                />
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="version in versionsCtrl.rows" :key="(version as Version).version">
+                <td>{{ (version as Version).version }}</td>
+              </tr>
+              <tr v-if="versionsCtrl.rows.length === 0">
+                <td colspan="1" class="text-center text-lol-muted">Aucun résultat</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </AdminPageTemplate>

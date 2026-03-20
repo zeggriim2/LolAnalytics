@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { RouterLink, useRouter } from 'vue-router'
+import { LayoutDashboard, Swords, Users, Database, LogOut } from 'lucide-vue-next'
 import { useAuthStore } from '@admin/stores/auth'
 
 const router = useRouter()
@@ -22,36 +23,40 @@ function logout() {
         <li>
           <RouterLink
             to="/"
-            class="block py-3 px-4 text-lol-text no-underline rounded mb-1 transition-colors hover:bg-lol-bg hover:text-lol-gold"
+            class="flex items-center gap-3 py-3 px-4 text-lol-text no-underline rounded mb-1 transition-colors hover:bg-lol-bg hover:text-lol-gold"
             active-class="!bg-lol-bg !text-lol-gold"
           >
+            <LayoutDashboard class="w-4 h-4 shrink-0" />
             Dashboard
           </RouterLink>
         </li>
         <li>
           <RouterLink
             to="/matches"
-            class="block py-3 px-4 text-lol-text no-underline rounded mb-1 transition-colors hover:bg-lol-bg hover:text-lol-gold"
+            class="flex items-center gap-3 py-3 px-4 text-lol-text no-underline rounded mb-1 transition-colors hover:bg-lol-bg hover:text-lol-gold"
             active-class="!bg-lol-bg !text-lol-gold"
           >
+            <Swords class="w-4 h-4 shrink-0" />
             Matches
           </RouterLink>
         </li>
         <li>
           <RouterLink
             to="/summoners"
-            class="block py-3 px-4 text-lol-text no-underline rounded mb-1 transition-colors hover:bg-lol-bg hover:text-lol-gold"
+            class="flex items-center gap-3 py-3 px-4 text-lol-text no-underline rounded mb-1 transition-colors hover:bg-lol-bg hover:text-lol-gold"
             active-class="!bg-lol-bg !text-lol-gold"
           >
+            <Users class="w-4 h-4 shrink-0" />
             Summoners
           </RouterLink>
         </li>
         <li>
           <RouterLink
             to="/game-data"
-            class="block py-3 px-4 text-lol-text no-underline rounded mb-1 transition-colors hover:bg-lol-bg hover:text-lol-gold"
+            class="flex items-center gap-3 py-3 px-4 text-lol-text no-underline rounded mb-1 transition-colors hover:bg-lol-bg hover:text-lol-gold"
             active-class="!bg-lol-bg !text-lol-gold"
           >
+            <Database class="w-4 h-4 shrink-0" />
             Game Data
           </RouterLink>
         </li>
@@ -59,9 +64,10 @@ function logout() {
     </nav>
     <div class="border-t border-lol-border pt-4">
       <button
-        class="w-full py-3 px-4 text-left text-lol-text rounded transition-colors hover:bg-lol-bg hover:text-red-400"
+        class="w-full flex items-center gap-3 py-3 px-4 text-left text-lol-text rounded transition-colors hover:bg-lol-bg hover:text-red-400"
         @click="logout"
       >
+        <LogOut class="w-4 h-4 shrink-0" />
         Logout
       </button>
     </div>
