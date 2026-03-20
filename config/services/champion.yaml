@@ -1,4 +1,8 @@
 services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
     App\Champion\Domain\Repository\ChampionRepositoryInterface:
         alias: App\Champion\Infrastructure\Persistence\Doctrine\Repository\DoctrineChampionRepository
 
