@@ -26,11 +26,30 @@ if [ "$1" = 'frankenphp' ] || [ "$1" = 'php' ] || [ "$1" = 'bin/console' ]; then
 		composer install --prefer-dist --no-progress --no-interaction
 	fi
 
+	# Générer .env.local depuis les variables d'environnement Docker (devtest/prod)
+	# Cela permet à Symfony de les lire comme un fichier .env standard
+	if [ "${APP_ENV}" != "dev" ] && [ -n "${DATABASE_URL:-}" ]; then
+		echo "Génération de .env.local depuis les variables d'environnement..."
+		cat > .env.local <<EOF
+APP_ENV=${APP_ENV:-prod}
+APP_SECRET=${APP_SECRET:-}
+DATABASE_URL=${DATABASE_URL:-}
+API_RIOT_KEY=${API_RIOT_KEY:-}
+JWT_PASSPHRASE=${JWT_PASSPHRASE:-}
+MERCURE_URL=${MERCURE_URL:-}
+MERCURE_PUBLIC_URL=${MERCURE_PUBLIC_URL:-}
+MERCURE_JWT_SECRET=${MERCURE_JWT_SECRET:-}
+MERCURE_PUBLISHER_JWT_KEY=${MERCURE_PUBLISHER_JWT_KEY:-}
+MERCURE_SUBSCRIBER_JWT_KEY=${MERCURE_SUBSCRIBER_JWT_KEY:-}
+EOF
+		echo ".env.local généré."
+	fi
+
 	# Display information about the current project
 	# Or about an error in project initialization
 	php bin/console -V
 
-	if grep -q ^DATABASE_URL= .env; then
+	if [ -n "${DATABASE_URL:-}" ]; then
 		echo 'Waiting for database to be ready...'
 		ATTEMPTS_LEFT_TO_REACH_DATABASE=60
 		until [ $ATTEMPTS_LEFT_TO_REACH_DATABASE -eq 0 ] || DATABASE_ERROR=$(php bin/console dbal:run-sql -q "SELECT 1" 2>&1); do
