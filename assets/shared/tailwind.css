@@ -131,4 +131,12 @@
   .table-search {
     @apply w-full px-3 py-2 text-sm border border-lol-border rounded bg-lol-bg text-lol-text placeholder:text-lol-muted focus:outline-none focus:border-lol-gold;
   }
+
+  .table-filter-select {
+    @apply px-3 py-2 text-sm border border-lol-border rounded bg-lol-bg text-lol-text focus:outline-none focus:border-lol-gold cursor-pointer;
+  }
+
+  .table-filter-input {
+    @apply px-3 py-2 text-sm border border-lol-border rounded bg-lol-bg text-lol-text placeholder:text-lol-muted focus:outline-none focus:border-lol-gold;
+  }
 }

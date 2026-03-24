@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit\Match\Application\QueryHandler;
 
+use App\Match\Application\Filter\MatchFilters;
+use App\Match\Application\Filter\Specification\GameModeSpecification;
+use App\Match\Application\Filter\Specification\PlatformSpecification;
+use App\Match\Application\Filter\Specification\VersionSpecification;
 use App\Match\Application\Query\ListMatchesQuery;
 use App\Match\Application\QueryHandler\ListMatchesHandler;
 use App\Match\Application\ReadModel\MatchReadModel;
@@ -146,6 +150,84 @@ final class ListMatchesHandlerTest extends TestCase
         $this->repository
             ->expects($this->once())
             ->method('count')
+            ->willReturn(0);
+
+        ($this->handler)($query);
+    }
+
+    public function testUsesFilteredMethodsWhenFiltersAreNotEmpty(): void
+    {
+        $filters = new MatchFilters(new PlatformSpecification('euw1'));
+        $query = new ListMatchesQuery(new PaginationRequest(1, 20), $filters);
+
+        $this->repository
+            ->expects($this->never())
+            ->method('findPaginated');
+
+        $this->repository
+            ->expects($this->never())
+            ->method('count');
+
+        $this->repository
+            ->expects($this->once())
+            ->method('findPaginatedWithFilters')
+            ->with(0, 20, $filters)
+            ->willReturn([]);
+
+        $this->repository
+            ->expects($this->once())
+            ->method('countWithFilters')
+            ->with($filters)
+            ->willReturn(0);
+
+        $result = ($this->handler)($query);
+
+        $this->assertInstanceOf(PaginatedResult::class, $result);
+        $this->assertSame(0, $result->total);
+    }
+
+    public function testFilteredResultsAreMappedToReadModels(): void
+    {
+        $filters = new MatchFilters(new GameModeSpecification('CLASSIC'));
+        $query = new ListMatchesQuery(new PaginationRequest(1, 20), $filters);
+
+        $matches = [
+            $this->createMatch('EUW1_FILTERED_1', 111),
+            $this->createMatch('EUW1_FILTERED_2', 222),
+        ];
+
+        $this->repository
+            ->expects($this->once())
+            ->method('findPaginatedWithFilters')
+            ->willReturn($matches);
+
+        $this->repository
+            ->expects($this->once())
+            ->method('countWithFilters')
+            ->willReturn(2);
+
+        $result = ($this->handler)($query);
+
+        $this->assertCount(2, $result->items);
+        $this->assertContainsOnlyInstancesOf(MatchReadModel::class, $result->items);
+        $this->assertSame('EUW1_FILTERED_1', $result->items[0]->id);
+        $this->assertSame('EUW1_FILTERED_2', $result->items[1]->id);
+        $this->assertSame(2, $result->total);
+    }
+
+    public function testFiltersWithPaginationPassCorrectOffset(): void
+    {
+        $filters = new MatchFilters(new VersionSpecification('14.6'));
+        $query = new ListMatchesQuery(new PaginationRequest(3, 10), $filters);
+
+        $this->repository
+            ->expects($this->once())
+            ->method('findPaginatedWithFilters')
+            ->with(20, 10, $filters)
+            ->willReturn([]);
+
+        $this->repository
+            ->method('countWithFilters')
             ->willReturn(0);
 
         ($this->handler)($query);

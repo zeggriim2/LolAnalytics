@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Match\Presentation\Api;
 
+use App\Match\Application\Filter\MatchFiltersFactory;
 use App\Match\Application\Query\ListMatchesQuery;
 use App\Match\Application\ReadModel\MatchReadModel;
 use App\SharedContext\Application\Bus\QueryBusInterface;
@@ -27,9 +28,17 @@ final class ListMatchesController extends AbstractController
         $page = $request->query->getInt('page', 1);
         $limit = $request->query->getInt('limit', 20);
 
+        $filters = MatchFiltersFactory::fromQueryParams(
+            platform: $request->query->getString('platform') ?: null,
+            gameMode: $request->query->getString('gameMode') ?: null,
+            version: $request->query->getString('version') ?: null,
+            dateFrom: $request->query->getString('dateFrom') ?: null,
+            dateTo: $request->query->getString('dateTo') ?: null,
+        );
+
         /** @var PaginatedResult<MatchReadModel> $result */
         $result = $this->queryBus->handle(
-            new ListMatchesQuery(new PaginationRequest($page, $limit))
+            new ListMatchesQuery(new PaginationRequest($page, $limit), $filters)
         );
 
         return $this->json([

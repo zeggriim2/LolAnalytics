@@ -23,9 +23,15 @@ final class ListMatchesHandler
     public function __invoke(ListMatchesQuery $query): PaginatedResult
     {
         $pagination = $query->pagination;
+        $filters = $query->filters;
 
-        $matches = $this->repository->findPaginated($pagination->offset(), $pagination->limit);
-        $total = $this->repository->count();
+        if ($filters->isEmpty()) {
+            $matches = $this->repository->findPaginated($pagination->offset(), $pagination->limit);
+            $total = $this->repository->count();
+        } else {
+            $matches = $this->repository->findPaginatedWithFilters($pagination->offset(), $pagination->limit, $filters);
+            $total = $this->repository->countWithFilters($filters);
+        }
 
         return new PaginatedResult(
             items: array_map(MatchReadModel::fromDomain(...), $matches),

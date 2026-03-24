@@ -9,6 +9,7 @@ use App\GameData\Infrastructure\Persistence\Doctrine\Entity\GameTypeEntity;
 use App\GameData\Infrastructure\Persistence\Doctrine\Entity\MapEntity;
 use App\GameData\Infrastructure\Persistence\Doctrine\Entity\QueueEntity;
 use App\GameData\Infrastructure\Persistence\Doctrine\Entity\VersionEntity;
+use App\Match\Application\Filter\MatchFilters;
 use App\Match\Domain\Model\Matche;
 use App\Match\Domain\Repository\MatchRepositoryInterface;
 use App\Match\Domain\ValueObjet\MatchId;
@@ -164,5 +165,32 @@ final class DoctrineMatchRepository implements MatchRepositoryInterface
             ->setParameter('puuid', $puuid)
             ->getQuery()
             ->getSingleScalarResult();
+    }
+
+    public function findPaginatedWithFilters(int $offset, int $limit, MatchFilters $filters): array
+    {
+        $qb = $this->em->getRepository(MatchEntity::class)
+            ->createQueryBuilder('m')
+            ->orderBy('m.playedAt', 'DESC')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit);
+
+        $filters->apply($qb);
+
+        return array_map(
+            static fn (MatchEntity $entity): Matche => $entity->toDomain(),
+            $qb->getQuery()->getResult(),
+        );
+    }
+
+    public function countWithFilters(MatchFilters $filters): int
+    {
+        $qb = $this->em->getRepository(MatchEntity::class)
+            ->createQueryBuilder('m')
+            ->select('COUNT(m.id)');
+
+        $filters->apply($qb);
+
+        return (int) $qb->getQuery()->getSingleScalarResult();
     }
 }
