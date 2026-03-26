@@ -1,10 +1,23 @@
 framework:
     messenger:
-        # Uncomment this (and the failed transport below) to send failed messages to this transport for later handling.
-        # failure_transport: failed
+        failure_transport: failed
 
         transports:
-             sync: 'sync://'
+            async:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+                options:
+                    exchange:
+                        name: lolanalytics
+                        type: direct
+                        default_publish_routing_key: async
+                    queues:
+                        lolanalytics_async:
+                            binding_keys: [async]
+                retry_strategy:
+                    service: App\SharedContext\Infrastructure\Messenger\ServerLimitRetryStrategy
+
+            failed:
+                dsn: 'doctrine://default?queue_name=failed'
 
         default_bus: command.bus
 
@@ -18,3 +31,4 @@ framework:
                     - dispatch_after_current_bus
 
         routing:
+            App\Summoner\Application\Command\ImportSummonerCommand: async
