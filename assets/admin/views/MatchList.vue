@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, watch } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { RouterLink } from 'vue-router'
 import { matchApi } from '@shared/api/matchApi'
 import { api } from '@shared/api/client'
@@ -9,11 +9,22 @@ import { usePagination } from '@shared/composables/usePagination'
 import { useTableControls } from '@shared/composables/useTableControls'
 import PaginationBar from '@shared/components/PaginationBar.vue'
 import SortableHeader from '@shared/components/SortableHeader.vue'
+import SearchableSelect from '@shared/components/SearchableSelect.vue'
 import AdminPageTemplate from '@admin/components/templates/AdminPageTemplate.vue'
 
 const platforms = ref<Platform[]>([])
 const gameModes = ref<GameMode[]>([])
 const versions = ref<Version[]>([])
+
+const platformOptions = computed(() =>
+  platforms.value.map((p) => ({ value: p.value, label: p.label })),
+)
+const gameModeOptions = computed(() =>
+  gameModes.value.map((m) => ({ value: m.gameMode, label: m.gameMode })),
+)
+const versionOptions = computed(() =>
+  versions.value.map((v) => ({ value: v.version, label: v.version })),
+)
 
 const filters = ref<MatchFilters>({
   platform: '',
@@ -98,24 +109,23 @@ function formatDate(dateString: string): string {
           placeholder="Rechercher dans la page courante..."
         />
 
-        <select v-model="filters.platform" class="table-filter-select">
-          <option value="">Toutes les plateformes</option>
-          <option v-for="p in platforms" :key="p.value" :value="p.value">{{ p.label }}</option>
-        </select>
+        <SearchableSelect
+          v-model="filters.platform"
+          :options="platformOptions"
+          placeholder="Toutes les plateformes"
+        />
 
-        <select v-model="filters.gameMode" class="table-filter-select">
-          <option value="">Tous les modes</option>
-          <option v-for="m in gameModes" :key="m.gameMode" :value="m.gameMode">
-            {{ m.gameMode }}
-          </option>
-        </select>
+        <SearchableSelect
+          v-model="filters.gameMode"
+          :options="gameModeOptions"
+          placeholder="Tous les modes"
+        />
 
-        <select v-model="filters.version" class="table-filter-select">
-          <option value="">Toutes les versions</option>
-          <option v-for="v in versions" :key="v.version" :value="v.version">
-            {{ v.version }}
-          </option>
-        </select>
+        <SearchableSelect
+          v-model="filters.version"
+          :options="versionOptions"
+          placeholder="Toutes les versions"
+        />
 
         <div class="flex items-center gap-1">
           <input
