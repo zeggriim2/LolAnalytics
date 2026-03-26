@@ -139,4 +139,47 @@
   .table-filter-input {
     @apply px-3 py-2 text-sm border border-lol-border rounded bg-lol-bg text-lol-text placeholder:text-lol-muted focus:outline-none focus:border-lol-gold;
   }
+
+  .searchable-select {
+    @apply relative text-sm;
+  }
+
+  .searchable-select__trigger {
+    @apply flex items-center justify-between gap-2 px-3 py-2 border border-lol-border rounded bg-lol-bg text-lol-text cursor-pointer min-w-[160px];
+    &:hover {
+      @apply border-lol-gold;
+    }
+  }
+
+  .searchable-select__trigger--active {
+    @apply border-lol-gold;
+  }
+
+  .searchable-select__input {
+    @apply bg-transparent text-lol-text placeholder:text-lol-muted outline-none w-full;
+  }
+
+  .searchable-select__clear {
+    @apply text-lol-muted hover:text-lol-text leading-none;
+  }
+
+  .searchable-select__chevron {
+    @apply text-lol-muted text-xs;
+  }
+
+  .searchable-select__dropdown {
+    @apply absolute z-50 top-full left-0 mt-1 w-full max-h-52 overflow-y-auto border border-lol-border rounded bg-lol-card shadow-lg;
+  }
+
+  .searchable-select__option {
+    @apply px-3 py-2 cursor-pointer hover:bg-lol-border text-lol-text;
+  }
+
+  .searchable-select__option--selected {
+    @apply text-lol-gold;
+  }
+
+  .searchable-select__option--empty {
+    @apply text-lol-muted cursor-default;
+  }
 }
