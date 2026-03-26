@@ -76,7 +76,7 @@ jobs:
         run: |
           echo "Vérification de la connectivité vers ${PORTAINER_URL}..."
           curl -skf --connect-timeout 10 "${PORTAINER_URL}/api/status" \
-            || { echo "❌ Portainer inaccessible depuis GitHub Actions."; echo "Vérifie que le port est ouvert dans le firewall du VPS."; exit 1; }
+            || { echo "❌ Portainer inaccessible depuis GitHub Actions."; exit 1; }
           echo "✅ Portainer accessible."
 
       - name: Deploy stack via Portainer API
@@ -94,7 +94,7 @@ jobs:
           MYSQL_USER: ${{ secrets.DEVTEST_MYSQL_USER }}
           MYSQL_PASSWORD: ${{ secrets.DEVTEST_MYSQL_PASSWORD }}
           CADDY_MERCURE_JWT_SECRET: ${{ secrets.DEVTEST_MERCURE_JWT_SECRET }}
-          SERVER_NAME: ${{ secrets.DEVTEST_SERVER_NAME }}
+          SERVER_NAME_PUBLIC: ${{ secrets.DEVTEST_SERVER_NAME }}  # ← renommé
           JWT_PASSPHRASE: ${{ secrets.DEVTEST_JWT_PASSPHRASE }}
         run: |
           set -euo pipefail
@@ -111,7 +111,7 @@ jobs:
             --arg mysql_user           "${MYSQL_USER}" \
             --arg mysql_pw             "${MYSQL_PASSWORD}" \
             --arg mercure_jwt          "${CADDY_MERCURE_JWT_SECRET}" \
-            --arg server_name          "${SERVER_NAME}" \
+            --arg server_name_public   "${SERVER_NAME_PUBLIC}" \
             --arg jwt_passphrase       "${JWT_PASSPHRASE}" \
             '[
               {"name": "PHP_IMAGE",                "value": $php_image},
@@ -123,11 +123,10 @@ jobs:
               {"name": "MYSQL_USER",               "value": $mysql_user},
               {"name": "MYSQL_PASSWORD",           "value": $mysql_pw},
               {"name": "CADDY_MERCURE_JWT_SECRET", "value": $mercure_jwt},
-              {"name": "SERVER_NAME",              "value": $server_name},
+              {"name": "SERVER_NAME_PUBLIC",       "value": $server_name_public},
               {"name": "JWT_PASSPHRASE",           "value": $jwt_passphrase}
             ]')
 
-          # -k : ignore le certificat auto-signé de Portainer
           CURL="curl -skf --connect-timeout 15 --max-time 60"
 
           STACKS=$(${CURL} \
@@ -149,7 +148,7 @@ jobs:
                 \"stackFileContent\": ${COMPOSE_CONTENT},
                 \"env\": ${ENV_JSON}
               }"
-            echo "Stack créé avec succès."
+            echo "✅ Stack créé avec succès."
           else
             echo "Stack '${PORTAINER_STACK_NAME}' trouvé (id=${STACK_ID}) → mise à jour..."
             ${CURL} -X PUT \
@@ -162,5 +161,5 @@ jobs:
                 \"prune\": false,
                 \"pullImage\": true
               }"
-            echo "Stack mis à jour avec succès."
+            echo "✅ Stack mis à jour avec succès."
           fi

@@ -1,8 +1,3 @@
-# DevTest environment — uses pre-built image from GitHub Container Registry
-# Deployed via: .github/workflows/cd-devtest.yml
-# On VPS: /opt/lolanalytics-devtest/
-# JWT keys: auto-generated via lexik:jwt:generate-keypair, persisted in jwt_keys volume
-
 services:
   php:
     image: ${PHP_IMAGE}
@@ -11,24 +6,33 @@ services:
       database:
         condition: service_healthy
     environment:
-      SERVER_NAME: ${SERVER_NAME:-localhost}, php:80
+      SERVER_NAME: ":80"
       APP_SECRET: ${APP_SECRET}
       DATABASE_URL: ${DATABASE_URL}
       API_RIOT_KEY: ${API_RIOT_KEY}
       JWT_PASSPHRASE: ${JWT_PASSPHRASE}
       MERCURE_URL: http://php/.well-known/mercure
-      MERCURE_PUBLIC_URL: https://${SERVER_NAME:-localhost}/.well-known/mercure
+      MERCURE_PUBLIC_URL: https://${SERVER_NAME_PUBLIC}/.well-known/mercure
       MERCURE_JWT_SECRET: ${CADDY_MERCURE_JWT_SECRET}
       MERCURE_PUBLISHER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET}
       MERCURE_SUBSCRIBER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET}
+      TRUSTED_PROXIES: "127.0.0.1,REMOTE_ADDR"
+      TRUSTED_HOSTS: "^${SERVER_NAME_PUBLIC}$$"
     volumes:
       - caddy_data:/data
       - caddy_config:/config
       - jwt_keys:/var/www/html/config/jwt
-    ports:
-      - "${HTTP_PORT:-80}:80"
-      - "${HTTPS_PORT:-443}:443"
-      - "${HTTPS_PORT:-443}:443/udp"
+    networks:
+      - web-network
+      - internal
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=web-network
+      - traefik.http.routers.lolanalytics.rule=Host(`${SERVER_NAME_PUBLIC}`)
+      - traefik.http.routers.lolanalytics.entrypoints=websecure
+      - traefik.http.routers.lolanalytics.tls.certresolver=letsencrypt
+      - traefik.http.services.lolanalytics.loadbalancer.server.port=80
+      - traefik.http.routers.lolanalytics.middlewares=secure-headers@docker
 
   database:
     image: mysql:8
@@ -40,16 +44,42 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     volumes:
       - database_data:/var/lib/mysql
-    ports:
-      - "3306:3306"
+    networks:
+      - internal
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       timeout: 5s
       retries: 5
       start_period: 60s
 
+  phpmyadmin:
+    image: phpmyadmin:latest
+    restart: unless-stopped
+    environment:
+      PMA_HOST: database
+      PMA_PORT: 3306
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      UPLOAD_LIMIT: 512M
+    networks:
+      - web-network
+      - internal
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=web-network
+      - traefik.http.routers.phpmyadmin.rule=Host(`pma.zeggriim.fr`)
+      - traefik.http.routers.phpmyadmin.entrypoints=websecure
+      - traefik.http.routers.phpmyadmin.tls.certresolver=letsencrypt
+      - traefik.http.services.phpmyadmin.loadbalancer.server.port=80
+      - traefik.http.routers.phpmyadmin.middlewares=secure-headers@docker,authelia@docker
+
 volumes:
   caddy_data:
   caddy_config:
   database_data:
   jwt_keys:
+
+networks:
+  web-network:
+    external: true
+  internal:
+    driver: bridge
