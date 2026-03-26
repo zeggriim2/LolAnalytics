@@ -30,3 +30,21 @@ services:
     ports:
       - "3306:3306"
 ###< doctrine/doctrine-bundle ###
+
+  worker:
+    build:
+      context: .
+      target: frankenphp_dev
+    volumes:
+      - ./:/app
+      - ./frankenphp/conf.d/20-app.dev.ini:/usr/local/etc/php/app.conf.d/20-app.dev.ini:ro
+    command: php bin/console messenger:consume async --time-limit=3600 -vv
+    restart: unless-stopped
+    depends_on:
+      database:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    environment:
+      APP_ENV: "${APP_ENV:-dev}"
+      MESSENGER_TRANSPORT_DSN: "amqp://${RABBITMQ_USER:-app}:${RABBITMQ_PASSWORD:-app}@rabbitmq:5672/%2f/messages"

@@ -1,3 +1,7 @@
+# DevTest environment — uses pre-built image from GitHub Container Registry
+# Deployed via: .github/workflows/cd-devtest.yml
+# On VPS: /opt/lolanalytics-devtest/
+# JWT keys: auto-generated via lexik:jwt:generate-keypair, persisted in jwt_keys volume
 services:
   php:
     image: ${PHP_IMAGE}
@@ -5,12 +9,16 @@ services:
     depends_on:
       database:
         condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
     environment:
+      # FrankenPHP écoute en HTTP interne uniquement — Traefik gère le TLS
       SERVER_NAME: ":80"
       APP_SECRET: ${APP_SECRET}
       DATABASE_URL: ${DATABASE_URL}
       API_RIOT_KEY: ${API_RIOT_KEY}
       JWT_PASSPHRASE: ${JWT_PASSPHRASE}
+      MESSENGER_TRANSPORT_DSN: amqp://${RABBITMQ_USER}:${RABBITMQ_PASSWORD}@rabbitmq:5672/%2f/messages
       MERCURE_URL: http://php/.well-known/mercure
       MERCURE_PUBLIC_URL: https://${SERVER_NAME_PUBLIC}/.well-known/mercure
       MERCURE_JWT_SECRET: ${CADDY_MERCURE_JWT_SECRET}
@@ -22,6 +30,7 @@ services:
       - caddy_data:/data
       - caddy_config:/config
       - jwt_keys:/var/www/html/config/jwt
+    # Plus de ports exposés directement — Traefik s'en charge
     networks:
       - web-network
       - internal
@@ -34,6 +43,46 @@ services:
       - traefik.http.services.lolanalytics.loadbalancer.server.port=80
       - traefik.http.routers.lolanalytics.middlewares=secure-headers@docker
 
+  worker:
+    image: ${PHP_IMAGE}
+    restart: unless-stopped
+    command: php bin/console messenger:consume async --time-limit=3600 -vv
+    depends_on:
+      database:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    environment:
+      APP_SECRET: ${APP_SECRET}
+      DATABASE_URL: ${DATABASE_URL}
+      API_RIOT_KEY: ${API_RIOT_KEY}
+      JWT_PASSPHRASE: ${JWT_PASSPHRASE}
+      MESSENGER_TRANSPORT_DSN: amqp://${RABBITMQ_USER}:${RABBITMQ_PASSWORD}@rabbitmq:5672/%2f/messages
+      MERCURE_URL: http://php/.well-known/mercure
+      MERCURE_JWT_SECRET: ${CADDY_MERCURE_JWT_SECRET}
+      MERCURE_PUBLISHER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET}
+      MERCURE_SUBSCRIBER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET}
+    volumes:
+      - jwt_keys:/var/www/html/config/jwt
+    networks:
+      - internal
+
+  rabbitmq:
+    image: rabbitmq:4.2.5-management-alpine
+    restart: unless-stopped
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - internal
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   database:
     image: mysql:8
     restart: unless-stopped
@@ -44,6 +93,7 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     volumes:
       - database_data:/var/lib/mysql
+    # Plus de port exposé publiquement — accès interne uniquement
     networks:
       - internal
     healthcheck:
@@ -77,6 +127,7 @@ volumes:
   caddy_config:
   database_data:
   jwt_keys:
+  rabbitmq_data:
 
 networks:
   web-network:

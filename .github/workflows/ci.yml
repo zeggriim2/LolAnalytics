@@ -104,7 +104,7 @@ jobs:
         run: docker run --rm -v $(pwd):/project -w /project jakzal/phpqa:php8.4-alpine php-cs-fixer fix --dry-run --diff --verbose
       -
         name: Install PHP dependencies
-        run: docker run --rm -v $(pwd):/project -w /project jakzal/phpqa:php8.4-alpine composer install --no-interaction --prefer-dist
+        run: docker run --rm -v $(pwd):/project -w /project jakzal/phpqa:php8.4-alpine composer install --no-interaction --prefer-dist --ignore-platform-req=ext-amqp
       -
         name: PHPStan
         run: docker run --rm -v $(pwd):/project -w /project jakzal/phpqa:php8.4-alpine phpstan analyse --memory-limit=1G

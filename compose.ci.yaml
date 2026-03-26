@@ -15,3 +15,8 @@ services:
   node:
     profiles:
       - frontend
+
+  # Worker is not needed in CI — async transport is overridden to sync:// in test env
+  worker:
+    profiles:
+      - worker
