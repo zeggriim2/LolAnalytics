@@ -72,7 +72,7 @@ final readonly class DoctrineSummonerRepository implements SummonerRepositoryInt
     {
         $entities = $this->entityManager->getRepository(SummonerEntity::class)
             ->createQueryBuilder('s')
-            ->orderBy('s.gameName', 'DESC')
+            ->orderBy('s.gameName', 'ASC')
             ->setFirstResult($offset)
             ->setMaxResults($limit)
             ->getQuery()
