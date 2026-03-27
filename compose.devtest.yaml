@@ -30,6 +30,7 @@ services:
       - caddy_data:/data
       - caddy_config:/config
       - jwt_keys:/var/www/html/config/jwt
+      - public_images:/var/www/html/public/images
     # Plus de ports exposés directement — Traefik s'en charge
     networks:
       - web-network
@@ -64,6 +65,7 @@ services:
       MERCURE_SUBSCRIBER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET}
     volumes:
       - jwt_keys:/var/www/html/config/jwt
+      - public_images:/var/www/html/public/image
     networks:
       - internal
 
@@ -77,11 +79,20 @@ services:
       - rabbitmq_data:/var/lib/rabbitmq
     networks:
       - internal
+      - web-network
     healthcheck:
       test: ["CMD", "rabbitmq-diagnostics", "ping"]
       interval: 10s
       timeout: 5s
       retries: 5
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=web-network
+      - traefik.http.routers.rabbitmq.rule=Host(`rabbitmq.zeggriim.fr`)
+      - traefik.http.routers.rabbitmq.entrypoints=websecure
+      - traefik.http.routers.rabbitmq.tls.certresolver=letsencrypt
+      - traefik.http.services.rabbitmq.loadbalancer.server.port=15672   # ← port management
+      - traefik.http.routers.rabbitmq.middlewares=secure-headers@docker,authelia@docker
 
   database:
     image: mysql:8
@@ -128,6 +139,7 @@ volumes:
   database_data:
   jwt_keys:
   rabbitmq_data:
+  public_images:
 
 networks:
   web-network:

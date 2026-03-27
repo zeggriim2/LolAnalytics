@@ -96,7 +96,7 @@ Dans Portainer, aller dans **Environments**. L'ID est visible dans l'URL : `/#/e
 | `DEVTEST_MYSQL_PASSWORD`      | Mot de passe MySQL (= celui dans DATABASE_URL) | — |
 | `DEVTEST_API_RIOT_KEY`        | Token Riot Games API | — |
 | `DEVTEST_MERCURE_JWT_SECRET`  | Secret Mercure | `openssl rand -hex 32` |
-| `DEVTEST_SERVER_NAME`         | Domaine ou IP du VPS | `devtest.mondomaine.com` |
+| `DEVTEST_SERVER_NAME_PUBLIC`  | Domaine ou IP du VPS | `devtest.mondomaine.com` |
 | `DEVTEST_JWT_PASSPHRASE`      | Passphrase des clés JWT | (depuis `.env.dev.local`) |
 
 ---
