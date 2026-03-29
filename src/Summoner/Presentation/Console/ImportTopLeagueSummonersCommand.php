@@ -6,7 +6,8 @@ namespace App\Summoner\Presentation\Console;
 
 use App\SharedContext\Application\Bus\CommandBusInterface;
 use App\SharedContext\Domain\ValueObjet\Platform;
-use App\Summoner\Application\Command\ImportChallengerSummonersCommand as ImportChallengerSummonersApplicationCommand;
+use App\Summoner\Application\Command\ImportTopLeagueSummonersCommand as ImportTopLeagueSummonersApplicationCommand;
+use App\Summoner\Domain\Enum\TopLeagueTier;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -16,10 +17,10 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Zeggriim\RiotApiDataDragon\Enum\Queue;
 
 #[AsCommand(
-    name: 'summoner:import:challenger',
-    description: 'Enqueue all challenger summoners for async import via RabbitMQ',
+    name: 'summoner:import:top-league',
+    description: 'Enqueue all top-league summoners (Challenger / GrandMaster / Master) for async import via RabbitMQ',
 )]
-final class ImportChallengerSummonersCommand extends Command
+final class ImportTopLeagueSummonersCommand extends Command
 {
     public function __construct(private readonly CommandBusInterface $commandBus)
     {
@@ -33,8 +34,15 @@ final class ImportChallengerSummonersCommand extends Command
                 'platform',
                 'p',
                 InputOption::VALUE_REQUIRED,
-                'Platform to fetch challenger from (euw1, na1, kr…)',
+                'Platform to fetch from (euw1, na1, kr…)',
                 'euw1',
+            )
+            ->addOption(
+                'tier',
+                't',
+                InputOption::VALUE_REQUIRED,
+                sprintf('Tier: %s', implode(', ', array_column(TopLeagueTier::cases(), 'value'))),
+                TopLeagueTier::CHALLENGER->value,
             )
             ->addOption(
                 'queue',
@@ -50,12 +58,21 @@ final class ImportChallengerSummonersCommand extends Command
         $io = new SymfonyStyle($input, $output);
 
         $platformValue = strtolower((string) $input->getOption('platform'));
+        $tierValue = strtolower((string) $input->getOption('tier'));
         $queueValue = (string) $input->getOption('queue');
 
         $platform = Platform::tryFrom($platformValue);
 
         if (null === $platform) {
             $io->error(sprintf('Unknown platform "%s". Valid values: %s', $platformValue, implode(', ', array_column(Platform::cases(), 'value'))));
+
+            return Command::FAILURE;
+        }
+
+        $tier = TopLeagueTier::tryFrom($tierValue);
+
+        if (null === $tier) {
+            $io->error(sprintf('Unknown tier "%s". Valid values: %s', $tierValue, implode(', ', array_column(TopLeagueTier::cases(), 'value'))));
 
             return Command::FAILURE;
         }
@@ -68,10 +85,11 @@ final class ImportChallengerSummonersCommand extends Command
             return Command::FAILURE;
         }
 
-        $this->commandBus->dispatch(new ImportChallengerSummonersApplicationCommand($platform, $queue));
+        $this->commandBus->dispatch(new ImportTopLeagueSummonersApplicationCommand($platform, $tier, $queue));
 
         $io->success(sprintf(
-            'Challenger summoners for platform "%s" / queue "%s" have been enqueued.',
+            '%s summoners for platform "%s" / queue "%s" have been enqueued.',
+            ucfirst($tier->value),
             $platform->value,
             $queue->value,
         ));

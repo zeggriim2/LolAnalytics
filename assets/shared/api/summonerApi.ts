@@ -15,4 +15,9 @@ export const summonerApi = {
       method: 'POST',
       body: JSON.stringify({ puuid, platform }),
     }),
+  importTopLeague: (platform: string, tier: string, queue: string) =>
+    fetchApi<{ status: string; message: string }>('/summoners/import/top-league', {
+      method: 'POST',
+      body: JSON.stringify({ platform, tier, queue }),
+    }),
 }

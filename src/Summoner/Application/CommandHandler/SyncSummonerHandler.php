@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Summoner\Application\CommandHandler;
 
 use App\SharedContext\Domain\ValueObjet\Platform;
-use App\Summoner\Application\Command\ImportSummonerCommand;
+use App\Summoner\Application\Command\SyncSummonerCommand;
 use App\Summoner\Application\Exception\SummonerValidationException;
 use App\Summoner\Application\Port\RiotSummonerProviderInterface;
 use App\Summoner\Domain\Model\Summoner;
@@ -16,7 +16,7 @@ use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 #[AsMessageHandler(bus: 'command.bus')]
-final readonly class ImportSummonerHandler
+final readonly class SyncSummonerHandler
 {
     public function __construct(
         private RiotSummonerProviderInterface $summonerProvider,
@@ -25,17 +25,9 @@ final readonly class ImportSummonerHandler
     ) {
     }
 
-    private const int REFRESH_COOLDOWN_HOURS = 6;
-
-    public function __invoke(ImportSummonerCommand $command): void
+    public function __invoke(SyncSummonerCommand $command): void
     {
         $puuid = Puuid::fromString($command->puuid);
-        $existingSummoner = $this->summonerRepository->findByPuuid($puuid);
-
-        if (!$command->force && null !== $existingSummoner && $this->isRecentlyUpdated($existingSummoner->lastUpdatedAt())) {
-            return;
-        }
-
         $region = $command->platform->toRegion();
 
         $dto = $this->summonerProvider->fetchByPuuid(
@@ -49,6 +41,8 @@ final readonly class ImportSummonerHandler
         if ($violations->count() > 0) {
             throw SummonerValidationException::forSingle($dto->puuid, $violations);
         }
+
+        $existingSummoner = $this->summonerRepository->findByPuuid($puuid);
 
         if (null !== $existingSummoner) {
             $existingSummoner->updateProfile(
@@ -72,12 +66,5 @@ final readonly class ImportSummonerHandler
         );
 
         $this->summonerRepository->save($summoner);
-    }
-
-    private function isRecentlyUpdated(\DateTimeImmutable $lastUpdatedAt): bool
-    {
-        $threshold = new \DateTimeImmutable(sprintf('-%d hours', self::REFRESH_COOLDOWN_HOURS));
-
-        return $lastUpdatedAt > $threshold;
     }
 }

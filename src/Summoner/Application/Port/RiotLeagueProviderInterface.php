@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace App\Summoner\Application\Port;
 
 use App\SharedContext\Domain\ValueObjet\Platform;
+use App\Summoner\Domain\Enum\TopLeagueTier;
 use Zeggriim\RiotApiDataDragon\Enum\Queue;
 
 interface RiotLeagueProviderInterface
 {
     /**
-     * @return string[] List of PUUIDs from the challenger league
+     * @return string[] List of PUUIDs from the given top-league tier
      */
-    public function getChallengerPuuids(Platform $platform, Queue $queue): array;
+    public function getTopLeaguePuuids(Platform $platform, Queue $queue, TopLeagueTier $tier): array;
 }

@@ -1,6 +1,7 @@
+entr
 <script setup lang="ts">
 import { RouterLink, useRouter } from 'vue-router'
-import { LayoutDashboard, Swords, Users, Database, LogOut } from 'lucide-vue-next'
+import { LayoutDashboard, Swords, Users, Database, Trophy, LogOut } from 'lucide-vue-next'
 import { useAuthStore } from '@admin/stores/auth'
 
 const router = useRouter()
@@ -58,6 +59,16 @@ function logout() {
           >
             <Database class="w-4 h-4 shrink-0" />
             Game Data
+          </RouterLink>
+        </li>
+        <li>
+          <RouterLink
+            to="/league-import"
+            class="flex items-center gap-3 py-3 px-4 text-lol-text no-underline rounded mb-1 transition-colors hover:bg-lol-bg hover:text-lol-gold"
+            active-class="!bg-lol-bg !text-lol-gold"
+          >
+            <Trophy class="w-4 h-4 shrink-0" />
+            League Import
           </RouterLink>
         </li>
       </ul>
