@@ -185,6 +185,141 @@ final class ImportSummonerHandlerTest extends TestCase
         ($this->handler)($command);
     }
 
+    public function testSkipsImportWhenSummonerIsRecentlyUpdated(): void
+    {
+        // Given: summoner updated 1 hour ago (within 6h cooldown)
+        $puuid = 'recent-puuid-123';
+        $platform = Platform::EUW1;
+        $command = new ImportSummonerCommand($puuid, $platform, force: false);
+
+        $this->validator->expects($this->never())->method('validate');
+
+        $recentSummoner = Summoner::create(
+            Puuid::fromString($puuid),
+            \App\Summoner\Domain\ValueObject\RiotId::create('RecentPlayer', 'EUW'),
+            1234,
+            100,
+            Platform::EUW1,
+            new \DateTimeImmutable('-1 hour'),
+        );
+
+        $this->summonerRepository
+            ->expects($this->once())
+            ->method('findByPuuid')
+            ->willReturn($recentSummoner);
+
+        $this->summonerProvider
+            ->expects($this->never())
+            ->method('fetchByPuuid');
+
+        $this->summonerRepository
+            ->expects($this->never())
+            ->method('save');
+
+        // When
+        ($this->handler)($command);
+    }
+
+    public function testForceImportBypassesCooldown(): void
+    {
+        // Given: summoner updated 1 hour ago but force=true
+        $puuid = 'recent-puuid-456';
+        $platform = Platform::EUW1;
+        $command = new ImportSummonerCommand($puuid, $platform, force: true);
+
+        $recentSummoner = Summoner::create(
+            Puuid::fromString($puuid),
+            \App\Summoner\Domain\ValueObject\RiotId::create('OldName', 'EUW'),
+            1111,
+            100,
+            Platform::EUW1,
+            new \DateTimeImmutable('-1 hour'),
+        );
+
+        $dto = new SummonerDto(
+            puuid: $puuid,
+            gameName: 'ForcedUpdate',
+            tagLine: 'EUW',
+            profileIconId: 9999,
+            summonerLevel: 200,
+            platform: 'euw1',
+            lastUpdatedAt: new \DateTimeImmutable(),
+        );
+
+        $this->summonerRepository
+            ->expects($this->once())
+            ->method('findByPuuid')
+            ->willReturn($recentSummoner);
+
+        $this->summonerProvider
+            ->expects($this->once())
+            ->method('fetchByPuuid')
+            ->willReturn($dto);
+
+        $this->validator
+            ->expects($this->once())
+            ->method('validate')
+            ->willReturn(new ConstraintViolationList());
+
+        $this->summonerRepository
+            ->expects($this->once())
+            ->method('save')
+            ->with($this->callback(fn (Summoner $s) => 'ForcedUpdate' === $s->riotId()->gameName()));
+
+        // When
+        ($this->handler)($command);
+    }
+
+    public function testImportsWhenSummonerExistsButIsOutdated(): void
+    {
+        // Given: summoner updated 8 hours ago (outside 6h cooldown)
+        $puuid = 'old-puuid-123';
+        $platform = Platform::EUW1;
+        $command = new ImportSummonerCommand($puuid, $platform, force: false);
+
+        $outdatedSummoner = Summoner::create(
+            Puuid::fromString($puuid),
+            \App\Summoner\Domain\ValueObject\RiotId::create('OldName', 'EUW'),
+            1111,
+            100,
+            Platform::EUW1,
+            new \DateTimeImmutable('-8 hours'),
+        );
+
+        $dto = new SummonerDto(
+            puuid: $puuid,
+            gameName: 'RefreshedName',
+            tagLine: 'EUW',
+            profileIconId: 2222,
+            summonerLevel: 150,
+            platform: 'euw1',
+            lastUpdatedAt: new \DateTimeImmutable(),
+        );
+
+        $this->summonerRepository
+            ->expects($this->once())
+            ->method('findByPuuid')
+            ->willReturn($outdatedSummoner);
+
+        $this->summonerProvider
+            ->expects($this->once())
+            ->method('fetchByPuuid')
+            ->willReturn($dto);
+
+        $this->validator
+            ->expects($this->once())
+            ->method('validate')
+            ->willReturn(new ConstraintViolationList());
+
+        $this->summonerRepository
+            ->expects($this->once())
+            ->method('save')
+            ->with($this->callback(fn (Summoner $s) => 'RefreshedName' === $s->riotId()->gameName()));
+
+        // When
+        ($this->handler)($command);
+    }
+
     public function testThrowsExceptionWhenDtoValidationFails(): void
     {
         $puuid = 'invalid-puuid';

@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace App\Tests\Functional\Summoner\Application\CommandHandler;
 
 use App\SharedContext\Domain\ValueObjet\Platform;
-use App\Summoner\Application\Command\ImportChallengerSummonersCommand;
+use App\Summoner\Application\Command\ImportTopLeagueSummonersCommand;
 use App\Summoner\Application\Dto\SummonerDto;
 use App\Summoner\Application\Port\RiotLeagueProviderInterface;
 use App\Summoner\Application\Port\RiotSummonerProviderInterface;
+use App\Summoner\Domain\Enum\TopLeagueTier;
 use App\Summoner\Domain\Repository\SummonerRepositoryInterface;
 use App\Summoner\Domain\ValueObject\Puuid;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -16,7 +17,7 @@ use Symfony\Component\Messenger\MessageBusInterface;
 use Zeggriim\RiotApiDataDragon\Enum\Queue;
 use Zenstruck\Foundry\Test\ResetDatabase;
 
-final class ImportChallengerSummonersHandlerTest extends KernelTestCase
+final class ImportTopLeagueSummonersHandlerTest extends KernelTestCase
 {
     use ResetDatabase;
 
@@ -33,16 +34,17 @@ final class ImportChallengerSummonersHandlerTest extends KernelTestCase
         $this->repository = $container->get(SummonerRepositoryInterface::class);
     }
 
-    public function testImportsChallengerSummonersFromLeague(): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('tierProvider')]
+    public function testImportsTopLeagueSummonersFromLeague(TopLeagueTier $tier): void
     {
-        // Given: 3 puuids returned by the challenger league
-        $puuids = ['challenger-puuid-1', 'challenger-puuid-2', 'challenger-puuid-3'];
+        // Given: 3 puuids returned by the league provider
+        $puuids = ['top-puuid-1', 'top-puuid-2', 'top-puuid-3'];
 
         $mockLeagueProvider = $this->createMock(RiotLeagueProviderInterface::class);
         $mockLeagueProvider
             ->expects($this->once())
-            ->method('getChallengerPuuids')
-            ->with(Platform::EUW1, Queue::RANKED_SOLO)
+            ->method('getTopLeaguePuuids')
+            ->with(Platform::EUW1, Queue::RANKED_SOLO, $tier)
             ->willReturn($puuids);
 
         $mockSummonerProvider = $this->createStub(RiotSummonerProviderInterface::class);
@@ -50,7 +52,7 @@ final class ImportChallengerSummonersHandlerTest extends KernelTestCase
             ->method('fetchByPuuid')
             ->willReturnCallback(fn (string $puuid) => new SummonerDto(
                 puuid: $puuid,
-                gameName: 'Challenger',
+                gameName: 'Player',
                 tagLine: 'EUW',
                 profileIconId: 1,
                 summonerLevel: 500,
@@ -63,7 +65,7 @@ final class ImportChallengerSummonersHandlerTest extends KernelTestCase
 
         // When
         $this->commandBus->dispatch(
-            new ImportChallengerSummonersCommand(Platform::EUW1, Queue::RANKED_SOLO),
+            new ImportTopLeagueSummonersCommand(Platform::EUW1, $tier, Queue::RANKED_SOLO),
         );
 
         // Then: all 3 summoners are persisted
@@ -77,10 +79,10 @@ final class ImportChallengerSummonersHandlerTest extends KernelTestCase
 
     public function testImportsNothingWhenLeagueIsEmpty(): void
     {
-        // Given: empty challenger league
+        // Given: empty league
         $mockLeagueProvider = $this->createStub(RiotLeagueProviderInterface::class);
         $mockLeagueProvider
-            ->method('getChallengerPuuids')
+            ->method('getTopLeaguePuuids')
             ->willReturn([]);
 
         $mockSummonerProvider = $this->createMock(RiotSummonerProviderInterface::class);
@@ -93,10 +95,20 @@ final class ImportChallengerSummonersHandlerTest extends KernelTestCase
 
         // When
         $this->commandBus->dispatch(
-            new ImportChallengerSummonersCommand(Platform::EUW1),
+            new ImportTopLeagueSummonersCommand(Platform::EUW1),
         );
 
         // Then: no summoners in DB
         $this->assertCount(0, $this->repository->findAll(0, 10));
+    }
+
+    /**
+     * @return iterable<string, array{TopLeagueTier}>
+     */
+    public static function tierProvider(): iterable
+    {
+        yield 'challenger' => [TopLeagueTier::CHALLENGER];
+        yield 'grandmaster' => [TopLeagueTier::GRANDMASTER];
+        yield 'master' => [TopLeagueTier::MASTER];
     }
 }

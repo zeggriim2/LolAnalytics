@@ -6,7 +6,7 @@ namespace App\Summoner\Presentation\Api;
 
 use App\SharedContext\Application\Bus\CommandBusInterface;
 use App\SharedContext\Domain\ValueObjet\Platform;
-use App\Summoner\Application\Command\ImportSummonerCommand;
+use App\Summoner\Application\Command\SyncSummonerCommand;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -46,7 +46,7 @@ final class SyncSummonerByPuuidController extends AbstractController
         }
 
         try {
-            $this->commandBus->dispatch(new ImportSummonerCommand($puuid, $platform));
+            $this->commandBus->dispatch(new SyncSummonerCommand($puuid, $platform));
 
             return $this->json([
                 'status' => 'success',
