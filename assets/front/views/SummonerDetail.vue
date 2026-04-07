@@ -6,7 +6,9 @@ import { matchApi } from '@shared/api/matchApi'
 import { usePagination } from '@shared/composables/usePagination'
 import PaginationBar from '@shared/components/PaginationBar.vue'
 import SummonerMatchCharts from '@shared/components/SummonerMatchCharts.vue'
+import ChampionIcon from '@shared/components/ChampionIcon.vue'
 import type { Summoner, Match } from '@shared/types'
+import { ChevronLeft, User, Star, Globe } from 'lucide-vue-next'
 
 const route = useRoute()
 const summoner = ref<Summoner | null>(null)
@@ -35,7 +37,7 @@ onMounted(async () => {
     summoner.value = response.data
     fetchPage(1)
   } catch (e) {
-    error.value = 'Failed to load summoner details'
+    error.value = 'Impossible de charger le profil'
     console.error(e)
   } finally {
     loading.value = false
@@ -58,88 +60,125 @@ function formatDate(dateString: string): string {
 </script>
 
 <template>
-  <div class="container">
-    <header class="page-header">
-      <RouterLink to="/summoners" class="btn btn-secondary mr-4"> &larr; Back </RouterLink>
-      <h2 class="inline">Summoner Details</h2>
-    </header>
+  <div class="container py-8">
+    <!-- Back -->
+    <RouterLink
+      to="/summoners"
+      class="inline-flex items-center gap-1.5 text-lol-muted text-sm no-underline hover:text-lol-text transition-colors mb-6"
+    >
+      <ChevronLeft class="w-4 h-4" />
+      Retour aux invocateurs
+    </RouterLink>
 
-    <div v-if="loading" class="loading">Loading...</div>
+    <div v-if="loading" class="loading">Chargement…</div>
     <div v-else-if="error" class="error">{{ error }}</div>
+
     <div v-else-if="summoner">
-      <div class="card">
-        <div class="card-header">
-          <h3>{{ summoner.riotId }}</h3>
+      <!-- Profile card -->
+      <div
+        class="bg-lol-card border border-lol-border rounded-2xl p-6 mb-6 flex flex-col sm:flex-row items-start sm:items-center gap-6"
+      >
+        <!-- Avatar -->
+        <div
+          class="w-16 h-16 rounded-full bg-lol-gold/10 border-2 border-lol-gold/30 flex items-center justify-center shrink-0"
+        >
+          <User class="w-8 h-8 text-lol-gold/60" />
         </div>
-        <div class="stats-grid">
-          <div class="stat-card">
-            <div class="stat-value">{{ summoner.summonerLevel }}</div>
-            <div class="stat-label">Level</div>
+
+        <div class="flex-1 min-w-0">
+          <h2 class="text-2xl font-bold text-lol-text">{{ summoner.riotId }}</h2>
+          <p class="text-lol-muted text-sm mt-1">
+            Dernière mise à jour : {{ formatDate(summoner.lastUpdatedAt) }}
+          </p>
+        </div>
+
+        <!-- Stats inline -->
+        <div class="flex flex-wrap gap-6 shrink-0">
+          <div class="text-center">
+            <div class="flex items-center gap-1.5 text-lol-gold font-bold text-xl justify-center">
+              <Star class="w-4 h-4" />
+              {{ summoner.summonerLevel }}
+            </div>
+            <p class="text-lol-muted text-xs mt-0.5">Niveau</p>
           </div>
-          <div class="stat-card">
-            <div class="stat-value">{{ summoner.platform.toUpperCase() }}</div>
-            <div class="stat-label">Platform</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-value">{{ summoner.profileIconId }}</div>
-            <div class="stat-label">Profile Icon ID</div>
+          <div class="text-center">
+            <div class="flex items-center gap-1.5 text-lol-text font-bold text-xl justify-center">
+              <Globe class="w-4 h-4 text-lol-muted" />
+              {{ summoner.platform.toUpperCase() }}
+            </div>
+            <p class="text-lol-muted text-xs mt-0.5">Serveur</p>
           </div>
         </div>
-        <p class="text-lol-muted">Last updated: {{ formatDate(summoner.lastUpdatedAt) }}</p>
-        <p class="text-lol-muted mt-2">
-          PUUID: <code>{{ summoner.puuid }}</code>
-        </p>
       </div>
 
-      <!-- Charts -->
-      <div v-if="matchesInitialLoading" class="loading">Loading matches...</div>
+      <!-- Charts & Match History -->
+      <div v-if="matchesInitialLoading" class="loading">Chargement des parties…</div>
+
       <template v-else-if="matches.length > 0">
         <SummonerMatchCharts :matches="matches" :summoner-puuid="puuid" />
 
-        <!-- Match History Table -->
-        <div class="card" :class="{ 'opacity-50': matchesLoading }">
+        <!-- Match history -->
+        <div class="card" :class="{ 'opacity-50 pointer-events-none': matchesLoading }">
           <div class="card-header">
-            <h3>Match History</h3>
+            <h3 class="font-semibold text-lol-text">Historique des parties</h3>
+            <span class="text-lol-muted text-sm">{{ meta.total }} parties</span>
           </div>
-          <table class="table">
-            <thead>
-              <tr>
-                <th>Mode</th>
-                <th>Champion</th>
-                <th>K/D/A</th>
-                <th>Result</th>
-                <th>Date</th>
-                <th>Duration</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="match in matches" :key="match.id">
-                <td>{{ match.gameMode }}</td>
-                <td>Champion #{{ findParticipant(match)?.championId }}</td>
-                <td>
-                  {{ findParticipant(match)?.kills }}/{{ findParticipant(match)?.deaths }}/{{
-                    findParticipant(match)?.assists
-                  }}
-                </td>
-                <td>
-                  <span
-                    class="badge text-white"
-                    :class="findParticipant(match)?.win ? 'bg-lol-win' : 'bg-lol-loss'"
-                  >
-                    {{ findParticipant(match)?.win ? 'Victory' : 'Defeat' }}
-                  </span>
-                </td>
-                <td>{{ formatDate(match.playedAt) }}</td>
-                <td>{{ match.durationFormatted }}</td>
-                <td>
-                  <RouterLink :to="`/matches/${match.id}`" class="btn btn-primary btn-sm">
-                    View
-                  </RouterLink>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+
+          <div class="overflow-x-auto">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Mode</th>
+                  <th>Champion</th>
+                  <th>K/D/A</th>
+                  <th>Résultat</th>
+                  <th>Date</th>
+                  <th>Durée</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="match in matches" :key="match.id">
+                  <td class="text-lol-muted text-xs">{{ match.gameMode }}</td>
+                  <td>
+                    <ChampionIcon
+                      v-if="findParticipant(match)?.championId"
+                      :champion-id="findParticipant(match)!.championId"
+                      :version="match.version"
+                      :size="32"
+                    />
+                    <span v-else class="text-lol-muted text-xs">—</span>
+                  </td>
+                  <td class="font-mono text-sm">
+                    {{ findParticipant(match)?.kills }}/{{ findParticipant(match)?.deaths }}/{{
+                      findParticipant(match)?.assists
+                    }}
+                  </td>
+                  <td>
+                    <span
+                      class="badge text-white text-xs"
+                      :class="findParticipant(match)?.win ? 'bg-lol-win' : 'bg-lol-loss'"
+                    >
+                      {{ findParticipant(match)?.win ? 'Victoire' : 'Défaite' }}
+                    </span>
+                  </td>
+                  <td class="text-lol-muted text-xs whitespace-nowrap">
+                    {{ formatDate(match.playedAt) }}
+                  </td>
+                  <td class="text-lol-muted text-xs">{{ match.durationFormatted }}</td>
+                  <td>
+                    <RouterLink
+                      :to="`/matches/${match.id}`"
+                      class="btn btn-primary text-xs px-3 py-1"
+                    >
+                      Voir
+                    </RouterLink>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
           <PaginationBar
             :meta="meta"
             :has-previous="hasPrevious"
@@ -150,7 +189,9 @@ function formatDate(dateString: string): string {
           />
         </div>
       </template>
+
       <div v-else-if="matchesError" class="error">{{ matchesError }}</div>
+      <div v-else class="loading">Aucune partie enregistrée</div>
     </div>
   </div>
 </template>

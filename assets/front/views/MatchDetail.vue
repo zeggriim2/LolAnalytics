@@ -4,6 +4,8 @@ import { useRoute, RouterLink } from 'vue-router'
 import { api } from '@shared/api/client'
 import type { Match } from '@shared/types'
 import ItemIcon from '@shared/components/ItemIcon.vue'
+import ChampionIcon from '@shared/components/ChampionIcon.vue'
+import { ChevronLeft, Clock, Swords, Globe, Calendar } from 'lucide-vue-next'
 
 const route = useRoute()
 const match = ref<Match | null>(null)
@@ -19,7 +21,7 @@ onMounted(async () => {
     const response = await api.getMatch(matchId)
     match.value = response.data
   } catch (e) {
-    error.value = 'Failed to load match details'
+    error.value = 'Impossible de charger les détails de la partie'
     console.error(e)
   } finally {
     loading.value = false
@@ -42,157 +44,201 @@ function formatGold(value: number): string {
 </script>
 
 <template>
-  <div class="container">
-    <header class="page-header">
-      <RouterLink to="/" class="btn btn-secondary mr-4"> &larr; Back </RouterLink>
-      <h2 class="inline">Match Details</h2>
-    </header>
+  <div class="container py-8">
+    <!-- Back -->
+    <RouterLink
+      to="/"
+      class="inline-flex items-center gap-1.5 text-lol-muted text-sm no-underline hover:text-lol-text transition-colors mb-6"
+    >
+      <ChevronLeft class="w-4 h-4" />
+      Retour à l'accueil
+    </RouterLink>
 
-    <div v-if="loading" class="loading">Loading...</div>
+    <div v-if="loading" class="loading">Chargement…</div>
     <div v-else-if="error" class="error">{{ error }}</div>
+
     <div v-else-if="match">
-      <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-value">{{ match.durationFormatted }}</div>
-          <div class="stat-label">Duration</div>
+      <!-- Match stats bar -->
+      <div class="flex flex-wrap gap-4 mb-8">
+        <div
+          class="flex items-center gap-2 bg-lol-card border border-lol-border rounded-xl px-4 py-3"
+        >
+          <Clock class="w-4 h-4 text-lol-gold" />
+          <div>
+            <p class="text-lol-text font-semibold text-sm">{{ match.durationFormatted }}</p>
+            <p class="text-lol-muted text-xs">Durée</p>
+          </div>
         </div>
-        <div class="stat-card">
-          <div class="stat-value">{{ match.gameMode }}</div>
-          <div class="stat-label">Game Mode</div>
+        <div
+          class="flex items-center gap-2 bg-lol-card border border-lol-border rounded-xl px-4 py-3"
+        >
+          <Swords class="w-4 h-4 text-lol-gold" />
+          <div>
+            <p class="text-lol-text font-semibold text-sm">{{ match.gameMode }}</p>
+            <p class="text-lol-muted text-xs">Mode</p>
+          </div>
         </div>
-        <div class="stat-card">
-          <div class="stat-value">{{ match.platform.toUpperCase() }}</div>
-          <div class="stat-label">Platform</div>
+        <div
+          class="flex items-center gap-2 bg-lol-card border border-lol-border rounded-xl px-4 py-3"
+        >
+          <Globe class="w-4 h-4 text-lol-gold" />
+          <div>
+            <p class="text-lol-text font-semibold text-sm">{{ match.platform.toUpperCase() }}</p>
+            <p class="text-lol-muted text-xs">Serveur</p>
+          </div>
         </div>
-        <div class="stat-card">
-          <div class="stat-value">{{ formatDate(match.playedAt) }}</div>
-          <div class="stat-label">Played At</div>
+        <div
+          class="flex items-center gap-2 bg-lol-card border border-lol-border rounded-xl px-4 py-3"
+        >
+          <Calendar class="w-4 h-4 text-lol-gold" />
+          <div>
+            <p class="text-lol-text font-semibold text-sm">{{ formatDate(match.playedAt) }}</p>
+            <p class="text-lol-muted text-xs">Date</p>
+          </div>
         </div>
       </div>
 
+      <!-- Winners -->
       <div class="card">
         <div class="card-header">
-          <h3>Winners</h3>
-          <span class="badge bg-lol-win text-white">Victory</span>
+          <h3 class="font-semibold text-lol-text">Équipe gagnante</h3>
+          <span class="badge bg-lol-win text-white">Victoire</span>
         </div>
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Champion</th>
-              <th>Summoner</th>
-              <th>Lvl</th>
-              <th>K/D/A</th>
-              <th>KDA</th>
-              <th>CS</th>
-              <th>Gold</th>
-              <th>Dmg dealt</th>
-              <th>Dmg taken</th>
-              <th>Vision</th>
-              <th>Wards</th>
-              <th>Items</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="participant in winners" :key="participant.puuid">
-              <td>Champion #{{ participant.championId }}</td>
-              <td>
-                <RouterLink
-                  :to="`/summoners/${participant.puuid}`"
-                  class="text-lol-gold no-underline hover:underline"
-                >
-                  {{ participant.puuid.substring(0, 8) }}...
-                </RouterLink>
-              </td>
-              <td>{{ participant.champLevel }}</td>
-              <td>{{ participant.kills }}/{{ participant.deaths }}/{{ participant.assists }}</td>
-              <td>{{ participant.kda }}</td>
-              <td>{{ participant.cs }}</td>
-              <td>{{ formatGold(participant.goldEarned) }}</td>
-              <td>{{ formatGold(participant.totalDamageDealtToChampions) }}</td>
-              <td>{{ formatGold(participant.totalDamageTaken) }}</td>
-              <td>{{ participant.visionScore }}</td>
-              <td>{{ participant.wardsPlaced }}/{{ participant.wardsKilled }}</td>
-              <td>
-                <div class="items-row">
-                  <ItemIcon
-                    v-for="itemId in participant.items"
-                    :key="itemId"
-                    :item-id="itemId"
+        <div class="overflow-x-auto">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Champion</th>
+                <th>Invocateur</th>
+                <th>Niv</th>
+                <th>K/D/A</th>
+                <th>KDA</th>
+                <th>CS</th>
+                <th>Or</th>
+                <th>Dégâts</th>
+                <th>Vision</th>
+                <th>Wards</th>
+                <th>Items</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="participant in winners" :key="participant.puuid">
+                <td>
+                  <ChampionIcon
+                    :champion-id="participant.championId"
                     :version="match.version"
-                    :size="28"
+                    :size="36"
                   />
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+                </td>
+                <td>
+                  <RouterLink
+                    :to="`/summoners/${participant.summonerId}`"
+                    class="text-lol-gold no-underline hover:underline font-medium text-sm"
+                  >
+                    {{ participant.gameName }}
+                  </RouterLink>
+                </td>
+                <td class="text-lol-muted text-sm">{{ participant.champLevel }}</td>
+                <td class="font-mono text-sm">
+                  {{ participant.kills }}/{{ participant.deaths }}/{{ participant.assists }}
+                </td>
+                <td class="text-sm">{{ participant.kda }}</td>
+                <td class="text-lol-muted text-sm">{{ participant.cs }}</td>
+                <td class="text-lol-muted text-sm">{{ formatGold(participant.goldEarned) }}</td>
+                <td class="text-lol-muted text-sm">
+                  {{ formatGold(participant.totalDamageDealtToChampions) }}
+                </td>
+                <td class="text-lol-muted text-sm">{{ participant.visionScore }}</td>
+                <td class="text-lol-muted text-sm">
+                  {{ participant.wardsPlaced }}/{{ participant.wardsKilled }}
+                </td>
+                <td>
+                  <div class="flex gap-0.5 flex-wrap">
+                    <ItemIcon
+                      v-for="itemId in participant.items"
+                      :key="itemId"
+                      :item-id="itemId"
+                      :version="match.version"
+                      :size="28"
+                    />
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
 
+      <!-- Losers -->
       <div class="card">
         <div class="card-header">
-          <h3>Losers</h3>
-          <span class="badge bg-lol-loss text-white">Defeat</span>
+          <h3 class="font-semibold text-lol-text">Équipe perdante</h3>
+          <span class="badge bg-lol-loss text-white">Défaite</span>
         </div>
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Champion</th>
-              <th>Summoner</th>
-              <th>Lvl</th>
-              <th>K/D/A</th>
-              <th>KDA</th>
-              <th>CS</th>
-              <th>Gold</th>
-              <th>Dmg dealt</th>
-              <th>Dmg taken</th>
-              <th>Vision</th>
-              <th>Wards</th>
-              <th>Items</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="participant in losers" :key="participant.puuid">
-              <td>Champion #{{ participant.championId }}</td>
-              <td>
-                <RouterLink
-                  :to="`/summoners/${participant.puuid}`"
-                  class="text-lol-gold no-underline hover:underline"
-                >
-                  {{ participant.puuid.substring(0, 8) }}...
-                </RouterLink>
-              </td>
-              <td>{{ participant.champLevel }}</td>
-              <td>{{ participant.kills }}/{{ participant.deaths }}/{{ participant.assists }}</td>
-              <td>{{ participant.kda }}</td>
-              <td>{{ participant.cs }}</td>
-              <td>{{ formatGold(participant.goldEarned) }}</td>
-              <td>{{ formatGold(participant.totalDamageDealtToChampions) }}</td>
-              <td>{{ formatGold(participant.totalDamageTaken) }}</td>
-              <td>{{ participant.visionScore }}</td>
-              <td>{{ participant.wardsPlaced }}/{{ participant.wardsKilled }}</td>
-              <td>
-                <div class="items-row">
-                  <ItemIcon
-                    v-for="itemId in participant.items"
-                    :key="itemId"
-                    :item-id="itemId"
+        <div class="overflow-x-auto">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Champion</th>
+                <th>Invocateur</th>
+                <th>Niv</th>
+                <th>K/D/A</th>
+                <th>KDA</th>
+                <th>CS</th>
+                <th>Or</th>
+                <th>Dégâts</th>
+                <th>Vision</th>
+                <th>Wards</th>
+                <th>Items</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="participant in losers" :key="participant.puuid">
+                <td>
+                  <ChampionIcon
+                    :champion-id="participant.championId"
                     :version="match.version"
-                    :size="28"
+                    :size="36"
                   />
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+                </td>
+                <td>
+                  <RouterLink
+                    :to="`/summoners/${participant.summonerId}`"
+                    class="text-lol-gold no-underline hover:underline font-medium text-sm"
+                  >
+                    {{ participant.gameName }}
+                  </RouterLink>
+                </td>
+                <td class="text-lol-muted text-sm">{{ participant.champLevel }}</td>
+                <td class="font-mono text-sm">
+                  {{ participant.kills }}/{{ participant.deaths }}/{{ participant.assists }}
+                </td>
+                <td class="text-sm">{{ participant.kda }}</td>
+                <td class="text-lol-muted text-sm">{{ participant.cs }}</td>
+                <td class="text-lol-muted text-sm">{{ formatGold(participant.goldEarned) }}</td>
+                <td class="text-lol-muted text-sm">
+                  {{ formatGold(participant.totalDamageDealtToChampions) }}
+                </td>
+                <td class="text-lol-muted text-sm">{{ participant.visionScore }}</td>
+                <td class="text-lol-muted text-sm">
+                  {{ participant.wardsPlaced }}/{{ participant.wardsKilled }}
+                </td>
+                <td>
+                  <div class="flex gap-0.5 flex-wrap">
+                    <ItemIcon
+                      v-for="itemId in participant.items"
+                      :key="itemId"
+                      :item-id="itemId"
+                      :version="match.version"
+                      :size="28"
+                    />
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
 </template>
-
-<style scoped>
-.items-row {
-  display: flex;
-  gap: 2px;
-  flex-wrap: wrap;
-}
-</style>

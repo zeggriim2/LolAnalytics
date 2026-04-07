@@ -3,6 +3,7 @@ import { ref, onMounted } from 'vue'
 import { useRouter, RouterLink } from 'vue-router'
 import { api } from '@shared/api/client'
 import type { Match } from '@shared/types'
+import { Search, Swords, Clock, Users } from 'lucide-vue-next'
 
 const router = useRouter()
 const recentMatches = ref<Match[]>([])
@@ -38,43 +39,100 @@ function formatDate(dateString: string): string {
 
 <template>
   <div>
-    <section class="text-center py-16">
-      <div class="container">
-        <h2 class="text-4xl mb-4 text-lol-gold">Analyze Your League of Legends Matches</h2>
-        <p class="text-xl text-lol-muted mb-8">
-          Search for a summoner to view their match history and statistics
-        </p>
+    <!-- Hero Section -->
+    <section class="relative py-20 overflow-hidden">
+      <!-- Background gradient -->
+      <div class="absolute inset-0 pointer-events-none" aria-hidden="true">
+        <div
+          class="absolute inset-0 bg-gradient-to-b from-lol-gold/5 via-transparent to-transparent"
+        />
+        <div
+          class="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-lol-gold/8 rounded-full blur-3xl"
+        />
+      </div>
+
+      <div class="container relative">
+        <div class="text-center max-w-2xl mx-auto mb-10">
+          <div
+            class="inline-flex items-center gap-2 bg-lol-gold/10 border border-lol-gold/30 rounded-full px-4 py-1.5 text-lol-gold text-xs font-medium mb-6"
+          >
+            <Swords class="w-3.5 h-3.5" />
+            League of Legends Analytics
+          </div>
+          <h2 class="text-4xl lg:text-5xl font-bold text-lol-text mb-4 leading-tight">
+            Analysez vos <span class="text-lol-gold">parties</span>
+          </h2>
+          <p class="text-lol-muted text-lg">
+            Recherchez un invocateur pour consulter son historique de matchs et ses statistiques
+            détaillées.
+          </p>
+        </div>
+
+        <!-- Search -->
         <form class="search-box" @submit.prevent="onSearch">
-          <input
-            v-model="searchQuery"
-            type="text"
-            class="search-input"
-            placeholder="Enter Summoner Name#TAG (e.g., Faker#KR1)"
-            @keyup.enter="onSearch"
-          />
+          <div class="relative">
+            <Search
+              class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-lol-muted pointer-events-none"
+            />
+            <input
+              v-model="searchQuery"
+              type="text"
+              class="search-input pl-12 pr-4"
+              placeholder="Faker#KR1, T1 Faker#KR1…"
+            />
+          </div>
         </form>
       </div>
     </section>
 
-    <section class="py-12">
+    <!-- Recent Matches -->
+    <section class="py-10 border-t border-lol-border/30">
       <div class="container">
-        <h3 class="text-2xl mb-6 text-lol-gold">Recent Matches</h3>
-        <div v-if="loading" class="loading">Loading...</div>
-        <div v-else class="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-4">
+        <div class="flex items-center justify-between mb-6">
+          <h3 class="text-xl font-semibold text-lol-text">Parties récentes</h3>
+          <RouterLink to="/summoners" class="text-lol-gold text-sm no-underline hover:underline">
+            Voir les invocateurs →
+          </RouterLink>
+        </div>
+
+        <div v-if="loading" class="loading">Chargement…</div>
+
+        <div
+          v-else-if="recentMatches.length > 0"
+          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
+        >
           <RouterLink
             v-for="match in recentMatches"
             :key="match.id"
             :to="`/matches/${match.id}`"
-            class="bg-lol-card rounded-lg p-6 border border-lol-border no-underline text-inherit transition-transform duration-200 hover:-translate-y-0.5 hover:shadow-lg"
+            class="group block bg-lol-card rounded-xl p-5 border border-lol-border no-underline transition-all duration-200 hover:border-lol-gold/50 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-lol-gold/5"
           >
-            <h3 class="text-base mb-2">{{ match.gameMode }}</h3>
-            <p class="text-lol-muted text-sm">
-              {{ formatDate(match.playedAt) }} · {{ match.durationFormatted }} ·
-              {{ match.participantsCount }} players
-            </p>
+            <div class="flex items-center justify-between mb-3">
+              <span
+                class="inline-flex items-center gap-1.5 bg-lol-bg px-2.5 py-1 rounded-full text-xs font-medium text-lol-muted"
+              >
+                <Swords class="w-3 h-3" />
+                {{ match.gameMode }}
+              </span>
+              <span class="text-lol-border text-xs">{{ match.platform.toUpperCase() }}</span>
+            </div>
+
+            <div class="flex items-center gap-4 text-sm text-lol-muted mt-2">
+              <span class="flex items-center gap-1">
+                <Clock class="w-3.5 h-3.5" />
+                {{ match.durationFormatted }}
+              </span>
+              <span class="flex items-center gap-1">
+                <Users class="w-3.5 h-3.5" />
+                {{ match.participantsCount }} joueurs
+              </span>
+            </div>
+
+            <p class="text-lol-muted/60 text-xs mt-3">{{ formatDate(match.playedAt) }}</p>
           </RouterLink>
-          <div v-if="recentMatches.length === 0" class="loading">No matches found</div>
         </div>
+
+        <div v-else class="loading">Aucune partie trouvée</div>
       </div>
     </section>
   </div>

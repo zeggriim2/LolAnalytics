@@ -3,36 +3,49 @@ import { RouterView, RouterLink } from 'vue-router'
 </script>
 
 <template>
-  <header class="bg-lol-card py-4 border-b-2 border-lol-gold">
-    <div class="container flex items-center justify-between">
-      <h1 class="text-lol-gold text-2xl">
-        <RouterLink to="/" class="text-inherit no-underline">LoL Analytics</RouterLink>
-      </h1>
-      <nav>
-        <ul class="flex gap-6 list-none">
-          <li>
-            <RouterLink
-              to="/"
-              class="text-lol-text no-underline text-sm transition-colors hover:text-lol-gold"
-              active-class="!text-lol-gold"
-            >
-              Home
-            </RouterLink>
-          </li>
-          <li>
-            <RouterLink
-              to="/summoners"
-              class="text-lol-text no-underline text-sm transition-colors hover:text-lol-gold"
-              active-class="!text-lol-gold"
-            >
-              Summoners
-            </RouterLink>
-          </li>
-        </ul>
-      </nav>
-    </div>
-  </header>
-  <main>
-    <RouterView />
-  </main>
+  <div class="min-h-screen flex flex-col">
+    <!-- Header sticky avec backdrop blur -->
+    <header class="sticky top-0 z-50 bg-lol-card/80 backdrop-blur-md border-b border-lol-border/60">
+      <div class="container flex items-center justify-between h-14">
+        <RouterLink to="/" class="no-underline flex items-center gap-2 group">
+          <span
+            class="text-lol-gold font-bold text-lg tracking-wide group-hover:opacity-90 transition-opacity"
+          >
+            LoL<span class="text-lol-text font-light">Analytics</span>
+          </span>
+        </RouterLink>
+
+        <nav>
+          <ul class="flex gap-1 list-none">
+            <li>
+              <RouterLink
+                to="/"
+                class="px-3 py-1.5 text-sm text-lol-muted no-underline rounded-lg transition-colors hover:text-lol-text hover:bg-lol-border/40"
+                active-class="!text-lol-gold !bg-lol-gold/10"
+              >
+                Accueil
+              </RouterLink>
+            </li>
+            <li>
+              <RouterLink
+                to="/summoners"
+                class="px-3 py-1.5 text-sm text-lol-muted no-underline rounded-lg transition-colors hover:text-lol-text hover:bg-lol-border/40"
+                active-class="!text-lol-gold !bg-lol-gold/10"
+              >
+                Invocateurs
+              </RouterLink>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="flex-1">
+      <RouterView />
+    </main>
+
+    <footer class="border-t border-lol-border/40 py-5 text-center text-lol-muted/60 text-xs">
+      LoL Analytics — Powered by Riot Games API
+    </footer>
+  </div>
 </template>
