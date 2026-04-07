@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useRoute, RouterLink } from 'vue-router'
+import { ChevronLeft, Users, RefreshCw } from 'lucide-vue-next'
 import { api } from '@shared/api/client'
 import { matchApi } from '@shared/api/matchApi'
 import { usePagination } from '@shared/composables/usePagination'
@@ -80,33 +81,53 @@ function formatDate(dateString: string): string {
 <template>
   <AdminPageTemplate>
     <template #header>
-      <RouterLink to="/summoners" class="btn btn-secondary mr-4">&larr; Back</RouterLink>
-      <h2 class="inline">Summoner Details</h2>
+      <div class="flex items-center gap-3">
+        <RouterLink
+          to="/summoners"
+          class="text-admin-text hover:text-admin-heading transition-colors"
+          title="Retour"
+        >
+          <ChevronLeft class="w-5 h-5" />
+        </RouterLink>
+        <span class="text-admin-border">|</span>
+        <Users class="w-4 h-4 text-admin-primary" />
+        <h2 class="text-admin-heading font-semibold text-lg">
+          {{ summoner?.riotId ?? 'Summoner Details' }}
+        </h2>
+      </div>
+      <button
+        v-if="summoner"
+        class="admin-btn-secondary flex items-center gap-2"
+        :disabled="syncLoading"
+        @click="syncMatches"
+      >
+        <RefreshCw class="w-4 h-4" :class="{ 'animate-spin': syncLoading }" />
+        {{ syncLoading ? 'Syncing…' : 'Sync Matches' }}
+      </button>
     </template>
 
     <div v-if="loading" class="loading">Loading...</div>
     <div v-else-if="error" class="error">{{ error }}</div>
     <div v-else-if="summoner">
-      <div class="card">
-        <div class="card-header">
-          <h3>{{ summoner.riotId }}</h3>
-          <div class="flex items-center gap-2">
-            <button class="btn btn-primary" :disabled="syncLoading" @click="syncMatches">
-              <span v-if="syncLoading">Syncing...</span>
-              <span v-else>Sync Matches</span>
-            </button>
-          </div>
-        </div>
-        <div v-if="syncError" class="error">{{ syncError }}</div>
-        <div class="stats-grid">
-          <StatCard :value="summoner.summonerLevel" label="Level" />
-          <StatCard :value="summoner.platform.toUpperCase()" label="Platform" />
-          <StatCard :value="summoner.profileIconId" label="Profile Icon ID" />
-        </div>
-        <p class="text-lol-muted">Last updated: {{ formatDate(summoner.lastUpdatedAt) }}</p>
-        <p class="text-lol-muted mt-2">
-          PUUID: <code>{{ summoner.puuid }}</code>
+      <div
+        v-if="syncError"
+        class="bg-red-500/10 border border-red-500/30 text-red-400 rounded-xl p-4 text-sm mb-4"
+      >
+        {{ syncError }}
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+        <StatCard :value="summoner.summonerLevel" label="Level" />
+        <StatCard :value="summoner.platform.toUpperCase()" label="Platform" />
+        <StatCard :value="summoner.profileIconId" label="Profile Icon ID" />
+      </div>
+
+      <div class="admin-card p-4 mb-6">
+        <p class="text-admin-text text-sm">
+          Dernière mise à jour :
+          <span class="text-admin-heading">{{ formatDate(summoner.lastUpdatedAt) }}</span>
         </p>
+        <p class="text-admin-text text-xs mt-1.5 font-mono break-all">{{ summoner.puuid }}</p>
       </div>
 
       <div v-if="matchesInitialLoading" class="loading">Loading matches...</div>

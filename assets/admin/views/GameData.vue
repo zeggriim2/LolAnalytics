@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
+import { Database } from 'lucide-vue-next'
 import { gameDataApi } from '@shared/api/gameDataApi'
+import { useToast } from '@shared/composables/useToast'
 import type { Queue, GameMap, GameMode, GameType, Version } from '@shared/types'
 import { useTableControls } from '@shared/composables/useTableControls'
-import AlertMessage from '@shared/components/AlertMessage.vue'
 import SpinnerButton from '@shared/components/SpinnerButton.vue'
+import SkeletonTable from '@shared/components/SkeletonTable.vue'
 import SortableHeader from '@shared/components/SortableHeader.vue'
 import GameDataTabItem from '@admin/components/molecules/GameDataTabItem.vue'
 import AdminPageTemplate from '@admin/components/templates/AdminPageTemplate.vue'
@@ -20,7 +22,7 @@ const activeTab = ref('queues')
 
 const syncingAll = ref(false)
 const syncingType = ref<string | null>(null)
-const syncMessage = ref<{ type: 'success' | 'error'; text: string } | null>(null)
+const toast = useToast()
 
 const queuesCtrl = useTableControls(() => queues.value)
 const mapsCtrl = useTableControls(() => maps.value)
@@ -71,22 +73,14 @@ async function loadDataByType(type: string) {
   }
 }
 
-function showMessage(type: 'success' | 'error', text: string) {
-  syncMessage.value = { type, text }
-  setTimeout(() => {
-    syncMessage.value = null
-  }, 4000)
-}
-
 async function syncAll() {
   syncingAll.value = true
-  syncMessage.value = null
   try {
     const res = await gameDataApi.syncAll()
     await loadAllData()
-    showMessage('success', res.message)
+    toast.success(res.message)
   } catch (e) {
-    showMessage('error', e instanceof Error ? e.message : 'Sync failed')
+    toast.error(e instanceof Error ? e.message : 'Sync failed')
   } finally {
     syncingAll.value = false
   }
@@ -94,13 +88,12 @@ async function syncAll() {
 
 async function syncType(type: string) {
   syncingType.value = type
-  syncMessage.value = null
   try {
     const res = await gameDataApi.sync(type)
     await loadDataByType(type)
-    showMessage('success', res.message)
+    toast.success(res.message)
   } catch (e) {
-    showMessage('error', e instanceof Error ? e.message : 'Sync failed')
+    toast.error(e instanceof Error ? e.message : 'Sync failed')
   } finally {
     syncingType.value = null
   }
@@ -127,7 +120,10 @@ onMounted(async () => {
 <template>
   <AdminPageTemplate>
     <template #header>
-      <h2>Game Data</h2>
+      <div class="flex items-center gap-2">
+        <Database class="w-5 h-5 text-admin-primary" />
+        <h2 class="text-admin-heading font-semibold text-lg">Game Data</h2>
+      </div>
       <SpinnerButton
         :loading="syncingAll"
         :disabled="isSyncing()"
@@ -137,10 +133,10 @@ onMounted(async () => {
       />
     </template>
 
-    <AlertMessage v-if="syncMessage" :type="syncMessage.type" :message="syncMessage.text" />
-
-    <div v-if="loading" class="loading">Loading...</div>
-    <div v-else-if="error" class="error">{{ error }}</div>
+    <div v-if="error" class="error">{{ error }}</div>
+    <div v-if="loading" class="admin-card p-6 mb-6">
+      <SkeletonTable :rows="6" :cols="3" />
+    </div>
     <div v-else class="bg-lol-card rounded-lg border border-lol-border mb-6">
       <div class="tab-bar px-2">
         <GameDataTabItem

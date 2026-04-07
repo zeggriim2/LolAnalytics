@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
 import { useRoute, RouterLink } from 'vue-router'
+import { ChevronLeft, Swords } from 'lucide-vue-next'
 import { api } from '@shared/api/client'
 import type { Match } from '@shared/types'
 import StatCard from '@admin/components/atoms/StatCard.vue'
@@ -42,8 +43,18 @@ function formatDate(dateString: string): string {
 <template>
   <AdminPageTemplate>
     <template #header>
-      <RouterLink to="/matches" class="btn btn-secondary mr-4">&larr; Back</RouterLink>
-      <h2 class="inline">Match Details</h2>
+      <div class="flex items-center gap-3">
+        <RouterLink
+          to="/matches"
+          class="text-admin-text hover:text-admin-heading transition-colors"
+          title="Retour"
+        >
+          <ChevronLeft class="w-5 h-5" />
+        </RouterLink>
+        <span class="text-admin-border">|</span>
+        <Swords class="w-4 h-4 text-admin-primary" />
+        <h2 class="text-admin-heading font-semibold text-lg">Match Details</h2>
+      </div>
     </template>
 
     <div v-if="loading" class="loading">Loading...</div>

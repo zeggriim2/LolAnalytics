@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { authApi } from '@shared/api/authApi'
 import { useAuthStore } from '../stores/auth'
+import { Swords, Mail, Lock, AlertCircle } from 'lucide-vue-next'
 
 const router = useRouter()
 const authStore = useAuthStore()
@@ -15,13 +16,12 @@ const loading = ref(false)
 async function handleLogin() {
   error.value = null
   loading.value = true
-
   try {
     const { token } = await authApi.login(email.value, password.value)
     authStore.setToken(token)
     await router.push('/')
   } catch {
-    error.value = 'Invalid credentials. Please try again.'
+    error.value = 'Identifiants invalides. Veuillez réessayer.'
   } finally {
     loading.value = false
   }
@@ -29,128 +29,90 @@ async function handleLogin() {
 </script>
 
 <template>
-  <div class="login-page">
-    <div class="login-card">
-      <h1 class="login-title">LolAnalytics Admin</h1>
+  <div class="min-h-screen bg-admin-bg flex items-center justify-center p-4">
+    <!-- Background glow -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+      <div
+        class="absolute -top-40 left-1/2 -translate-x-1/2 w-96 h-96 bg-admin-primary/10 rounded-full blur-3xl"
+      />
+    </div>
 
-      <form class="login-form" @submit.prevent="handleLogin">
-        <div class="form-group">
-          <label for="email">Email</label>
-          <input
-            id="email"
-            v-model="email"
-            type="email"
-            required
-            autocomplete="email"
-            placeholder="admin@example.com"
-          />
+    <div class="relative w-full max-w-md">
+      <!-- Logo / branding -->
+      <div class="flex flex-col items-center mb-8">
+        <div
+          class="w-14 h-14 rounded-2xl bg-admin-primary flex items-center justify-center mb-4 shadow-xl shadow-admin-primary/30"
+        >
+          <Swords class="w-7 h-7 text-white" />
         </div>
+        <h1 class="text-admin-heading text-2xl font-bold tracking-tight">LoL Analytics</h1>
+        <p class="text-admin-text text-sm mt-1">Admin — Connectez-vous pour continuer</p>
+      </div>
 
-        <div class="form-group">
-          <label for="password">Password</label>
-          <input
-            id="password"
-            v-model="password"
-            type="password"
-            required
-            autocomplete="current-password"
-            placeholder="••••••••"
-          />
-        </div>
+      <!-- Card -->
+      <div class="bg-admin-card border border-admin-border rounded-2xl p-8 shadow-2xl">
+        <form class="space-y-5" @submit.prevent="handleLogin">
+          <!-- Email -->
+          <div>
+            <label class="block text-admin-heading text-sm font-medium mb-1.5" for="email">
+              Email
+            </label>
+            <div class="relative">
+              <Mail
+                class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-admin-text pointer-events-none"
+              />
+              <input
+                id="email"
+                v-model="email"
+                type="email"
+                required
+                autocomplete="email"
+                placeholder="admin@example.com"
+                class="admin-input pl-10"
+              />
+            </div>
+          </div>
 
-        <div v-if="error" class="login-error">{{ error }}</div>
+          <!-- Password -->
+          <div>
+            <label class="block text-admin-heading text-sm font-medium mb-1.5" for="password">
+              Mot de passe
+            </label>
+            <div class="relative">
+              <Lock
+                class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-admin-text pointer-events-none"
+              />
+              <input
+                id="password"
+                v-model="password"
+                type="password"
+                required
+                autocomplete="current-password"
+                placeholder="••••••••"
+                class="admin-input pl-10"
+              />
+            </div>
+          </div>
 
-        <button type="submit" class="login-btn" :disabled="loading">
-          {{ loading ? 'Signing in…' : 'Sign in' }}
-        </button>
-      </form>
+          <!-- Error -->
+          <div
+            v-if="error"
+            class="flex items-center gap-2 bg-red-500/10 border border-red-500/30 rounded-lg px-4 py-3 text-red-400 text-sm"
+          >
+            <AlertCircle class="w-4 h-4 shrink-0" />
+            {{ error }}
+          </div>
+
+          <!-- Submit -->
+          <button
+            type="submit"
+            :disabled="loading"
+            class="admin-btn-primary w-full py-2.5 text-sm font-semibold"
+          >
+            {{ loading ? 'Connexion…' : 'Se connecter' }}
+          </button>
+        </form>
+      </div>
     </div>
   </div>
 </template>
-
-<style scoped>
-.login-page {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  background: #0f172a;
-}
-
-.login-card {
-  background: #1e293b;
-  border: 1px solid #334155;
-  border-radius: 12px;
-  padding: 2.5rem;
-  width: 100%;
-  max-width: 400px;
-}
-
-.login-title {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #f1f5f9;
-  text-align: center;
-  margin-bottom: 2rem;
-}
-
-.login-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.375rem;
-}
-
-.form-group label {
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: #94a3b8;
-}
-
-.form-group input {
-  padding: 0.625rem 0.875rem;
-  background: #0f172a;
-  border: 1px solid #334155;
-  border-radius: 6px;
-  color: #f1f5f9;
-  font-size: 0.875rem;
-  outline: none;
-  transition: border-color 0.2s;
-}
-
-.form-group input:focus {
-  border-color: #3b82f6;
-}
-
-.login-error {
-  color: #f87171;
-  font-size: 0.875rem;
-  text-align: center;
-}
-
-.login-btn {
-  padding: 0.75rem;
-  background: #3b82f6;
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  font-size: 0.875rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.login-btn:hover:not(:disabled) {
-  background: #2563eb;
-}
-
-.login-btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-</style>

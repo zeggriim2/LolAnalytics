@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { Trophy } from 'lucide-vue-next'
 import { summonerApi } from '@shared/api/summonerApi'
+import { useToast } from '@shared/composables/useToast'
 import AdminPageTemplate from '@admin/components/templates/AdminPageTemplate.vue'
-import AlertMessage from '@shared/components/AlertMessage.vue'
 import SpinnerButton from '@shared/components/SpinnerButton.vue'
 
 const TIERS = ['challenger', 'grandmaster', 'master'] as const
@@ -15,23 +16,15 @@ const QUEUES = [
 const platform = ref('euw1')
 const queue = ref('RANKED_SOLO_5x5')
 const loadingTier = ref<string | null>(null)
-const message = ref<{ type: 'success' | 'error'; text: string } | null>(null)
-
-function showMessage(type: 'success' | 'error', text: string) {
-  message.value = { type, text }
-  setTimeout(() => {
-    message.value = null
-  }, 5000)
-}
+const toast = useToast()
 
 async function importTier(tier: string) {
   loadingTier.value = tier
-  message.value = null
   try {
     const res = await summonerApi.importTopLeague(platform.value, tier, queue.value)
-    showMessage('success', res.message)
+    toast.success(res.message)
   } catch (e) {
-    showMessage('error', e instanceof Error ? e.message : 'Import failed')
+    toast.error(e instanceof Error ? e.message : 'Import failed')
   } finally {
     loadingTier.value = null
   }
@@ -45,10 +38,11 @@ function tierLabel(tier: string): string {
 <template>
   <AdminPageTemplate>
     <template #header>
-      <h2>League Import</h2>
+      <div class="flex items-center gap-2">
+        <Trophy class="w-5 h-5 text-admin-primary" />
+        <h2 class="text-admin-heading font-semibold text-lg">League Import</h2>
+      </div>
     </template>
-
-    <AlertMessage v-if="message" :type="message.type" :message="message.text" class="mb-6" />
 
     <div class="bg-lol-card rounded-lg border border-lol-border p-6 mb-6">
       <h3 class="text-lol-gold mb-4">Import Settings</h3>

@@ -90,8 +90,8 @@ onUnmounted(() => {
         <button
           v-if="modelValue"
           class="searchable-select__clear"
-          @click.stop="clear"
           type="button"
+          @click.stop="clear"
         >
           ✕
         </button>

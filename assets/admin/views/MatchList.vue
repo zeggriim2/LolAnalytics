@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue'
 import { RouterLink } from 'vue-router'
+import { Swords } from 'lucide-vue-next'
 import { matchApi } from '@shared/api/matchApi'
 import { api } from '@shared/api/client'
 import type { Match, Platform, GameMode, Version } from '@shared/types'
@@ -10,6 +11,7 @@ import { useTableControls } from '@shared/composables/useTableControls'
 import PaginationBar from '@shared/components/PaginationBar.vue'
 import SortableHeader from '@shared/components/SortableHeader.vue'
 import SearchableSelect from '@shared/components/SearchableSelect.vue'
+import SkeletonTable from '@shared/components/SkeletonTable.vue'
 import AdminPageTemplate from '@admin/components/templates/AdminPageTemplate.vue'
 
 const platforms = ref<Platform[]>([])
@@ -96,12 +98,14 @@ function formatDate(dateString: string): string {
 <template>
   <AdminPageTemplate>
     <template #header>
-      <h2>Matches</h2>
+      <div class="flex items-center gap-2">
+        <Swords class="w-5 h-5 text-admin-primary" />
+        <h2 class="text-admin-heading font-semibold text-lg">Matches</h2>
+      </div>
     </template>
 
-    <div v-if="initialLoading" class="loading">Loading...</div>
-    <div v-else-if="error" class="error">{{ error }}</div>
-    <div v-else class="card">
+    <div v-if="error" class="error">{{ error }}</div>
+    <div class="card">
       <div class="mb-4 flex flex-wrap gap-2 items-end">
         <input
           v-model="ctrl.search"
@@ -143,7 +147,10 @@ function formatDate(dateString: string): string {
         </button>
       </div>
 
+      <SkeletonTable v-if="initialLoading" :rows="8" :cols="8" />
+
       <div
+        v-else
         class="transition-opacity duration-200"
         :class="{ 'opacity-50 pointer-events-none': loading }"
       >
@@ -225,6 +232,7 @@ function formatDate(dateString: string): string {
       </div>
 
       <PaginationBar
+        v-if="!initialLoading"
         :meta="meta"
         :has-previous="hasPrevious"
         :has-next="hasNext"

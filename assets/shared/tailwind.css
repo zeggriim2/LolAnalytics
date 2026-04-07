@@ -1,6 +1,7 @@
 @import 'tailwindcss';
 
 @theme {
+  /* ── Front (LoL theme) ──────────────────────────────── */
   --color-lol-bg: #0a1428;
   --color-lol-card: #1e2d3d;
   --color-lol-gold: #c89b3c;
@@ -9,6 +10,20 @@
   --color-lol-win: #1ea7fd;
   --color-lol-loss: #e84057;
   --color-lol-border: #3c3c41;
+
+  /* ── Admin (TailAdmin-inspired) ─────────────────────── */
+  --color-admin-bg: #111928;
+  --color-admin-sidebar: #1a2332;
+  --color-admin-card: #1f2937;
+  --color-admin-card2: #263244;
+  --color-admin-primary: #3b82f6;
+  --color-admin-primary-dark: #2563eb;
+  --color-admin-border: #2d3748;
+  --color-admin-text: #9ca3af;
+  --color-admin-heading: #e5e7eb;
+  --color-admin-success: #10b981;
+  --color-admin-danger: #ef4444;
+
   --font-family-sans:
     -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
 }
@@ -27,12 +42,14 @@
 }
 
 @layer components {
+  /* ── Shared layout ──────────────────────────────────── */
   .container {
     @apply max-w-[1200px] mx-auto px-4;
   }
 
+  /* ── LoL Front components ───────────────────────────── */
   .card {
-    @apply bg-lol-card rounded-lg p-6 mb-6 border border-lol-border;
+    @apply bg-lol-card rounded-xl p-6 mb-6 border border-lol-border;
   }
 
   .card-header {
@@ -44,7 +61,7 @@
   }
 
   .stat-card {
-    @apply bg-lol-card rounded-lg p-6 border border-lol-border text-center;
+    @apply bg-lol-card rounded-xl p-6 border border-lol-border text-center;
   }
 
   .stat-value {
@@ -52,23 +69,23 @@
   }
 
   .stat-label {
-    @apply text-lol-muted text-sm;
+    @apply text-lol-muted text-sm mt-1;
   }
 
   .btn {
-    @apply inline-block px-4 py-2 border-none rounded cursor-pointer text-sm no-underline transition-opacity hover:opacity-90;
+    @apply inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg cursor-pointer text-sm font-medium no-underline transition-all duration-150;
   }
 
   .btn-primary {
-    @apply bg-lol-gold text-lol-bg;
+    @apply bg-lol-gold text-lol-bg hover:opacity-90;
   }
 
   .btn-secondary {
-    @apply bg-lol-border text-lol-text;
+    @apply bg-lol-border/60 text-lol-text border border-lol-border hover:bg-lol-border;
   }
 
   .badge {
-    @apply inline-block px-2 py-1 rounded text-xs font-semibold;
+    @apply inline-block px-2 py-0.5 rounded text-xs font-semibold;
   }
 
   .table {
@@ -81,11 +98,11 @@
   }
 
   .table th {
-    @apply text-lol-muted font-semibold uppercase text-xs;
+    @apply text-lol-muted font-semibold uppercase text-xs tracking-wide;
   }
 
-  .table tr:hover {
-    @apply bg-lol-gold/10;
+  .table tr:hover td {
+    @apply bg-lol-gold/5;
   }
 
   .loading {
@@ -93,7 +110,7 @@
   }
 
   .error {
-    @apply bg-lol-loss/10 border border-lol-loss text-lol-loss p-4 rounded mb-4;
+    @apply bg-lol-loss/10 border border-lol-loss/40 text-lol-loss p-4 rounded-lg mb-4;
   }
 
   .page-header {
@@ -101,15 +118,17 @@
   }
 
   .page-header h2 {
-    @apply text-2xl text-lol-gold;
+    @apply text-2xl text-lol-gold font-semibold;
   }
 
   .search-box {
-    @apply max-w-[500px] mx-auto;
+    @apply max-w-[540px] mx-auto;
   }
 
   .search-input {
-    @apply w-full p-4 text-base border-2 border-lol-gold rounded-lg bg-lol-card text-lol-text placeholder:text-lol-muted focus:outline-none focus:ring-3 focus:ring-lol-gold/30;
+    @apply w-full p-4 text-base border-2 border-lol-gold/60 rounded-xl bg-lol-card text-lol-text
+      placeholder:text-lol-muted focus:outline-none focus:border-lol-gold focus:ring-4 focus:ring-lol-gold/20
+      transition-all duration-200;
   }
 
   .tab-bar {
@@ -117,7 +136,8 @@
   }
 
   .tab-item {
-    @apply px-5 py-3 text-sm font-medium cursor-pointer text-lol-muted border-b-2 border-transparent -mb-px transition-colors hover:text-lol-text;
+    @apply px-5 py-3 text-sm font-medium cursor-pointer text-lol-muted border-b-2 border-transparent -mb-px
+      transition-colors hover:text-lol-text;
   }
 
   .tab-item--active {
@@ -125,19 +145,22 @@
   }
 
   .sortable-th {
-    @apply cursor-pointer select-none hover:text-lol-text;
+    @apply cursor-pointer select-none hover:text-lol-text transition-colors;
   }
 
   .table-search {
-    @apply w-full px-3 py-2 text-sm border border-lol-border rounded bg-lol-bg text-lol-text placeholder:text-lol-muted focus:outline-none focus:border-lol-gold;
+    @apply w-full px-3 py-2 text-sm border border-lol-border rounded-lg bg-lol-bg text-lol-text
+      placeholder:text-lol-muted focus:outline-none focus:border-lol-gold transition-colors;
   }
 
   .table-filter-select {
-    @apply px-3 py-2 text-sm border border-lol-border rounded bg-lol-bg text-lol-text focus:outline-none focus:border-lol-gold cursor-pointer;
+    @apply px-3 py-2 text-sm border border-lol-border rounded-lg bg-lol-bg text-lol-text
+      focus:outline-none focus:border-lol-gold cursor-pointer transition-colors;
   }
 
   .table-filter-input {
-    @apply px-3 py-2 text-sm border border-lol-border rounded bg-lol-bg text-lol-text placeholder:text-lol-muted focus:outline-none focus:border-lol-gold;
+    @apply px-3 py-2 text-sm border border-lol-border rounded-lg bg-lol-bg text-lol-text
+      placeholder:text-lol-muted focus:outline-none focus:border-lol-gold transition-colors;
   }
 
   .searchable-select {
@@ -145,7 +168,8 @@
   }
 
   .searchable-select__trigger {
-    @apply flex items-center justify-between gap-2 px-3 py-2 border border-lol-border rounded bg-lol-bg text-lol-text cursor-pointer min-w-[160px];
+    @apply flex items-center justify-between gap-2 px-3 py-2 border border-lol-border rounded-lg
+      bg-lol-bg text-lol-text cursor-pointer min-w-[160px] transition-colors;
     &:hover {
       @apply border-lol-gold;
     }
@@ -168,11 +192,12 @@
   }
 
   .searchable-select__dropdown {
-    @apply absolute z-50 top-full left-0 mt-1 w-full max-h-52 overflow-y-auto border border-lol-border rounded bg-lol-card shadow-lg;
+    @apply absolute z-50 top-full left-0 mt-1 w-full max-h-52 overflow-y-auto border border-lol-border
+      rounded-lg bg-lol-card shadow-xl;
   }
 
   .searchable-select__option {
-    @apply px-3 py-2 cursor-pointer hover:bg-lol-border text-lol-text;
+    @apply px-3 py-2 cursor-pointer hover:bg-lol-border/50 text-lol-text transition-colors;
   }
 
   .searchable-select__option--selected {
@@ -181,5 +206,57 @@
 
   .searchable-select__option--empty {
     @apply text-lol-muted cursor-default;
+  }
+
+  /* ── Admin components ───────────────────────────────── */
+  .admin-card {
+    @apply bg-admin-card border border-admin-border rounded-xl;
+  }
+
+  .admin-input {
+    @apply w-full bg-admin-bg border border-admin-border rounded-lg px-3 py-2.5 text-admin-heading text-sm
+      placeholder:text-admin-text/50 outline-none focus:border-admin-primary transition-colors;
+  }
+
+  .admin-btn-primary {
+    @apply inline-flex items-center justify-center gap-2 bg-admin-primary hover:bg-admin-primary-dark
+      text-white rounded-lg px-4 py-2 text-sm font-medium transition-colors
+      disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .admin-btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 bg-admin-card2 border border-admin-border
+      text-admin-text hover:text-admin-heading rounded-lg px-4 py-2 text-sm font-medium transition-colors;
+  }
+
+  .admin-table {
+    @apply w-full border-collapse;
+  }
+
+  .admin-table th {
+    @apply py-3 px-4 text-left text-admin-text text-xs font-semibold uppercase tracking-wide
+      border-b border-admin-border bg-admin-bg/40;
+  }
+
+  .admin-table td {
+    @apply py-3.5 px-4 text-admin-heading text-sm border-b border-admin-border/60;
+  }
+
+  .admin-table tr:last-child td {
+    @apply border-b-0;
+  }
+
+  .admin-table tbody tr:hover td {
+    @apply bg-admin-primary/5;
+  }
+
+  .admin-badge-success {
+    @apply inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium
+      bg-admin-success/10 text-admin-success;
+  }
+
+  .admin-badge-danger {
+    @apply inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium
+      bg-admin-danger/10 text-admin-danger;
   }
 }
