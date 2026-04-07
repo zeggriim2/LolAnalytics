@@ -35,15 +35,13 @@ final readonly class RiotLeagueProvider implements RiotLeagueProviderInterface
 
         foreach ($data['entries'] ?? [] as $entry) {
             $puuid = $entry['puuid'] ?? '';
-            $summonerId = $entry['summonerId'] ?? '';
 
-            if ('' === $puuid || '' === $summonerId) {
+            if ('' === $puuid) {
                 continue;
             }
 
             $dtos[] = new LeagueEntryDto(
                 puuid: $puuid,
-                summonerId: $summonerId,
                 leaguePoints: (int) ($entry['leaguePoints'] ?? 0),
                 wins: (int) ($entry['wins'] ?? 0),
                 losses: (int) ($entry['losses'] ?? 0),

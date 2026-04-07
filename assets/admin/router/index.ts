@@ -7,6 +7,7 @@ import SummonerList from '../views/SummonerList.vue'
 import SummonerDetail from '../views/SummonerDetail.vue'
 import GameData from '../views/GameData.vue'
 import LeagueImport from '../views/LeagueImport.vue'
+import LeagueLeaderboard from '../views/LeagueLeaderboard.vue'
 
 const router = createRouter({
   history: createWebHistory('/admin'),
@@ -51,6 +52,11 @@ const router = createRouter({
       path: '/league-import',
       name: 'league-import',
       component: LeagueImport,
+    },
+    {
+      path: '/league-leaderboard',
+      name: 'league-leaderboard',
+      component: LeagueLeaderboard,
     },
   ],
 })

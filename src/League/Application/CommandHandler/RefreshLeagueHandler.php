@@ -23,11 +23,9 @@ final readonly class RefreshLeagueHandler
     public function __invoke(RefreshLeagueCommand $command): void
     {
         $dtos = $this->leagueProvider->getLeagueEntries($command->platform, $command->queue, $command->tier);
-
         $entries = array_map(
             static fn ($dto): LeagueEntry => LeagueEntry::create(
                 $dto->puuid,
-                $dto->summonerId,
                 $dto->leaguePoints,
                 $dto->wins,
                 $dto->losses,

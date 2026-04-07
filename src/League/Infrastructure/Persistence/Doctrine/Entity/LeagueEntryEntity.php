@@ -10,6 +10,8 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'league_entries')]
+#[ORM\Index(columns: ['puuid'], name: 'idx_league_entry_puuid')]
+#[ORM\Index(columns: ['league_id', 'league_points'], name: 'idx_league_entry_lp')]
 class LeagueEntryEntity
 {
     #[ORM\Id]
@@ -20,9 +22,6 @@ class LeagueEntryEntity
     #[ORM\Column(type: Types::STRING, length: 78)]
     private string $puuid;
 
-    #[ORM\Column(type: Types::STRING, length: 100)]
-    private string $summonerId;
-
     #[ORM\Column(type: Types::INTEGER)]
     private int $leaguePoints;
 
@@ -32,7 +31,7 @@ class LeagueEntryEntity
     #[ORM\Column(type: Types::INTEGER)]
     private int $losses;
 
-    #[ORM\Column(type: Types::STRING, length: 2, nullable: true)]
+    #[ORM\Column(name: 'league_rank', type: Types::STRING, length: 2, nullable: true)]
     private ?string $rank;
 
     #[ORM\Column(type: Types::BOOLEAN)]
@@ -52,7 +51,6 @@ class LeagueEntryEntity
     {
         $entity = new self();
         $entity->puuid = $entry->puuid();
-        $entity->summonerId = $entry->summonerId();
         $entity->leaguePoints = $entry->leaguePoints();
         $entity->wins = $entry->wins();
         $entity->losses = $entry->losses();
@@ -69,7 +67,6 @@ class LeagueEntryEntity
     {
         return LeagueEntry::create(
             $this->puuid,
-            $this->summonerId,
             $this->leaguePoints,
             $this->wins,
             $this->losses,
@@ -88,11 +85,6 @@ class LeagueEntryEntity
     public function getPuuid(): string
     {
         return $this->puuid;
-    }
-
-    public function getSummonerId(): string
-    {
-        return $this->summonerId;
     }
 
     public function getLeaguePoints(): int
