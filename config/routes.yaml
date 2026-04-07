@@ -31,6 +31,12 @@ game_data_api:
     type: attribute
     prefix: /api/admin/game-data
     
+league_api:
+    resource: ../src/League/Presentation/Api/
+    type: attribute
+    prefix: /api/admin/leagues
+    trailing_slash_on_root: false
+
 api:
     resource: ../src/SharedContext/Presentation/Api/
     type: attribute

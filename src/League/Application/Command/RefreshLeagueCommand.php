@@ -2,19 +2,18 @@
 
 declare(strict_types=1);
 
-namespace App\Summoner\Application\Command;
+namespace App\League\Application\Command;
 
 use App\League\Domain\Enum\LeagueTier;
 use App\SharedContext\Domain\ValueObjet\Platform;
 use Zeggriim\RiotApiDataDragon\Enum\Queue;
 
-final readonly class ImportTopLeagueSummonersCommand
+final readonly class RefreshLeagueCommand
 {
     public function __construct(
         public Platform $platform,
-        public LeagueTier $tier = LeagueTier::CHALLENGER,
-        public Queue $queue = Queue::RANKED_SOLO,
-        public bool $force = false,
+        public LeagueTier $tier,
+        public Queue $queue,
     ) {
     }
 }

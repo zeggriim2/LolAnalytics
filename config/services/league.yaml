@@ -1,0 +1,6 @@
+services:
+    App\League\Domain\Repository\LeagueRepositoryInterface:
+        alias: App\League\Infrastructure\Persistence\Doctrine\Repository\DoctrineLeagueRepository
+
+    App\League\Application\Port\RiotLeagueProviderInterface:
+        alias: App\League\Infrastructure\Adapter\RiotLeagueProvider

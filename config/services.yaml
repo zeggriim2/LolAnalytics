@@ -18,6 +18,7 @@ services:
             - '../src/Summoner/Domain/Model/*'
             - '../src/Champion/Domain/Model/*'
             - '../src/Auth/Domain/Model/*'
+            - '../src/League/Domain/Model/*'
             - '../src/Infrastructure/SharedContext/Framework/Symfony/Kernel.php'
 
 imports:
@@ -26,4 +27,5 @@ imports:
     - { resource: services/summoner.yaml }
     - { resource: services/champion.yaml }
     - { resource: services/auth.yaml }
+    - { resource: services/league.yaml }
     - { resource: services/shared_context.yaml }

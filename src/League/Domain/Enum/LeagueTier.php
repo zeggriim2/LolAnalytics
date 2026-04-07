@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Summoner\Domain\Enum;
+namespace App\League\Domain\Enum;
 
-enum TopLeagueTier: string
+enum LeagueTier: string
 {
     case CHALLENGER = 'challenger';
     case GRANDMASTER = 'grandmaster';
