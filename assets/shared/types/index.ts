@@ -92,6 +92,21 @@ export interface Platform {
   label: string
 }
 
+export type LeagueTier = 'challenger' | 'grandmaster' | 'master'
+
+export interface LeagueEntry {
+  rank: number
+  puuid: string
+  summonerId: string
+  leaguePoints: number
+  wins: number
+  losses: number
+  winRate: number
+  hotStreak: boolean
+  veteran: boolean
+  freshBlood: boolean
+}
+
 export interface ApiResponse<T> {
   data: T
   total?: number

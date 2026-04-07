@@ -8,7 +8,6 @@ final class LeagueEntry
 {
     private function __construct(
         private readonly string $puuid,
-        private readonly string $summonerId,
         private readonly int $leaguePoints,
         private readonly int $wins,
         private readonly int $losses,
@@ -21,7 +20,6 @@ final class LeagueEntry
 
     public static function create(
         string $puuid,
-        string $summonerId,
         int $leaguePoints,
         int $wins,
         int $losses,
@@ -30,17 +28,12 @@ final class LeagueEntry
         bool $veteran,
         bool $freshBlood,
     ): self {
-        return new self($puuid, $summonerId, $leaguePoints, $wins, $losses, $rank, $hotStreak, $veteran, $freshBlood);
+        return new self($puuid, $leaguePoints, $wins, $losses, $rank, $hotStreak, $veteran, $freshBlood);
     }
 
     public function puuid(): string
     {
         return $this->puuid;
-    }
-
-    public function summonerId(): string
-    {
-        return $this->summonerId;
     }
 
     public function leaguePoints(): int
