@@ -10,8 +10,8 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'league_entries')]
-#[ORM\Index(columns: ['puuid'], name: 'idx_league_entry_puuid')]
-#[ORM\Index(columns: ['league_id', 'league_points'], name: 'idx_league_entry_lp')]
+#[ORM\Index(name: 'idx_league_entry_puuid', columns: ['puuid'])]
+#[ORM\Index(name: 'idx_league_entry_lp', columns: ['league_id', 'league_points'])]
 class LeagueEntryEntity
 {
     #[ORM\Id]

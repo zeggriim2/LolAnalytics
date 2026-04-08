@@ -84,6 +84,34 @@ final readonly class DoctrineSummonerRepository implements SummonerRepositoryInt
         );
     }
 
+    /**
+     * @param string[] $puuids
+     *
+     * @return array<string, Summoner> indexed by puuid
+     */
+    public function findByPuuids(array $puuids): array
+    {
+        if ([] === $puuids) {
+            return [];
+        }
+
+        $entities = $this->entityManager->getRepository(SummonerEntity::class)
+            ->createQueryBuilder('s')
+            ->where('s.puuid IN (:puuids)')
+            ->setParameter('puuids', $puuids)
+            ->getQuery()
+            ->getResult();
+
+        $result = [];
+
+        foreach ($entities as $entity) {
+            $summoner = $entity->toDomain();
+            $result[$summoner->puuid()->value()] = $summoner;
+        }
+
+        return $result;
+    }
+
     public function count(): int
     {
         return (int) $this->entityManager->getRepository(SummonerEntity::class)

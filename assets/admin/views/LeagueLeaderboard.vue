@@ -170,7 +170,14 @@ onMounted(() => fetchEntries(1))
         <tbody>
           <tr v-for="entry in entries" :key="entry.puuid">
             <td class="text-lol-muted text-sm">{{ entry.rank }}</td>
-            <td class="font-mono text-xs text-lol-muted">{{ entry.puuid.slice(0, 16) }}…</td>
+            <td class="font-medium text-lol-text">
+              <template v-if="entry.gameName">
+                {{ entry.gameName }}<span class="text-lol-muted">#{{ entry.tagLine }}</span>
+              </template>
+              <span v-else class="font-mono text-xs text-lol-muted"
+                >{{ entry.puuid.slice(0, 16) }}…</span
+              >
+            </td>
             <td class="text-right font-semibold" :class="tierColor(tier)">
               {{ entry.leaguePoints }} LP
             </td>

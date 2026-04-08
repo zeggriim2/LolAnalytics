@@ -12,6 +12,10 @@ use App\League\Domain\Model\League;
 use App\League\Domain\Model\LeagueEntry;
 use App\League\Domain\Repository\LeagueRepositoryInterface;
 use App\SharedContext\Domain\ValueObjet\Platform;
+use App\Summoner\Domain\Model\Summoner;
+use App\Summoner\Domain\Repository\SummonerRepositoryInterface;
+use App\Summoner\Domain\ValueObject\Puuid;
+use App\Summoner\Domain\ValueObject\RiotId;
 use PHPUnit\Framework\TestCase;
 use Zeggriim\RiotApiDataDragon\Enum\Queue;
 
@@ -19,10 +23,10 @@ final class GetLeagueEntriesHandlerTest extends TestCase
 {
     public function testReturnsEmptyResultWhenLeagueNotFound(): void
     {
-        $repository = $this->createStub(LeagueRepositoryInterface::class);
-        $repository->method('findByTierQueuePlatform')->willReturn(null);
+        $leagueRepo = $this->createStub(LeagueRepositoryInterface::class);
+        $leagueRepo->method('findByTierQueuePlatform')->willReturn(null);
 
-        $result = (new GetLeagueEntriesHandler($repository))(
+        $result = (new GetLeagueEntriesHandler($leagueRepo, $this->emptySummonerRepo()))(
             new GetLeagueEntriesQuery(Platform::EUW1, LeagueTier::CHALLENGER, Queue::RANKED_SOLO),
         );
 
@@ -38,10 +42,10 @@ final class GetLeagueEntriesHandlerTest extends TestCase
             ['puuid-mid', 800],
         ]);
 
-        $repository = $this->createStub(LeagueRepositoryInterface::class);
-        $repository->method('findByTierQueuePlatform')->willReturn($league);
+        $leagueRepo = $this->createStub(LeagueRepositoryInterface::class);
+        $leagueRepo->method('findByTierQueuePlatform')->willReturn($league);
 
-        $result = (new GetLeagueEntriesHandler($repository))(
+        $result = (new GetLeagueEntriesHandler($leagueRepo, $this->emptySummonerRepo()))(
             new GetLeagueEntriesQuery(Platform::EUW1, LeagueTier::CHALLENGER, Queue::RANKED_SOLO),
         );
 
@@ -58,10 +62,10 @@ final class GetLeagueEntriesHandlerTest extends TestCase
             ['puuid-b', 1000],
         ]);
 
-        $repository = $this->createStub(LeagueRepositoryInterface::class);
-        $repository->method('findByTierQueuePlatform')->willReturn($league);
+        $leagueRepo = $this->createStub(LeagueRepositoryInterface::class);
+        $leagueRepo->method('findByTierQueuePlatform')->willReturn($league);
 
-        $result = (new GetLeagueEntriesHandler($repository))(
+        $result = (new GetLeagueEntriesHandler($leagueRepo, $this->emptySummonerRepo()))(
             new GetLeagueEntriesQuery(Platform::EUW1, LeagueTier::CHALLENGER, Queue::RANKED_SOLO),
         );
 
@@ -77,10 +81,10 @@ final class GetLeagueEntriesHandlerTest extends TestCase
         );
         $league = $this->makeLeague($entries);
 
-        $repository = $this->createStub(LeagueRepositoryInterface::class);
-        $repository->method('findByTierQueuePlatform')->willReturn($league);
+        $leagueRepo = $this->createStub(LeagueRepositoryInterface::class);
+        $leagueRepo->method('findByTierQueuePlatform')->willReturn($league);
 
-        $result = (new GetLeagueEntriesHandler($repository))(
+        $result = (new GetLeagueEntriesHandler($leagueRepo, $this->emptySummonerRepo()))(
             new GetLeagueEntriesQuery(Platform::EUW1, LeagueTier::CHALLENGER, Queue::RANKED_SOLO, page: 2, limit: 3),
         );
 
@@ -94,14 +98,84 @@ final class GetLeagueEntriesHandlerTest extends TestCase
         $entries = array_map(fn (int $i): array => ["p-{$i}", $i * 10], range(1, 7));
         $league = $this->makeLeague($entries);
 
-        $repository = $this->createStub(LeagueRepositoryInterface::class);
-        $repository->method('findByTierQueuePlatform')->willReturn($league);
+        $leagueRepo = $this->createStub(LeagueRepositoryInterface::class);
+        $leagueRepo->method('findByTierQueuePlatform')->willReturn($league);
 
-        $result = (new GetLeagueEntriesHandler($repository))(
+        $result = (new GetLeagueEntriesHandler($leagueRepo, $this->emptySummonerRepo()))(
             new GetLeagueEntriesQuery(Platform::EUW1, LeagueTier::CHALLENGER, Queue::RANKED_SOLO, page: 1, limit: 3),
         );
 
         $this->assertSame(3, $result->totalPages); // ceil(7/3) = 3
+    }
+
+    public function testGameNameAndTagLineAreSetWhenSummonerExists(): void
+    {
+        $puuid = 'puuid-known';
+        $league = $this->makeLeague([[$puuid, 1000]]);
+
+        $leagueRepo = $this->createStub(LeagueRepositoryInterface::class);
+        $leagueRepo->method('findByTierQueuePlatform')->willReturn($league);
+
+        $summoner = Summoner::create(
+            Puuid::fromString($puuid),
+            RiotId::create('Faker', 'T1'),
+            1,
+            100,
+            Platform::EUW1,
+            new \DateTimeImmutable(),
+        );
+
+        $summonerRepo = $this->createStub(SummonerRepositoryInterface::class);
+        $summonerRepo->method('findByPuuids')->willReturn([$puuid => $summoner]);
+
+        $result = (new GetLeagueEntriesHandler($leagueRepo, $summonerRepo))(
+            new GetLeagueEntriesQuery(Platform::EUW1, LeagueTier::CHALLENGER, Queue::RANKED_SOLO),
+        );
+
+        $this->assertSame('Faker', $result->items[0]->gameName);
+        $this->assertSame('T1', $result->items[0]->tagLine);
+    }
+
+    public function testGameNameAndTagLineAreNullWhenSummonerNotFound(): void
+    {
+        $league = $this->makeLeague([['puuid-unknown', 500]]);
+
+        $leagueRepo = $this->createStub(LeagueRepositoryInterface::class);
+        $leagueRepo->method('findByTierQueuePlatform')->willReturn($league);
+
+        $result = (new GetLeagueEntriesHandler($leagueRepo, $this->emptySummonerRepo()))(
+            new GetLeagueEntriesQuery(Platform::EUW1, LeagueTier::CHALLENGER, Queue::RANKED_SOLO),
+        );
+
+        $this->assertNull($result->items[0]->gameName);
+        $this->assertNull($result->items[0]->tagLine);
+    }
+
+    public function testOnlyPuuidsOfCurrentPageAreFetchedFromSummonerRepository(): void
+    {
+        $entries = array_map(fn (int $i): array => ["puuid-{$i}", 1000 - $i], range(0, 5));
+        $league = $this->makeLeague($entries);
+
+        $leagueRepo = $this->createStub(LeagueRepositoryInterface::class);
+        $leagueRepo->method('findByTierQueuePlatform')->willReturn($league);
+
+        $summonerRepo = $this->createMock(SummonerRepositoryInterface::class);
+        $summonerRepo->expects($this->once())
+            ->method('findByPuuids')
+            ->with($this->countOf(2)) // limit 2, page 2 → only 2 puuids
+            ->willReturn([]);
+
+        (new GetLeagueEntriesHandler($leagueRepo, $summonerRepo))(
+            new GetLeagueEntriesQuery(Platform::EUW1, LeagueTier::CHALLENGER, Queue::RANKED_SOLO, page: 2, limit: 2),
+        );
+    }
+
+    private function emptySummonerRepo(): SummonerRepositoryInterface
+    {
+        $stub = $this->createStub(SummonerRepositoryInterface::class);
+        $stub->method('findByPuuids')->willReturn([]);
+
+        return $stub;
     }
 
     /**

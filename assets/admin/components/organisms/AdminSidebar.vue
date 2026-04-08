@@ -6,6 +6,7 @@ import {
   Users,
   Database,
   Trophy,
+  Medal,
   LogOut,
   PanelLeftClose,
   PanelLeftOpen,
@@ -29,6 +30,7 @@ const navItems = [
   { to: '/summoners', icon: Users, label: 'Summoners' },
   { to: '/game-data', icon: Database, label: 'Game Data' },
   { to: '/league-import', icon: Trophy, label: 'League Import' },
+  { to: '/league-leaderboard', icon: Medal, label: 'Leaderboard' },
 ]
 
 function isActive(to: string, exact = false) {
@@ -39,7 +41,7 @@ function isActive(to: string, exact = false) {
 
 <template>
   <aside
-    class="min-h-screen bg-admin-sidebar border-r border-admin-border flex flex-col shrink-0 transition-[width] duration-300 ease-in-out overflow-hidden"
+    class="h-screen bg-admin-sidebar border-r border-admin-border flex flex-col shrink-0 transition-[width] duration-300 ease-in-out overflow-hidden sticky top-0"
     :class="sidebar.collapsed ? 'w-16' : 'w-64'"
   >
     <!-- Logo -->
@@ -62,7 +64,7 @@ function isActive(to: string, exact = false) {
 
     <!-- Navigation -->
     <nav
-      class="flex-1 py-5 space-y-0.5 overflow-hidden"
+      class="flex-1 py-5 space-y-0.5 overflow-y-auto overflow-x-hidden"
       :class="sidebar.collapsed ? 'px-2' : 'px-3'"
     >
       <Transition name="fade">
