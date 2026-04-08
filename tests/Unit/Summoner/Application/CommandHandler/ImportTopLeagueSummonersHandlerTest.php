@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit\Summoner\Application\CommandHandler;
 
+use App\League\Application\Query\GetLeaguePuuidsQuery;
+use App\League\Domain\Enum\LeagueTier;
 use App\SharedContext\Application\Bus\CommandBusInterface;
+use App\SharedContext\Application\Bus\QueryBusInterface;
 use App\SharedContext\Domain\ValueObjet\Platform;
 use App\Summoner\Application\Command\ImportSummonerCommand;
 use App\Summoner\Application\Command\ImportTopLeagueSummonersCommand;
 use App\Summoner\Application\CommandHandler\ImportTopLeagueSummonersHandler;
-use App\Summoner\Application\Port\RiotLeagueProviderInterface;
-use App\Summoner\Domain\Enum\TopLeagueTier;
 use PHPUnit\Framework\TestCase;
 use Zeggriim\RiotApiDataDragon\Enum\Queue;
 
@@ -21,14 +22,14 @@ final class ImportTopLeagueSummonersHandlerTest extends TestCase
         // Given
         $platform = Platform::EUW1;
         $queue = Queue::RANKED_SOLO;
-        $tier = TopLeagueTier::CHALLENGER;
+        $tier = LeagueTier::CHALLENGER;
         $puuids = ['puuid-1', 'puuid-2', 'puuid-3'];
 
-        $leagueProvider = $this->createMock(RiotLeagueProviderInterface::class);
-        $leagueProvider
+        $queryBus = $this->createMock(QueryBusInterface::class);
+        $queryBus
             ->expects($this->once())
-            ->method('getTopLeaguePuuids')
-            ->with($platform, $queue, $tier)
+            ->method('handle')
+            ->with($this->callback(fn (GetLeaguePuuidsQuery $q): bool => $q->platform === $platform && $q->tier === $tier && $q->queue === $queue))
             ->willReturn($puuids);
 
         $dispatchedCommands = [];
@@ -43,7 +44,7 @@ final class ImportTopLeagueSummonersHandlerTest extends TestCase
             });
 
         // When
-        (new ImportTopLeagueSummonersHandler($leagueProvider, $commandBus))(
+        (new ImportTopLeagueSummonersHandler($queryBus, $commandBus))(
             new ImportTopLeagueSummonersCommand($platform, $tier, $queue),
         );
 
@@ -57,50 +58,50 @@ final class ImportTopLeagueSummonersHandlerTest extends TestCase
         }
     }
 
-    public function testDispatchesNothingWhenNoPuuids(): void
+    public function testDispatchesNothingWhenLeagueIsEmpty(): void
     {
         // Given
-        $leagueProvider = $this->createStub(RiotLeagueProviderInterface::class);
-        $leagueProvider->method('getTopLeaguePuuids')->willReturn([]);
+        $queryBus = $this->createStub(QueryBusInterface::class);
+        $queryBus->method('handle')->willReturn([]);
 
         $commandBus = $this->createMock(CommandBusInterface::class);
         $commandBus->expects($this->never())->method('dispatch');
 
         // When
-        (new ImportTopLeagueSummonersHandler($leagueProvider, $commandBus))(
+        (new ImportTopLeagueSummonersHandler($queryBus, $commandBus))(
             new ImportTopLeagueSummonersCommand(Platform::EUW1),
         );
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('tierProvider')]
-    public function testForwardsTierToLeagueProvider(TopLeagueTier $tier): void
+    public function testForwardsTierToQueryBus(LeagueTier $tier): void
     {
         // Given
         $platform = Platform::NA1;
         $queue = Queue::RANKED_FLEX_SR;
 
-        $leagueProvider = $this->createMock(RiotLeagueProviderInterface::class);
-        $leagueProvider
+        $queryBus = $this->createMock(QueryBusInterface::class);
+        $queryBus
             ->expects($this->once())
-            ->method('getTopLeaguePuuids')
-            ->with($platform, $queue, $tier)
+            ->method('handle')
+            ->with($this->callback(fn (GetLeaguePuuidsQuery $q): bool => $q->tier === $tier && $q->queue === $queue && $q->platform === $platform))
             ->willReturn([]);
 
         $commandBus = $this->createStub(CommandBusInterface::class);
 
         // When
-        (new ImportTopLeagueSummonersHandler($leagueProvider, $commandBus))(
+        (new ImportTopLeagueSummonersHandler($queryBus, $commandBus))(
             new ImportTopLeagueSummonersCommand($platform, $tier, $queue),
         );
     }
 
     /**
-     * @return iterable<string, array{TopLeagueTier}>
+     * @return iterable<string, array{LeagueTier}>
      */
     public static function tierProvider(): iterable
     {
-        yield 'challenger' => [TopLeagueTier::CHALLENGER];
-        yield 'grandmaster' => [TopLeagueTier::GRANDMASTER];
-        yield 'master' => [TopLeagueTier::MASTER];
+        yield 'challenger' => [LeagueTier::CHALLENGER];
+        yield 'grandmaster' => [LeagueTier::GRANDMASTER];
+        yield 'master' => [LeagueTier::MASTER];
     }
 }
