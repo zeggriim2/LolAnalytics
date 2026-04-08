@@ -8,6 +8,7 @@ use App\League\Application\Dto\LeagueEntryListDto;
 use App\League\Application\Query\GetLeagueEntriesQuery;
 use App\League\Domain\Repository\LeagueRepositoryInterface;
 use App\SharedContext\Domain\Pagination\PaginatedResult;
+use App\Summoner\Domain\Repository\SummonerRepositoryInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler(bus: 'query.bus')]
@@ -15,6 +16,7 @@ final readonly class GetLeagueEntriesHandler
 {
     public function __construct(
         private LeagueRepositoryInterface $leagueRepository,
+        private SummonerRepositoryInterface $summonerRepository,
     ) {
     }
 
@@ -41,8 +43,15 @@ final readonly class GetLeagueEntriesHandler
         $offset = ($query->page - 1) * $query->limit;
         $page = array_slice($entries, $offset, $query->limit);
 
+        $puuids = array_map(static fn ($entry): string => $entry->puuid(), $page);
+        $summoners = $this->summonerRepository->findByPuuids($puuids);
+
         $dtos = array_map(
-            static fn ($entry, $i): LeagueEntryListDto => LeagueEntryListDto::fromDomain($entry, $offset + $i + 1),
+            static fn ($entry, $i): LeagueEntryListDto => LeagueEntryListDto::fromDomain(
+                $entry,
+                $offset + $i + 1,
+                $summoners[$entry->puuid()] ?? null,
+            ),
             $page,
             array_keys($page),
         );

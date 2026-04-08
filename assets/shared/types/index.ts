@@ -97,7 +97,8 @@ export type LeagueTier = 'challenger' | 'grandmaster' | 'master'
 export interface LeagueEntry {
   rank: number
   puuid: string
-  summonerId: string
+  gameName: string | null
+  tagLine: string | null
   leaguePoints: number
   wins: number
   losses: number

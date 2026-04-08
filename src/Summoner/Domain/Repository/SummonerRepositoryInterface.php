@@ -20,4 +20,11 @@ interface SummonerRepositoryInterface extends PaginatableRepositoryInterface
      * @return Summoner[]
      */
     public function findAll(): array;
+
+    /**
+     * @param string[] $puuids
+     *
+     * @return array<string, Summoner> indexed by puuid
+     */
+    public function findByPuuids(array $puuids): array;
 }
