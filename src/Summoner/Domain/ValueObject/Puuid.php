@@ -12,7 +12,7 @@ final readonly class Puuid
 
     public static function fromString(string $puuid): self
     {
-        if (empty($puuid)) {
+        if ('' === $puuid) {
             throw new \InvalidArgumentException('Puuid cannot be empty');
         }
 

@@ -94,6 +94,21 @@ export interface Platform {
 
 export type LeagueTier = 'challenger' | 'grandmaster' | 'master'
 
+export interface SummonerStats {
+  totalGames: number
+  wins: number
+  losses: number
+  winRate: number
+  avgKills: number
+  avgDeaths: number
+  avgAssists: number
+  avgKda: number
+  avgCs: number
+  avgCsPerMin: number
+  avgGold: number
+  favoriteChampionId: number | null
+}
+
 export interface LeagueEntry {
   rank: number
   puuid: string

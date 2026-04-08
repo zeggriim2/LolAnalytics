@@ -5,3 +5,6 @@ services:
     App\Summoner\Application\Port\RiotSummonerProviderInterface:
         alias: App\Summoner\Infrastructure\Adapter\RiotSummonerProvider
 
+    App\Summoner\Application\Port\SummonerMatchStatsProviderInterface:
+        alias: App\Summoner\Infrastructure\Adapter\DoctrineMatchStatsAdapter
+
