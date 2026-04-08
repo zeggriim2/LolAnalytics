@@ -3,15 +3,18 @@ import { ref, onMounted } from 'vue'
 import { useRoute, RouterLink } from 'vue-router'
 import { api } from '@shared/api/client'
 import { matchApi } from '@shared/api/matchApi'
+import { summonerApi } from '@shared/api/summonerApi'
 import { usePagination } from '@shared/composables/usePagination'
 import PaginationBar from '@shared/components/PaginationBar.vue'
+import SummonerStatsCards from '@shared/components/SummonerStatsCards.vue'
 import SummonerMatchCharts from '@shared/components/SummonerMatchCharts.vue'
 import ChampionIcon from '@shared/components/ChampionIcon.vue'
-import type { Summoner, Match } from '@shared/types'
+import type { Summoner, SummonerStats, Match } from '@shared/types'
 import { ChevronLeft, User, Star, Globe } from 'lucide-vue-next'
 
 const route = useRoute()
 const summoner = ref<Summoner | null>(null)
+const stats = ref<SummonerStats | null>(null)
 const loading = ref(true)
 const error = ref<string | null>(null)
 
@@ -33,8 +36,12 @@ const {
 
 onMounted(async () => {
   try {
-    const response = await api.getSummoner(puuid)
-    summoner.value = response.data
+    const [summonerRes, statsRes] = await Promise.all([
+      api.getSummoner(puuid),
+      summonerApi.getStats(puuid),
+    ])
+    summoner.value = summonerRes.data
+    stats.value = statsRes.data
     fetchPage(1)
   } catch (e) {
     error.value = 'Impossible de charger le profil'
@@ -110,6 +117,14 @@ function formatDate(dateString: string): string {
           </div>
         </div>
       </div>
+
+      <!-- Stats cards -->
+      <SummonerStatsCards
+        v-if="stats && matches.length > 0"
+        :stats="stats"
+        :version="matches[0]?.version ?? ''"
+        class="mb-2"
+      />
 
       <!-- Charts & Match History -->
       <div v-if="matchesInitialLoading" class="loading">Chargement des parties…</div>
