@@ -30,7 +30,7 @@ services:
       - caddy_data:/data
       - caddy_config:/config
       - jwt_keys:/var/www/html/config/jwt
-      - public_images:/var/www/html/public/images
+      - public_images:/app/public/images
     # Plus de ports exposés directement — Traefik s'en charge
     networks:
       - web-network
@@ -65,7 +65,7 @@ services:
       MERCURE_SUBSCRIBER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET}
     volumes:
       - jwt_keys:/var/www/html/config/jwt
-      - public_images:/var/www/html/public/image
+      - public_images:/app/public/images
     networks:
       - internal
 
