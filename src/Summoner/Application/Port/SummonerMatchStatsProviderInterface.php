@@ -22,4 +22,17 @@ interface SummonerMatchStatsProviderInterface
      * }
      */
     public function getAggregateStatsByPuuid(string $puuid): array;
+
+    /**
+     * @return array<int, array{
+     *     position: string,
+     *     totalGames: int,
+     *     wins: int,
+     *     avgKills: float,
+     *     avgDeaths: float,
+     *     avgAssists: float,
+     *     avgCs: float,
+     * }>
+     */
+    public function getStatsByPositionByPuuid(string $puuid): array;
 }

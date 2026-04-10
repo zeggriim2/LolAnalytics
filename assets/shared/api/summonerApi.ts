@@ -1,4 +1,10 @@
-import type { Summoner, SummonerStats, ApiResponse, PaginatedResponse } from '@shared/types'
+import type {
+  Summoner,
+  SummonerStats,
+  PositionStat,
+  ApiResponse,
+  PaginatedResponse,
+} from '@shared/types'
 import { fetchApi } from './fetchApi'
 
 export const summonerApi = {
@@ -6,6 +12,8 @@ export const summonerApi = {
     fetchApi<PaginatedResponse<Summoner>>(`/summoners?page=${page}&limit=${limit}`),
   getSummoner: (puuid: string) => fetchApi<ApiResponse<Summoner>>(`/summoners/${puuid}`),
   getStats: (puuid: string) => fetchApi<ApiResponse<SummonerStats>>(`/summoners/${puuid}/stats`),
+  getPositionStats: (puuid: string) =>
+    fetchApi<ApiResponse<PositionStat[]>>(`/summoners/${puuid}/position-stats`),
   importByRiotId: (gameName: string, tagLine: string, platform: string) =>
     fetchApi<{ status: string; message: string }>('/summoners/import/riot-id', {
       method: 'POST',

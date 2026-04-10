@@ -8,13 +8,15 @@ import { usePagination } from '@shared/composables/usePagination'
 import PaginationBar from '@shared/components/PaginationBar.vue'
 import SummonerStatsCards from '@shared/components/SummonerStatsCards.vue'
 import SummonerMatchCharts from '@shared/components/SummonerMatchCharts.vue'
+import PositionStatsChart from '@shared/components/PositionStatsChart.vue'
 import ChampionIcon from '@shared/components/ChampionIcon.vue'
-import type { Summoner, SummonerStats, Match } from '@shared/types'
+import type { Summoner, SummonerStats, PositionStat, Match } from '@shared/types'
 import { ChevronLeft, User, Star, Globe } from 'lucide-vue-next'
 
 const route = useRoute()
 const summoner = ref<Summoner | null>(null)
 const stats = ref<SummonerStats | null>(null)
+const positionStats = ref<PositionStat[]>([])
 const loading = ref(true)
 const error = ref<string | null>(null)
 
@@ -36,12 +38,14 @@ const {
 
 onMounted(async () => {
   try {
-    const [summonerRes, statsRes] = await Promise.all([
+    const [summonerRes, statsRes, positionRes] = await Promise.all([
       api.getSummoner(puuid),
       summonerApi.getStats(puuid),
+      summonerApi.getPositionStats(puuid),
     ])
     summoner.value = summonerRes.data
     stats.value = statsRes.data
+    positionStats.value = positionRes.data
     fetchPage(1)
   } catch (e) {
     error.value = 'Impossible de charger le profil'
@@ -125,6 +129,9 @@ function formatDate(dateString: string): string {
         :version="matches[0]?.version ?? ''"
         class="mb-2"
       />
+
+      <!-- Position stats -->
+      <PositionStatsChart v-if="positionStats.length > 0" :positions="positionStats" class="mb-6" />
 
       <!-- Charts & Match History -->
       <div v-if="matchesInitialLoading" class="loading">Chargement des parties…</div>
