@@ -19,6 +19,7 @@ final readonly class DoctrineMatchStatsAdapter implements SummonerMatchStatsProv
         $aggregates = $this->em->createQueryBuilder()
             ->select([
                 'COUNT(p.id) as totalGames',
+                'SUM(CASE WHEN p.win = true THEN 1 ELSE 0 END) as wins',
                 'AVG(p.kills) as avgKills',
                 'AVG(p.deaths) as avgDeaths',
                 'AVG(p.assists) as avgAssists',
@@ -34,15 +35,6 @@ final readonly class DoctrineMatchStatsAdapter implements SummonerMatchStatsProv
             ->getQuery()
             ->getSingleResult();
 
-        $wins = (int) $this->em->createQueryBuilder()
-            ->select('COUNT(p.id)')
-            ->from(ParticipantEntity::class, 'p')
-            ->where('p.summonerId = :puuid')
-            ->andWhere('p.win = true')
-            ->setParameter('puuid', $puuid)
-            ->getQuery()
-            ->getSingleScalarResult();
-
         $favoriteChampion = $this->em->createQueryBuilder()
             ->select('p.championId, COUNT(p.id) as cnt')
             ->from(ParticipantEntity::class, 'p')
@@ -55,9 +47,10 @@ final readonly class DoctrineMatchStatsAdapter implements SummonerMatchStatsProv
             ->getOneOrNullResult();
 
         $totalGames = (int) ($aggregates['totalGames'] ?? 0);
+        $wins = (int) ($aggregates['wins'] ?? 0);
         $avgCs = round((float) ($aggregates['avgCs'] ?? 0), 1);
         $avgDurationSeconds = (int) round((float) ($aggregates['avgDuration'] ?? 0));
-        $avgDurationMinutes = $avgDurationSeconds > 0 ? $avgDurationSeconds / 60 : 1;
+        $avgCsPerMin = $avgDurationSeconds > 0 ? round($avgCs / ($avgDurationSeconds / 60), 1) : 0.0;
 
         return [
             'totalGames' => $totalGames,
@@ -67,10 +60,52 @@ final readonly class DoctrineMatchStatsAdapter implements SummonerMatchStatsProv
             'avgDeaths' => round((float) ($aggregates['avgDeaths'] ?? 0), 1),
             'avgAssists' => round((float) ($aggregates['avgAssists'] ?? 0), 1),
             'avgCs' => $avgCs,
-            'avgCsPerMin' => round($avgCs / $avgDurationMinutes, 1),
+            'avgCsPerMin' => $avgCsPerMin,
             'avgGold' => (int) round((float) ($aggregates['avgGold'] ?? 0)),
             'avgDurationSeconds' => $avgDurationSeconds,
             'favoriteChampionId' => $favoriteChampion ? $favoriteChampion['championId'] : null,
         ];
+    }
+
+    public function getStatsByPositionByPuuid(string $puuid): array
+    {
+        $rows = $this->em->createQueryBuilder()
+            ->select([
+                'ps.individualPosition as position',
+                'COUNT(p.id) as totalGames',
+                'SUM(CASE WHEN p.win = true THEN 1 ELSE 0 END) as wins',
+                'AVG(p.kills) as avgKills',
+                'AVG(p.deaths) as avgDeaths',
+                'AVG(p.assists) as avgAssists',
+                'AVG(ps.cs) as avgCs',
+            ])
+            ->from(ParticipantEntity::class, 'p')
+            ->join('p.stats', 'ps')
+            ->where('p.summonerId = :puuid')
+            ->andWhere('ps.individualPosition != :empty')
+            ->setParameter('puuid', $puuid)
+            ->setParameter('empty', '')
+            ->groupBy('ps.individualPosition')
+            ->orderBy('totalGames', 'DESC')
+            ->getQuery()
+            ->getArrayResult();
+
+        return array_map(function (array $row): array {
+            $totalGames = (int) $row['totalGames'];
+            $wins = (int) $row['wins'];
+            $avgKills = round((float) $row['avgKills'], 1);
+            $avgDeaths = round((float) $row['avgDeaths'], 1);
+            $avgAssists = round((float) $row['avgAssists'], 1);
+
+            return [
+                'position' => $row['position'],
+                'totalGames' => $totalGames,
+                'wins' => $wins,
+                'avgKills' => $avgKills,
+                'avgDeaths' => $avgDeaths,
+                'avgAssists' => $avgAssists,
+                'avgCs' => round((float) $row['avgCs'], 1),
+            ];
+        }, $rows);
     }
 }

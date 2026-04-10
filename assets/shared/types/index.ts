@@ -109,6 +109,18 @@ export interface SummonerStats {
   favoriteChampionId: number | null
 }
 
+export interface PositionStat {
+  position: string
+  totalGames: number
+  wins: number
+  winRate: number
+  avgKills: number
+  avgDeaths: number
+  avgAssists: number
+  avgKda: number
+  avgCs: number
+}
+
 export interface LeagueEntry {
   rank: number
   puuid: string
