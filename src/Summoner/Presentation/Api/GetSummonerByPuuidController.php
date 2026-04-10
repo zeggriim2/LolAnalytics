@@ -10,6 +10,7 @@ use App\Summoner\Application\Query\GetSummonerByPuuidQuery;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/{puuid}', name: 'api_summoners_show', methods: [Request::METHOD_GET])]
@@ -26,7 +27,7 @@ final class GetSummonerByPuuidController extends AbstractController
         $summoner = $this->queryBus->handle(new GetSummonerByPuuidQuery($puuid));
 
         if (null === $summoner) {
-            return $this->json(['error' => 'Summoner not found'], 404);
+            return $this->json(['error' => 'Summoner not found'], Response::HTTP_NOT_FOUND);
         }
 
         return $this->json([

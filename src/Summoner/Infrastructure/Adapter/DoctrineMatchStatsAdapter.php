@@ -90,22 +90,14 @@ final readonly class DoctrineMatchStatsAdapter implements SummonerMatchStatsProv
             ->getQuery()
             ->getArrayResult();
 
-        return array_map(function (array $row): array {
-            $totalGames = (int) $row['totalGames'];
-            $wins = (int) $row['wins'];
-            $avgKills = round((float) $row['avgKills'], 1);
-            $avgDeaths = round((float) $row['avgDeaths'], 1);
-            $avgAssists = round((float) $row['avgAssists'], 1);
-
-            return [
-                'position' => $row['position'],
-                'totalGames' => $totalGames,
-                'wins' => $wins,
-                'avgKills' => $avgKills,
-                'avgDeaths' => $avgDeaths,
-                'avgAssists' => $avgAssists,
-                'avgCs' => round((float) $row['avgCs'], 1),
-            ];
-        }, $rows);
+        return array_map(static fn (array $row): array => [
+            'position' => $row['position'],
+            'totalGames' => (int) $row['totalGames'],
+            'wins' => (int) $row['wins'],
+            'avgKills' => round((float) $row['avgKills'], 1),
+            'avgDeaths' => round((float) $row['avgDeaths'], 1),
+            'avgAssists' => round((float) $row['avgAssists'], 1),
+            'avgCs' => round((float) $row['avgCs'], 1),
+        ], $rows);
     }
 }
